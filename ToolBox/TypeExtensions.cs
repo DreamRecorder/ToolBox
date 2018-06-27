@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System . Threading . Tasks ;
 
 using JetBrains.Annotations;
 
@@ -13,9 +14,9 @@ namespace DreamRecorder.ToolBox
 	public static class TypeExtensions
 	{
 
-		public static Assembly GetAssembly(this Type type) => type.GetTypeInfo().Assembly ;
-
 		public static int GetInheritanceDepth(this Type type) { return GetInheritanceDepth(type, typeof(object)); }
+
+		public static Task StartUpAssembly<T>() => typeof ( T ) . Assembly . Startup ( ) ;
 
 		public static int GetInheritanceDepth(this Type type, Type baseType)
 		{

@@ -3,6 +3,8 @@ using System . Collections ;
 using System . Collections . Generic ;
 using System . Linq ;
 
+using JetBrains . Annotations ;
+
 namespace DreamRecorder . ToolBox
 {
 
@@ -35,13 +37,17 @@ namespace DreamRecorder . ToolBox
 
 		private static readonly byte[] Table = new byte[256];
 
-		public static byte CaluCrc8(this byte[] data) { return ComputeChecksum(data); }
+		public static byte CalculateCrc8(this byte[] data) { return ComputeChecksum(data); }
 
-		public static byte ComputeChecksum(params byte[] data)
+		public static byte ComputeChecksum( [NotNull] params byte[] data)
 		{
+			if ( data == null )
+			{
+				throw new ArgumentNullException ( nameof(data) ) ;
+			}
+
 			byte crc = 0;
-			if (data != null &&
-				data.Length > 0)
+			if (data.Length > 0)
 			{
 				foreach (byte b in data)
 				{

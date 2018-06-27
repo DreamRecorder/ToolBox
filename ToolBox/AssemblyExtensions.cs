@@ -10,10 +10,13 @@ using JetBrains.Annotations;
 namespace DreamRecorder.ToolBox
 {
 
+
+
 	[PublicAPI]
 	public static class AssemblyExtensions
 	{
-		public static readonly string CommaWithNewline = "," + Environment.NewLine;
+
+		public static readonly string CommaWithNewline = $",{Environment . NewLine}" ;
 
 		public static string GetAssemblyFullName(this Type type)
 		{

@@ -9,9 +9,14 @@ namespace DreamRecorder . ToolBox
 	public class StaticRandom : Random
 	{
 
-		public static Random Current { get; } = new StaticRandom();
+		public static Random Current { get; set; } = new StaticRandom();
 
 		public StaticRandom() { }
+
+		public StaticRandom ( Random random )
+		{
+			_random = random;
+		}
 
 		public StaticRandom(int seed) : base(seed) { }
 

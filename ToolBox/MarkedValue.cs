@@ -16,12 +16,6 @@ namespace DreamRecorder . ToolBox
 
 		public TMark Mark { get; set; }
 
-		//public static implicit operator TMark(MarkedValue<TValue, TMark> value)
-		//{
-		//	return value.Mark;
-		//}
-
-
 		public MarkedValue(TValue value, TMark mark)
 		{
 			Value = value;
