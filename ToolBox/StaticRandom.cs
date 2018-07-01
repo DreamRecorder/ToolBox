@@ -9,58 +9,55 @@ namespace DreamRecorder . ToolBox
 	public class StaticRandom : Random
 	{
 
-		public static Random Current { get; set; } = new StaticRandom();
+		private readonly Random _random = new Random ( ) ;
 
-		public StaticRandom() { }
+		public static Random Current { get ; set ; } = new StaticRandom ( ) ;
 
-		public StaticRandom ( Random random )
+		public override int Next ( )
 		{
-			_random = random;
-		}
-
-		public StaticRandom(int seed) : base(seed) { }
-
-		private readonly Random _random = new Random();
-
-		public override int Next()
-		{
-			lock (_random)
+			lock ( _random )
 			{
-				return _random.Next();
+				return _random . Next ( ) ;
 			}
 		}
 
-		public override int Next(int maxValue)
+		public override int Next ( int maxValue )
 		{
-			lock (_random)
+			lock ( _random )
 			{
-				return _random.Next(maxValue);
+				return _random . Next ( maxValue ) ;
 			}
 		}
 
-		public override int Next(int minValue, int maxValue)
+		public override int Next ( int minValue , int maxValue )
 		{
-			lock (_random)
+			lock ( _random )
 			{
-				return _random.Next(minValue, maxValue);
+				return _random . Next ( minValue , maxValue ) ;
 			}
 		}
 
-		public override void NextBytes(byte[] buffer)
+		public override void NextBytes ( byte [ ] buffer )
 		{
-			lock (_random)
+			lock ( _random )
 			{
-				_random.NextBytes(buffer);
+				_random . NextBytes ( buffer ) ;
 			}
 		}
 
-		public override double NextDouble()
+		public override double NextDouble ( )
 		{
-			lock (_random)
+			lock ( _random )
 			{
-				return _random.NextDouble();
+				return _random . NextDouble ( ) ;
 			}
 		}
+
+		public StaticRandom ( ) { }
+
+		public StaticRandom ( Random random ) { _random = random ; }
+
+		public StaticRandom ( int seed ) : base ( seed ) { }
 
 	}
 

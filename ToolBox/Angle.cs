@@ -9,63 +9,63 @@ namespace DreamRecorder . ToolBox
 {
 
 	[PublicAPI]
-	public struct Angle : IEquatable<Angle>
+	public struct Angle : IEquatable <Angle>
 	{
 
-		public static implicit operator Angle(double degree) { return new Angle(degree); }
+		public static implicit operator Angle ( double degree ) { return new Angle ( degree ) ; }
 
-		public static implicit operator double(Angle angle) { return angle.Degree; }
+		public static implicit operator double ( Angle angle ) { return angle . Degree ; }
 
-		public double Degree { get; }
+		public double Degree { get ; }
 
-		public bool Equals(Angle other) { return Degree.Equals(other.Degree); }
+		public bool Equals ( Angle other ) { return Degree . Equals ( other . Degree ) ; }
 
-		public override bool Equals(object obj)
+		public override bool Equals ( object obj )
 		{
-			if (ReferenceEquals(null, obj))
+			if ( ReferenceEquals ( null , obj ) )
 			{
-				return false;
+				return false ;
 			}
 
-			return obj is Angle angle && Equals(angle);
+			return obj is Angle angle && Equals ( angle ) ;
 		}
 
-		public override int GetHashCode() { return Degree.GetHashCode(); }
+		public override int GetHashCode ( ) { return Degree . GetHashCode ( ) ; }
 
-		public static bool operator ==(Angle left, Angle right) { return left.Equals(right); }
+		public static bool operator == ( Angle left , Angle right ) { return left . Equals ( right ) ; }
 
-		public static bool operator !=(Angle left, Angle right) { return !left.Equals(right); }
+		public static bool operator != ( Angle left , Angle right ) { return ! left . Equals ( right ) ; }
 
-		public double Radius => Degree / 180 * Math.PI;
+		public double Radius => Degree / 180 * Math . PI ;
 
-		public Angle(double degree) { Degree = degree; }
+		public Angle ( double degree ) { Degree = degree ; }
 
-		public double Grad => Degree / 9 * 10;
+		public double Grad => Degree / 9 * 10 ;
 
-		public static explicit operator Angle(string value)
+		public static explicit operator Angle ( string value )
 		{
-			if (value.EndsWith("°"))
+			if ( value . EndsWith ( "°" ) )
 			{
-				return new Angle(Convert.ToDouble(value.TrimEnd('°')));
+				return new Angle ( Convert . ToDouble ( value . TrimEnd ( '°' ) ) ) ;
 			}
 
-			if (value.EndsWith("ᵍ")
-				|| value.EndsWith("gon"))
+			if ( value . EndsWith ( "ᵍ" ) ||
+				value . EndsWith ( "gon" ) )
 			{
-				return new Angle(Convert.ToDouble(value.TrimEnd(("ᵍ" + "gon").ToCharArray())));
+				return new Angle ( Convert . ToDouble ( value . TrimEnd ( ( "ᵍ" + "gon" ) . ToCharArray ( ) ) ) ) ;
 			}
 
-			return new Angle(Convert.ToDouble(value) / Math.PI * 180);
+			return new Angle ( Convert . ToDouble ( value ) / Math . PI * 180 ) ;
 		}
 
 
-		public static Angle FromDegree(double degree) { return new Angle(degree); }
+		public static Angle FromDegree ( double degree ) { return new Angle ( degree ) ; }
 
-		public static Angle FromRedius(double radius) { return new Angle(radius / Math.PI * 180); }
+		public static Angle FromRedius ( double radius ) { return new Angle ( radius / Math . PI * 180 ) ; }
 
-		public static Angle FromGrad(double grad) { return new Angle(grad / 10 * 9); }
+		public static Angle FromGrad ( double grad ) { return new Angle ( grad / 10 * 9 ) ; }
 
-		public override string ToString() { return $"{Degree}°"; }
+		public override string ToString ( ) { return $"{Degree}°" ; }
 
 	}
 

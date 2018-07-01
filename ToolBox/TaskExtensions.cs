@@ -9,7 +9,9 @@ namespace DreamRecorder . ToolBox
 
 	public static class TaskExtensions
 	{
-		public static readonly Task CompletedTask = Task.FromResult(false);
+
+		public static readonly Task CompletedTask = Task . FromResult ( false ) ;
+
 	}
 
 }

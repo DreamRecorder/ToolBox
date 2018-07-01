@@ -1,18 +1,19 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System ;
+using System . Collections ;
+using System . Collections . Generic ;
+using System . Linq ;
 using System . Net . Sockets ;
 
-using JetBrains.Annotations;
+using JetBrains . Annotations ;
 
-namespace DreamRecorder.ToolBox
+namespace DreamRecorder . ToolBox
 {
 
 	[PublicAPI]
 	public static class SocketExtensions
 	{
-		public static bool IsAvailable( [NotNull] this Socket socket)
+
+		public static bool IsAvailable ( [NotNull] this Socket socket )
 		{
 			if ( socket == null )
 			{
@@ -21,33 +22,36 @@ namespace DreamRecorder.ToolBox
 
 			try
 			{
-				return !(socket.Poll(1, SelectMode.SelectRead) && socket.Available == 0);
+				return ! ( socket . Poll ( 1 , SelectMode . SelectRead ) && socket . Available == 0 ) ;
 			}
-			catch (SocketException) { return false; }
+			catch ( SocketException )
+			{
+				return false ;
+			}
 		}
 
-		public static void CleanTcpClient( [NotNull] this List<TcpClient> clients)
+		public static void CleanTcpClient ( [NotNull] this List <TcpClient> clients )
 		{
 			if ( clients == null )
 			{
 				throw new ArgumentNullException ( nameof(clients) ) ;
 			}
 
-			lock (clients)
+			lock ( clients )
 			{
-				clients.RemoveAll((client) =>
-								{
-									lock (client)
+				clients . RemoveAll ( client =>
 									{
-										if (client.Client.IsAvailable())
+										lock ( client )
 										{
-											return false;
-										}
+											if ( client . Client . IsAvailable ( ) )
+											{
+												return false ;
+											}
 
-										client.Dispose();
-										return true;
-									}
-								});
+											client . Dispose ( ) ;
+											return true ;
+										}
+									} ) ;
 			}
 		}
 

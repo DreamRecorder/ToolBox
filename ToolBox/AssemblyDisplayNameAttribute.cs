@@ -8,13 +8,14 @@ using JetBrains . Annotations ;
 namespace DreamRecorder . ToolBox
 {
 
-	[PublicAPI][AttributeUsage(AttributeTargets.Assembly)]
+	[PublicAPI]
+	[AttributeUsage ( AttributeTargets . Assembly )]
 	public sealed class AssemblyDisplayNameAttribute : Attribute
 	{
 
-		public string Name { get; }
+		public string Name { get ; }
 
-		public AssemblyDisplayNameAttribute(string name) { Name = name; }
+		public AssemblyDisplayNameAttribute ( string name ) { Name = name ; }
 
 	}
 

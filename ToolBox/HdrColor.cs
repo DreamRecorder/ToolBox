@@ -1,85 +1,86 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
+﻿using System ;
+using System . Collections ;
+using System . Collections . Generic ;
+using System . Drawing ;
+using System . Linq ;
 
 using JetBrains . Annotations ;
 
-namespace DreamRecorder.ToolBox
+namespace DreamRecorder . ToolBox
 {
+
 	[PublicAPI]
-	public struct HdrColor : IEquatable<HdrColor>
+	public struct HdrColor : IEquatable <HdrColor>
 	{
 
-		public double R { get; }
+		public double R { get ; }
 
-		public double G { get; }
+		public double G { get ; }
 
-		public double B { get; }
+		public double B { get ; }
 
-		public HdrColor(double r, double g, double b)
+		public HdrColor ( double r , double g , double b )
 		{
-			R = r;
-			G = g;
-			B = b;
+			R = r ;
+			G = g ;
+			B = b ;
 		}
 
 		/// <summary>
 		///     Returns the vector (0,0,0).
 		/// </summary>
-		public static HdrColor Black => new HdrColor();
+		public static HdrColor Black => new HdrColor ( ) ;
 
 		/// <summary>
 		///     Returns the vector (1,1,1).
 		/// </summary>
-		public static HdrColor White => new HdrColor(1.0d, 1.0d, 1.0d);
+		public static HdrColor White => new HdrColor ( 1.0d , 1.0d , 1.0d ) ;
 
 		/// <summary>
 		///     Returns the vector (1,0,0).
 		/// </summary>
-		public static HdrColor Red => new HdrColor(1.0d, 0.0d, 0.0d);
+		public static HdrColor Red => new HdrColor ( 1.0d , 0.0d , 0.0d ) ;
 
 		/// <summary>
 		///     Returns the vector (0,1,0).
 		/// </summary>
-		public static HdrColor Green => new HdrColor(0.0d, 1.0d, 0.0d);
+		public static HdrColor Green => new HdrColor ( 0.0d , 1.0d , 0.0d ) ;
 
 		/// <summary>
 		///     Returns the vector (0,0,1).
 		/// </summary>
-		public static HdrColor Blue => new HdrColor(0.0d, 0.0d, 1.0d);
+		public static HdrColor Blue => new HdrColor ( 0.0d , 0.0d , 1.0d ) ;
 
-		public bool Equals(HdrColor other)
+		public bool Equals ( HdrColor other )
 		{
-			return R.Equals(other.R) && G.Equals(other.G) && B.Equals(other.B);
+			return R . Equals ( other . R ) && G . Equals ( other . G ) && B . Equals ( other . B ) ;
 		}
 
-		public override bool Equals(object obj)
+		public override bool Equals ( object obj )
 		{
-			if (ReferenceEquals(null, obj))
+			if ( ReferenceEquals ( null , obj ) )
 			{
-				return false;
+				return false ;
 			}
 
-			return obj is HdrColor color && Equals(color);
+			return obj is HdrColor color && Equals ( color ) ;
 		}
 
-		public override int GetHashCode()
+		public override int GetHashCode ( )
 		{
 			unchecked
 			{
-				int hashCode = R.GetHashCode();
-				hashCode = (hashCode * 397) ^ G.GetHashCode();
-				hashCode = (hashCode * 397) ^ B.GetHashCode();
-				return hashCode;
+				int hashCode = R . GetHashCode ( ) ;
+				hashCode = ( hashCode * 397 ) ^ G . GetHashCode ( ) ;
+				hashCode = ( hashCode * 397 ) ^ B . GetHashCode ( ) ;
+				return hashCode ;
 			}
 		}
 
 
-		public static bool operator ==(HdrColor left, HdrColor right) { return Equals(left, right); }
+		public static bool operator == ( HdrColor left , HdrColor right ) { return Equals ( left , right ) ; }
 
-		public static bool operator !=(HdrColor left, HdrColor right) { return !Equals(left, right); }
+		public static bool operator != ( HdrColor left , HdrColor right ) { return ! Equals ( left , right ) ; }
 
 
 		/// <summary>
@@ -88,12 +89,12 @@ namespace DreamRecorder.ToolBox
 		/// <param name="value1">The first source vector.</param>
 		/// <param name="value2">The second source vector.</param>
 		/// <returns>The minimized vector.</returns>
-		public static HdrColor Min(HdrColor value1, HdrColor value2)
+		public static HdrColor Min ( HdrColor value1 , HdrColor value2 )
 		{
-			return new HdrColor(
-				value1.R < value2.R ? value1.R : value2.R,
-				value1.G < value2.G ? value1.G : value2.G,
-				value1.B < value2.B ? value1.B : value2.B);
+			return new HdrColor (
+				value1 . R < value2 . R ? value1 . R : value2 . R ,
+				value1 . G < value2 . G ? value1 . G : value2 . G ,
+				value1 . B < value2 . B ? value1 . B : value2 . B ) ;
 		}
 
 		/// <summary>
@@ -102,12 +103,12 @@ namespace DreamRecorder.ToolBox
 		/// <param name="value1">The first source vector.</param>
 		/// <param name="value2">The second source vector.</param>
 		/// <returns>The maximized vector.</returns>
-		public static HdrColor Max(HdrColor value1, HdrColor value2)
+		public static HdrColor Max ( HdrColor value1 , HdrColor value2 )
 		{
-			return new HdrColor(
-				value1.R > value2.R ? value1.R : value2.R,
-				value1.G > value2.G ? value1.G : value2.G,
-				value1.B > value2.B ? value1.B : value2.B);
+			return new HdrColor (
+				value1 . R > value2 . R ? value1 . R : value2 . R ,
+				value1 . G > value2 . G ? value1 . G : value2 . G ,
+				value1 . B > value2 . B ? value1 . B : value2 . B ) ;
 		}
 
 		/// <summary>
@@ -116,14 +117,14 @@ namespace DreamRecorder.ToolBox
 		/// <param name="left">The first source vector.</param>
 		/// <param name="right">The second source vector.</param>
 		/// <returns>The summed vector.</returns>
-		public static HdrColor operator +(HdrColor left, HdrColor right)
+		public static HdrColor operator + ( HdrColor left , HdrColor right )
 		{
-			return new HdrColor(left.R + right.R, left.G + right.G, left.B + right.B);
+			return new HdrColor ( left . R + right . R , left . G + right . G , left . B + right . B ) ;
 		}
 
-		public static HdrColor operator +(HdrColor left, double right)
+		public static HdrColor operator + ( HdrColor left , double right )
 		{
-			return new HdrColor(left.R + right, left.G + right, left.B + right);
+			return new HdrColor ( left . R + right , left . G + right , left . B + right ) ;
 		}
 
 		/// <summary>
@@ -132,14 +133,14 @@ namespace DreamRecorder.ToolBox
 		/// <param name="left">The first source vector.</param>
 		/// <param name="right">The second source vector.</param>
 		/// <returns>The difference vector.</returns>
-		public static HdrColor operator -(HdrColor left, HdrColor right)
+		public static HdrColor operator - ( HdrColor left , HdrColor right )
 		{
-			return new HdrColor(left.R - right.R, left.G - right.G, left.B - right.B);
+			return new HdrColor ( left . R - right . R , left . G - right . G , left . B - right . B ) ;
 		}
 
-		public static HdrColor operator -(HdrColor left, double right)
+		public static HdrColor operator - ( HdrColor left , double right )
 		{
-			return new HdrColor(left.R - right, left.G - right, left.B - right);
+			return new HdrColor ( left . R - right , left . G - right , left . B - right ) ;
 		}
 
 		/// <summary>
@@ -148,9 +149,9 @@ namespace DreamRecorder.ToolBox
 		/// <param name="left">The first source vector.</param>
 		/// <param name="right">The second source vector.</param>
 		/// <returns>The product vector.</returns>
-		public static HdrColor operator *(HdrColor left, HdrColor right)
+		public static HdrColor operator * ( HdrColor left , HdrColor right )
 		{
-			return new HdrColor(left.R * right.R, left.G * right.G, left.B * right.B);
+			return new HdrColor ( left . R * right . R , left . G * right . G , left . B * right . B ) ;
 		}
 
 		/// <summary>
@@ -159,7 +160,7 @@ namespace DreamRecorder.ToolBox
 		/// <param name="left">The source vector.</param>
 		/// <param name="right">The scalar value.</param>
 		/// <returns>The scaled vector.</returns>
-		public static HdrColor operator *(HdrColor left, double right) { return left * new HdrColor(right); }
+		public static HdrColor operator * ( HdrColor left , double right ) { return left * new HdrColor ( right ) ; }
 
 		/// <summary>
 		///     Multiplies a vector by the given scalar.
@@ -167,9 +168,9 @@ namespace DreamRecorder.ToolBox
 		/// <param name="left">The scalar value.</param>
 		/// <param name="right">The source vector.</param>
 		/// <returns>The scaled vector.</returns>
-		public static HdrColor operator *(double left, HdrColor right) { return new HdrColor(left) * right; }
+		public static HdrColor operator * ( double left , HdrColor right ) { return new HdrColor ( left ) * right ; }
 
-		public HdrColor(double value) : this(value, value, value) { }
+		public HdrColor ( double value ) : this ( value , value , value ) { }
 
 		/// <summary>
 		///     Divides the first vector by the second.
@@ -177,9 +178,9 @@ namespace DreamRecorder.ToolBox
 		/// <param name="left">The first source vector.</param>
 		/// <param name="right">The second source vector.</param>
 		/// <returns>The vector resulting from the division.</returns>
-		public static HdrColor operator /(HdrColor left, HdrColor right)
+		public static HdrColor operator / ( HdrColor left , HdrColor right )
 		{
-			return new HdrColor(left.R / right.R, left.G / right.G, left.B / right.B);
+			return new HdrColor ( left . R / right . R , left . G / right . G , left . B / right . B ) ;
 		}
 
 		/// <summary>
@@ -188,49 +189,50 @@ namespace DreamRecorder.ToolBox
 		/// <param name="value1">The source vector.</param>
 		/// <param name="value2">The scalar value.</param>
 		/// <returns>The result of the division.</returns>
-		public static HdrColor operator /(HdrColor value1, double value2)
+		public static HdrColor operator / ( HdrColor value1 , double value2 )
 		{
-			double invDiv = 1.0f / value2;
+			double invDiv = 1.0f / value2 ;
 
-			return new HdrColor(
-				value1.R * invDiv,
-				value1.G * invDiv,
-				value1.B * invDiv);
+			return new HdrColor (
+				value1 . R * invDiv ,
+				value1 . G * invDiv ,
+				value1 . B * invDiv ) ;
 		}
 
 
-	
-
-		public static implicit operator HdrColor((double R, double G, double B) value)
+		public static implicit operator HdrColor ( (double R , double G , double B) value )
 		{
-			return new HdrColor(value.R, value.G, value.B);
+			return new HdrColor ( value . R , value . G , value . B ) ;
 		}
 
-		public double Brightness => (R + G + B) / 3;
+		public double Brightness => ( R + G + B ) / 3 ;
 
-		public HdrColor SetBrightness(double brightness) { return this * (brightness / Brightness); }
+		public HdrColor SetBrightness ( double brightness ) { return this * ( brightness / Brightness ) ; }
 
 		public double Saturation
 		{
 			get
 			{
-				double maxValue = Math.Max(Math.Max(R, G), B);
-				double minValue = Math.Min(Math.Min(R, G), B);
-				return maxValue - minValue;
+				double maxValue = Math . Max ( Math . Max ( R , G ) , B ) ;
+				double minValue = Math . Min ( Math . Min ( R , G ) , B ) ;
+				return maxValue - minValue ;
 			}
 		}
 
-		public HdrColor SetSaturation(double saturation)
+		public HdrColor SetSaturation ( double saturation )
 		{
-			HdrColor different = this - Brightness;
+			HdrColor different = this - Brightness ;
 
-			return (different * (saturation/Saturation)) + Brightness;
+			return different * ( saturation / Saturation ) + Brightness ;
 		}
 
-		public Color ToDrawingColor(ToneMappingAlgorithm mappingAlgorithm=null)
+		public Color ToDrawingColor ( ToneMappingAlgorithm mappingAlgorithm = null )
 		{
 			mappingAlgorithm = mappingAlgorithm ?? KnowToneMapping . AcesMapping ;
-			return Color.FromArgb(byte.MaxValue, mappingAlgorithm(R), mappingAlgorithm(G), mappingAlgorithm(B));
+			return Color . FromArgb ( byte . MaxValue ,
+									mappingAlgorithm ( R ) ,
+									mappingAlgorithm ( G ) ,
+									mappingAlgorithm ( B ) ) ;
 		}
 
 	}

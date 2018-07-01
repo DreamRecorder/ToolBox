@@ -16,7 +16,7 @@ namespace DreamRecorder . ToolBox
 		/// </summary>
 		/// <returns></returns>
 		[NotNull]
-		XElement ToXElement();
+		XElement ToXElement ( ) ;
 
 	}
 
