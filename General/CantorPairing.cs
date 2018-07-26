@@ -1,4 +1,5 @@
 ﻿using System ;
+using System . Collections ;
 using System . Collections . Generic ;
 using System . Linq ;
 
@@ -15,8 +16,8 @@ namespace DreamRecorder . ToolBox . General
 
 		public static (int X , int Y) Calculate ( long value )
 		{
-			long w = Convert . ToInt64 (
-				Math . Floor ( ( Math . Sqrt ( Convert . ToDouble ( 8m * value + 1 ) ) - 1 ) / 2 ) ) ;
+			long w = Convert . ToInt64 ( Math . Floor ( ( Math . Sqrt ( Convert . ToDouble ( 8m * value + 1 ) ) - 1 )
+														/ 2 ) ) ;
 			long t = ( w * w + w ) / 2 ;
 
 			return ( Convert . ToInt32 ( w - value + t ) , Convert . ToInt32 ( value - t ) ) ;

@@ -1,4 +1,5 @@
 ﻿using System ;
+using System . Collections ;
 using System . Collections . Generic ;
 using System . Collections . ObjectModel ;
 using System . Drawing ;
@@ -20,27 +21,22 @@ namespace DreamRecorder . ToolBox . General
 
 		public double this [ double x ] => Find ( x ) ;
 
-		public void AddPoint ( Point point )
+		public LinearInterpolationLookupTable ( )
 		{
-			PointsList . Add ( point ) ;
+			PointsList = new List <Point> ( ) ;
+			Points = new ReadOnlyCollection <Point> ( PointsList ) ;
 			Sort ( ) ;
 		}
 
-		public void Sort ( ) { PointsList . Sort ( ( left , right ) => left . X - right . X ) ; }
-
-		public double Find ( double x )
+		public LinearInterpolationLookupTable ( IEnumerable <Point> init )
 		{
-			for ( int i = 0 ; i < Points . Count - 1 ; i++ )
-			{
-				if ( Points [ i ] . X <= x &&
-					x < Points [ i + 1 ] . X )
-				{
-					return ( Points [ i + 1 ] . Y - Points [ i ] . Y ) * ( x - Points [ i ] . X ) /
-							( Points [ i + 1 ] . X - Points [ i ] . X ) + Points [ i ] . Y ;
-				}
-			}
+			PointsList = new List <Point> ( init ) ;
+			Points = new ReadOnlyCollection <Point> ( PointsList ) ;
+		}
 
-			return 0 ;
+		public LinearInterpolationLookupTable ( XElement element )
+		{
+			//todo:
 		}
 
 		public XElement ToXElement ( )
@@ -59,22 +55,29 @@ namespace DreamRecorder . ToolBox . General
 			return result ;
 		}
 
-		public LinearInterpolationLookupTable ( )
+		public void AddPoint ( Point point )
 		{
-			PointsList = new List <Point> ( ) ;
-			Points = new ReadOnlyCollection <Point> ( PointsList ) ;
+			PointsList . Add ( point ) ;
 			Sort ( ) ;
 		}
 
-		public LinearInterpolationLookupTable ( IEnumerable <Point> init )
-		{
-			PointsList = new List <Point> ( init ) ;
-			Points = new ReadOnlyCollection <Point> ( PointsList ) ;
-		}
+		public void Sort ( ) { PointsList . Sort ( ( left , right ) => left . X - right . X ) ; }
 
-		public LinearInterpolationLookupTable ( XElement element )
+		public double Find ( double x )
 		{
-			//todo:
+			for ( int i = 0 ; i < Points . Count - 1 ; i++ )
+			{
+				if ( Points [ i ] . X <= x
+					&& x < Points [ i + 1 ] . X )
+				{
+					return ( Points [ i + 1 ] . Y - Points [ i ] . Y )
+							* ( x - Points [ i ] . X )
+							/ ( Points [ i + 1 ] . X - Points [ i ] . X )
+							+ Points [ i ] . Y ;
+				}
+			}
+
+			return 0 ;
 		}
 
 	}

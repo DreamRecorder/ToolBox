@@ -1,4 +1,5 @@
 ﻿using System ;
+using System . Collections ;
 using System . Collections . Generic ;
 using System . Linq ;
 
@@ -12,11 +13,14 @@ namespace DreamRecorder . ToolBox . General
 
 		public static Random Current { get ; set ; }
 
+		public StaticRandom ( ) { }
+
+		public StaticRandom ( Random random ) { _random = random ; }
+
+		public StaticRandom ( int seed ) : base ( seed ) { }
+
 		[Startup]
-		public static void StartUp ( )
-		{
-			Current= new StaticRandom();
-		}
+		public static void StartUp ( ) { Current = new StaticRandom ( ) ; }
 
 		public override int Next ( )
 		{
@@ -57,12 +61,6 @@ namespace DreamRecorder . ToolBox . General
 				return _random . NextDouble ( ) ;
 			}
 		}
-
-		public StaticRandom ( ) { }
-
-		public StaticRandom ( Random random ) { _random = random ; }
-
-		public StaticRandom ( int seed ) : base ( seed ) { }
 
 	}
 

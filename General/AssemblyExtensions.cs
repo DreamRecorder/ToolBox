@@ -1,4 +1,5 @@
 ﻿using System ;
+using System . Collections ;
 using System . Collections . Generic ;
 using System . Linq ;
 using System . Reflection ;
@@ -41,10 +42,8 @@ namespace DreamRecorder . ToolBox . General
 
 				return Task . WhenAll ( tasks ) ;
 			}
-			else
-			{
-				return TaskExtensions . CompletedTask ;
-			}
+
+			return TaskExtensions . CompletedTask ;
 		}
 
 

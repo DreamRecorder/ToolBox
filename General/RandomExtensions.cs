@@ -1,4 +1,5 @@
 ﻿using System ;
+using System . Collections ;
 using System . Collections . Generic ;
 using System . Linq ;
 
@@ -34,8 +35,7 @@ namespace DreamRecorder . ToolBox . General
 			double u1 = random . NextDouble ( ) ;
 			double u2 = random . NextDouble ( ) ;
 
-			double randStdNormal = Math . Sqrt ( - 2.0 * Math . Log ( u1 ) ) *
-									Math . Sin ( 2.0 * Math . PI * u2 ) ;
+			double randStdNormal = Math . Sqrt ( - 2.0 * Math . Log ( u1 ) ) * Math . Sin ( 2.0 * Math . PI * u2 ) ;
 
 			double randNormal = mu + sigma * randStdNormal ;
 
@@ -122,14 +122,14 @@ namespace DreamRecorder . ToolBox . General
 			{
 				return a + Math . Sqrt ( u * ( b - a ) * ( c - a ) ) ;
 			}
-			else
-			{
-				return b - Math . Sqrt ( ( 1 - u ) * ( b - a ) * ( b - c ) ) ;
-			}
+
+			return b - Math . Sqrt ( ( 1 - u ) * ( b - a ) * ( b - c ) ) ;
 		}
 
 		/// <summary>
-		///     Equally likely to return true or false. Uses <see cref="Random.Next()" />.
+		///     Equally likely to return true or false. Uses
+		///     <see cref="Random.Next()" />
+		///     .
 		/// </summary>
 		/// <returns></returns>
 		public static bool NextBoolean ( [NotNull] this Random random )

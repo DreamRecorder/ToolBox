@@ -1,4 +1,5 @@
 ﻿using System ;
+using System . Collections ;
 using System . Collections . Generic ;
 using System . Linq ;
 
@@ -10,7 +11,7 @@ namespace DreamRecorder . ToolBox . General
 	public static class StaticLoggerFactory
 	{
 
-		public static LoggerFactory LoggerFactory { get; set; }
+		public static LoggerFactory LoggerFactory { get ; set ; }
 
 	}
 
