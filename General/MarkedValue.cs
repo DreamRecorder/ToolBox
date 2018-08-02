@@ -21,12 +21,9 @@ namespace DreamRecorder . ToolBox . General
 			Mark = mark ;
 		}
 
-		public static implicit operator TValue ( MarkedValue <TValue , TMark> value ) { return value . Value ; }
+		public static implicit operator TValue ( MarkedValue <TValue , TMark> value ) => value . Value ;
 
-		public static implicit operator MarkedValue <TValue , TMark> ( TValue value )
-		{
-			return new MarkedValue <TValue , TMark> ( value , default ) ;
-		}
+		public static implicit operator MarkedValue <TValue , TMark> ( TValue value ) => new MarkedValue <TValue , TMark> ( value , default ) ;
 
 	}
 
