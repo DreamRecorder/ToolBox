@@ -1,5 +1,4 @@
 ﻿using System ;
-using System . Collections ;
 using System . Collections . Generic ;
 using System . Drawing ;
 using System . Linq ;
@@ -91,9 +90,9 @@ namespace DreamRecorder . ToolBox . General
 		/// <returns>The minimized vector.</returns>
 		public static HdrColor Min ( HdrColor value1 , HdrColor value2 )
 		{
-			return new HdrColor ( value1 . R < value2 . R ? value1 . R: value2 . R ,
-								value1 . G < value2 . G ? value1 . G: value2 . G ,
-								value1 . B < value2 . B ? value1 . B: value2 . B ) ;
+			return new HdrColor ( value1 . R < value2 . R ? value1 . R : value2 . R ,
+								value1 . G < value2 . G ? value1 . G : value2 . G ,
+								value1 . B < value2 . B ? value1 . B : value2 . B ) ;
 		}
 
 		/// <summary>
@@ -104,9 +103,9 @@ namespace DreamRecorder . ToolBox . General
 		/// <returns>The maximized vector.</returns>
 		public static HdrColor Max ( HdrColor value1 , HdrColor value2 )
 		{
-			return new HdrColor ( value1 . R > value2 . R ? value1 . R: value2 . R ,
-								value1 . G > value2 . G ? value1 . G: value2 . G ,
-								value1 . B > value2 . B ? value1 . B: value2 . B ) ;
+			return new HdrColor ( value1 . R > value2 . R ? value1 . R : value2 . R ,
+								value1 . G > value2 . G ? value1 . G : value2 . G ,
+								value1 . B > value2 . B ? value1 . B : value2 . B ) ;
 		}
 
 		/// <summary>

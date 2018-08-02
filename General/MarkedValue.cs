@@ -1,5 +1,4 @@
 ﻿using System ;
-using System . Collections ;
 using System . Collections . Generic ;
 using System . Linq ;
 
@@ -23,6 +22,11 @@ namespace DreamRecorder . ToolBox . General
 		}
 
 		public static implicit operator TValue ( MarkedValue <TValue , TMark> value ) { return value . Value ; }
+
+		public static implicit operator MarkedValue <TValue , TMark> ( TValue value )
+		{
+			return new MarkedValue <TValue , TMark> ( value , default ) ;
+		}
 
 	}
 

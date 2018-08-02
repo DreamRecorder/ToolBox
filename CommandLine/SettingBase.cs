@@ -1,5 +1,4 @@
 ﻿using System ;
-using System . Collections ;
 using System . Collections . Generic ;
 using System . Globalization ;
 using System . IO ;
@@ -7,7 +6,11 @@ using System . Linq ;
 using System . Reflection ;
 using System . Text ;
 
+using DreamRecorder . ToolBox . General ;
+
 using JetBrains . Annotations ;
+
+using Microsoft . Extensions . Logging ;
 
 namespace DreamRecorder . ToolBox . CommandLine
 {
@@ -16,8 +19,9 @@ namespace DreamRecorder . ToolBox . CommandLine
 		where T : SettingBase <T , TSettingCategory> , new ( ) where TSettingCategory : Enum , IConvertible
 	{
 
-		protected SettingBase ( ) {
-		}
+		protected ILogger Logger { get ; private set ; }
+
+		protected SettingBase ( ) { Logger = StaticLoggerFactory . LoggerFactory . CreateLogger <T> ( ) ; }
 
 		public string Save ( )
 		{
@@ -44,7 +48,8 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 			for ( int i = 0 ; i < stringBuilders . Length ; i++ )
 			{
-				builder . AppendLine ( $"##{( TSettingCategory ) Enum . ToObject ( typeof ( TSettingCategory ) , i )}" ) ;
+				builder . AppendLine (
+					$"##{( TSettingCategory ) Enum . ToObject ( typeof ( TSettingCategory ) , i )}" ) ;
 				builder . AppendLine ( ) ;
 				builder . AppendLine ( stringBuilders [ i ] . ToString ( ) ) ;
 				builder . AppendLine ( ) ;
@@ -79,18 +84,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 			foreach ( string line in source . Split ( new [ ] { Environment . NewLine } ,
 													StringSplitOptions . RemoveEmptyEntries ) )
 			{
-				if ( ! string . IsNullOrWhiteSpace ( line )
-					&& ! line . StartsWith ( "#" ) )
-				{
-					string [ ] setCommand = line . Split ( '=' ) ;
-
-					PropertyInfo property = settings . GetType ( ) .
-														GetProperty ( setCommand [ 0 ] . Trim ( ) ,
-																	BindingFlags . IgnoreCase ) ;
-					object value = Convert . ChangeType ( setCommand [ 1 ] . Trim ( ) , property . PropertyType ) ;
-
-					property . SetValue ( settings , value ) ;
-				}
+				ParseLine ( settings , line ) ;
 			}
 
 			return settings ;
@@ -118,18 +112,25 @@ namespace DreamRecorder . ToolBox . CommandLine
 		}
 
 
-		public void ParseLine ( string line )
+		public static void ParseLine <T> ( T settings , string line )
 		{
-			if ( ! string . IsNullOrWhiteSpace ( line )
-				&& ! line . StartsWith ( "#" ) )
+			if ( ! string . IsNullOrWhiteSpace ( line ) &&
+				! line . StartsWith ( "#" ) )
 			{
 				string [ ] setCommand = line . Split ( '=' ) ;
 
 				PropertyInfo property =
-					GetType ( ) . GetProperty ( setCommand [ 0 ] . Trim ( ) , BindingFlags . IgnoreCase ) ;
-				object value = Convert . ChangeType ( setCommand [ 1 ] . Trim ( ) , property . PropertyType ) ;
+					typeof ( T ) . GetProperty ( setCommand [ 0 ] . Trim ( ) , BindingFlags . IgnoreCase ) ;
+				if ( property != null )
+				{
+					object value = Convert . ChangeType ( setCommand [ 1 ] . Trim ( ) , property . PropertyType ) ;
 
-				property . SetValue ( this , value ) ;
+					property . SetValue ( settings , value ) ;
+				}
+				else
+				{
+					//todo:log warning
+				}
 			}
 		}
 

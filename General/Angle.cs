@@ -1,5 +1,4 @@
 ﻿using System ;
-using System . Collections ;
 using System . Collections . Generic ;
 using System . Linq ;
 
@@ -49,8 +48,8 @@ namespace DreamRecorder . ToolBox . General
 				return new Angle ( Convert . ToDouble ( value . TrimEnd ( '°' ) ) ) ;
 			}
 
-			if ( value . EndsWith ( "ᵍ" )
-				|| value . EndsWith ( "gon" ) )
+			if ( value . EndsWith ( "ᵍ" ) ||
+				value . EndsWith ( "gon" ) )
 			{
 				return new Angle ( Convert . ToDouble ( value . TrimEnd ( ( "ᵍ" + "gon" ) . ToCharArray ( ) ) ) ) ;
 			}

@@ -1,5 +1,4 @@
 ﻿using System ;
-using System . Collections ;
 using System . Collections . Generic ;
 using System . Collections . ObjectModel ;
 using System . Drawing ;
@@ -10,6 +9,16 @@ using JetBrains . Annotations ;
 
 namespace DreamRecorder . ToolBox . General
 {
+
+	public static class ExecptionMessages
+	{
+
+		public static string XmlNameMismath ( string argumentName , Type type )
+		{
+			return $"{argumentName} do not perform a {type . FullName}" ;
+		}
+
+	}
 
 	[PublicAPI]
 	public class LinearInterpolationLookupTable : ISelfSerializeable
@@ -28,14 +37,31 @@ namespace DreamRecorder . ToolBox . General
 			Sort ( ) ;
 		}
 
-		public LinearInterpolationLookupTable ( IEnumerable <Point> init )
+		public LinearInterpolationLookupTable ( [NotNull] IEnumerable <Point> init )
 		{
+			if ( init == null )
+			{
+				throw new ArgumentNullException ( nameof(init) ) ;
+			}
+
 			PointsList = new List <Point> ( init ) ;
 			Points = new ReadOnlyCollection <Point> ( PointsList ) ;
 		}
 
-		public LinearInterpolationLookupTable ( XElement element )
+		public LinearInterpolationLookupTable ( [NotNull] XElement element )
 		{
+			if ( element == null )
+			{
+				throw new ArgumentNullException ( nameof(element) ) ;
+			}
+
+			if ( element . Name != nameof(LinearInterpolationLookupTable) )
+			{
+				throw new ArgumentException (
+					ExecptionMessages . XmlNameMismath ( nameof(element) ,
+														typeof ( LinearInterpolationLookupTable ) ) ) ;
+			}
+
 			//todo:
 		}
 
@@ -67,8 +93,8 @@ namespace DreamRecorder . ToolBox . General
 		{
 			for ( int i = 0 ; i < Points . Count - 1 ; i++ )
 			{
-				if ( Points [ i ] . X <= x
-					&& x < Points [ i + 1 ] . X )
+				if ( Points [ i ] . X <= x &&
+					x < Points [ i + 1 ] . X )
 				{
 					return ( Points [ i + 1 ] . Y - Points [ i ] . Y )
 							* ( x - Points [ i ] . X )

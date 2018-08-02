@@ -1,5 +1,4 @@
 ﻿using System ;
-using System . Collections ;
 using System . Collections . Generic ;
 using System . IO ;
 using System . Linq ;
@@ -89,7 +88,8 @@ namespace DreamRecorder . ToolBox . CommandLine
 			{
 				writer . WriteLine ( License ) ;
 				writer . WriteLine ( ) ;
-				writer . WriteLine ( "To accept this license, you should write \"I accept this License.\" at the end of this file." ) ;
+				writer . WriteLine (
+					"To accept this license, you should write \"I accept this License.\" at the end of this file." ) ;
 			}
 		}
 
@@ -122,12 +122,11 @@ namespace DreamRecorder . ToolBox . CommandLine
 			return true ;
 		}
 
-
 		/// <summary>
 		///     Call this after Create StaticLoggerFactory
 		/// </summary>
 		/// <param name="args"></param>
-		public virtual void Main ( string [ ] args )
+		public virtual void RunMain ( string [ ] args )
 		{
 			Current = ( T ) this ;
 
@@ -176,29 +175,48 @@ namespace DreamRecorder . ToolBox . CommandLine
 												{
 													IsDebug = debugOption . HasValue ( ) ;
 
+#if DEBUG
+													IsDebug = true ;
+#endif
+
 													if ( ! noLogoOption . HasValue ( ) )
 													{
 														ShowLogo ( ) ;
 														ShowCopyright ( ) ;
 													}
 
-#if false
-												Logger.LogInformation("Debug version, skip license check.");
-#else
+													#region Check License
 
-													if ( ! acceptLicenseOption . HasValue ( ) )
+													if ( IsDebug )
 													{
-														if ( ! CheckLicenseFile ( ) )
-														{
-															Logger . LogInformation ( "Licese check failed." ) ;
-															Exit ( ProgramExitCode <TExitCode> . LicenseNotAccepted ) ;
-														}
+														Logger . LogInformation (
+															"Debug version, skip license check and you are assumed to accept license." ) ;
 													}
 													else
 													{
-														Logger . LogInformation ( "" ) ;
+														if ( ! acceptLicenseOption . HasValue ( ) )
+														{
+															if ( ! CheckLicenseFile ( ) )
+															{
+																Logger . LogInformation ( "Licese check failed." ) ;
+																Exit (
+																	ProgramExitCode <TExitCode> . LicenseNotAccepted ) ;
+															}
+															else
+															{
+																Logger . LogInformation (
+																	"Licese file check passed." ) ;
+															}
+														}
+														else
+														{
+															Logger . LogInformation (
+																"License Accepted by command line argument." ) ;
+														}
 													}
-#endif
+
+													#endregion
+
 
 													Start ( args ) ;
 													return 0 ;
