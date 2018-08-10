@@ -30,7 +30,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 			DisplayName = displayName ?? throw new ArgumentNullException ( nameof(displayName) ) ;
 			Introduction = introduction ?? throw new ArgumentNullException ( nameof(introduction) ) ;
 			RestartRequired = restartRequired ;
-			DefultValue = defultValue ?? throw new ArgumentNullException ( nameof(defultValue) ) ;
+			DefultValue = defultValue;
 		}
 
 		public override string ToString ( )
