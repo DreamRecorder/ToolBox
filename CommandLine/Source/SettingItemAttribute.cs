@@ -30,20 +30,20 @@ namespace DreamRecorder . ToolBox . CommandLine
 			DisplayName = displayName ?? throw new ArgumentNullException ( nameof(displayName) ) ;
 			Introduction = introduction ?? throw new ArgumentNullException ( nameof(introduction) ) ;
 			RestartRequired = restartRequired ;
-			DefultValue = defultValue;
+			DefultValue = defultValue ;
 		}
 
 		public override string ToString ( )
 		{
 			StringBuilder builder = new StringBuilder ( ) ;
+
 			builder . AppendLine ( $"#	{DisplayName}" ) ;
+
+			builder . AppendLine ( $"#	{Introduction}" ) ;
+
 			if ( RestartRequired )
 			{
-				builder . AppendLine ( $"#	{Introduction} This setting will be applied after restart." ) ;
-			}
-			else
-			{
-				builder . AppendLine ( $"#	{Introduction}" ) ;
+				builder . AppendLine ( "#	This setting will be applied after restart." ) ;
 			}
 
 			builder . AppendLine ( $"#	Defult Value: {Introduction}" ) ;

@@ -105,6 +105,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 			while ( ! reader . EndOfStream )
 			{
 				string line = reader . ReadLine ( ) ;
+				ParseLine ( settings , line ) ;
 			}
 
 			reader . Dispose ( ) ;
@@ -120,13 +121,25 @@ namespace DreamRecorder . ToolBox . CommandLine
 			{
 				string [ ] setCommand = line . Split ( '=' ) ;
 
-				PropertyInfo property =
-					typeof ( T ) . GetProperty ( setCommand [ 0 ] . Trim ( ) , BindingFlags . IgnoreCase ) ;
-				if ( property != null )
+				if ( setCommand . Length == 2 )
 				{
-					object value = Convert . ChangeType ( setCommand [ 1 ] . Trim ( ) , property . PropertyType ) ;
+					PropertyInfo property = typeof ( T ) . GetProperty ( setCommand . First ( ) . Trim ( ) ,
+																		BindingFlags . Instance
+																		| BindingFlags . IgnoreCase
+																		| BindingFlags . NonPublic
+																		| BindingFlags . Public ) ;
 
-					property . SetValue ( settings , value ) ;
+					if ( property != null )
+					{
+						object value =
+							Convert . ChangeType ( setCommand . Last ( ) . Trim ( ) , property . PropertyType ) ;
+
+						property . SetValue ( settings , value ) ;
+					}
+					else
+					{
+						Logger . LogError ( "Cannot find proprtty with name: {0}" , line ) ;
+					}
 				}
 				else
 				{
