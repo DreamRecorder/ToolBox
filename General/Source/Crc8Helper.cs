@@ -8,6 +8,7 @@ using JetBrains . Annotations ;
 namespace DreamRecorder . ToolBox . General
 {
 
+	[PublicAPI]
 	public static class Crc8Helper
 	{
 
@@ -49,10 +50,7 @@ namespace DreamRecorder . ToolBox . General
 			byte crc = 0 ;
 			if ( data . Length > 0 )
 			{
-				foreach ( byte b in data )
-				{
-					crc = Table [ crc ^ b ] ;
-				}
+				crc = data . Aggregate ( crc , ( current , b ) => Table [ current ^ b ] ) ;
 			}
 
 			return crc ;

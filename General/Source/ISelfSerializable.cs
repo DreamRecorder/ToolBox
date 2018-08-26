@@ -9,7 +9,7 @@ using JetBrains . Annotations ;
 namespace DreamRecorder . ToolBox . General
 {
 
-	public interface ISelfSerializeable
+	public interface ISelfSerializable
 	{
 
 		/// <summary>

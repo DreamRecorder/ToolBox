@@ -12,38 +12,12 @@ using Microsoft . Extensions . Logging ;
 namespace Example
 {
 
-	public class ProgramExitCode : ProgramExitCode <ProgramExitCode>
-	{
-
-	}
-
-	public enum ProgramSettingCatalog
-	{
-
-		General = 0
-
-	}
-
-	public class ProgramSetting : SettingBase <ProgramSetting , ProgramSettingCatalog>
-	{
-
-		[SettingItem ( ( int ) ProgramSettingCatalog . General , nameof(BotToken) , "" , true , "" )]
-		public string BotToken { get ; set ; }
-
-		[SettingItem ( ( int ) ProgramSettingCatalog . General , nameof(DatabaseConnection) , "" , true , "" )]
-		public string DatabaseConnection { get ; set ; }
-
-		[SettingItem ( ( int ) ProgramSettingCatalog . General , nameof(HttpProxy) , "" , true , null )]
-		public string HttpProxy { get ; set ; }
-
-	}
-
 	public class Program : ProgramBase <Program , ProgramExitCode , ProgramSetting , ProgramSettingCatalog>
 	{
 
 		public override bool WaitForExit => true ;
 
-		public override string License => "agpl" ;
+		public override string License => "AGPL" ;
 
 		public override bool CanExit => true ;
 

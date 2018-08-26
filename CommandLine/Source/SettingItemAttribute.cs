@@ -4,9 +4,12 @@ using System . Collections . Generic ;
 using System . Linq ;
 using System . Text ;
 
+using JetBrains . Annotations ;
+
 namespace DreamRecorder . ToolBox . CommandLine
 {
 
+	[PublicAPI]
 	public class SettingItemAttribute : Attribute
 	{
 
@@ -18,19 +21,19 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 		public bool RestartRequired { get ; set ; }
 
-		public object DefultValue { get ; set ; }
+		public object DefaultValue { get ; set ; }
 
 		public SettingItemAttribute ( int settingCategory ,
 									string displayName ,
 									string introduction ,
 									bool restartRequired ,
-									object defultValue )
+									object defaultValue )
 		{
 			SettingCategory = settingCategory ;
 			DisplayName = displayName ?? throw new ArgumentNullException ( nameof(displayName) ) ;
 			Introduction = introduction ?? throw new ArgumentNullException ( nameof(introduction) ) ;
 			RestartRequired = restartRequired ;
-			DefultValue = defultValue ;
+			DefaultValue = defaultValue ;
 		}
 
 		public override string ToString ( )
@@ -46,7 +49,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 				builder . AppendLine ( "#	This setting will be applied after restart." ) ;
 			}
 
-			builder . AppendLine ( $"#	Defult Value: {Introduction}" ) ;
+			builder . AppendLine ( $"#	Default Value: {Introduction}" ) ;
 			return builder . ToString ( ) ;
 		}
 

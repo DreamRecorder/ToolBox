@@ -13,7 +13,7 @@ namespace DreamRecorder . ToolBox . General
 	{
 
 		/// <summary>
-		///     Generates normally distributed numbers. Each operation makes two Gaussians for the price of one, and apparently
+		///     Generates normally distributed numbers. Each operation makes two Gaussian for the price of one, and apparently
 		///     they can be cached or something for better performance, but who cares.
 		/// </summary>
 		/// <param name="random"></param>

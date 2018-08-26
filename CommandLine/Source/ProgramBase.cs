@@ -8,12 +8,15 @@ using System . Reflection ;
 
 using DreamRecorder . ToolBox . General ;
 
+using JetBrains . Annotations ;
+
 using Microsoft . Extensions . CommandLineUtils ;
 using Microsoft . Extensions . Logging ;
 
 namespace DreamRecorder . ToolBox . CommandLine
 {
 
+	[PublicAPI]
 	public abstract class ProgramBase <T , TExitCode , TSetting , TSettingCategory>
 		where T : ProgramBase <T , TExitCode , TSetting , TSettingCategory>
 		where TExitCode : ProgramExitCode <TExitCode> , new ( )
@@ -216,14 +219,14 @@ namespace DreamRecorder . ToolBox . CommandLine
 														{
 															if ( ! CheckLicenseFile ( ) )
 															{
-																Logger . LogInformation ( "Licese check failed." ) ;
+																Logger . LogInformation ( "License check failed." ) ;
 																Exit ( ProgramExitCode <TExitCode> .
 																			LicenseNotAccepted ) ;
 															}
 															else
 															{
 																Logger .
-																	LogInformation ( "Licese file check passed." ) ;
+																	LogInformation ( "License file check passed." ) ;
 															}
 														}
 														else
@@ -267,7 +270,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 														else
 														{
 															Logger .
-																LogInformation ( "Setting file does't exists, generating new." ) ;
+																LogInformation ( "Setting file doesn't exists, generating new." ) ;
 															Setting = SettingBase <TSetting , TSettingCategory> .
 																GenerateNew ( ) ;
 															SaveSettingFile ( ) ;

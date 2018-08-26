@@ -16,14 +16,16 @@ using Microsoft . Extensions . Logging ;
 namespace DreamRecorder . ToolBox . CommandLine
 {
 
+	[PublicAPI]
 	public abstract class SettingBase <T , TSettingCategory>
 		where T : SettingBase <T , TSettingCategory> , new ( ) where TSettingCategory : Enum , IConvertible
 	{
 
 		private static ILogger Logger
-			=> logger ?? ( logger = StaticLoggerFactory . LoggerFactory . CreateLogger <T> ( ) ) ;
+			=> _logger ?? ( _logger = StaticLoggerFactory . LoggerFactory . CreateLogger <T> ( ) ) ;
 
-		private static ILogger logger ;
+		// ReSharper disable once StaticMemberInGenericType
+		private static ILogger _logger ;
 
 		public string Save ( )
 		{
@@ -67,7 +69,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 			{
 				SettingItemAttribute attribute =
 					( SettingItemAttribute ) property . GetCustomAttribute ( typeof ( SettingItemAttribute ) ) ;
-				property . SetValue ( setting , attribute . DefultValue ) ;
+				property . SetValue ( setting , attribute . DefaultValue ) ;
 			}
 
 			return setting ;
@@ -114,7 +116,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 		}
 
 
-		public static void ParseLine <T> ( T settings , string line )
+		public static void ParseLine ( T settings , string line )
 		{
 			if ( ! string . IsNullOrWhiteSpace ( line )
 				&& ! line . StartsWith ( "#" ) )
@@ -138,7 +140,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 					}
 					else
 					{
-						Logger . LogError ( "Cannot find proprtty with name: {0}" , line ) ;
+						Logger . LogError ( "Cannot find property with name: {0}" , line ) ;
 					}
 				}
 				else

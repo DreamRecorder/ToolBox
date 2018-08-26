@@ -61,7 +61,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public static Angle FromDegree ( double degree ) { return new Angle ( degree ) ; }
 
-		public static Angle FromRedius ( double radius ) { return new Angle ( radius / Math . PI * 180 ) ; }
+		public static Angle FromRadius ( double radius ) { return new Angle ( radius / Math . PI * 180 ) ; }
 
 		public static Angle FromGrad ( double grad ) { return new Angle ( grad / 10 * 9 ) ; }
 

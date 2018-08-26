@@ -3,6 +3,8 @@ using System . Collections ;
 using System . Collections . Generic ;
 using System . Drawing ;
 using System . Linq ;
+using System . Runtime . Serialization ;
+using System . Xml . Linq ;
 
 using JetBrains . Annotations ;
 
@@ -10,13 +12,18 @@ namespace DreamRecorder . ToolBox . General
 {
 
 	[PublicAPI]
-	public struct HdrColor : IEquatable <HdrColor>
+	[Serializable]
+	[DataContract]
+	public struct HdrColor : IEquatable <HdrColor> , ISelfSerializable
 	{
 
+		[DataMember]
 		public double R { get ; }
 
+		[DataMember]
 		public double G { get ; }
 
+		[DataMember]
 		public double B { get ; }
 
 		public HdrColor ( double r , double g , double b )
@@ -75,6 +82,17 @@ namespace DreamRecorder . ToolBox . General
 				hashCode = ( hashCode * 397 ) ^ B . GetHashCode ( ) ;
 				return hashCode ;
 			}
+		}
+
+		public XElement ToXElement ( )
+		{
+			XElement result = new XElement ( nameof(HdrColor) ) ;
+
+			result . SetAttributeValue ( nameof(R) , R ) ;
+			result . SetAttributeValue ( nameof(G) , G ) ;
+			result . SetAttributeValue ( nameof(B) , B ) ;
+
+			return result ;
 		}
 
 

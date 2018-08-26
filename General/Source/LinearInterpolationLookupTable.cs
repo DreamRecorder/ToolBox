@@ -11,18 +11,8 @@ using JetBrains . Annotations ;
 namespace DreamRecorder . ToolBox . General
 {
 
-	public static class ExecptionMessages
-	{
-
-		public static string XmlNameMismath ( string argumentName , Type type )
-		{
-			return $"{argumentName} do not perform a {type . FullName}" ;
-		}
-
-	}
-
 	[PublicAPI]
-	public class LinearInterpolationLookupTable : ISelfSerializeable
+	public class LinearInterpolationLookupTable : ISelfSerializable
 	{
 
 		public ReadOnlyCollection <Point> Points { get ; }
@@ -58,7 +48,7 @@ namespace DreamRecorder . ToolBox . General
 
 			if ( element . Name != nameof(LinearInterpolationLookupTable) )
 			{
-				throw new ArgumentException ( ExecptionMessages . XmlNameMismath ( nameof(element) ,
+				throw new ArgumentException ( ExceptionMessages . XmlNameMismatch ( nameof(element) ,
 																					typeof (
 																						LinearInterpolationLookupTable
 																					) ) ) ;
