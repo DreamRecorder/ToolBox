@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTest", "General\UnitTes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandLine", "CommandLine\Source\CommandLine.csproj", "{E1BFEB40-FEFD-4BA8-85B0-6F91F13E9C44}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example", "CommandLine\Example\Example.csproj", "{CEA71CFA-8AA7-404E-B5D8-E1DF22B1F563}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example", "CommandLine\Example\Example.csproj", "{CEA71CFA-8AA7-404E-B5D8-E1DF22B1F563}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Colors", "Colors\Colors.csproj", "{5B630DB3-C1CE-47EF-9FA3-36A169F1D15D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +39,10 @@ Global
 		{CEA71CFA-8AA7-404E-B5D8-E1DF22B1F563}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CEA71CFA-8AA7-404E-B5D8-E1DF22B1F563}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CEA71CFA-8AA7-404E-B5D8-E1DF22B1F563}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B630DB3-C1CE-47EF-9FA3-36A169F1D15D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B630DB3-C1CE-47EF-9FA3-36A169F1D15D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B630DB3-C1CE-47EF-9FA3-36A169F1D15D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B630DB3-C1CE-47EF-9FA3-36A169F1D15D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,12 +52,13 @@ Global
 		{8FB56F9C-6197-49FC-9F80-EDC91AA977F6} = {2D5F594D-8C6A-4F7E-AADB-8944E8935FB0}
 		{E1BFEB40-FEFD-4BA8-85B0-6F91F13E9C44} = {6749562D-3004-4C05-BF9A-6FC70D2629F8}
 		{CEA71CFA-8AA7-404E-B5D8-E1DF22B1F563} = {6749562D-3004-4C05-BF9A-6FC70D2629F8}
+		{5B630DB3-C1CE-47EF-9FA3-36A169F1D15D} = {2D5F594D-8C6A-4F7E-AADB-8944E8935FB0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {14DAB56C-F500-45EE-8A65-CFA2C12B509D}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 5
+		SccNumberOfProjects = 6
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://vsts.dreamry.org/defaultcollection
 		SccLocalPath0 = .
@@ -71,5 +78,9 @@ Global
 		SccProjectTopLevelParentUniqueName4 = ToolBox.sln
 		SccProjectName4 = CommandLine/Example
 		SccLocalPath4 = CommandLine\\Example
+		SccProjectUniqueName5 = Colors\\Colors.csproj
+		SccProjectTopLevelParentUniqueName5 = ToolBox.sln
+		SccProjectName5 = Colors
+		SccLocalPath5 = Colors
 	EndGlobalSection
 EndGlobal

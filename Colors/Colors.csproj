@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup Label="Globals">
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>DreamRecorder.ToolBox.Colors</AssemblyName>
+    <RootNamespace>DreamRecorder.ToolBox.Colors</RootNamespace>
+    <Version>1.1.4.1</Version>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <Authors>Wencey Wang</Authors>
+    <Company>Dream Recorder</Company>
+    <PackageProjectUrl>https://vsts.dreamry.org/DefaultCollection/ToolBox</PackageProjectUrl>
+    <Copyright>Dream Recorder (c) 2018</Copyright>
+    <Description>Tools for other Dreamry project.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\General\Source\General.csproj" />
+  </ItemGroup>
+
+</Project>

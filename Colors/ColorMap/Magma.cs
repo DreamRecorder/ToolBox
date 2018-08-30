@@ -3,7 +3,7 @@ using System . Collections ;
 using System . Collections . Generic ;
 using System . Linq ;
 
-namespace DreamRecorder . ToolBox . General . ColorMap
+namespace DreamRecorder . ToolBox . Colors . ColorMap
 {
 
 	public class Magma : DataColorMap

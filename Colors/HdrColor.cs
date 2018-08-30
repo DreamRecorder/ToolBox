@@ -6,9 +6,11 @@ using System . Linq ;
 using System . Runtime . Serialization ;
 using System . Xml . Linq ;
 
+using DreamRecorder . ToolBox . General ;
+
 using JetBrains . Annotations ;
 
-namespace DreamRecorder . ToolBox . General
+namespace DreamRecorder . ToolBox . Colors
 {
 
 	[PublicAPI]
@@ -31,6 +33,24 @@ namespace DreamRecorder . ToolBox . General
 			R = r ;
 			G = g ;
 			B = b ;
+		}
+
+		public HdrColor ( XElement element )
+		{
+			if ( element == null )
+			{
+				throw new ArgumentNullException ( nameof(element) ) ;
+			}
+
+			if ( element . Name == nameof(HdrColor) )
+			{
+				throw new ArgumentException ( ExceptionMessages . XmlNameMismatch ( nameof(element) ,
+																					typeof ( HdrColor ) ) ) ;
+			}
+
+			R = element . ReadNecessaryValue <double> ( nameof(R) ) ;
+			G = element . ReadNecessaryValue <double> ( nameof(G) ) ;
+			B = element . ReadNecessaryValue <double> ( nameof(B) ) ;
 		}
 
 		/// <summary>
@@ -241,11 +261,16 @@ namespace DreamRecorder . ToolBox . General
 
 		public Color ToDrawingColor ( ToneMappingAlgorithm mappingAlgorithm = null )
 		{
-			mappingAlgorithm = mappingAlgorithm ?? KnowToneMapping . AcesMapping ;
+			mappingAlgorithm = mappingAlgorithm ?? KnowToneMapping . Drop ;
 			return Color . FromArgb ( byte . MaxValue ,
 									mappingAlgorithm ( R ) ,
 									mappingAlgorithm ( G ) ,
 									mappingAlgorithm ( B ) ) ;
+		}
+
+		public static implicit operator HdrColor ( Color color )
+		{
+			return new HdrColor ( color . R / 255d , color . G / 255d , color . B / 255d ) ;
 		}
 
 	}
