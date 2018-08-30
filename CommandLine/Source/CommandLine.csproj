@@ -8,10 +8,9 @@
   </PropertyGroup>
 
   <PropertyGroup>
- <TargetFramework>netstandard2.0</TargetFramework>
-     <AssemblyName>DreamRecorder.ToolBox.CommandLine</AssemblyName>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>DreamRecorder.ToolBox.CommandLine</AssemblyName>
     <RootNamespace>DreamRecorder.ToolBox.CommandLine</RootNamespace>
-    
     <PackageId>DreamRecorder.ToolBox.CommandLine</PackageId>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Authors>Wencey Wang</Authors>
@@ -22,8 +21,7 @@
     <PackageProjectUrl>https://vsts.dreamry.org/DefaultCollection/ToolBox</PackageProjectUrl>
     <Copyright>Dream Recorder (c) 2018</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.1.4.1</Version>
-   
+    <Version>1.1.4.2</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

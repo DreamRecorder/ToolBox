@@ -25,6 +25,8 @@ namespace DreamRecorder . ToolBox . General
 			return $"{element} should have property {name}." ;
 		}
 
+		public static string NotPrepared ( ) { return "this assembly is not prepared." ; }
+
 	}
 
 }

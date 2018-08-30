@@ -19,7 +19,7 @@ namespace DreamRecorder . ToolBox . General
 			return GetInheritanceDepth ( type , typeof ( object ) ) ;
 		}
 
-		public static Task StartUpAssembly <T> ( ) { return typeof ( T ) . Assembly . Startup ( ) ; }
+		public static Task PrepareAssembly <T> ( ) { return typeof ( T ) . Assembly . Prepare ( ) ; }
 
 		public static int GetInheritanceDepth ( this Type type , Type baseType )
 		{

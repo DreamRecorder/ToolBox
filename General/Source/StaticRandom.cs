@@ -22,7 +22,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public StaticRandom ( int seed ) : base ( seed ) { }
 
-		[Startup]
+		[Prepare]
 		public static void StartUp ( ) { Current = new StaticRandom ( ) ; }
 
 		public override int Next ( )

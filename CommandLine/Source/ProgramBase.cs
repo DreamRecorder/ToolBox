@@ -157,7 +157,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 			foreach ( Assembly assembly in assemblies )
 			{
-				assembly . Startup ( ) ;
+				assembly . Prepare ( ) ;
 			}
 
 			#endregion

@@ -21,9 +21,9 @@ namespace DreamRecorder . ToolBox . General
 			return type . GetTypeInfo ( ) . Assembly . GetName ( ) . FullName . Replace ( ", " , CommaWithNewline ) ;
 		}
 
-		public static Task Startup ( this Assembly assembly )
+		public static Task Prepare ( this Assembly assembly )
 		{
-			StartupAttribute attribute = assembly . GetCustomAttribute <StartupAttribute> ( ) ;
+			PrepareAttribute attribute = assembly . GetCustomAttribute <PrepareAttribute> ( ) ;
 
 			if ( attribute != null )
 			{
@@ -33,7 +33,7 @@ namespace DreamRecorder . ToolBox . General
 				{
 					foreach ( MethodInfo method in type . DeclaredMethods )
 					{
-						if ( method . GetCustomAttributes ( typeof ( StartupAttribute ) ) . Any ( ) )
+						if ( method . GetCustomAttributes ( typeof ( PrepareAttribute ) ) . Any ( ) )
 						{
 							tasks . Add ( Task . Run ( ( ) => method . Invoke ( null , new object [ ] { } ) ) ) ;
 						}

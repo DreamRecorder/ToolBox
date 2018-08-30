@@ -14,18 +14,13 @@ namespace DreamRecorder . ToolBox . Colors
 {
 
 	[PublicAPI]
-	[Serializable]
-	[DataContract]
 	public struct HdrColor : IEquatable <HdrColor> , ISelfSerializable
 	{
 
-		[DataMember]
 		public double R { get ; }
 
-		[DataMember]
 		public double G { get ; }
 
-		[DataMember]
 		public double B { get ; }
 
 		public HdrColor ( double r , double g , double b )
