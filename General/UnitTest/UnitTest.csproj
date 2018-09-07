@@ -36,7 +36,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Source\General.csproj" />
+    <ProjectReference Include="..\Colors\Colors.csproj" />
+    <ProjectReference Include="..\General\General.csproj" />
+    <ProjectReference Include="..\Network\Network.csproj" />
   </ItemGroup>
 
 </Project>

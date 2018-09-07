@@ -5,7 +5,10 @@ using System . Linq ;
 using System . Reflection ;
 using System . Runtime . InteropServices ;
 
+using JetBrains . Annotations ;
+
 [assembly : AssemblyTrademark ( "Dream Recorder Toolbox" )]
 [assembly : ComVisible ( true )]
 [assembly : CLSCompliant ( true )]
-[assembly : Guid ( "96B36C3B-9F2C-4296-A707-FFD3F711D5EF" )]
+[assembly : Guid ( "CDDB95C7-1952-4C61-858A-1C78111D006D" )]
+[assembly : PublicAPI]

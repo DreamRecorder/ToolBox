@@ -6,7 +6,7 @@ using System . Net . Sockets ;
 
 using JetBrains . Annotations ;
 
-namespace DreamRecorder . ToolBox . General
+namespace DreamRecorder . ToolBox . Network
 {
 
 	[PublicAPI]

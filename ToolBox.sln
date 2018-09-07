@@ -7,15 +7,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "General", "General", "{2D5F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommandLine", "CommandLine", "{6749562D-3004-4C05-BF9A-6FC70D2629F8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "General", "General\Source\General.csproj", "{EF1A5CE4-7C32-4D59-8478-09125367A3B3}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTest", "General\UnitTest\UnitTest.csproj", "{8FB56F9C-6197-49FC-9F80-EDC91AA977F6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandLine", "CommandLine\Source\CommandLine.csproj", "{E1BFEB40-FEFD-4BA8-85B0-6F91F13E9C44}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example", "CommandLine\Example\Example.csproj", "{CEA71CFA-8AA7-404E-B5D8-E1DF22B1F563}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Colors", "Colors\Colors.csproj", "{5B630DB3-C1CE-47EF-9FA3-36A169F1D15D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Colors", "General\Colors\Colors.csproj", "{9B521F65-00F8-402A-8005-BC8F0DDEC1EB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "General", "General\General\General.csproj", "{C6A13C5D-2A22-42A9-8DD7-269053A13273}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Network", "General\Network\Network.csproj", "{929FA67C-090E-4A86-9090-CD6F2B0E8CD7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +25,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{EF1A5CE4-7C32-4D59-8478-09125367A3B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EF1A5CE4-7C32-4D59-8478-09125367A3B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EF1A5CE4-7C32-4D59-8478-09125367A3B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EF1A5CE4-7C32-4D59-8478-09125367A3B3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8FB56F9C-6197-49FC-9F80-EDC91AA977F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8FB56F9C-6197-49FC-9F80-EDC91AA977F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8FB56F9C-6197-49FC-9F80-EDC91AA977F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,48 +37,61 @@ Global
 		{CEA71CFA-8AA7-404E-B5D8-E1DF22B1F563}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CEA71CFA-8AA7-404E-B5D8-E1DF22B1F563}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CEA71CFA-8AA7-404E-B5D8-E1DF22B1F563}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5B630DB3-C1CE-47EF-9FA3-36A169F1D15D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5B630DB3-C1CE-47EF-9FA3-36A169F1D15D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5B630DB3-C1CE-47EF-9FA3-36A169F1D15D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5B630DB3-C1CE-47EF-9FA3-36A169F1D15D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B521F65-00F8-402A-8005-BC8F0DDEC1EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B521F65-00F8-402A-8005-BC8F0DDEC1EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B521F65-00F8-402A-8005-BC8F0DDEC1EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B521F65-00F8-402A-8005-BC8F0DDEC1EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6A13C5D-2A22-42A9-8DD7-269053A13273}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6A13C5D-2A22-42A9-8DD7-269053A13273}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6A13C5D-2A22-42A9-8DD7-269053A13273}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6A13C5D-2A22-42A9-8DD7-269053A13273}.Release|Any CPU.Build.0 = Release|Any CPU
+		{929FA67C-090E-4A86-9090-CD6F2B0E8CD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{929FA67C-090E-4A86-9090-CD6F2B0E8CD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{929FA67C-090E-4A86-9090-CD6F2B0E8CD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{929FA67C-090E-4A86-9090-CD6F2B0E8CD7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{EF1A5CE4-7C32-4D59-8478-09125367A3B3} = {2D5F594D-8C6A-4F7E-AADB-8944E8935FB0}
 		{8FB56F9C-6197-49FC-9F80-EDC91AA977F6} = {2D5F594D-8C6A-4F7E-AADB-8944E8935FB0}
 		{E1BFEB40-FEFD-4BA8-85B0-6F91F13E9C44} = {6749562D-3004-4C05-BF9A-6FC70D2629F8}
 		{CEA71CFA-8AA7-404E-B5D8-E1DF22B1F563} = {6749562D-3004-4C05-BF9A-6FC70D2629F8}
-		{5B630DB3-C1CE-47EF-9FA3-36A169F1D15D} = {2D5F594D-8C6A-4F7E-AADB-8944E8935FB0}
+		{9B521F65-00F8-402A-8005-BC8F0DDEC1EB} = {2D5F594D-8C6A-4F7E-AADB-8944E8935FB0}
+		{C6A13C5D-2A22-42A9-8DD7-269053A13273} = {2D5F594D-8C6A-4F7E-AADB-8944E8935FB0}
+		{929FA67C-090E-4A86-9090-CD6F2B0E8CD7} = {2D5F594D-8C6A-4F7E-AADB-8944E8935FB0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {14DAB56C-F500-45EE-8A65-CFA2C12B509D}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 6
+		SccNumberOfProjects = 7
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://vsts.dreamry.org/defaultcollection
 		SccLocalPath0 = .
-		SccProjectUniqueName1 = General\\Source\\General.csproj
+		SccProjectUniqueName1 = General\\UnitTest\\UnitTest.csproj
 		SccProjectTopLevelParentUniqueName1 = ToolBox.sln
-		SccProjectName1 = General/Source
-		SccLocalPath1 = General\\Source
-		SccProjectUniqueName2 = General\\UnitTest\\UnitTest.csproj
+		SccProjectName1 = General/UnitTest
+		SccLocalPath1 = General\\UnitTest
+		SccProjectUniqueName2 = CommandLine\\Source\\CommandLine.csproj
 		SccProjectTopLevelParentUniqueName2 = ToolBox.sln
-		SccProjectName2 = General/UnitTest
-		SccLocalPath2 = General\\UnitTest
-		SccProjectUniqueName3 = CommandLine\\Source\\CommandLine.csproj
+		SccProjectName2 = CommandLine/Source
+		SccLocalPath2 = CommandLine\\Source
+		SccProjectUniqueName3 = CommandLine\\Example\\Example.csproj
 		SccProjectTopLevelParentUniqueName3 = ToolBox.sln
-		SccProjectName3 = CommandLine/Source
-		SccLocalPath3 = CommandLine\\Source
-		SccProjectUniqueName4 = CommandLine\\Example\\Example.csproj
+		SccProjectName3 = CommandLine/Example
+		SccLocalPath3 = CommandLine\\Example
+		SccProjectUniqueName4 = General\\Colors\\Colors.csproj
 		SccProjectTopLevelParentUniqueName4 = ToolBox.sln
-		SccProjectName4 = CommandLine/Example
-		SccLocalPath4 = CommandLine\\Example
-		SccProjectUniqueName5 = Colors\\Colors.csproj
+		SccProjectName4 = General/Colors
+		SccLocalPath4 = General\\Colors
+		SccProjectUniqueName5 = General\\General\\General.csproj
 		SccProjectTopLevelParentUniqueName5 = ToolBox.sln
-		SccProjectName5 = Colors
-		SccLocalPath5 = Colors
+		SccProjectName5 = General/General
+		SccLocalPath5 = General\\General
+		SccProjectUniqueName6 = General\\Network\\Network.csproj
+		SccProjectTopLevelParentUniqueName6 = ToolBox.sln
+		SccProjectName6 = General/Network
+		SccLocalPath6 = General\\Network
 	EndGlobalSection
 EndGlobal

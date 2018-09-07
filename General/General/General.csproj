@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
- <PropertyGroup Label="Globals">
+  <PropertyGroup Label="Globals">
     <SccProjectName>SAK</SccProjectName>
     <SccProvider>SAK</SccProvider>
     <SccAuxPath>SAK</SccAuxPath>
@@ -9,9 +9,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>DreamRecorder.ToolBox.CommandLine</AssemblyName>
-    <RootNamespace>DreamRecorder.ToolBox.CommandLine</RootNamespace>
-    <PackageId>DreamRecorder.ToolBox.CommandLine</PackageId>
+    <AssemblyName>DreamRecorder.ToolBox.General</AssemblyName>
+    <RootNamespace>DreamRecorder.ToolBox.General</RootNamespace>
+    <PackageId>DreamRecorder.ToolBox</PackageId>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Authors>Wencey Wang</Authors>
     <Company>Dream Recorder</Company>
@@ -22,24 +22,17 @@
     <Copyright>Dream Recorder (c) 2018</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>1.1.4.4</Version>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <LangVersion>latest</LangVersion>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" />
-    <PackageReference Include="Microsoft.Extensions.CommandLineUtils" Version="1.1.1" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="2.1.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\General\General\General.csproj" />
+    <Folder Include="Properties\" />
   </ItemGroup>
+
 </Project>
