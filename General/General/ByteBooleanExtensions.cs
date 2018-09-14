@@ -2,6 +2,7 @@
 using System . Collections ;
 using System . Collections . Generic ;
 using System . Linq ;
+using System . Runtime . InteropServices ;
 
 using JetBrains . Annotations ;
 
@@ -44,7 +45,7 @@ namespace DreamRecorder . ToolBox . General
 
 			return result ;
 		}
-
+	
 		public static byte ToByte ( [NotNull] bool [ ] source )
 		{
 			if ( source == null )
@@ -110,6 +111,43 @@ namespace DreamRecorder . ToolBox . General
 			}
 
 			return result ;
+		}
+
+		public static T BytesToStruct<T>(this byte[] bytes)
+		{
+			int size = Marshal.SizeOf(typeof(T));
+			IntPtr buffer = Marshal.AllocHGlobal(size);
+			try
+			{
+				Marshal.Copy(bytes, 0, buffer, size);
+				return (T)Marshal.PtrToStructure(buffer, typeof(T));
+			}
+			finally
+			{
+				Marshal.FreeHGlobal(buffer);
+			}
+		}
+
+		public static byte[] StructToBytes<T>(this T value)
+		{
+			int size = Marshal.SizeOf(typeof(T));
+
+			byte[] bytes = new byte[size];
+
+			IntPtr buffer = Marshal.AllocHGlobal(size);
+			try
+			{
+				Marshal.StructureToPtr(value, buffer, false);
+				Marshal.Copy(bytes, 0, buffer, size);
+				Marshal.Copy(buffer, bytes, 0, size);
+				Marshal.FreeHGlobal(buffer);
+
+				return bytes;
+			}
+			finally
+			{
+				Marshal.FreeHGlobal(buffer);
+			}
 		}
 
 	}
