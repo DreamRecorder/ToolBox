@@ -55,6 +55,21 @@ namespace DreamRecorder . ToolBox . General
 
 		public static string ToSlug ( this string name ) { return ToUrlSlug ( name ) ; }
 
+		public static string[] SplitByCamelCase ( [NotNull] string value)
+		{
+			if ( value == null )
+			{
+				throw new ArgumentNullException ( nameof(value) ) ;
+			}
+
+			string[] words = Regex.Matches(value, "(^[a-z]+|[A-Z]+(?![a-z])|[A-Z][a-z]+)")
+								.OfType<Match>()
+								.Select(m => m.Value)
+								.ToArray();
+
+			return words;
+		}
+
 	}
 
 }
