@@ -45,7 +45,7 @@ namespace DreamRecorder . ToolBox . General
 
 			return result ;
 		}
-	
+
 		public static byte ToByte ( [NotNull] bool [ ] source )
 		{
 			if ( source == null )
@@ -113,40 +113,40 @@ namespace DreamRecorder . ToolBox . General
 			return result ;
 		}
 
-		public static T BytesToStruct<T>(this byte[] bytes)
+		public static T BytesToStruct <T> ( this byte [ ] bytes )
 		{
-			int size = Marshal.SizeOf(typeof(T));
-			IntPtr buffer = Marshal.AllocHGlobal(size);
+			int size = Marshal . SizeOf ( typeof ( T ) ) ;
+			IntPtr buffer = Marshal . AllocHGlobal ( size ) ;
 			try
 			{
-				Marshal.Copy(bytes, 0, buffer, size);
-				return (T)Marshal.PtrToStructure(buffer, typeof(T));
+				Marshal . Copy ( bytes , 0 , buffer , size ) ;
+				return ( T ) Marshal . PtrToStructure ( buffer , typeof ( T ) ) ;
 			}
 			finally
 			{
-				Marshal.FreeHGlobal(buffer);
+				Marshal . FreeHGlobal ( buffer ) ;
 			}
 		}
 
-		public static byte[] StructToBytes<T>(this T value)
+		public static byte [ ] StructToBytes <T> ( this T value )
 		{
-			int size = Marshal.SizeOf(typeof(T));
+			int size = Marshal . SizeOf ( typeof ( T ) ) ;
 
-			byte[] bytes = new byte[size];
+			byte [ ] bytes = new byte[ size ] ;
 
-			IntPtr buffer = Marshal.AllocHGlobal(size);
+			IntPtr buffer = Marshal . AllocHGlobal ( size ) ;
 			try
 			{
-				Marshal.StructureToPtr(value, buffer, false);
-				Marshal.Copy(bytes, 0, buffer, size);
-				Marshal.Copy(buffer, bytes, 0, size);
-				Marshal.FreeHGlobal(buffer);
+				Marshal . StructureToPtr ( value , buffer , false ) ;
+				Marshal . Copy ( bytes , 0 , buffer , size ) ;
+				Marshal . Copy ( buffer , bytes , 0 , size ) ;
+				Marshal . FreeHGlobal ( buffer ) ;
 
-				return bytes;
+				return bytes ;
 			}
 			finally
 			{
-				Marshal.FreeHGlobal(buffer);
+				Marshal . FreeHGlobal ( buffer ) ;
 			}
 		}
 

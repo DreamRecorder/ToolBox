@@ -3,6 +3,7 @@ using System . Collections ;
 using System . Collections . Generic ;
 using System . Drawing ;
 using System . Linq ;
+using System . Runtime . Serialization ;
 using System . Xml . Linq ;
 
 using DreamRecorder . ToolBox . General ;
@@ -13,13 +14,17 @@ namespace DreamRecorder . ToolBox . Colors
 {
 
 	[PublicAPI]
+	[DataContract]
 	public struct HdrColor : IEquatable <HdrColor> , ISelfSerializable
 	{
 
+		[DataMember]
 		public double R { get ; }
 
+		[DataMember]
 		public double G { get ; }
 
+		[DataMember]
 		public double B { get ; }
 
 		public HdrColor ( double r , double g , double b )
