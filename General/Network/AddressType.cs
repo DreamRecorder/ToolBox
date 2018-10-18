@@ -13,7 +13,7 @@ namespace DreamRecorder . ToolBox . Network
 
 		Ipv6 = 16 ,
 
-		Mac = 8
+		Mac = 6
 
 	}
 

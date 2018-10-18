@@ -3,6 +3,8 @@ using System . Collections ;
 using System . Collections . Generic ;
 using System . Linq ;
 
+using JetBrains . Annotations ;
+
 namespace DreamRecorder . ToolBox . Network . Ip
 {
 
@@ -61,6 +63,16 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			{
 				throw new ArgumentException ( ) ; //todo:
 			}
+		}
+
+		public static explicit operator Ipv4Address ( [NotNull] string address )
+		{
+			if ( address == null )
+			{
+				throw new ArgumentNullException ( nameof(address) ) ;
+			}
+
+			return new Ipv4Address ( address ) ;
 		}
 
 		public override object Clone ( ) { throw new NotImplementedException ( ) ; }

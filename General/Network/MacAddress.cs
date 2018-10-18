@@ -2,6 +2,7 @@
 using System . Collections ;
 using System . Collections . Generic ;
 using System . Linq ;
+using System . Text ;
 
 using JetBrains . Annotations ;
 
@@ -13,7 +14,7 @@ namespace DreamRecorder . ToolBox . Network
 
 		public override AddressType Type => AddressType . Mac ;
 
-		public MacAddress ( ) { AddressBytes = new byte[ 8 ] ; }
+		public MacAddress ( ) { AddressBytes = new byte[ 6 ] ; }
 
 		internal MacAddress ( byte [ ] address )
 		{
@@ -29,7 +30,6 @@ namespace DreamRecorder . ToolBox . Network
 
 			AddressBytes = address ;
 		}
-
 
 		public MacAddress ( [NotNull] string address ) : this ( )
 		{
@@ -117,6 +117,42 @@ namespace DreamRecorder . ToolBox . Network
 			}
 
 			AddressBytes = buffer . Take ( 8 ) . ToArray ( ) ;
+		}
+
+		public override string ToString ( )
+		{
+			StringBuilder addressString = new StringBuilder ( ) ;
+
+			foreach ( byte value in AddressBytes )
+			{
+				int tmp = ( value >> 4 ) & 0x0F ;
+
+				for ( int i = 0 ; i < 2 ; i++ )
+				{
+					if ( tmp < 0x0A )
+					{
+						addressString . Append ( ( char ) ( tmp + 0x30 ) ) ;
+					}
+					else
+					{
+						addressString . Append ( ( char ) ( tmp + 0x37 ) ) ;
+					}
+
+					tmp = ( value & 0x0F ) ;
+				}
+			}
+
+			return addressString . ToString ( ) ;
+		}
+
+		public static explicit operator MacAddress ( [NotNull] string address )
+		{
+			if ( address == null )
+			{
+				throw new ArgumentNullException ( nameof(address) ) ;
+			}
+
+			return new MacAddress ( address ) ;
 		}
 
 		public override object Clone ( ) { return new MacAddress ( AddressBytes ) ; }

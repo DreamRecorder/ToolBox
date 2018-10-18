@@ -36,6 +36,8 @@ namespace DreamRecorder . ToolBox . Network
 			return Equals ( AddressBytes , other . AddressBytes ) && Length == other . Length && Type == other . Type ;
 		}
 
+		public static explicit operator string ( Prefix prefix ) { return prefix . ToString ( ) ; }
+
 		public virtual bool IsInPrefix ( [NotNull] Address address )
 		{
 			if ( address == null )

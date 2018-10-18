@@ -67,6 +67,16 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			}
 		}
 
+		public static explicit operator Ipv4Prefix ( [NotNull] string address )
+		{
+			if ( address == null )
+			{
+				throw new ArgumentNullException ( nameof(address) ) ;
+			}
+
+			return new Ipv4Prefix ( address ) ;
+		}
+
 		public override object Clone ( ) { return new Ipv4Prefix ( AddressBytes , Length ) ; }
 
 	}

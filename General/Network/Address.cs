@@ -30,6 +30,10 @@ namespace DreamRecorder . ToolBox . Network
 			return Equals ( AddressBytes , other . AddressBytes ) && Type == other . Type ;
 		}
 
+		public static implicit operator byte [ ] ( Address address ) { return address . AddressBytes ; }
+
+		public static explicit operator string ( Address address ) { return address . ToString ( ) ; }
+
 		public override bool Equals ( object obj )
 		{
 			if ( ReferenceEquals ( null , obj ) )

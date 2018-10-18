@@ -1,21 +1,19 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System ;
+using System . Collections ;
+using System . Collections . Generic ;
+using System . Linq ;
 
-namespace DreamRecorder.ToolBox.General
+namespace DreamRecorder . ToolBox . General
 {
 
-	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Property)]
+	[AttributeUsage ( AttributeTargets . Class | AttributeTargets . Property )]
 	public sealed class SortIndexAttribute : Attribute
 	{
 
-		public int Value { get; }
+		public int Value { get ; }
 
-		public SortIndexAttribute(int value) { Value = value; }
+		public SortIndexAttribute ( int value ) { Value = value ; }
 
 	}
-
-
 
 }

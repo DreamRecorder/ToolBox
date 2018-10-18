@@ -4,6 +4,8 @@ using System . Collections . Generic ;
 using System . Linq ;
 using System . Text ;
 
+using JetBrains . Annotations ;
+
 namespace DreamRecorder . ToolBox . Network . Ip
 {
 
@@ -98,6 +100,16 @@ namespace DreamRecorder . ToolBox . Network . Ip
 		}
 
 		private const int NumberOfLabels = 8 ;
+
+		public static explicit operator Ipv6Address ( [NotNull] string address )
+		{
+			if ( address == null )
+			{
+				throw new ArgumentNullException ( nameof(address) ) ;
+			}
+
+			return new Ipv6Address ( address ) ;
+		}
 
 		public override object Clone ( ) { return new Ipv6Address ( AddressBytes ) ; }
 
