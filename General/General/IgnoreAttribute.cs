@@ -10,12 +10,8 @@ namespace DreamRecorder . ToolBox . General
 
 	[PublicAPI]
 	[AttributeUsage ( AttributeTargets . Class | AttributeTargets . Property )]
-	public sealed class SortIndexAttribute : Attribute
+	public sealed class IgnoreAttribute : Attribute
 	{
-
-		public int Value { get ; }
-
-		public SortIndexAttribute ( int value ) { Value = value ; }
 
 	}
 
