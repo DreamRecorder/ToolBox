@@ -1,6 +1,7 @@
 ﻿using System ;
 using System . Collections ;
 using System . Collections . Generic ;
+using System . ComponentModel . DataAnnotations ;
 using System . Linq ;
 
 using DreamRecorder . ToolBox . General ;
@@ -12,7 +13,7 @@ namespace DreamRecorder . ToolBox . Network
 
 	public abstract class Prefix : ICloneable , IEquatable <Prefix>
 	{
-
+		[Key]
 		public byte [ ] AddressBytes { get ; set ; }
 
 		public byte Length { get ; set ; }

@@ -2,13 +2,14 @@
 using System . Collections ;
 using System . Collections . Generic ;
 using System . Linq ;
+using System.ComponentModel.DataAnnotations;
 
 namespace DreamRecorder . ToolBox . Network
 {
 
 	public abstract class Address : ICloneable , IEquatable <Address>
 	{
-
+		[Key]
 		public byte [ ] AddressBytes { get ; set ; }
 
 		public abstract AddressType Type { get ; }
