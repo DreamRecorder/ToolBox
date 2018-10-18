@@ -13,6 +13,7 @@ namespace DreamRecorder . ToolBox . Network
 
 	public abstract class Prefix : ICloneable , IEquatable <Prefix>
 	{
+
 		[Key]
 		public byte [ ] AddressBytes { get ; set ; }
 

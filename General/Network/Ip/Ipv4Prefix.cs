@@ -13,6 +13,12 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 		public override AddressType Type => AddressType . Ipv4 ;
 
+		public Ipv4Prefix ( )
+		{
+			AddressBytes = new byte[ 4 ] ;
+			Length = 0 ;
+		}
+
 		private Ipv4Prefix ( [NotNull] byte [ ] address , byte length )
 		{
 			if ( address == null )

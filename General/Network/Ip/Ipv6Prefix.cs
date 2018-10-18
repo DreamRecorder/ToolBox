@@ -13,6 +13,12 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 		public override AddressType Type => AddressType . Ipv6 ;
 
+		public Ipv6Prefix ( )
+		{
+			AddressBytes = new byte[ 16 ] ;
+			Length = 0 ;
+		}
+
 		private Ipv6Prefix ( [NotNull] byte [ ] address , byte length )
 		{
 			if ( address == null )
