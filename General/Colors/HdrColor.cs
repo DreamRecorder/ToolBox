@@ -18,6 +18,31 @@ namespace DreamRecorder . ToolBox . Colors
 	public struct HdrColor : IEquatable <HdrColor> , ISelfSerializable
 	{
 
+		public static explicit operator byte [ ] ( HdrColor color )
+		{
+			byte [ ] result = new byte[ sizeof ( double ) * 3 ] ;
+
+			BitConverter . GetBytes ( color . R ) . CopyTo ( result , sizeof ( double ) * 0 ) ;
+			BitConverter . GetBytes ( color . G ) . CopyTo ( result , sizeof ( double ) * 1 ) ;
+			BitConverter . GetBytes ( color . B ) . CopyTo ( result , sizeof ( double ) * 2 ) ;
+
+			return result ;
+		}
+
+		public static explicit operator HdrColor ( [NotNull] byte [ ] color )
+		{
+			if ( color == null )
+			{
+				throw new ArgumentNullException ( nameof(color) ) ;
+			}
+
+			double R = BitConverter . ToDouble ( color , sizeof ( double ) * 0 ) ;
+			double G = BitConverter . ToDouble ( color , sizeof ( double ) * 1 ) ;
+			double B = BitConverter . ToDouble ( color , sizeof ( double ) * 2 ) ;
+
+			return new HdrColor ( R , G , B ) ;
+		}
+
 		[DataMember]
 		public double R { get ; }
 
