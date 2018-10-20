@@ -57,12 +57,12 @@ namespace DreamRecorder . ToolBox . General
 			return count ;
 		}
 
-		public static List <PropertyInfo> GetSortedProperties <T> ( )
+		public static List <PropertyInfo> GetSortedProperties ( this Type type )
 		{
-			List <PropertyInfo> result = typeof ( T ) . GetProperties ( ) .
-														Where ( prop => prop . GetCustomAttribute <IgnoreAttribute> ( )
-																		== null ) .
-														ToList ( ) ;
+			List <PropertyInfo> result = type . GetProperties ( ) .
+												Where ( prop => prop . GetCustomAttribute <IgnoreAttribute> ( )
+																== null ) .
+												ToList ( ) ;
 
 			Comparison <PropertyInfo> comp = ( x , y )
 												=> ( x . GetCustomAttribute <SortIndexAttribute> ( ) ? . Value
@@ -76,23 +76,38 @@ namespace DreamRecorder . ToolBox . General
 			return result ;
 		}
 
-		public static List <(PropertyInfo , TAttribute)> GetSortedPropertiesWithAttribute <T , TAttribute> ( )
-			where TAttribute : Attribute
+		public static List <PropertyInfo> GetSortedProperties <T> ( )
 		{
-			return GetSortedProperties <T> ( ) .
-					Select ( prop => ( (PropertyInfo Info , TAttribute Attribute) )
-								( prop , prop . GetCustomAttribute <TAttribute> ( true ) ) ) .
-					Where ( prop => prop . Attribute != null ) .
-					ToList ( ) ;
+			return typeof ( T ) . GetSortedProperties ( ) ;
 		}
 
-		public static List <(PropertyInfo , TAttribute)> GetSortedPropertiesWithNullableAttribute <T , TAttribute> ( )
-			where TAttribute : Attribute
+		public static List <(PropertyInfo PropertyInfo , TAttribute Attribute)> GetSortedPropertiesWithAttribute
+			<TAttribute> ( this Type type ) where TAttribute : Attribute
 		{
-			return GetSortedProperties <T> ( ) .
-					Select ( prop => ( (PropertyInfo Info , TAttribute Attribute) )
-								( prop , prop . GetCustomAttribute <TAttribute> ( true ) ) ) .
-					ToList ( ) ;
+			return type . GetSortedPropertiesWithNullableAttribute <TAttribute> ( ) .
+						Where ( prop => prop . Attribute != null ) .
+						ToList ( ) ;
+		}
+
+		public static List <(PropertyInfo PropertyInfo , TAttribute Attribute)> GetSortedPropertiesWithAttribute
+			<T , TAttribute> ( ) where TAttribute : Attribute
+		{
+			return typeof ( T ) . GetSortedPropertiesWithAttribute <TAttribute> ( ) ;
+		}
+
+		public static List <(PropertyInfo , TAttribute Attribute)> GetSortedPropertiesWithNullableAttribute
+			<TAttribute> ( this Type type ) where TAttribute : Attribute
+		{
+			return type . GetSortedProperties ( ) .
+						Select ( prop => ( (PropertyInfo PropertyInfo , TAttribute Attribute) )
+									( prop , prop . GetCustomAttribute <TAttribute> ( true ) ) ) .
+						ToList ( ) ;
+		}
+
+		public static List <(PropertyInfo PropertyInfo , TAttribute Attribute)> GetSortedPropertiesWithNullableAttribute
+			<T , TAttribute> ( ) where TAttribute : Attribute
+		{
+			return typeof ( T ) . GetSortedPropertiesWithNullableAttribute <TAttribute> ( ) ;
 		}
 
 	}
