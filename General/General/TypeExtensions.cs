@@ -57,6 +57,44 @@ namespace DreamRecorder . ToolBox . General
 			return count ;
 		}
 
+		public static List <PropertyInfo> GetSortedProperties <T> ( )
+		{
+			List <PropertyInfo> result = typeof ( T ) . GetProperties ( ) .
+														Where ( prop => prop . GetCustomAttribute <IgnoreAttribute> ( )
+																		== null ) .
+														ToList ( ) ;
+
+			Comparison <PropertyInfo> comp = ( x , y )
+												=> ( x . GetCustomAttribute <SortIndexAttribute> ( ) ? . Value
+													?? int . MaxValue ) . CompareTo ( ( y . GetCustomAttribute <
+																								SortIndexAttribute
+																							> ( ) ? .
+																							Value
+																						?? int . MaxValue ) ) ;
+
+			result . Sort ( comp . Union ( ( x , y ) => string . CompareOrdinal ( x . Name , y . Name ) ) ) ;
+			return result ;
+		}
+
+		public static List <(PropertyInfo , TAttribute)> GetSortedPropertiesWithAttribute <T , TAttribute> ( )
+			where TAttribute : Attribute
+		{
+			return GetSortedProperties <T> ( ) .
+					Select ( prop => ( (PropertyInfo Info , TAttribute Attribute) )
+								( prop , prop . GetCustomAttribute <TAttribute> ( true ) ) ) .
+					Where ( prop => prop . Attribute != null ) .
+					ToList ( ) ;
+		}
+
+		public static List <(PropertyInfo , TAttribute)> GetSortedPropertiesWithNullableAttribute <T , TAttribute> ( )
+			where TAttribute : Attribute
+		{
+			return GetSortedProperties <T> ( ) .
+					Select ( prop => ( (PropertyInfo Info , TAttribute Attribute) )
+								( prop , prop . GetCustomAttribute <TAttribute> ( true ) ) ) .
+					ToList ( ) ;
+		}
+
 	}
 
 }

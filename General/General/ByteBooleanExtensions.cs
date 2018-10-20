@@ -128,7 +128,7 @@ namespace DreamRecorder . ToolBox . General
 			}
 		}
 
-		public static byte [ ] StructToBytes <T> ( this T value )
+		public static byte [ ] StructToBytes <T> ( this T value ) where T : struct
 		{
 			int size = Marshal . SizeOf ( typeof ( T ) ) ;
 

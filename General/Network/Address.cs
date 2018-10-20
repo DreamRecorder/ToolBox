@@ -4,9 +4,11 @@ using System . Collections . Generic ;
 using System . ComponentModel . DataAnnotations ;
 using System . Linq ;
 
+using JetBrains . Annotations ;
+
 namespace DreamRecorder . ToolBox . Network
 {
-
+	[PublicAPI]
 	public abstract class Address : ICloneable , IEquatable <Address>
 	{
 

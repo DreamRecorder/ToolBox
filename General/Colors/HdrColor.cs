@@ -36,6 +36,11 @@ namespace DreamRecorder . ToolBox . Colors
 				throw new ArgumentNullException ( nameof(color) ) ;
 			}
 
+			if ( color . Length < sizeof ( double ) * 3 )
+			{
+				throw new ArgumentException ( ) ;
+			}
+
 			double R = BitConverter . ToDouble ( color , sizeof ( double ) * 0 ) ;
 			double G = BitConverter . ToDouble ( color , sizeof ( double ) * 1 ) ;
 			double B = BitConverter . ToDouble ( color , sizeof ( double ) * 2 ) ;
