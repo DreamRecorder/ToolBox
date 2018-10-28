@@ -163,6 +163,8 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 			Assembly [ ] assemblies = AppDomain . CurrentDomain . GetAssemblies ( ) ;
 
+			AppDomain . CurrentDomain . AssemblyLoad += CurrentDomain_AssemblyLoad ;
+
 			Logger . LogTrace ( "Current App Domain contains {0} assembly." , assemblies . Length ) ;
 			Logger . LogTrace ( string . Join ( Environment . NewLine ,
 												assemblies . Select ( ass => ass . GetDisplayName ( ) ) .
@@ -303,6 +305,11 @@ namespace DreamRecorder . ToolBox . CommandLine
 					}
 				}
 			}
+		}
+
+		private void CurrentDomain_AssemblyLoad ( object sender , AssemblyLoadEventArgs args )
+		{
+			args . LoadedAssembly . Prepare ( ) ;
 		}
 
 	}
