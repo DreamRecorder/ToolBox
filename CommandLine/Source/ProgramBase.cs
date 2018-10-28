@@ -309,7 +309,9 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 		private void CurrentDomain_AssemblyLoad ( object sender , AssemblyLoadEventArgs args )
 		{
-			args . LoadedAssembly . Prepare ( ) ;
+			Logger.LogTrace("Prepare assembly {0}", args.LoadedAssembly.GetDisplayName());
+
+			args. LoadedAssembly . Prepare ( ) ;
 		}
 
 	}
