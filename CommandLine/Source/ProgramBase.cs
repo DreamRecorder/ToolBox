@@ -153,21 +153,25 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 			#region CreateLogger
 
-			Logger = StaticLoggerFactory.LoggerFactory.CreateLogger<T>();
+			Logger = StaticLoggerFactory . LoggerFactory . CreateLogger <T> ( ) ;
 
-			Logger.LogInformation("Start with argument: {0}", string.Join(" ", args));
+			Logger . LogInformation ( "Start with argument: {0}" , string . Join ( " " , args ) ) ;
 
 			#endregion
 
 			#region StartUp
 
-			Assembly[ ] assemblies = AppDomain . CurrentDomain . GetAssemblies ( ) ;
+			Assembly [ ] assemblies = AppDomain . CurrentDomain . GetAssemblies ( ) ;
 
-			Logger . LogDebug ( "Current App Domain contains {0} assembly." ) ;
+			Logger . LogTrace ( "Current App Domain contains {0} assembly." , assemblies . Length ) ;
+			Logger . LogTrace ( string . Join ( Environment . NewLine ,
+												assemblies . Select ( ass => ass . GetDisplayName ( ) ) .
+															ToArray ( ) ) ) ;
+
 
 			foreach ( Assembly assembly in assemblies )
 			{
-				Logger . LogDebug ( "Prepare assembly {0}" , assembly . GetDisplayName ( ) ) ;
+				Logger . LogTrace ( "Prepare assembly {0}" , assembly . GetDisplayName ( ) ) ;
 
 				assembly . Prepare ( ) ;
 			}

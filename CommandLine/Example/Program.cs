@@ -56,4 +56,15 @@ namespace Example
 
 	}
 
+	public class TestClass
+	{
+
+		[Prepare]
+		public static void Prep ( )
+		{
+
+		}
+
+	}
+
 }
