@@ -128,7 +128,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 			using ( StreamReader reader = new StreamReader ( licenseFile ) )
 			{
 				Logger . LogInformation ( "License file found, reading it." ) ;
-				licenseFileContent = reader . ReadToEnd ( ) ;
+				licenseFileContent = reader . ReadToEnd ( ) . TrimEnd ( ) ;
 			}
 
 			if ( ! licenseFileContent . EndsWith ( "I accept this License." ) )
@@ -155,8 +155,12 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 			Assembly [ ] assemblies = AppDomain . CurrentDomain . GetAssemblies ( ) ;
 
+			Logger . LogDebug ( "Current App Domain contains {0} assembly." ) ;
+
 			foreach ( Assembly assembly in assemblies )
 			{
+				Logger . LogDebug ( "Prepare assembly {0}" , assembly . GetDisplayName ( ) ) ;
+
 				assembly . Prepare ( ) ;
 			}
 
