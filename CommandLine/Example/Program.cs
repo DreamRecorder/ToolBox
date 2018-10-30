@@ -1,6 +1,7 @@
 ﻿using System ;
 using System . Collections ;
 using System . Collections . Generic ;
+using System . Collections . ObjectModel ;
 using System . Linq ;
 using System . Threading ;
 
@@ -36,6 +37,8 @@ namespace Example
 
 		public void DoSth ( )
 		{
+			ReadOnlyDictionary <string , string> a = Emojis . EmojisList ;
+			Console . WriteLine ( a ) ;
 			while ( IsRunning )
 			{
 				Thread . Sleep ( 100 ) ;
@@ -60,10 +63,7 @@ namespace Example
 	{
 
 		[Prepare]
-		public static void Prep ( )
-		{
-
-		}
+		public static void Prep ( ) { }
 
 	}
 

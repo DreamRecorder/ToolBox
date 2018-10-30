@@ -299,7 +299,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 			{
 				while ( IsRunning )
 				{
-					if ( Console . ReadLine ( ) ? . Trim ( ) . ToLower ( ) == "exit" )
+					if ( Console . ReadLine ( ) ? . Trim ( ) . ToLower ( ) == "exit" && CanExit )
 					{
 						Exit ( ProgramExitCode <TExitCode> . Success ) ;
 					}
@@ -309,9 +309,9 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 		private void CurrentDomain_AssemblyLoad ( object sender , AssemblyLoadEventArgs args )
 		{
-			Logger.LogTrace("Prepare assembly {0}", args.LoadedAssembly.GetDisplayName());
+			Logger . LogTrace ( "Prepare assembly {0}" , args . LoadedAssembly . GetDisplayName ( ) ) ;
 
-			args. LoadedAssembly . Prepare ( ) ;
+			args . LoadedAssembly . Prepare ( ) ;
 		}
 
 	}

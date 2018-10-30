@@ -39,21 +39,14 @@ namespace DreamRecorder . ToolBox . General
 		private static string RemoveDiacritics ( string input )
 		{
 			string normalizedInput = input . Normalize ( NormalizationForm . FormD ) ;
-			StringBuilder result = new StringBuilder ( ) ;
 
-			foreach ( char t in normalizedInput )
-			{
-				UnicodeCategory uc = CharUnicodeInfo . GetUnicodeCategory ( t ) ;
-				if ( uc != UnicodeCategory . NonSpacingMark )
-				{
-					result . Append ( t ) ;
-				}
-			}
-
-			return ( result . ToString ( ) . Normalize ( NormalizationForm . FormC ) ) ;
+			return new string ( normalizedInput . Where ( t => CharUnicodeInfo . GetUnicodeCategory ( t )
+																!= UnicodeCategory . NonSpacingMark ) .
+												ToArray ( ) ) . Normalize ( NormalizationForm . FormC ) ;
 		}
 
 		public static string ToSlug ( this string name ) { return ToUrlSlug ( name ) ; }
+
 
 		public static string [ ] SplitByCamelCase ( [NotNull] string value )
 		{
