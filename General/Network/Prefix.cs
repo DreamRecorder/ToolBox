@@ -61,10 +61,8 @@ namespace DreamRecorder . ToolBox . Network
 
 				return isSame ;
 			}
-			else
-			{
-				return false ;
-			}
+
+			return false ;
 		}
 
 		public override bool Equals ( object obj )

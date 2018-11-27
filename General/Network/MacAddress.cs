@@ -82,10 +82,8 @@ namespace DreamRecorder . ToolBox . Network
 						validCount = 0 ;
 						continue ;
 					}
-					else
-					{
-						throw new FormatException ( ) ;
-					}
+
+					throw new FormatException ( ) ;
 				}
 				else
 				{

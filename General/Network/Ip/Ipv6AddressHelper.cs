@@ -151,8 +151,9 @@ namespace DreamRecorder . ToolBox . Network . Ip
 				}
 
 				// SIIT - 0:0 : 0:0 : FFFF:0 : x.x.x.x
-				else if ( numbers [ 4 ] == 0xFFFF
-						&& numbers [ 5 ] == 0 )
+
+				if ( numbers [ 4 ] == 0xFFFF
+					&& numbers [ 5 ] == 0 )
 				{
 					return true ;
 				}
@@ -252,7 +253,8 @@ namespace DreamRecorder . ToolBox . Network . Ip
 								{
 									goto case ']' ;
 								}
-								else if ( name [ i ] == '/' )
+
+								if ( name [ i ] == '/' )
 								{
 									goto case '/' ;
 								}

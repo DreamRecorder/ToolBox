@@ -22,10 +22,8 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			{
 				return new Ipv6Address ( address ) ;
 			}
-			else
-			{
-				return new Ipv4Address ( address ) ;
-			}
+
+			return new Ipv4Address ( address ) ;
 		}
 
 	}

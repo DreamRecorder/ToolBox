@@ -9,9 +9,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>DreamRecorder.ToolBox.General</AssemblyName>
-    <RootNamespace>DreamRecorder.ToolBox.General</RootNamespace>
-    <PackageId>DreamRecorder.ToolBox</PackageId>
+     <AssemblyName>DreamRecorder.ToolBox.Renderer</AssemblyName>
+    <RootNamespace>DreamRecorder.ToolBox.Renderer</RootNamespace>
+    <PackageId>DreamRecorder.ToolBox.Renderer</PackageId>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Authors>Wencey Wang</Authors>
     <Company>Dream Recorder</Company>
@@ -21,24 +21,21 @@
     <PackageProjectUrl>https://vsts.dreamry.org/DefaultCollection/ToolBox</PackageProjectUrl>
     <Copyright>Dream Recorder (c) 2018</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.1.4.3</Version>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Version>1.1.4.22</Version>
     <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <LangVersion>latest</LangVersion>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.1.1" />
-  </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\General\General\General.csproj" />
   </ItemGroup>
 
 </Project>

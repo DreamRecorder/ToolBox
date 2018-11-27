@@ -100,10 +100,8 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			{
 				return IsValidCanonical ( name , start , ref end , allowIPv6 , notImplicitFile ) ;
 			}
-			else
-			{
-				return ParseNonCanonical ( name , start , ref end , notImplicitFile ) != Invalid ;
-			}
+
+			return ParseNonCanonical ( name , start , ref end , notImplicitFile ) != Invalid ;
 		}
 
 		//
@@ -314,7 +312,8 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			{
 				return Invalid ; // Empty trailing segment: 1.1.1.
 			}
-			else if ( current >= end )
+
+			if ( current >= end )
 			{
 				// end of string, allowed
 			}

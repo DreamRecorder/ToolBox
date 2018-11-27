@@ -93,10 +93,8 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 				throw new FormatException ( ) ;
 			}
-			else
-			{
-				throw new ArgumentException ( "" , nameof(address) ) ; //todo
-			}
+
+			throw new ArgumentException ( "" , nameof(address) ) ; //todo
 		}
 
 		private const int NumberOfLabels = 8 ;

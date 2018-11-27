@@ -21,10 +21,8 @@ namespace DreamRecorder . ToolBox . General
 						{
 							return comparison2 ( x , y ) ;
 						}
-						else
-						{
-							return result ;
-						}
+
+						return result ;
 					} ;
 		}
 
@@ -37,10 +35,8 @@ namespace DreamRecorder . ToolBox . General
 						{
 							return comparer . Compare ( x , y ) ;
 						}
-						else
-						{
-							return result ;
-						}
+
+						return result ;
 					} ;
 		}
 

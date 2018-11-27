@@ -4,7 +4,6 @@ using System . Collections . Generic ;
 using System . Diagnostics ;
 using System . IO ;
 using System . Linq ;
-using System . Reflection ;
 
 using DreamRecorder . ToolBox . General ;
 
@@ -37,7 +36,6 @@ namespace DreamRecorder . ToolBox . CommandLine
 		public bool IsDebug { get ; private set ; }
 
 		public TSetting Setting { get ; set ; }
-
 
 		public abstract bool CanExit { get ; }
 
@@ -161,22 +159,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 			#region StartUp
 
-			Assembly [ ] assemblies = AppDomain . CurrentDomain . GetAssemblies ( ) ;
-
-			AppDomain . CurrentDomain . AssemblyLoad += CurrentDomain_AssemblyLoad ;
-
-			Logger . LogTrace ( "Current App Domain contains {0} assembly." , assemblies . Length ) ;
-			Logger . LogTrace ( string . Join ( Environment . NewLine ,
-												assemblies . Select ( ass => ass . GetDisplayName ( ) ) .
-															ToArray ( ) ) ) ;
-
-
-			foreach ( Assembly assembly in assemblies )
-			{
-				Logger . LogTrace ( "Prepare assembly {0}" , assembly . GetDisplayName ( ) ) ;
-
-				assembly . Prepare ( ) ;
-			}
+			AppDomainExtensions . PrepareCurrentDomain ( ) ;
 
 			#endregion
 
@@ -305,13 +288,6 @@ namespace DreamRecorder . ToolBox . CommandLine
 					}
 				}
 			}
-		}
-
-		private void CurrentDomain_AssemblyLoad ( object sender , AssemblyLoadEventArgs args )
-		{
-			Logger . LogTrace ( "Prepare assembly {0}" , args . LoadedAssembly . GetDisplayName ( ) ) ;
-
-			args . LoadedAssembly . Prepare ( ) ;
 		}
 
 	}

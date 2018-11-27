@@ -15,28 +15,28 @@ namespace DreamRecorder . ToolBox . General
 	public class LinearInterpolationLookupTable : ISelfSerializable
 	{
 
-		public ReadOnlyCollection <Point> Points { get ; }
+		public ReadOnlyCollection <PointF> Points { get ; }
 
-		private List <Point> PointsList { get ; }
+		private List <PointF> PointsList { get ; }
 
 		public double this [ double x ] => Find ( x ) ;
 
 		public LinearInterpolationLookupTable ( )
 		{
-			PointsList = new List <Point> ( ) ;
-			Points = new ReadOnlyCollection <Point> ( PointsList ) ;
+			PointsList = new List <PointF> ( ) ;
+			Points = new ReadOnlyCollection <PointF> ( PointsList ) ;
 			Sort ( ) ;
 		}
 
-		public LinearInterpolationLookupTable ( [NotNull] IEnumerable <Point> init )
+		public LinearInterpolationLookupTable ( [NotNull] IEnumerable <PointF> init )
 		{
 			if ( init == null )
 			{
 				throw new ArgumentNullException ( nameof(init) ) ;
 			}
 
-			PointsList = new List <Point> ( init ) ;
-			Points = new ReadOnlyCollection <Point> ( PointsList ) ;
+			PointsList = new List <PointF> ( init ) ;
+			Points = new ReadOnlyCollection <PointF> ( PointsList ) ;
 		}
 
 		public LinearInterpolationLookupTable ( [NotNull] XElement element )
@@ -54,18 +54,26 @@ namespace DreamRecorder . ToolBox . General
 																					) ) ) ;
 			}
 
-			//todo:
+			foreach ( XElement pointData in element . Elements ( ) )
+			{
+				PointF point = new PointF ( pointData . ReadNecessaryValue <float> ( nameof(point . X) ) ,
+											pointData . ReadNecessaryValue <float> ( nameof(point . Y) ) ) ;
+
+				PointsList . Add ( point ) ;
+			}
+
+			Sort ( ) ;
 		}
 
 		public XElement ToXElement ( )
 		{
 			XElement result = new XElement ( nameof(LinearInterpolationLookupTable) ) ;
-			foreach ( Point point in Points )
+			foreach ( PointF point in Points )
 			{
-				XElement pointElement = new XElement ( nameof(Point) ) ;
+				XElement pointElement = new XElement ( nameof(point) ) ;
 
-				pointElement . SetAttributeValue ( nameof(Point . X) , point . X ) ;
-				pointElement . SetAttributeValue ( nameof(Point . Y) , point . Y ) ;
+				pointElement . SetAttributeValue ( nameof(point . X) , point . X ) ;
+				pointElement . SetAttributeValue ( nameof(point . Y) , point . Y ) ;
 
 				result . Add ( pointElement ) ;
 			}
@@ -73,13 +81,13 @@ namespace DreamRecorder . ToolBox . General
 			return result ;
 		}
 
-		public void AddPoint ( Point point )
+		public void AddPoint ( PointF point )
 		{
 			PointsList . Add ( point ) ;
 			Sort ( ) ;
 		}
 
-		public void Sort ( ) { PointsList . Sort ( ( left , right ) => left . X - right . X ) ; }
+		public void Sort ( ) { PointsList . Sort ( ( left , right ) => left . X . CompareTo ( right . X ) ) ; }
 
 		public double Find ( double x )
 		{

@@ -9,18 +9,22 @@ namespace DreamRecorder . ToolBox . General
 {
 
 	[PublicAPI]
-	public class MarkedValue <TValue , TMark>
+	public class MarkedValue <TValue , TMark> : ICloneable
 	{
 
 		public TValue Value { get ; set ; }
 
 		public TMark Mark { get ; set ; }
 
+		public MarkedValue <TValue , TMark> Copy => new MarkedValue <TValue , TMark> ( Value , Mark ) ;
+
 		public MarkedValue ( TValue value , TMark mark )
 		{
 			Value = value ;
 			Mark = mark ;
 		}
+
+		public object Clone ( ) { return new MarkedValue <TValue , TMark> ( Value , Mark ) ; }
 
 		public static implicit operator TValue ( MarkedValue <TValue , TMark> value ) { return value . Value ; }
 

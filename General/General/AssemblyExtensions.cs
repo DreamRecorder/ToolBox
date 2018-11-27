@@ -46,7 +46,6 @@ namespace DreamRecorder . ToolBox . General
 			return TaskExtensions . CompletedTask ;
 		}
 
-
 		public static string GetDisplayName ( [NotNull] this Assembly assembly )
 		{
 			if ( assembly == null )
