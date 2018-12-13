@@ -6,4 +6,11 @@ using System . Linq ;
 namespace DreamRecorder . ToolBox . General
 {
 
+	public interface IGuid
+	{
+
+		Guid Guid { get ; }
+
+	}
+
 }

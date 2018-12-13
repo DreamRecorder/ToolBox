@@ -7,34 +7,20 @@ using System . Numerics ;
 namespace DreamRecorder . ToolBox . Renderer
 {
 
-	public class ObliqueProjector : IProjector
+	public class ObliqueProjector : Projector
 	{
 
-		public float Height { get ; set ; }
+		public override Vector3 Direction => new Vector3 ( - Height , - Height * 2 , - Height ) ;
 
-		public Vector3 CenterAt { get ; set ; }
-
-		public float ScreenWidth { get ; set ; }
-
-		public float WorldWidth { get ; set ; }
-
-		//public readonly 
-
-		public Vector2 Project ( Vector3 point )
+		protected override Vector2 CalculateProject ( Vector3 relativePoint )
 		{
-			Vector3 relativePoint = point - CenterAt ;
-			Vector2 result = new Vector2 ( ( relativePoint . X - relativePoint . Y / 2 ) * ScreenWidth / WorldWidth ,
-											- ( relativePoint . Z - relativePoint . Y / 2 )
-											* ScreenWidth
-											/ WorldWidth ) ;
-			return result ;
+			return new Vector2 ( ( relativePoint . X - relativePoint . Y / 2 ) ,
+								- ( relativePoint . Z - relativePoint . Y / 2 ) ) ;
 		}
 
-		public Ray Project ( Vector2 point )
+		protected override Vector3 CalculateProject ( Vector2 point )
 		{
-			Vector3 sourcePoint = new Vector3 ( point . X + point . Y + Height , ( point . Y + Height ) * 2 , Height ) ;
-
-			return new Ray ( sourcePoint + CenterAt , new Vector3 ( - Height , - Height * 2 , - Height ) ) ;
+			return new Vector3 ( point . X + point . Y , point . Y * 2 , 0 ) ;
 		}
 
 	}

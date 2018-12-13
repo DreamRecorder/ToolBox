@@ -9,21 +9,23 @@ using DreamRecorder . ToolBox . General ;
 namespace DreamRecorder . ToolBox . Renderer
 {
 
-	public class IsometricProjector : IProjector
+	public class IsometricProjector : Projector
 	{
 
-		public float ScreenWidth { get ; set ; }
+		public override Vector3 Direction => new Vector3 ( - 0.5f , - 0.5f , - 1f ) ;
 
-		public float WorldWidth { get ; set ; }
-
-		public Vector2 Project ( Vector3 point )
+		protected override Vector2 CalculateProject ( Vector3 relativePoint )
 		{
-			Vector2 result = new Vector2 ( ( point . X - point . Y ) * Constants . Sqrt3F / 2 ,
-											- ( point . Z - ( point . X + point . Y ) / 2 )  ) ;
-			return result ;
+			return new Vector2 ( ( relativePoint . X - relativePoint . Y ) * Constants . Sqrt3F / 2 ,
+								- ( relativePoint . Z - ( relativePoint . X + relativePoint . Y ) / 2 ) ) ;
 		}
 
-		public Ray Project ( Vector2 point ) { throw new NotImplementedException ( ) ; }
+		protected override Vector3 CalculateProject ( Vector2 point )
+		{
+			return new Vector3 ( ( point . X / Constants . Sqrt3F + point . Y ) ,
+								( point . Y - ( point . X / Constants . Sqrt3F ) ) ,
+								0f ) ;
+		}
 
 	}
 

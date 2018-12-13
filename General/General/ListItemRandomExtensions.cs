@@ -85,7 +85,7 @@ namespace DreamRecorder . ToolBox . General
 		}
 
 		/// <summary>
-		///     从列表中重复地随机挑选一些项。
+		///     从列表中不重复地随机挑选一些项。
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="list"></param>

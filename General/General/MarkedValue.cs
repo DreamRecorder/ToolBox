@@ -16,8 +16,6 @@ namespace DreamRecorder . ToolBox . General
 
 		public TMark Mark { get ; set ; }
 
-		public MarkedValue <TValue , TMark> Copy => new MarkedValue <TValue , TMark> ( Value , Mark ) ;
-
 		public MarkedValue ( TValue value , TMark mark )
 		{
 			Value = value ;
