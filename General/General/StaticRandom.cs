@@ -9,61 +9,57 @@ namespace DreamRecorder . ToolBox . General
 {
 
 	[PublicAPI]
-	public class StaticRandom : Random
+	public class StaticRandom : Random , IRandom
 	{
-
-		private readonly Random _random = new Random ( ) ;
 
 		public static Random Current { get ; set ; }
 
 		public StaticRandom ( ) { }
 
-		public StaticRandom ( Random random ) { _random = random ; }
-
 		public StaticRandom ( int seed ) : base ( seed ) { }
-
-		[Prepare]
-		public static void StartUp ( ) { Current = new StaticRandom ( ) ; }
 
 		public override int Next ( )
 		{
-			lock ( _random )
+			lock ( this )
 			{
-				return _random . Next ( ) ;
+				return base . Next ( ) ;
 			}
 		}
 
 		public override int Next ( int maxValue )
 		{
-			lock ( _random )
+			lock ( this )
 			{
-				return _random . Next ( maxValue ) ;
+				return base . Next ( maxValue ) ;
 			}
 		}
 
 		public override int Next ( int minValue , int maxValue )
 		{
-			lock ( _random )
+			lock ( this )
 			{
-				return _random . Next ( minValue , maxValue ) ;
+				return base . Next ( minValue , maxValue ) ;
 			}
 		}
 
 		public override void NextBytes ( byte [ ] buffer )
 		{
-			lock ( _random )
+			lock ( this )
 			{
-				_random . NextBytes ( buffer ) ;
+				base . NextBytes ( buffer ) ;
 			}
 		}
 
 		public override double NextDouble ( )
 		{
-			lock ( _random )
+			lock ( this )
 			{
-				return _random . NextDouble ( ) ;
+				return base . NextDouble ( ) ;
 			}
 		}
+
+		[Prepare]
+		public static void StartUp ( ) { Current = new StaticRandom ( ) ; }
 
 	}
 

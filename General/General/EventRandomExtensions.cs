@@ -12,7 +12,7 @@ namespace DreamRecorder . ToolBox . General
 	public static class EventRandomExtensions
 	{
 
-		public static bool InvokeEvent ( this Random random , NormalValue possibility )
+		public static bool InvokeEvent ( this IRandom random , NormalValue possibility )
 		{
 			if ( random == null )
 			{
@@ -22,19 +22,19 @@ namespace DreamRecorder . ToolBox . General
 			return random . NextNormalValue ( ) <= possibility ;
 		}
 
-		public static NormalValue NextNormalValue ( this Random random )
+		public static NormalValue NextNormalValue ( this IRandom random )
 		{
 			return random . Next ( NormalValue . MaxValue + 1 ) ;
 		}
 
-		public static NormalValue NextNormalValue ( this Random random ,
+		public static NormalValue NextNormalValue ( this IRandom random ,
 													NormalValue lowerBound ,
 													NormalValue higherBound )
 		{
 			return random . Next ( lowerBound , higherBound + 1 ) ;
 		}
 
-		public static NormalValue NextNormalValue ( this Random random , NormalValue lowerBound )
+		public static NormalValue NextNormalValue ( this IRandom random , NormalValue lowerBound )
 		{
 			return random . Next ( lowerBound , NormalValue . MaxValue + 1 ) ;
 		}

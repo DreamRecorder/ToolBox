@@ -12,7 +12,7 @@ namespace DreamRecorder . ToolBox . General
 	public static class ListItemRandomExtensions
 	{
 
-		public static T RandomItem <T> ( this IList <T> list , Random random = null )
+		public static T RandomItem <T> ( this IList <T> list , IRandom random = null )
 		{
 			if ( list == null )
 			{
@@ -24,7 +24,7 @@ namespace DreamRecorder . ToolBox . General
 				throw new InvalidOperationException ( "Sequence contains no elements" ) ;
 			}
 
-			random = random ?? new Random ( ) ;
+			random = random ?? ( IRandom ) new Random ( ) ;
 			return list [ random . Next ( list . Count ) ] ;
 		}
 
@@ -56,7 +56,7 @@ namespace DreamRecorder . ToolBox . General
 		/// <param name="count"></param>
 		/// <param name="random"></param>
 		/// <returns></returns>
-		public static List <T> RandomChoose <T> ( this IList <T> list , int count , Random random = null )
+		public static List <T> RandomChoose <T> ( this IList <T> list , int count , IRandom random = null )
 		{
 			if ( list == null )
 			{
@@ -74,7 +74,7 @@ namespace DreamRecorder . ToolBox . General
 			}
 
 			List <T> result = new List <T> ( count ) ;
-			random = random ?? new Random ( ) ;
+			random = random ?? ( IRandom ) new Random ( ) ;
 
 			for ( int i = 0 ; i < count ; i++ )
 			{
@@ -92,7 +92,7 @@ namespace DreamRecorder . ToolBox . General
 		/// <param name="count"></param>
 		/// <param name="random"></param>
 		/// <returns></returns>
-		public static List <T> RandomUniqueChoose <T> ( this IList <T> list , int count , Random random = null )
+		public static List <T> RandomUniqueChoose <T> ( this IList <T> list , int count , IRandom random = null )
 		{
 			if ( list == null )
 			{
@@ -114,7 +114,7 @@ namespace DreamRecorder . ToolBox . General
 				throw new ArgumentOutOfRangeException ( nameof(count) ) ;
 			}
 
-			random = random ?? new Random ( ) ;
+			random = random ?? ( IRandom ) new Random ( ) ;
 
 			return random . Permutation ( list . Count - 1 , count ) . Select ( index => list [ index ] ) . ToList ( ) ;
 		}
