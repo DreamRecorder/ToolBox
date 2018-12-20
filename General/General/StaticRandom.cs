@@ -12,7 +12,7 @@ namespace DreamRecorder . ToolBox . General
 	public class StaticRandom : Random , IRandom
 	{
 
-		public static Random Current { get ; set ; }
+		public static StaticRandom Current { get ; set ; }
 
 		public StaticRandom ( ) { }
 
