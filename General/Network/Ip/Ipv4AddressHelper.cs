@@ -143,7 +143,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 				}
 				else if ( ch == '/'
 						|| ch == '\\'
-						|| ( notImplicitFile && ( ch == ':' || ch == '?' || ch == '#' ) ) )
+						|| notImplicitFile && ( ch == ':' || ch == '?' || ch == '#' ) )
 				{
 					break ;
 				}
@@ -152,9 +152,9 @@ namespace DreamRecorder . ToolBox . Network . Ip
 					&& ch >= '0' )
 				{
 					if ( ! haveNumber
-						&& ( ch == '0' ) )
+						&& ch == '0' )
 					{
-						if ( ( start + 1 < end )
+						if ( start + 1 < end
 							&& name [ start + 1 ] == '0' )
 						{
 							// 00 is not allowed as a prefix.
@@ -174,7 +174,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 				else if ( ch == '.' )
 				{
 					if ( ! haveNumber
-						|| ( number > 0 && firstCharIsZero ) )
+						|| number > 0 && firstCharIsZero )
 					{
 						// 0 is not allowed to prefix a number.
 						return false ;
@@ -193,7 +193,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 				++start ;
 			}
 
-			bool res = ( dots == 3 ) && haveNumber ;
+			bool res = dots == 3 && haveNumber ;
 			if ( res )
 			{
 				end = start ;
@@ -276,7 +276,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 						break ; // Invalid/terminator
 					}
 
-					currentValue = ( currentValue * numberBase ) + digitValue ;
+					currentValue = currentValue * numberBase + digitValue ;
 
 					if ( currentValue > MaxIPv4Value ) // Overflow
 					{
@@ -319,7 +319,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			}
 			else if ( ( ch = name [ current ] ) == '/'
 					|| ch == '\\'
-					|| ( notImplicitFile && ( ch == ':' || ch == '?' || ch == '#' ) ) )
+					|| notImplicitFile && ( ch == ':' || ch == '?' || ch == '#' ) )
 			{
 				end = current ;
 			}
@@ -388,7 +388,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 				numbers [ 0 ] = ( byte ) ( result >> 24 ) ;
 				numbers [ 1 ] = ( byte ) ( result >> 16 ) ;
 				numbers [ 2 ] = ( byte ) ( result >> 8 ) ;
-				numbers [ 3 ] = ( byte ) ( result ) ;
+				numbers [ 3 ] = ( byte ) result ;
 			}
 
 			return numbers [ 0 ] == 127 ;
@@ -405,7 +405,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			{
 				byte b = 0 ;
 				char ch ;
-				for ( ; ( start < end ) && ( ch = name [ start ] ) != '.' && ch != ':' ; ++start )
+				for ( ; start < end && ( ch = name [ start ] ) != '.' && ch != ':' ; ++start )
 				{
 					b = ( byte ) ( b * 10 + ( byte ) ( ch - '0' ) ) ;
 				}

@@ -9,10 +9,11 @@ namespace DreamRecorder . ToolBox . General
 {
 
 	[PublicAPI]
-	public class MarkedValue <TValue , TMark> : ICloneable
+	public class MarkedValue <TValue , TMark> : ICloneable , IEquatable <MarkedValue <TValue , TMark>>
+		where TValue : IEquatable <TValue>
 	{
 
-		public TValue Value { get ; set ; }
+		public TValue Value { get ; }
 
 		public TMark Mark { get ; set ; }
 
@@ -23,6 +24,44 @@ namespace DreamRecorder . ToolBox . General
 		}
 
 		public object Clone ( ) { return new MarkedValue <TValue , TMark> ( Value , Mark ) ; }
+
+		public bool Equals ( MarkedValue <TValue , TMark> other )
+		{
+			if ( other is null )
+			{
+				return false ;
+			}
+
+			return ReferenceEquals ( this , other )
+					|| EqualityComparer <TValue> . Default . Equals ( Value , other . Value ) ;
+		}
+
+		public override bool Equals ( object obj )
+		{
+			if ( obj is null )
+			{
+				return false ;
+			}
+
+			if ( ReferenceEquals ( this , obj ) )
+			{
+				return true ;
+			}
+
+			return obj . GetType ( ) == GetType ( ) && Equals ( ( MarkedValue <TValue , TMark> ) obj ) ;
+		}
+
+		public override int GetHashCode ( ) { return EqualityComparer <TValue> . Default . GetHashCode ( Value ) ; }
+
+		public static bool operator == ( MarkedValue <TValue , TMark> left , MarkedValue <TValue , TMark> right )
+		{
+			return Equals ( left , right ) ;
+		}
+
+		public static bool operator != ( MarkedValue <TValue , TMark> left , MarkedValue <TValue , TMark> right )
+		{
+			return ! Equals ( left , right ) ;
+		}
 
 		public static implicit operator TValue ( MarkedValue <TValue , TMark> value ) { return value . Value ; }
 

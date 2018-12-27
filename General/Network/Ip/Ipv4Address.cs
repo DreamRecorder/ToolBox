@@ -18,7 +18,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 		public Ipv4Address ( long address ) : this ( )
 		{
 			AddressBytes = new byte[ 4 ] ;
-			AddressBytes [ 0 ] = ( byte ) ( address ) ;
+			AddressBytes [ 0 ] = ( byte ) address ;
 			AddressBytes [ 1 ] = ( byte ) ( address >> 8 ) ;
 			AddressBytes [ 2 ] = ( byte ) ( address >> 16 ) ;
 			AddressBytes [ 3 ] = ( byte ) ( address >> 24 ) ;
@@ -50,11 +50,12 @@ namespace DreamRecorder . ToolBox . Network . Ip
 				}
 
 				// IPv4AddressHelper always returns IP address in a format that we need to reverse.
-				result = ( ( ( result & 0x000000FF ) << 24 )
-							| ( ( ( result & 0x0000FF00 ) << 8 )
-								| ( ( ( result & 0x00FF0000 ) >> 8 ) | ( ( result & 0xFF000000 ) >> 24 ) ) ) ) ;
+				result = ( ( result & 0x000000FF ) << 24 )
+						| ( ( result & 0x0000FF00 ) << 8 )
+						| ( ( result & 0x00FF0000 ) >> 8 )
+						| ( ( result & 0xFF000000 ) >> 24 ) ;
 
-				AddressBytes [ 0 ] = ( byte ) ( result ) ;
+				AddressBytes [ 0 ] = ( byte ) result ;
 				AddressBytes [ 1 ] = ( byte ) ( result >> 8 ) ;
 				AddressBytes [ 2 ] = ( byte ) ( result >> 16 ) ;
 				AddressBytes [ 3 ] = ( byte ) ( result >> 24 ) ;

@@ -66,11 +66,10 @@ namespace DreamRecorder . ToolBox . General
 
 			Comparison <PropertyInfo> comp = ( x , y )
 												=> ( x . GetCustomAttribute <SortIndexAttribute> ( ) ? . Value
-													?? int . MaxValue ) . CompareTo ( ( y . GetCustomAttribute <
-																								SortIndexAttribute
-																							> ( ) ? .
-																							Value
-																						?? int . MaxValue ) ) ;
+													?? int . MaxValue ) . CompareTo ( y . GetCustomAttribute <
+																							SortIndexAttribute> ( ) ? .
+																						Value
+																					?? int . MaxValue ) ;
 
 			result . Sort ( comp . Union ( ( x , y ) => string . CompareOrdinal ( x . Name , y . Name ) ) ) ;
 			return result ;

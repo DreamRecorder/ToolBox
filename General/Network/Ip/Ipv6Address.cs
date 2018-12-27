@@ -58,7 +58,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 					fixed ( char * name = address )
 					{
 						if ( Ipv6AddressHelper . IsValidStrict ( name , offset , ref end )
-							|| ( end != address . Length ) )
+							|| end != address . Length )
 						{
 							ushort [ ] numbers = new ushort[ NumberOfLabels ] ;
 							string scopeId = null ;
@@ -83,7 +83,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 							for ( int i = 0 ; i < NumberOfLabels ; i++ )
 							{
 								AddressBytes [ j++ ] = ( byte ) ( ( address [ i ] >> 8 ) & 0xFF ) ;
-								AddressBytes [ j++ ] = ( byte ) ( ( address [ i ] ) & 0xFF ) ;
+								AddressBytes [ j++ ] = ( byte ) ( address [ i ] & 0xFF ) ;
 							}
 
 							ScopeId = scopeId ;

@@ -22,8 +22,8 @@ namespace DreamRecorder . ToolBox . Renderer
 
 		protected override Vector3 CalculateProject ( Vector2 point )
 		{
-			return new Vector3 ( ( point . X / Constants . Sqrt3F + point . Y ) ,
-								( point . Y - ( point . X / Constants . Sqrt3F ) ) ,
+			return new Vector3 ( point . X / Constants . Sqrt3F + point . Y ,
+								point . Y - point . X / Constants . Sqrt3F ,
 								0f ) ;
 		}
 

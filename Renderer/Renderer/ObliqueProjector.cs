@@ -14,7 +14,7 @@ namespace DreamRecorder . ToolBox . Renderer
 
 		protected override Vector2 CalculateProject ( Vector3 relativePoint )
 		{
-			return new Vector2 ( ( relativePoint . X - relativePoint . Y / 2 ) ,
+			return new Vector2 ( relativePoint . X - relativePoint . Y / 2 ,
 								- ( relativePoint . Z - relativePoint . Y / 2 ) ) ;
 		}
 

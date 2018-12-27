@@ -66,7 +66,7 @@ namespace DreamRecorder . ToolBox . General
 			{
 				for ( int i = 7 ; i >= 0 ; i-- )
 				{
-					fixed ( bool * pointer = & ( source [ i ] ) )
+					fixed ( bool * pointer = & source [ i ] )
 					{
 						result += ( byte ) ( value * * ( byte * ) pointer ) ;
 						value = value << 1 ;
@@ -101,7 +101,7 @@ namespace DreamRecorder . ToolBox . General
 				{
 					for ( int i = 7 ; i >= 0 ; i-- )
 					{
-						fixed ( bool * pointer = & ( source [ i + 8 * j ] ) )
+						fixed ( bool * pointer = & source [ i + 8 * j ] )
 						{
 							result [ j ] += ( byte ) ( value * * ( byte * ) pointer ) ;
 							value = value << 1 ;

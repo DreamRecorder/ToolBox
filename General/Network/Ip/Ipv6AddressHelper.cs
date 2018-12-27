@@ -49,7 +49,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			StringBuilder builder = new StringBuilder ( ) ;
 			for ( int i = 0 ; i < NumberOfLabels ; i++ )
 			{
-				if ( ipv4Embedded && i == ( NumberOfLabels - 2 ) )
+				if ( ipv4Embedded && i == NumberOfLabels - 2 )
 				{
 					// Write the remaining digits as an IPv4 address
 					builder . Append ( string . Format ( CultureInfo . InvariantCulture ,
@@ -69,7 +69,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 				}
 
 				if ( range . Key <= i
-					&& range . Value == ( NumberOfLabels - 1 ) )
+					&& range . Value == NumberOfLabels - 1 )
 				{
 					// Remainder compressed; 1::
 					builder . Append ( Separator ) ;
@@ -218,7 +218,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			int i ;
 			for ( i = start ; i < end ; ++i )
 			{
-				if ( havePrefix ? ( name [ i ] >= '0' && name [ i ] <= '9' ): Uri . IsHexDigit ( name [ i ] ) )
+				if ( havePrefix ? name [ i ] >= '0' && name [ i ] <= '9': Uri . IsHexDigit ( name [ i ] ) )
 				{
 					++sequenceLength ;
 					expectingNumber = false ;
@@ -270,8 +270,8 @@ namespace DreamRecorder . ToolBox . Network . Ip
 						}
 						case ':' :
 						{
-							if ( ( i > 0 )
-								&& ( name [ i - 1 ] == ':' ) )
+							if ( i > 0
+								&& name [ i - 1 ] == ':' )
 							{
 								if ( haveCompressor )
 								{
@@ -300,7 +300,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 								return false ;
 							}
 
-							if ( ( sequenceCount == 0 ) || havePrefix )
+							if ( sequenceCount == 0 || havePrefix )
 							{
 								return false ;
 							}
@@ -344,7 +344,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			// if the last token was a prefix, check number of digits
 			//
 
-			if ( havePrefix && ( ( sequenceLength < 1 ) || ( sequenceLength > 2 ) ) )
+			if ( havePrefix && ( sequenceLength < 1 || sequenceLength > 2 ) )
 			{
 				return false ;
 			}
@@ -356,10 +356,8 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			int expectedSequenceCount = 8 + ( havePrefix ? 1: 0 ) ;
 
 			if ( ! expectingNumber
-				&& ( sequenceLength <= 4 )
-				&& ( haveCompressor
-						? ( sequenceCount < expectedSequenceCount )
-						: ( sequenceCount == expectedSequenceCount ) ) )
+				&& sequenceLength <= 4
+				&& ( haveCompressor ? sequenceCount < expectedSequenceCount: sequenceCount == expectedSequenceCount ) )
 			{
 				if ( i == end + 1 )
 				{
@@ -527,8 +525,8 @@ namespace DreamRecorder . ToolBox . Network . Ip
 							compressorIndex = index ;
 							++i ;
 						}
-						else if ( ( compressorIndex < 0 )
-								&& ( index < 6 ) )
+						else if ( compressorIndex < 0
+								&& index < 6 )
 						{
 							//
 							// no point checking for IPv4 address if we don't
@@ -545,11 +543,11 @@ namespace DreamRecorder . ToolBox . Network . Ip
 						//
 
 						for ( int j = i ;
-							( address [ j ] != ']' )
-							&& ( address [ j ] != ':' )
-							&& ( address [ j ] != '%' )
-							&& ( address [ j ] != '/' )
-							&& ( j < i + 4 ) ;
+							address [ j ] != ']'
+							&& address [ j ] != ':'
+							&& address [ j ] != '%'
+							&& address [ j ] != '/'
+							&& j < i + 4 ;
 							++j )
 						{
 							if ( address [ j ] == '.' )
@@ -563,9 +561,9 @@ namespace DreamRecorder . ToolBox . Network . Ip
 								// delimited with ']')
 								//
 
-								while ( ( address [ j ] != ']' )
-										&& ( address [ j ] != '/' )
-										&& ( address [ j ] != '%' ) )
+								while ( address [ j ] != ']'
+										&& address [ j ] != '/'
+										&& address [ j ] != '%' )
 								{
 									++j ;
 								}
@@ -653,14 +651,15 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			//  0:0:0:0:0:FFFF:127.0.0.1    == 0:0:0:0:0:FFFF:7F00:0001
 			//
 
-			return ( ( numbers [ 0 ] == 0 )
-					&& ( numbers [ 1 ] == 0 )
-					&& ( numbers [ 2 ] == 0 )
-					&& ( numbers [ 3 ] == 0 )
-					&& ( numbers [ 4 ] == 0 ) )
-					&& ( ( ( numbers [ 5 ] == 0 ) && ( numbers [ 6 ] == 0 ) && ( numbers [ 7 ] == 1 ) )
-						|| ( ( ( numbers [ 6 ] == 0x7F00 ) && ( numbers [ 7 ] == 0x0001 ) )
-							&& ( ( numbers [ 5 ] == 0 ) || ( numbers [ 5 ] == 0xFFFF ) ) ) ) ;
+			return numbers [ 0 ] == 0
+					&& numbers [ 1 ] == 0
+					&& numbers [ 2 ] == 0
+					&& numbers [ 3 ] == 0
+					&& numbers [ 4 ] == 0
+					&& ( numbers [ 5 ] == 0 && numbers [ 6 ] == 0 && numbers [ 7 ] == 1
+						|| numbers [ 6 ] == 0x7F00
+						&& numbers [ 7 ] == 0x0001
+						&& ( numbers [ 5 ] == 0 || numbers [ 5 ] == 0xFFFF ) ) ;
 		}
 
 	}

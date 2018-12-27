@@ -9,21 +9,21 @@ using JetBrains . Annotations ;
 namespace DreamRecorder . ToolBox . Network
 {
 
-	public class MacAddress : Address
+	public class Eui48Address : Address
 	{
 
 		public override AddressType Type => AddressType . Mac ;
 
-		public MacAddress ( ) { AddressBytes = new byte[ 6 ] ; }
+		public Eui48Address ( ) { AddressBytes = new byte[ 6 ] ; }
 
-		internal MacAddress ( byte [ ] address )
+		internal Eui48Address ( byte [ ] address )
 		{
 			if ( address == null )
 			{
 				throw new ArgumentNullException ( nameof(address) ) ;
 			}
 
-			if ( address . Length != 8 )
+			if ( address . Length != 6 )
 			{
 				throw new ArgumentException ( ) ;
 			}
@@ -31,7 +31,7 @@ namespace DreamRecorder . ToolBox . Network
 			AddressBytes = address ;
 		}
 
-		public MacAddress ( [NotNull] string address ) : this ( )
+		public Eui48Address ( [NotNull] string address ) : this ( )
 		{
 			if ( address == null )
 			{
@@ -61,9 +61,9 @@ namespace DreamRecorder . ToolBox . Network
 			}
 
 			int j = 0 ;
-			for ( int i = 0 ; i < address . Length ; i++ )
+			foreach ( char t in address )
 			{
-				int value = address [ i ] ;
+				int value = t ;
 
 				if ( value >= 0x30
 					&& value <= 0x39 )
@@ -77,13 +77,13 @@ namespace DreamRecorder . ToolBox . Network
 				}
 				else if ( value == '-' )
 				{
-					if ( validCount == 2 )
+					if ( validCount != 2 )
 					{
-						validCount = 0 ;
-						continue ;
+						throw new FormatException ( ) ;
 					}
 
-					throw new FormatException ( ) ;
+					validCount = 0 ;
+					continue ;
 				}
 				else
 				{
@@ -136,24 +136,24 @@ namespace DreamRecorder . ToolBox . Network
 						addressString . Append ( ( char ) ( tmp + 0x37 ) ) ;
 					}
 
-					tmp = ( value & 0x0F ) ;
+					tmp = value & 0x0F ;
 				}
 			}
 
 			return addressString . ToString ( ) ;
 		}
 
-		public static explicit operator MacAddress ( [NotNull] string address )
+		public static explicit operator Eui48Address ( [NotNull] string address )
 		{
 			if ( address == null )
 			{
 				throw new ArgumentNullException ( nameof(address) ) ;
 			}
 
-			return new MacAddress ( address ) ;
+			return new Eui48Address ( address ) ;
 		}
 
-		public override object Clone ( ) { return new MacAddress ( AddressBytes ) ; }
+		public override object Clone ( ) { return new Eui48Address ( AddressBytes ) ; }
 
 	}
 
