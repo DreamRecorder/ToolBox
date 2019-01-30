@@ -3,13 +3,27 @@ using System . Collections ;
 using System . Collections . Generic ;
 using System . Linq ;
 
-namespace DreamRecorder . ToolBox . AlertHelper
+namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 {
 
 	public enum BootstrapVariation
 	{
 
-		Primary, Secondary, Success, Danger, Warning, Info, Light, Dark,
+		Primary ,
+
+		Secondary ,
+
+		Success ,
+
+		Danger ,
+
+		Warning ,
+
+		Info ,
+
+		Light ,
+
+		Dark
 
 	}
 

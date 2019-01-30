@@ -14,4 +14,4 @@ using JetBrains . Annotations ;
 [assembly : CLSCompliant ( true )]
 [assembly : Guid ( "4A9AF1FA-38A8-45AB-975B-AB3B31D30920" )]
 [assembly : PublicAPI]
-[assembly: Prepare]
+[assembly : Prepare]
