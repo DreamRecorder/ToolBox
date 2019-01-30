@@ -3,12 +3,6 @@ using System . Collections ;
 using System . Collections . Generic ;
 using System . Linq ;
 
-namespace DreamRecorder . ToolBox . TelegramBot
-{
+using DreamRecorder . ToolBox . General ;
 
-	public class Class1
-	{
-
-	}
-
-}
+[assembly : Prepare]

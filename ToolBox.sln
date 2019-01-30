@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2026
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28516.95
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "General", "General", "{2D5F594D-8C6A-4F7E-AADB-8944E8935FB0}"
 EndProject
@@ -21,7 +21,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Network", "General\Network\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TelegramBot", "CommandLine\TelegramBot\TelegramBot.csproj", "{105CAE82-AAF8-4C7A-9DB1-0627B96F43EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Renderer", "Renderer\Renderer\Renderer.csproj", "{8DCDDF0B-EA35-4B03-A0E5-0F9E3354436E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Renderer", "Renderer\Renderer\Renderer.csproj", "{8DCDDF0B-EA35-4B03-A0E5-0F9E3354436E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AspNet", "AspNet", "{6ECFB2DA-3E6D-42A2-AE16-BC0D5B3DF2EE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlertHelper", "AspNet\AlertHelper\AlertHelper.csproj", "{81034245-174A-4A04-81D7-5998E1F9294A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +65,10 @@ Global
 		{8DCDDF0B-EA35-4B03-A0E5-0F9E3354436E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DCDDF0B-EA35-4B03-A0E5-0F9E3354436E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DCDDF0B-EA35-4B03-A0E5-0F9E3354436E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81034245-174A-4A04-81D7-5998E1F9294A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81034245-174A-4A04-81D7-5998E1F9294A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81034245-174A-4A04-81D7-5998E1F9294A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81034245-174A-4A04-81D7-5998E1F9294A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -74,12 +82,13 @@ Global
 		{929FA67C-090E-4A86-9090-CD6F2B0E8CD7} = {2D5F594D-8C6A-4F7E-AADB-8944E8935FB0}
 		{105CAE82-AAF8-4C7A-9DB1-0627B96F43EE} = {6749562D-3004-4C05-BF9A-6FC70D2629F8}
 		{8DCDDF0B-EA35-4B03-A0E5-0F9E3354436E} = {2D5F594D-8C6A-4F7E-AADB-8944E8935FB0}
+		{81034245-174A-4A04-81D7-5998E1F9294A} = {6ECFB2DA-3E6D-42A2-AE16-BC0D5B3DF2EE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {14DAB56C-F500-45EE-8A65-CFA2C12B509D}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 9
+		SccNumberOfProjects = 10
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://vsts.dreamry.org/defaultcollection
 		SccLocalPath0 = .
@@ -115,5 +124,9 @@ Global
 		SccProjectTopLevelParentUniqueName8 = ToolBox.sln
 		SccProjectName8 = Renderer/Renderer
 		SccLocalPath8 = Renderer\\Renderer
+		SccProjectUniqueName9 = AspNet\\AlertHelper\\AlertHelper.csproj
+		SccProjectTopLevelParentUniqueName9 = ToolBox.sln
+		SccProjectName9 = AspNet/AlertHelper
+		SccLocalPath9 = AspNet\\AlertHelper
 	EndGlobalSection
 EndGlobal

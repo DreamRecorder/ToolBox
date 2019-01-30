@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup Label="Globals">
     <SccProjectName>SAK</SccProjectName>
@@ -9,9 +9,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-     <AssemblyName>DreamRecorder.ToolBox.Renderer</AssemblyName>
-    <RootNamespace>DreamRecorder.ToolBox.Renderer</RootNamespace>
-    <PackageId>DreamRecorder.ToolBox.Renderer</PackageId>
+    <AssemblyName>DreamRecorder.ToolBox.AspNet.AlertHelper</AssemblyName>
+    <RootNamespace>DreamRecorder.ToolBox.AspNet.AlertHelper</RootNamespace>
+    <PackageId>DreamRecorder.ToolBox.AspNet.AlertHelper</PackageId>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Authors>Wencey Wang</Authors>
     <Company>Dream Recorder</Company>
@@ -19,19 +19,15 @@
     <RepositoryType></RepositoryType>
     <RepositoryUrl></RepositoryUrl>
     <PackageProjectUrl>https://vsts.dreamry.org/DefaultCollection/ToolBox</PackageProjectUrl>
-    <Copyright>Dream Recorder (c) 2018</Copyright>
+    <Copyright>Dream Recorder (c) 2019</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>1.1.4.32</Version>
     <LangVersion>latest</LangVersion>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
