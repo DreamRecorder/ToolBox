@@ -9,6 +9,24 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+       <AssemblyName>DreamRecorder.ToolBox.AspNet.RequestHelper</AssemblyName>
+    <RootNamespace>DreamRecorder.ToolBox.AspNet.RequestHelper</RootNamespace>
+    <PackageId>DreamRecorder.ToolBox.AspNet.RequestHelper</PackageId>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Authors>Wencey Wang</Authors>
+    <Company>Dream Recorder</Company>
+    <Description>Tools for other Dreamry project.</Description>
+    <RepositoryType></RepositoryType>
+    <RepositoryUrl></RepositoryUrl>
+    <PackageProjectUrl>https://vsts.dreamry.org/DefaultCollection/ToolBox</PackageProjectUrl>
+    <Copyright>Dream Recorder (c) 2019</Copyright>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.1.4.33</Version>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\General\General\General.csproj" />
+  </ItemGroup>
 
 </Project>

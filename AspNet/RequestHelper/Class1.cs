@@ -1,8 +1,12 @@
-﻿using System;
+﻿using System ;
+using System . Collections ;
+using System . Collections . Generic ;
+using System . Linq ;
 
-namespace RequestHelper
+namespace DreamRecorder . ToolBox . AspNet . RequestHelper
 {
 	public class Class1
 	{
+
 	}
 }
