@@ -1,7 +1,9 @@
 ﻿using System ;
 using System . Collections ;
 using System . Collections . Generic ;
+using System . IO ;
 using System . Linq ;
+using System . Runtime . Serialization . Formatters . Binary ;
 using System . Text ;
 
 using Microsoft . AspNetCore . Mvc . Rendering ;
@@ -17,14 +19,29 @@ namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 		[ViewContext]
 		public ViewContext ViewContext { get ; set ; }
 
-		private List <Alert> Alerts
-			=> ViewContext ? . ViewData [ StringConst . Alerts ] as List <Alert> ?? new List <Alert> ( ) ;
+		public List <Alert> GetAlerts ( )
+		{
+			BinaryFormatter formatter = new BinaryFormatter ( ) ;
+			List <Alert> alerts ;
+			if ( ViewContext . HttpContext . Session . TryGetValue ( StringConst . Alerts , out byte [ ] buffer ) )
+			{
+				MemoryStream stream = new MemoryStream ( buffer ) ;
+				alerts = formatter . Deserialize ( stream ) as List <Alert> ?? new List <Alert> ( ) ;
+			}
+			else
+			{
+				alerts = new List <Alert> ( ) ;
+			}
+
+			return alerts ;
+		}
 
 		public override void Process ( TagHelperContext context , TagHelperOutput output )
 		{
 			StringBuilder result = new StringBuilder ( ) ;
+			List <Alert> alerts = GetAlerts ( ) ;
 
-			foreach ( Alert alert in Alerts )
+			foreach ( Alert alert in alerts )
 			{
 				result . AppendLine ( $"<div class=\"alert alert-{alert . Variation . ToString ( ) . ToLower ( )}\" role=\"alert\">{alert . Message}</div>" ) ;
 			}

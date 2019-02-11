@@ -1,7 +1,9 @@
 ﻿using System ;
 using System . Collections ;
 using System . Collections . Generic ;
+using System . IO ;
 using System . Linq ;
+using System . Runtime . Serialization . Formatters . Binary ;
 
 using JetBrains . Annotations ;
 
@@ -14,12 +16,28 @@ namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 	public static class ControllerAlertExtensions
 	{
 
+		public static void SetAlerts ( [NotNull] this Controller controller , List <Alert> alerts )
+		{
+			BinaryFormatter formatter = new BinaryFormatter ( ) ;
+			MemoryStream stream = new MemoryStream ( ) ;
+			formatter . Serialize ( stream , alerts ) ;
+
+			controller . HttpContext . Session . Set ( StringConst . Alerts , stream . GetBuffer ( ) ) ;
+		}
+
 		public static List <Alert> GetAlerts ( [NotNull] this Controller controller )
 		{
-			List <Alert> alerts =
-				controller . ViewData [ StringConst . Alerts ] as List <Alert> ?? new List <Alert> ( ) ;
-
-			controller . ViewData [ StringConst . Alerts ] = alerts ;
+			BinaryFormatter formatter = new BinaryFormatter ( ) ;
+			List <Alert> alerts ;
+			if ( controller . HttpContext . Session . TryGetValue ( StringConst . Alerts , out byte [ ] buffer ) )
+			{
+				MemoryStream stream = new MemoryStream ( buffer ) ;
+				alerts = formatter . Deserialize ( stream ) as List <Alert> ?? new List <Alert> ( ) ;
+			}
+			else
+			{
+				alerts = new List <Alert> ( ) ;
+			}
 
 			return alerts ;
 		}
@@ -31,14 +49,11 @@ namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 				throw new ArgumentNullException ( nameof(controller) ) ;
 			}
 
-			if ( alert == null )
-			{
-				throw new ArgumentNullException ( nameof(alert) ) ;
-			}
-
 			List <Alert> alerts = GetAlerts ( controller ) ;
 
 			alerts . Add ( alert ) ;
+
+			SetAlerts ( controller , alerts ) ;
 		}
 
 		public static void AlertError ( [NotNull] this Controller controller , string message )

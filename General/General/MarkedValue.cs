@@ -28,12 +28,10 @@ namespace DreamRecorder . ToolBox . General
 				{
 					return Values [ value ] ;
 				}
-				else
-				{
-					MarkedValue <TValue , TMark> markedValue = value ;
-					Values . Add ( value , markedValue ) ;
-					return markedValue ;
-				}
+
+				MarkedValue <TValue , TMark> markedValue = value ;
+				Values . Add ( value , markedValue ) ;
+				return markedValue ;
 			}
 		}
 

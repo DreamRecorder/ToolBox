@@ -6,7 +6,7 @@ using System . Linq ;
 namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 {
 
-	public enum BootstrapVariation
+	public enum BootstrapVariation : byte
 	{
 
 		Primary ,
