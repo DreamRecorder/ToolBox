@@ -36,6 +36,8 @@ namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 			return alerts ;
 		}
 
+		public void CleatAlerts ( ) { ViewContext . HttpContext . Session . Remove ( StringConst . Alerts ) ; }
+
 		public override void Process ( TagHelperContext context , TagHelperOutput output )
 		{
 			StringBuilder result = new StringBuilder ( ) ;
@@ -49,6 +51,8 @@ namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 			output . TagName = @"div" ;
 			output . TagMode = TagMode . StartTagAndEndTag ;
 			output . Content . SetHtmlContent ( result . ToString ( ) ) ;
+
+			CleatAlerts ( ) ;
 		}
 
 	}
