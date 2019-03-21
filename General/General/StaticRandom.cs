@@ -5,6 +5,8 @@ using System . Linq ;
 
 using JetBrains . Annotations ;
 
+using Microsoft . Extensions . DependencyInjection ;
+
 namespace DreamRecorder . ToolBox . General
 {
 
@@ -59,7 +61,11 @@ namespace DreamRecorder . ToolBox . General
 		}
 
 		[Prepare]
-		public static void StartUp ( ) { Current = new StaticRandom ( ) ; }
+		public static void StartUp ( )
+		{
+			Current = new StaticRandom ( ) ;
+			StaticServiceProvider . ServiceCollection . AddSingleton <IRandom> ( Current ) ;
+		}
 
 	}
 

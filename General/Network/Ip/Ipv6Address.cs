@@ -16,13 +16,13 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 		public string ScopeId { get ; set ; }
 
-		public Ipv6Address ( ) { AddressBytes = new byte[ 16 ] ; }
+		public Ipv6Address ( ) => AddressBytes = new byte[ 16 ] ;
 
 		public Ipv6Address ( byte [ ] address )
 		{
 			if ( address == null )
 			{
-				throw new ArgumentNullException ( nameof(address) ) ;
+				throw new ArgumentNullException ( nameof (address) ) ;
 			}
 
 			if ( address . Length != 16 )
@@ -37,7 +37,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 		{
 			if ( address == null )
 			{
-				throw new ArgumentNullException ( nameof(address) ) ;
+				throw new ArgumentNullException ( nameof (address) ) ;
 			}
 
 			if ( address . Contains ( ':' ) )
@@ -45,6 +45,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 				unsafe
 				{
 					int offset = 0 ;
+
 					if ( address [ 0 ] != '[' )
 					{
 						address = address + ']' ; //for Uri parser to find the terminator.
@@ -55,13 +56,15 @@ namespace DreamRecorder . ToolBox . Network . Ip
 					}
 
 					int end = address . Length ;
+
 					fixed ( char * name = address )
 					{
 						if ( Ipv6AddressHelper . IsValidStrict ( name , offset , ref end )
-							|| end != address . Length )
+							|| ( end != address . Length ) )
 						{
 							ushort [ ] numbers = new ushort[ NumberOfLabels ] ;
-							string scopeId = null ;
+							string     scopeId = null ;
+
 							fixed ( ushort * numbPtr = numbers )
 							{
 								Ipv6AddressHelper . Parse ( address , numbPtr , 0 , ref scopeId ) ;
@@ -80,10 +83,11 @@ namespace DreamRecorder . ToolBox . Network . Ip
 							}
 
 							int j = 0 ;
+
 							for ( int i = 0 ; i < NumberOfLabels ; i++ )
 							{
 								AddressBytes [ j++ ] = ( byte ) ( ( address [ i ] >> 8 ) & 0xFF ) ;
-								AddressBytes [ j++ ] = ( byte ) ( address [ i ] & 0xFF ) ;
+								AddressBytes [ j++ ] = ( byte ) ( address [ i ]          & 0xFF ) ;
 							}
 
 							ScopeId = scopeId ;
@@ -94,7 +98,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 				throw new FormatException ( ) ;
 			}
 
-			throw new ArgumentException ( "" , nameof(address) ) ; //todo
+			throw new ArgumentException ( "" , nameof (address) ) ; //todo
 		}
 
 		private const int NumberOfLabels = 8 ;
@@ -103,22 +107,24 @@ namespace DreamRecorder . ToolBox . Network . Ip
 		{
 			if ( address == null )
 			{
-				throw new ArgumentNullException ( nameof(address) ) ;
+				throw new ArgumentNullException ( nameof (address) ) ;
 			}
 
 			return new Ipv6Address ( address ) ;
 		}
 
-		public override object Clone ( ) { return new Ipv6Address ( AddressBytes ) ; }
+		public override object Clone ( ) => new Ipv6Address ( AddressBytes ) ;
 
 		public override string ToString ( )
 		{
 			StringBuilder str = new StringBuilder ( ) ;
+
 			for ( int i = 0 ; i < AddressBytes . Length ; i += 2 )
 			{
 				int segment = ( ushort ) ( AddressBytes [ i ] << 8 ) | AddressBytes [ i + 1 ] ;
 				str . AppendFormat ( "{0:X}" , segment ) ;
-				if ( i + 2 != AddressBytes . Length )
+
+				if ( ( i + 2 ) != AddressBytes . Length )
 				{
 					str . Append ( ':' ) ;
 				}

@@ -14,13 +14,13 @@ namespace DreamRecorder . ToolBox . Network
 
 		public override AddressType Type => AddressType . Mac ;
 
-		public Eui48Address ( ) { AddressBytes = new byte[ 6 ] ; }
+		public Eui48Address ( ) => AddressBytes = new byte[ 6 ] ;
 
 		internal Eui48Address ( byte [ ] address )
 		{
 			if ( address == null )
 			{
-				throw new ArgumentNullException ( nameof(address) ) ;
+				throw new ArgumentNullException ( nameof (address) ) ;
 			}
 
 			if ( address . Length != 6 )
@@ -35,11 +35,11 @@ namespace DreamRecorder . ToolBox . Network
 		{
 			if ( address == null )
 			{
-				throw new ArgumentNullException ( nameof(address) ) ;
+				throw new ArgumentNullException ( nameof (address) ) ;
 			}
 
-			int validCount = 0 ;
-			bool hasDashes = false ;
+			int      validCount = 0 ;
+			bool     hasDashes  = false ;
 			byte [ ] buffer ;
 
 
@@ -47,11 +47,11 @@ namespace DreamRecorder . ToolBox . Network
 			if ( address . IndexOf ( '-' ) >= 0 )
 			{
 				hasDashes = true ;
-				buffer = new byte[ ( address . Length + 1 ) / 3 ] ;
+				buffer    = new byte[ ( address . Length + 1 ) / 3 ] ;
 			}
 			else
 			{
-				if ( address . Length % 2 > 0 )
+				if ( ( address . Length % 2 ) > 0 )
 				{
 					//should be even
 					throw new FormatException ( ) ;
@@ -61,17 +61,18 @@ namespace DreamRecorder . ToolBox . Network
 			}
 
 			int j = 0 ;
+
 			foreach ( char t in address )
 			{
 				int value = t ;
 
-				if ( value >= 0x30
-					&& value <= 0x39 )
+				if ( ( value   >= 0x30 )
+					&& ( value <= 0x39 ) )
 				{
 					value -= 0x30 ;
 				}
-				else if ( value >= 0x41
-						&& value <= 0x46 )
+				else if ( ( value  >= 0x41 )
+						&& ( value <= 0x46 ) )
 				{
 					value -= 0x37 ;
 				}
@@ -83,6 +84,7 @@ namespace DreamRecorder . ToolBox . Network
 					}
 
 					validCount = 0 ;
+
 					continue ;
 				}
 				else
@@ -91,12 +93,12 @@ namespace DreamRecorder . ToolBox . Network
 				}
 
 				//we had too many characters after the last dash
-				if ( hasDashes && validCount >= 2 )
+				if ( hasDashes && ( validCount >= 2 ) )
 				{
 					throw new FormatException ( ) ;
 				}
 
-				if ( validCount % 2 == 0 )
+				if ( ( validCount % 2 ) == 0 )
 				{
 					buffer [ j ] = ( byte ) ( value << 4 ) ;
 				}
@@ -147,13 +149,13 @@ namespace DreamRecorder . ToolBox . Network
 		{
 			if ( address == null )
 			{
-				throw new ArgumentNullException ( nameof(address) ) ;
+				throw new ArgumentNullException ( nameof (address) ) ;
 			}
 
 			return new Eui48Address ( address ) ;
 		}
 
-		public override object Clone ( ) { return new Eui48Address ( AddressBytes ) ; }
+		public override object Clone ( ) => new Eui48Address ( AddressBytes ) ;
 
 	}
 

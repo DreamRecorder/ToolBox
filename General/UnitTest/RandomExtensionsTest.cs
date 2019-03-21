@@ -17,7 +17,7 @@ namespace DreamRecorder . ToolBox . General . UnitTest
 		public void EmptyListRandomItemTest ( )
 		{
 			List <object> tester = new List <object> ( ) ;
-			object _ = tester . RandomItem ( ) ;
+			object        _      = tester . RandomItem ( ) ;
 		}
 
 		[TestMethod]

@@ -17,6 +17,7 @@ namespace DreamRecorder . ToolBox . General
 			return ( x , y ) =>
 					{
 						int result = comparison1 ( x , y ) ;
+
 						if ( result == 0 )
 						{
 							return comparison2 ( x , y ) ;
@@ -31,6 +32,7 @@ namespace DreamRecorder . ToolBox . General
 			return ( x , y ) =>
 					{
 						int result = comparison ( x , y ) ;
+
 						if ( result == 0 )
 						{
 							return comparer . Compare ( x , y ) ;

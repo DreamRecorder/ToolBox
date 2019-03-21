@@ -16,7 +16,7 @@ namespace DreamRecorder . ToolBox . General
 		{
 			if ( list == null )
 			{
-				throw new ArgumentNullException ( nameof(list) ) ;
+				throw new ArgumentNullException ( nameof (list) ) ;
 			}
 
 			if ( list . Count == 0 )
@@ -25,6 +25,7 @@ namespace DreamRecorder . ToolBox . General
 			}
 
 			random = random ?? ( IRandom ) new Random ( ) ;
+
 			return list [ random . Next ( list . Count ) ] ;
 		}
 
@@ -32,12 +33,12 @@ namespace DreamRecorder . ToolBox . General
 		{
 			if ( random == null )
 			{
-				throw new ArgumentNullException ( nameof(random) ) ;
+				throw new ArgumentNullException ( nameof (random) ) ;
 			}
 
 			if ( list == null )
 			{
-				throw new ArgumentNullException ( nameof(list) ) ;
+				throw new ArgumentNullException ( nameof (list) ) ;
 			}
 
 			if ( list . Count == 0 )
@@ -60,12 +61,12 @@ namespace DreamRecorder . ToolBox . General
 		{
 			if ( list == null )
 			{
-				throw new ArgumentNullException ( nameof(list) ) ;
+				throw new ArgumentNullException ( nameof (list) ) ;
 			}
 
 			if ( count <= 0 )
 			{
-				throw new ArgumentOutOfRangeException ( nameof(count) ) ;
+				throw new ArgumentOutOfRangeException ( nameof (count) ) ;
 			}
 
 			if ( list . Count == 0 )
@@ -96,12 +97,12 @@ namespace DreamRecorder . ToolBox . General
 		{
 			if ( list == null )
 			{
-				throw new ArgumentNullException ( nameof(list) ) ;
+				throw new ArgumentNullException ( nameof (list) ) ;
 			}
 
 			if ( count <= 0 )
 			{
-				throw new ArgumentOutOfRangeException ( nameof(count) ) ;
+				throw new ArgumentOutOfRangeException ( nameof (count) ) ;
 			}
 
 			if ( list . Count == 0 )
@@ -111,7 +112,7 @@ namespace DreamRecorder . ToolBox . General
 
 			if ( count >= list . Count )
 			{
-				throw new ArgumentOutOfRangeException ( nameof(count) ) ;
+				throw new ArgumentOutOfRangeException ( nameof (count) ) ;
 			}
 
 			random = random ?? ( IRandom ) new Random ( ) ;

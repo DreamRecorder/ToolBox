@@ -15,7 +15,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public int Value { get ; }
 
-		public SortIndexAttribute ( int value ) { Value = value ; }
+		public SortIndexAttribute ( int value ) => Value = value ;
 
 	}
 

@@ -31,20 +31,19 @@ namespace DreamRecorder . ToolBox . General
 
 				MarkedValue <TValue , TMark> markedValue = value ;
 				Values . Add ( value , markedValue ) ;
+
 				return markedValue ;
 			}
 		}
 
 		IEnumerator <MarkedValue <TValue , TMark>> IEnumerable <MarkedValue <TValue , TMark>> . GetEnumerator ( )
-		{
-			return Values . Values . GetEnumerator ( ) ;
-		}
+			=> Values . Values . GetEnumerator ( ) ;
 
 		public void Add ( MarkedValue <TValue , TMark> item ) { Values . Add ( item . Value , item ) ; }
 
 		public void Clear ( ) { Values . Clear ( ) ; }
 
-		public bool Contains ( MarkedValue <TValue , TMark> item ) { return Values . Values . Contains ( item ) ; }
+		public bool Contains ( MarkedValue <TValue , TMark> item ) => Values . Values . Contains ( item ) ;
 
 		public void CopyTo ( MarkedValue <TValue , TMark> [ ] array , int arrayIndex )
 		{
@@ -65,7 +64,7 @@ namespace DreamRecorder . ToolBox . General
 
 		bool ICollection <MarkedValue <TValue , TMark>> . IsReadOnly => false ;
 
-		public IEnumerator GetEnumerator ( ) { return Values . GetEnumerator ( ) ; }
+		public IEnumerator GetEnumerator ( ) => Values . GetEnumerator ( ) ;
 
 	}
 
@@ -81,10 +80,10 @@ namespace DreamRecorder . ToolBox . General
 		public MarkedValue ( TValue value , TMark mark )
 		{
 			Value = value ;
-			Mark = mark ;
+			Mark  = mark ;
 		}
 
-		public object Clone ( ) { return new MarkedValue <TValue , TMark> ( Value , Mark ) ; }
+		public object Clone ( ) => new MarkedValue <TValue , TMark> ( Value , Mark ) ;
 
 		public bool Equals ( MarkedValue <TValue , TMark> other )
 		{
@@ -109,27 +108,21 @@ namespace DreamRecorder . ToolBox . General
 				return true ;
 			}
 
-			return obj . GetType ( ) == GetType ( ) && Equals ( ( MarkedValue <TValue , TMark> ) obj ) ;
+			return ( obj . GetType ( ) == GetType ( ) ) && Equals ( ( MarkedValue <TValue , TMark> ) obj ) ;
 		}
 
-		public override int GetHashCode ( ) { return EqualityComparer <TValue> . Default . GetHashCode ( Value ) ; }
+		public override int GetHashCode ( ) => EqualityComparer <TValue> . Default . GetHashCode ( Value ) ;
 
 		public static bool operator == ( MarkedValue <TValue , TMark> left , MarkedValue <TValue , TMark> right )
-		{
-			return Equals ( left , right ) ;
-		}
+			=> Equals ( left , right ) ;
 
 		public static bool operator != ( MarkedValue <TValue , TMark> left , MarkedValue <TValue , TMark> right )
-		{
-			return ! Equals ( left , right ) ;
-		}
+			=> ! Equals ( left , right ) ;
 
-		public static implicit operator TValue ( MarkedValue <TValue , TMark> value ) { return value . Value ; }
+		public static implicit operator TValue ( MarkedValue <TValue , TMark> value ) => value . Value ;
 
 		public static implicit operator MarkedValue <TValue , TMark> ( TValue value )
-		{
-			return new MarkedValue <TValue , TMark> ( value , default ) ;
-		}
+			=> new MarkedValue <TValue , TMark> ( value , default ) ;
 
 	}
 

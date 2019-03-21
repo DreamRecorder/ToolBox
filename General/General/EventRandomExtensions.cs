@@ -16,28 +16,22 @@ namespace DreamRecorder . ToolBox . General
 		{
 			if ( random == null )
 			{
-				throw new ArgumentNullException ( nameof(random) ) ;
+				throw new ArgumentNullException ( nameof (random) ) ;
 			}
 
 			return random . NextNormalValue ( ) <= possibility ;
 		}
 
 		public static NormalValue NextNormalValue ( this IRandom random )
-		{
-			return random . Next ( NormalValue . MaxValue + 1 ) ;
-		}
+			=> random . Next ( NormalValue . MaxValue + 1 ) ;
 
 		public static NormalValue NextNormalValue ( this IRandom random ,
-													NormalValue lowerBound ,
-													NormalValue higherBound )
-		{
-			return random . Next ( lowerBound , higherBound + 1 ) ;
-		}
+													NormalValue  lowerBound ,
+													NormalValue  higherBound )
+			=> random . Next ( lowerBound , higherBound + 1 ) ;
 
 		public static NormalValue NextNormalValue ( this IRandom random , NormalValue lowerBound )
-		{
-			return random . Next ( lowerBound , NormalValue . MaxValue + 1 ) ;
-		}
+			=> random . Next ( lowerBound , NormalValue . MaxValue + 1 ) ;
 
 	}
 

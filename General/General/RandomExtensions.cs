@@ -24,12 +24,12 @@ namespace DreamRecorder . ToolBox . General
 		{
 			if ( random == null )
 			{
-				throw new ArgumentNullException ( nameof(random) ) ;
+				throw new ArgumentNullException ( nameof (random) ) ;
 			}
 
 			if ( sigma <= 0 )
 			{
-				throw new ArgumentOutOfRangeException ( nameof(sigma) ) ;
+				throw new ArgumentOutOfRangeException ( nameof (sigma) ) ;
 			}
 
 			double u1 = random . NextDouble ( ) ;
@@ -37,7 +37,7 @@ namespace DreamRecorder . ToolBox . General
 
 			double randStdNormal = Math . Sqrt ( - 2.0 * Math . Log ( u1 ) ) * Math . Sin ( 2.0 * Math . PI * u2 ) ;
 
-			double randNormal = mu + sigma * randStdNormal ;
+			double randNormal = mu + ( sigma * randStdNormal ) ;
 
 			return randNormal ;
 		}
@@ -56,25 +56,25 @@ namespace DreamRecorder . ToolBox . General
 		{
 			if ( random == null )
 			{
-				throw new ArgumentNullException ( nameof(random) ) ;
+				throw new ArgumentNullException ( nameof (random) ) ;
 			}
 
 			if ( count <= 0 )
 			{
-				throw new ArgumentOutOfRangeException ( nameof(count) ) ;
+				throw new ArgumentOutOfRangeException ( nameof (count) ) ;
 			}
 
 			if ( maxValue < count )
 			{
-				throw new ArgumentOutOfRangeException ( nameof(maxValue) ) ;
+				throw new ArgumentOutOfRangeException ( nameof (maxValue) ) ;
 			}
 
-			List <int> result = new List <int> ( count ) ;
+			List <int>      result = new List <int> ( count ) ;
 			SortedSet <int> sorted = new SortedSet <int> ( ) ;
 
 			for ( int i = 0 ; i < count ; i++ )
 			{
-				int r = random . Next ( maxValue + 1 - i ) ;
+				int r = random . Next ( ( maxValue + 1 ) - i ) ;
 
 				foreach ( int q in sorted )
 				{
@@ -108,17 +108,17 @@ namespace DreamRecorder . ToolBox . General
 		{
 			if ( random == null )
 			{
-				throw new ArgumentNullException ( nameof(random) ) ;
+				throw new ArgumentNullException ( nameof (random) ) ;
 			}
 
-			if ( ! ( a <= c && c <= b ) )
+			if ( ! ( ( a <= c ) && ( c <= b ) ) )
 			{
-				throw new ArgumentOutOfRangeException ( $"It should be {nameof(a)}<={nameof(c)}<={nameof(b)}" ) ;
+				throw new ArgumentOutOfRangeException ( $"It should be {nameof (a)}<={nameof (c)}<={nameof (b)}" ) ;
 			}
 
 			double u = random . NextDouble ( ) ;
 
-			if ( u < ( c - a ) / ( b - a ) )
+			if ( u < ( ( c - a ) / ( b - a ) ) )
 			{
 				return a + Math . Sqrt ( u * ( b - a ) * ( c - a ) ) ;
 			}
@@ -136,7 +136,7 @@ namespace DreamRecorder . ToolBox . General
 		{
 			if ( random == null )
 			{
-				throw new ArgumentNullException ( nameof(random) ) ;
+				throw new ArgumentNullException ( nameof (random) ) ;
 			}
 
 			return random . Next ( 2 ) > 0 ;
@@ -151,12 +151,12 @@ namespace DreamRecorder . ToolBox . General
 		{
 			if ( random == null )
 			{
-				throw new ArgumentNullException ( nameof(random) ) ;
+				throw new ArgumentNullException ( nameof (random) ) ;
 			}
 
 			if ( list == null )
 			{
-				throw new ArgumentNullException ( nameof(list) ) ;
+				throw new ArgumentNullException ( nameof (list) ) ;
 			}
 
 			for ( int i = 0 ; i < list . Count ; i++ )
@@ -173,7 +173,7 @@ namespace DreamRecorder . ToolBox . General
 		{
 			if ( random == null )
 			{
-				throw new ArgumentNullException ( nameof(random) ) ;
+				throw new ArgumentNullException ( nameof (random) ) ;
 			}
 
 			if ( ! ( minValue <= maxValue ) )
@@ -181,14 +181,14 @@ namespace DreamRecorder . ToolBox . General
 				throw new ArgumentException ( ) ;
 			}
 
-			return minValue + random . NextDouble ( ) * ( maxValue - minValue ) ;
+			return minValue + ( random . NextDouble ( ) * ( maxValue - minValue ) ) ;
 		}
 
 		public static decimal NextDecimalBetween ( [NotNull] this IRandom random , decimal minValue , decimal maxValue )
 		{
 			if ( random == null )
 			{
-				throw new ArgumentNullException ( nameof(random) ) ;
+				throw new ArgumentNullException ( nameof (random) ) ;
 			}
 
 			if ( ! ( minValue <= maxValue ) )
@@ -196,7 +196,7 @@ namespace DreamRecorder . ToolBox . General
 				throw new ArgumentException ( ) ;
 			}
 
-			return minValue + Convert . ToDecimal ( random . NextDouble ( ) ) * ( maxValue - minValue ) ;
+			return minValue + ( Convert . ToDecimal ( random . NextDouble ( ) ) * ( maxValue - minValue ) ) ;
 		}
 
 	}

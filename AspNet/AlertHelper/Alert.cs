@@ -17,13 +17,11 @@ namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 		public Alert ( BootstrapVariation variation , string message )
 		{
 			Variation = variation ;
-			Message = message ;
+			Message   = message ;
 		}
 
 		public bool Equals ( Alert other )
-		{
-			return Variation == other . Variation && string . Equals ( Message , other . Message ) ;
-		}
+			=> ( Variation == other . Variation ) && string . Equals ( Message , other . Message ) ;
 
 		public override bool Equals ( object obj )
 		{
@@ -43,9 +41,9 @@ namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 			}
 		}
 
-		public static bool operator == ( Alert left , Alert right ) { return left . Equals ( right ) ; }
+		public static bool operator == ( Alert left , Alert right ) => left . Equals ( right ) ;
 
-		public static bool operator != ( Alert left , Alert right ) { return ! left . Equals ( right ) ; }
+		public static bool operator != ( Alert left , Alert right ) => ! left . Equals ( right ) ;
 
 	}
 

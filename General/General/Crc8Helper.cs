@@ -17,6 +17,7 @@ namespace DreamRecorder . ToolBox . General
 			for ( int i = 0 ; i < 256 ; ++i )
 			{
 				int temp = i ;
+
 				for ( int j = 0 ; j < 8 ; ++j )
 				{
 					if ( ( temp & 0x80 ) != 0 )
@@ -38,16 +39,17 @@ namespace DreamRecorder . ToolBox . General
 
 		private static readonly byte [ ] Table = new byte[ 256 ] ;
 
-		public static byte CalculateCrc8 ( this byte [ ] data ) { return ComputeChecksum ( data ) ; }
+		public static byte CalculateCrc8 ( this byte [ ] data ) => ComputeChecksum ( data ) ;
 
 		public static byte ComputeChecksum ( [NotNull] params byte [ ] data )
 		{
 			if ( data == null )
 			{
-				throw new ArgumentNullException ( nameof(data) ) ;
+				throw new ArgumentNullException ( nameof (data) ) ;
 			}
 
 			byte crc = 0 ;
+
 			if ( data . Length > 0 )
 			{
 				crc = data . Aggregate ( crc , ( current , b ) => Table [ current ^ b ] ) ;

@@ -12,19 +12,23 @@ namespace DreamRecorder . ToolBox . General
 
 		public static void PrepareCurrentDomain ( )
 		{
-			Assembly [ ] assemblies = AppDomain . CurrentDomain . GetAssemblies ( ) ;
-
 			AppDomain . CurrentDomain . AssemblyLoad += CurrentDomain_AssemblyLoad ;
+
+			Assembly [ ] assemblies = AppDomain . CurrentDomain . GetAssemblies ( ) ;
 
 			foreach ( Assembly assembly in assemblies )
 			{
 				assembly . Prepare ( ) ;
 			}
+
+			StaticServiceProvider . Update ( ) ;
 		}
 
 		private static void CurrentDomain_AssemblyLoad ( object sender , AssemblyLoadEventArgs args )
 		{
 			args . LoadedAssembly . Prepare ( ) ;
+
+			StaticServiceProvider . Update ( ) ;
 		}
 
 	}

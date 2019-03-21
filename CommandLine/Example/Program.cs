@@ -9,6 +9,7 @@ using DreamRecorder . ToolBox . CommandLine ;
 using DreamRecorder . ToolBox . General ;
 
 using Microsoft . Extensions . Logging ;
+using Microsoft . Extensions . Logging . Console ;
 
 namespace Example
 {
@@ -28,17 +29,13 @@ namespace Example
 
 		public override bool AutoSaveSetting => true ;
 
-		public static void Main ( string [ ] args )
-		{
-			StaticLoggerFactory . LoggerFactory =
-				new LoggerFactory ( ) . AddConsole ( LogLevel . Information ) . AddDebug ( ) ;
-			new Program ( ) . RunMain ( args ) ;
-		}
+		public static void Main ( string [ ] args ) { new Program ( ) . RunMain ( args ) ; }
 
 		public void DoSth ( )
 		{
 			ReadOnlyDictionary <string , string> a = Emojis . EmojisList ;
 			Console . WriteLine ( a ) ;
+
 			while ( IsRunning )
 			{
 				Thread . Sleep ( 100 ) ;
@@ -49,6 +46,12 @@ namespace Example
 		{
 			Thread thread = new Thread ( DoSth ) ;
 			thread . Start ( ) ;
+		}
+
+		public override void ConfigureLogger ( ILoggingBuilder builder )
+		{
+			builder . AddDebug ( ) ;
+			builder . AddFilter <ConsoleLoggerProvider> ( "Default" , LogLevel . Information ) . AddConsole ( ) ;
 		}
 
 		public override void ShowLogo ( ) { Console . WriteLine ( "Logo" ) ; }

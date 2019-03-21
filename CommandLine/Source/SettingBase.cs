@@ -11,6 +11,7 @@ using DreamRecorder . ToolBox . General ;
 
 using JetBrains . Annotations ;
 
+using Microsoft . Extensions . DependencyInjection ;
 using Microsoft . Extensions . Logging ;
 
 namespace DreamRecorder . ToolBox . CommandLine
@@ -22,7 +23,9 @@ namespace DreamRecorder . ToolBox . CommandLine
 	{
 
 		private static ILogger Logger
-			=> _logger ?? ( _logger = StaticLoggerFactory . LoggerFactory . CreateLogger <T> ( ) ) ;
+			=> _logger
+				?? ( _logger = StaticServiceProvider . Provider . GetService <ILoggerFactory> ( ) .
+														CreateLogger <T> ( ) ) ;
 
 		// ReSharper disable once StaticMemberInGenericType
 		private static ILogger _logger ;
@@ -41,7 +44,8 @@ namespace DreamRecorder . ToolBox . CommandLine
 			{
 				SettingItemAttribute attribute =
 					( SettingItemAttribute ) property . GetCustomAttribute ( typeof ( SettingItemAttribute ) ) ;
-				int index = attribute . SettingCategory ;
+
+				int           index           = attribute . SettingCategory ;
 				StringBuilder propertyBuilder = stringBuilders [ index ] ;
 				propertyBuilder . AppendLine ( attribute . ToString ( ) ) ;
 				propertyBuilder . AppendLine ( $"{property . Name} = {property . GetValue ( this )}" ) ;
@@ -69,6 +73,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 			{
 				SettingItemAttribute attribute =
 					( SettingItemAttribute ) property . GetCustomAttribute ( typeof ( SettingItemAttribute ) ) ;
+
 				property . SetValue ( setting , attribute . DefaultValue ) ;
 			}
 
@@ -79,7 +84,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 		{
 			if ( source == null )
 			{
-				throw new ArgumentNullException ( nameof(source) ) ;
+				throw new ArgumentNullException ( nameof (source) ) ;
 			}
 
 			T settings = new T ( ) ;
@@ -97,7 +102,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 		{
 			if ( stream == null )
 			{
-				throw new ArgumentNullException ( nameof(stream) ) ;
+				throw new ArgumentNullException ( nameof (stream) ) ;
 			}
 
 			T settings = new T ( ) ;

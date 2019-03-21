@@ -11,7 +11,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>DreamRecorder.ToolBox.Colors</AssemblyName>
     <RootNamespace>DreamRecorder.ToolBox.Colors</RootNamespace>
-    <Version>1.1.4.35</Version>
+    <Version>1.1.4.37</Version>
     <Authors>Wencey Wang</Authors>
     <Company>Dream Recorder</Company>
     <PackageProjectUrl>https://vsts.dreamry.org/DefaultCollection/ToolBox</PackageProjectUrl>

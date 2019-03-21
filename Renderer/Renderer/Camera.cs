@@ -45,7 +45,7 @@ namespace DreamRecorder . ToolBox . Renderer
 		public Camera ( Vector3 position , Vector3 lookAt )
 		{
 			Position = position ;
-			LookAt = lookAt ;
+			LookAt   = lookAt ;
 		}
 
 		public Vector3 Position { get ; set ; }
@@ -64,7 +64,8 @@ namespace DreamRecorder . ToolBox . Renderer
 		public Vector2 Project ( Vector3 point )
 		{
 			Vector2 result = CalculateProject ( point ) ;
-			double resize = ScreenWidth / HalfFovTan ;
+			double  resize = ScreenWidth / HalfFovTan ;
+
 			return new Vector2 ( ( float ) ( result . X * resize ) , ( float ) ( result . Y * resize ) ) ;
 		}
 
@@ -73,14 +74,10 @@ namespace DreamRecorder . ToolBox . Renderer
 		protected abstract Vector3 CalculateProject ( Vector2 point ) ;
 
 		public virtual Vector3 WorldConversion ( Vector3 worldPosition )
-		{
-			return Vector3 . Transform ( worldPosition , WorldConversionMatrix ) ;
-		}
+			=> Vector3 . Transform ( worldPosition , WorldConversionMatrix ) ;
 
 		public virtual Vector3 CameraConversion ( Vector3 cameraPosition )
-		{
-			return Vector3 . Transform ( cameraPosition , CameraConversionMatrix ) ;
-		}
+			=> Vector3 . Transform ( cameraPosition , CameraConversionMatrix ) ;
 
 	}
 

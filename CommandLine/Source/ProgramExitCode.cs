@@ -20,16 +20,14 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 		public static readonly T ExceptionUnhandled = ( ProgramExitCode <T> ) 2 ;
 
-		public static implicit operator int ( ProgramExitCode <T> item ) { return item . Code ; }
+		public static implicit operator int ( ProgramExitCode <T> item ) => item . Code ;
 
-		public static implicit operator ProgramExitCode <T> ( int item )
-		{
-			return new ProgramExitCode <T> { Code = item } ;
-		}
+		public static implicit operator ProgramExitCode <T> ( int item ) => new ProgramExitCode <T> { Code = item } ;
 
 		public static implicit operator T ( ProgramExitCode <T> item )
 		{
 			T result = new T { Code = item } ;
+
 			return result ;
 		}
 

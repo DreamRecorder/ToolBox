@@ -23,17 +23,17 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 		public object DefaultValue { get ; set ; }
 
-		public SettingItemAttribute ( int settingCategory ,
+		public SettingItemAttribute ( int  settingCategory ,
 									string displayName ,
 									string introduction ,
-									bool restartRequired ,
+									bool   restartRequired ,
 									object defaultValue )
 		{
 			SettingCategory = settingCategory ;
-			DisplayName = displayName ?? throw new ArgumentNullException ( nameof(displayName) ) ;
-			Introduction = introduction ?? throw new ArgumentNullException ( nameof(introduction) ) ;
+			DisplayName     = displayName  ?? throw new ArgumentNullException ( nameof (displayName) ) ;
+			Introduction    = introduction ?? throw new ArgumentNullException ( nameof (introduction) ) ;
 			RestartRequired = restartRequired ;
-			DefaultValue = defaultValue ;
+			DefaultValue    = defaultValue ;
 		}
 
 		public override string ToString ( )
@@ -50,6 +50,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 			}
 
 			builder . AppendLine ( $"#	Default Value: {Introduction}" ) ;
+
 			return builder . ToString ( ) ;
 		}
 

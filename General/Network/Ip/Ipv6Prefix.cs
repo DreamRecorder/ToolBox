@@ -16,14 +16,14 @@ namespace DreamRecorder . ToolBox . Network . Ip
 		public Ipv6Prefix ( )
 		{
 			AddressBytes = new byte[ 16 ] ;
-			Length = 0 ;
+			Length       = 0 ;
 		}
 
 		private Ipv6Prefix ( [NotNull] byte [ ] address , byte length )
 		{
 			if ( address == null )
 			{
-				throw new ArgumentNullException ( nameof(address) ) ;
+				throw new ArgumentNullException ( nameof (address) ) ;
 			}
 
 			if ( address . Length != 6 )
@@ -32,14 +32,14 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			}
 
 			AddressBytes = ( byte [ ] ) address . Clone ( ) ;
-			Length = length ;
+			Length       = length ;
 		}
 
 		public Ipv6Prefix ( [NotNull] string addressString )
 		{
 			if ( addressString == null )
 			{
-				throw new ArgumentNullException ( nameof(addressString) ) ;
+				throw new ArgumentNullException ( nameof (addressString) ) ;
 			}
 
 			string [ ] data = addressString . Split ( '/' ) ;
@@ -47,6 +47,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			switch ( data . Length )
 			{
 				case 2 :
+
 				{
 					Ipv6Address address = new Ipv6Address ( data [ 0 ] ) ;
 
@@ -57,6 +58,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 					break ;
 				}
 				case 1 :
+
 				{
 					Ipv6Address address = new Ipv6Address ( data [ 0 ] ) ;
 
@@ -67,6 +69,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 					break ;
 				}
 				default :
+
 				{
 					throw new ArgumentException ( ) ;
 				}
@@ -77,13 +80,13 @@ namespace DreamRecorder . ToolBox . Network . Ip
 		{
 			if ( address == null )
 			{
-				throw new ArgumentNullException ( nameof(address) ) ;
+				throw new ArgumentNullException ( nameof (address) ) ;
 			}
 
 			return new Ipv6Prefix ( address ) ;
 		}
 
-		public override object Clone ( ) { return new Ipv6Prefix ( AddressBytes , Length ) ; }
+		public override object Clone ( ) => new Ipv6Prefix ( AddressBytes , Length ) ;
 
 	}
 

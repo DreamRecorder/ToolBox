@@ -14,35 +14,34 @@ namespace DreamRecorder . ToolBox . General
 	public static class TypeExtensions
 	{
 
-		public static int GetInheritanceDepth ( this Type type )
-		{
-			return GetInheritanceDepth ( type , typeof ( object ) ) ;
-		}
+		public static int GetInheritanceDepth ( this Type type ) => GetInheritanceDepth ( type , typeof ( object ) ) ;
 
-		public static Task PrepareAssembly <T> ( ) { return typeof ( T ) . Assembly . Prepare ( ) ; }
+		public static Task PrepareAssembly <T> ( ) => typeof ( T ) . Assembly . Prepare ( ) ;
 
 		public static int GetInheritanceDepth ( this Type type , Type baseType )
 		{
 			if ( type == null )
 			{
-				throw new ArgumentNullException ( nameof(type) ) ;
+				throw new ArgumentNullException ( nameof (type) ) ;
 			}
 
 			if ( baseType == null )
 			{
-				throw new ArgumentNullException ( nameof(baseType) ) ;
+				throw new ArgumentNullException ( nameof (baseType) ) ;
 			}
 
 			if ( ! baseType . GetTypeInfo ( ) . IsAssignableFrom ( type . GetTypeInfo ( ) ) )
 			{
-				throw new ArgumentException ( $"{nameof(baseType)} is not assignable from {nameof(type)}" ) ;
+				throw new ArgumentException ( $"{nameof (baseType)} is not assignable from {nameof (type)}" ) ;
 			}
 
 			TypeInfo currentType = type . GetTypeInfo ( ) ;
-			int count = 0 ;
+			int      count       = 0 ;
+
 			while ( baseType . GetTypeInfo ( ) . IsAssignableFrom ( currentType ) )
 			{
 				TypeInfo currentBaseType = currentType . GetTypeInfo ( ) . BaseType ? . GetTypeInfo ( ) ;
+
 				if ( currentBaseType != null )
 				{
 					currentType = currentBaseType ;
@@ -72,13 +71,11 @@ namespace DreamRecorder . ToolBox . General
 																					?? int . MaxValue ) ;
 
 			result . Sort ( comp . Union ( ( x , y ) => string . CompareOrdinal ( x . Name , y . Name ) ) ) ;
+
 			return result ;
 		}
 
-		public static List <PropertyInfo> GetSortedProperties <T> ( )
-		{
-			return typeof ( T ) . GetSortedProperties ( ) ;
-		}
+		public static List <PropertyInfo> GetSortedProperties <T> ( ) => typeof ( T ) . GetSortedProperties ( ) ;
 
 		public static List <(PropertyInfo PropertyInfo , TAttribute Attribute)> GetSortedPropertiesWithAttribute
 			<TAttribute> ( this Type type ) where TAttribute : Attribute
@@ -90,9 +87,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public static List <(PropertyInfo PropertyInfo , TAttribute Attribute)> GetSortedPropertiesWithAttribute
 			<T , TAttribute> ( ) where TAttribute : Attribute
-		{
-			return typeof ( T ) . GetSortedPropertiesWithAttribute <TAttribute> ( ) ;
-		}
+			=> typeof ( T ) . GetSortedPropertiesWithAttribute <TAttribute> ( ) ;
 
 		public static List <(PropertyInfo , TAttribute Attribute)> GetSortedPropertiesWithNullableAttribute
 			<TAttribute> ( this Type type ) where TAttribute : Attribute
@@ -105,9 +100,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public static List <(PropertyInfo PropertyInfo , TAttribute Attribute)> GetSortedPropertiesWithNullableAttribute
 			<T , TAttribute> ( ) where TAttribute : Attribute
-		{
-			return typeof ( T ) . GetSortedPropertiesWithNullableAttribute <TAttribute> ( ) ;
-		}
+			=> typeof ( T ) . GetSortedPropertiesWithNullableAttribute <TAttribute> ( ) ;
 
 	}
 

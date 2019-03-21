@@ -20,7 +20,7 @@ namespace DreamRecorder . ToolBox . Renderer
 		public Ray ( Vector3 startPosition , Vector3 direction )
 		{
 			StartPosition = startPosition ;
-			Direction = Vector3 . Normalize ( direction ) ;
+			Direction     = Vector3 . Normalize ( direction ) ;
 		}
 
 	}

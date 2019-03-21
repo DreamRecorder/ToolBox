@@ -1,7 +1,6 @@
 ﻿using System ;
 using System . Collections ;
 using System . Collections . Generic ;
-using System . Diagnostics ;
 using System . IO ;
 using System . Linq ;
 
@@ -10,6 +9,7 @@ using DreamRecorder . ToolBox . General ;
 using JetBrains . Annotations ;
 
 using Microsoft . Extensions . CommandLineUtils ;
+using Microsoft . Extensions . DependencyInjection ;
 using Microsoft . Extensions . Logging ;
 
 namespace DreamRecorder . ToolBox . CommandLine
@@ -28,6 +28,8 @@ namespace DreamRecorder . ToolBox . CommandLine
 		public static T Current { get ; set ; }
 
 		public virtual bool IsRunning { get ; set ; }
+
+		public bool IsVerbose { get ; set ; }
 
 		public abstract bool WaitForExit { get ; }
 
@@ -53,11 +55,13 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 		public virtual void RegisterArgument ( CommandLineApplication application ) { }
 
+		public abstract void ConfigureLogger ( ILoggingBuilder builder ) ;
+
 		public void SaveSettingFile ( )
 		{
-			string config = Setting ? . Save ( ) ;
-			FileStream settingFile = File . OpenWrite ( FileNameConst . SettingFile ) ;
-			StreamWriter writer = new StreamWriter ( settingFile ) ;
+			string       config      = Setting ? . Save ( ) ;
+			FileStream   settingFile = File . OpenWrite ( FileNameConst . SettingFile ) ;
+			StreamWriter writer      = new StreamWriter ( settingFile ) ;
 			writer . Write ( config ) ;
 			writer . Dispose ( ) ;
 		}
@@ -104,6 +108,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 		{
 			Logger . LogInformation ( "Generating License File." ) ;
 			FileStream licenseFile = File . Open ( FileNameConst . LicenseFile , FileMode . Create ) ;
+
 			using ( StreamWriter writer = new StreamWriter ( licenseFile ) )
 			{
 				writer . WriteLine ( License ) ;
@@ -118,11 +123,13 @@ namespace DreamRecorder . ToolBox . CommandLine
 			{
 				Logger . LogInformation ( "License file not found." ) ;
 				GenerateLicenseFile ( ) ;
+
 				return false ;
 			}
 
 			FileStream licenseFile = File . OpenRead ( FileNameConst . LicenseFile ) ;
-			string licenseFileContent ;
+			string     licenseFileContent ;
+
 			using ( StreamReader reader = new StreamReader ( licenseFile ) )
 			{
 				Logger . LogInformation ( "License file found, reading it." ) ;
@@ -134,10 +141,12 @@ namespace DreamRecorder . ToolBox . CommandLine
 				Logger . LogInformation ( "License check error." ) ;
 
 				Console . WriteLine ( @"You should read the License.txt and accept it before use this program." ) ;
+
 				return false ;
 			}
 
 			Logger . LogInformation ( "License check pass." ) ;
+
 			return true ;
 		}
 
@@ -151,7 +160,11 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 			#region CreateLogger
 
-			Logger = StaticLoggerFactory . LoggerFactory . CreateLogger <T> ( ) ;
+			StaticServiceProvider . ServiceCollection . AddLogging ( ConfigureLogger ) ;
+
+			StaticServiceProvider . Update ( ) ;
+
+			Logger = StaticServiceProvider . Provider . GetService <ILoggerFactory> ( ) . CreateLogger <T> ( ) ;
 
 			Logger . LogInformation ( "Start with argument: {0}" , string . Join ( " " , args ) ) ;
 
@@ -180,101 +193,98 @@ namespace DreamRecorder . ToolBox . CommandLine
 												"Launch in Debug mode" ,
 												CommandOptionType . NoValue ) ;
 
+			CommandOption verboseOption =
+				commandLineApplication . Option ( "-v|--verbose" , "Verbose Log" , CommandOptionType . NoValue ) ;
 
 			RegisterArgument ( commandLineApplication ) ;
 
 			IsRunning = true ;
 
-			commandLineApplication . OnExecute ( ( ) =>
-												{
-													IsDebug = debugOption . HasValue ( ) || Debugger . IsAttached ;
+			int Execution ( )
+			{
+				#if DEBUG
+				IsDebug = true ;
+				#else
+				IsDebug = debugOption . HasValue ( ) || Debugger . IsAttached ;
+				#endif
 
-#if DEBUG
-													IsDebug = true ;
-#endif
+				IsVerbose = verboseOption . HasValue ( ) ;
 
-													if ( ! noLogoOption . HasValue ( ) )
-													{
-														ShowLogo ( ) ;
-														ShowCopyright ( ) ;
-													}
+				if ( ! noLogoOption . HasValue ( ) )
+				{
+					ShowLogo ( ) ;
+					ShowCopyright ( ) ;
+				}
 
-													#region Check License
+				#region Check License
 
-													if ( IsDebug )
-													{
-														Logger .
-															LogInformation ( "Debug version, skip license check and you are assumed to accept license." ) ;
-													}
-													else
-													{
-														if ( ! acceptLicenseOption . HasValue ( ) )
-														{
-															if ( ! CheckLicenseFile ( ) )
-															{
-																Logger . LogInformation ( "License check failed." ) ;
-																Exit ( ProgramExitCode <TExitCode> .
-																			LicenseNotAccepted ) ;
-															}
-															else
-															{
-																Logger .
-																	LogInformation ( "License file check passed." ) ;
-															}
-														}
-														else
-														{
-															Logger .
-																LogInformation ( "License Accepted by command line argument." ) ;
-														}
-													}
+				if ( IsDebug )
+				{
+					Logger . LogInformation ( "Debug version, skip license check and you are assumed to accept license." ) ;
+				}
+				else
+				{
+					if ( ! acceptLicenseOption . HasValue ( ) )
+					{
+						if ( ! CheckLicenseFile ( ) )
+						{
+							Logger . LogInformation ( "License check failed." ) ;
+							Exit ( ProgramExitCode <TExitCode> . LicenseNotAccepted ) ;
+						}
+						else
+						{
+							Logger . LogInformation ( "License file check passed." ) ;
+						}
+					}
+					else
+					{
+						Logger . LogInformation ( "License Accepted by command line argument." ) ;
+					}
+				}
 
-													#endregion
+				#endregion
 
-													#region Load Setting
+				#region Load Setting
 
-													if ( LoadSetting )
-													{
-														Logger . LogInformation ( "Loading setting file." ) ;
-														if ( File . Exists ( FileNameConst . SettingFile ) )
-														{
-															Logger .
-																LogInformation ( "Setting file exists, Reading." ) ;
-															try
-															{
-																using ( FileStream stream =
-																	File . OpenRead ( FileNameConst . SettingFile ) )
-																{
-																	Setting =
-																		SettingBase <TSetting , TSettingCategory> .
-																			Load ( stream ) ;
-																}
+				if ( LoadSetting )
+				{
+					Logger . LogInformation ( "Loading setting file." ) ;
 
-																Logger . LogInformation ( "Setting file loaded." ) ;
-															}
-															catch ( Exception )
-															{
-																Logger .
-																	LogInformation ( "Setting file error, will use default value." ) ;
-																Setting = SettingBase <TSetting , TSettingCategory> .
-																	GenerateNew ( ) ;
-															}
-														}
-														else
-														{
-															Logger .
-																LogInformation ( "Setting file doesn't exists, generating new." ) ;
-															Setting = SettingBase <TSetting , TSettingCategory> .
-																GenerateNew ( ) ;
-															SaveSettingFile ( ) ;
-														}
-													}
+					if ( File . Exists ( FileNameConst . SettingFile ) )
+					{
+						Logger . LogInformation ( "Setting file exists, Reading." ) ;
 
-													#endregion
+						try
+						{
+							using ( FileStream stream = File . OpenRead ( FileNameConst . SettingFile ) )
+							{
+								Setting = SettingBase <TSetting , TSettingCategory> . Load ( stream ) ;
+							}
 
-													Start ( args ) ;
-													return 0 ;
-												} ) ;
+							Logger . LogInformation ( "Setting file loaded." ) ;
+						}
+						catch ( Exception )
+						{
+							Logger . LogInformation ( "Setting file error, will use default value." ) ;
+							Setting = SettingBase <TSetting , TSettingCategory> . GenerateNew ( ) ;
+						}
+					}
+					else
+					{
+						Logger . LogInformation ( "Setting file doesn't exists, generating new." ) ;
+						Setting = SettingBase <TSetting , TSettingCategory> . GenerateNew ( ) ;
+						SaveSettingFile ( ) ;
+					}
+				}
+
+				#endregion
+
+				Start ( args ) ;
+
+				return 0 ;
+			}
+
+			commandLineApplication . OnExecute ( Execution ) ;
 
 			commandLineApplication . Execute ( args ) ;
 
@@ -282,7 +292,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 			{
 				while ( IsRunning )
 				{
-					if ( Console . ReadLine ( ) ? . Trim ( ) . ToLower ( ) == "exit" && CanExit )
+					if ( ( Console . ReadLine ( ) ? . Trim ( ) . ToLower ( ) == "exit" ) && CanExit )
 					{
 						Exit ( ProgramExitCode <TExitCode> . Success ) ;
 					}

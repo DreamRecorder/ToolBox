@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup Label="Globals">
     <SccProjectName>SAK</SccProjectName>
@@ -9,9 +9,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>DreamRecorder.ToolBox.General</AssemblyName>
-    <RootNamespace>DreamRecorder.ToolBox.General</RootNamespace>
-    <PackageId>DreamRecorder.ToolBox</PackageId>
+    <AssemblyName>DreamRecorder.ToolBox.AspNet.General</AssemblyName>
+    <RootNamespace>DreamRecorder.ToolBox.AspNet.General</RootNamespace>
+    <PackageId>DreamRecorder.ToolBox.AspNet.General</PackageId>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Authors>Wencey Wang</Authors>
     <Company>Dream Recorder</Company>
@@ -23,16 +23,10 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>1.1.4.37</Version>
     <LangVersion>latest</LangVersion>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2018.3.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Properties\" />
+    <ProjectReference Include="..\General\General\General.csproj" />
   </ItemGroup>
 
 </Project>

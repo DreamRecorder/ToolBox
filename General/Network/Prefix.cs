@@ -36,21 +36,23 @@ namespace DreamRecorder . ToolBox . Network
 				return true ;
 			}
 
-			return Equals ( AddressBytes , other . AddressBytes ) && Length == other . Length && Type == other . Type ;
+			return Equals ( AddressBytes , other . AddressBytes )
+					&& ( Length == other . Length )
+					&& ( Type   == other . Type ) ;
 		}
 
-		public static explicit operator string ( Prefix prefix ) { return prefix . ToString ( ) ; }
+		public static explicit operator string ( Prefix prefix ) => prefix . ToString ( ) ;
 
 		public virtual bool IsInPrefix ( [NotNull] Address address )
 		{
 			if ( address == null )
 			{
-				throw new ArgumentNullException ( nameof(address) ) ;
+				throw new ArgumentNullException ( nameof (address) ) ;
 			}
 
 			if ( address . Type == Type )
 			{
-				bool [ ] prefixArray = AddressBytes . ToBooleanArray ( ) ;
+				bool [ ] prefixArray  = AddressBytes . ToBooleanArray ( ) ;
 				bool [ ] addressArray = address . AddressBytes . ToBooleanArray ( ) ;
 
 				bool isSame = true ;
@@ -95,9 +97,9 @@ namespace DreamRecorder . ToolBox . Network
 			}
 		}
 
-		public static bool operator == ( Prefix left , Prefix right ) { return Equals ( left , right ) ; }
+		public static bool operator == ( Prefix left , Prefix right ) => Equals ( left , right ) ;
 
-		public static bool operator != ( Prefix left , Prefix right ) { return ! Equals ( left , right ) ; }
+		public static bool operator != ( Prefix left , Prefix right ) => ! Equals ( left , right ) ;
 
 	}
 

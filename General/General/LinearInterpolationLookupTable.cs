@@ -24,7 +24,7 @@ namespace DreamRecorder . ToolBox . General
 		public LinearInterpolationLookupTable ( )
 		{
 			PointsList = new List <PointF> ( ) ;
-			Points = new ReadOnlyCollection <PointF> ( PointsList ) ;
+			Points     = new ReadOnlyCollection <PointF> ( PointsList ) ;
 			Sort ( ) ;
 		}
 
@@ -32,23 +32,23 @@ namespace DreamRecorder . ToolBox . General
 		{
 			if ( init == null )
 			{
-				throw new ArgumentNullException ( nameof(init) ) ;
+				throw new ArgumentNullException ( nameof (init) ) ;
 			}
 
 			PointsList = new List <PointF> ( init ) ;
-			Points = new ReadOnlyCollection <PointF> ( PointsList ) ;
+			Points     = new ReadOnlyCollection <PointF> ( PointsList ) ;
 		}
 
 		public LinearInterpolationLookupTable ( [NotNull] XElement element )
 		{
 			if ( element == null )
 			{
-				throw new ArgumentNullException ( nameof(element) ) ;
+				throw new ArgumentNullException ( nameof (element) ) ;
 			}
 
-			if ( element . Name != nameof(LinearInterpolationLookupTable) )
+			if ( element . Name != nameof (LinearInterpolationLookupTable) )
 			{
-				throw new ArgumentException ( ExceptionMessages . XmlNameMismatch ( nameof(element) ,
+				throw new ArgumentException ( ExceptionMessages . XmlNameMismatch ( nameof (element) ,
 																					typeof (
 																						LinearInterpolationLookupTable
 																					) ) ) ;
@@ -56,8 +56,8 @@ namespace DreamRecorder . ToolBox . General
 
 			foreach ( XElement pointData in element . Elements ( ) )
 			{
-				PointF point = new PointF ( pointData . ReadNecessaryValue <float> ( nameof(point . X) ) ,
-											pointData . ReadNecessaryValue <float> ( nameof(point . Y) ) ) ;
+				PointF point = new PointF ( pointData . ReadNecessaryValue <float> ( nameof (point . X) ) ,
+											pointData . ReadNecessaryValue <float> ( nameof (point . Y) ) ) ;
 
 				PointsList . Add ( point ) ;
 			}
@@ -67,13 +67,14 @@ namespace DreamRecorder . ToolBox . General
 
 		public XElement ToXElement ( )
 		{
-			XElement result = new XElement ( nameof(LinearInterpolationLookupTable) ) ;
+			XElement result = new XElement ( nameof (LinearInterpolationLookupTable) ) ;
+
 			foreach ( PointF point in Points )
 			{
-				XElement pointElement = new XElement ( nameof(point) ) ;
+				XElement pointElement = new XElement ( nameof (point) ) ;
 
-				pointElement . SetAttributeValue ( nameof(point . X) , point . X ) ;
-				pointElement . SetAttributeValue ( nameof(point . Y) , point . Y ) ;
+				pointElement . SetAttributeValue ( nameof (point . X) , point . X ) ;
+				pointElement . SetAttributeValue ( nameof (point . Y) , point . Y ) ;
 
 				result . Add ( pointElement ) ;
 			}
@@ -91,14 +92,13 @@ namespace DreamRecorder . ToolBox . General
 
 		public double Find ( double x )
 		{
-			for ( int i = 0 ; i < Points . Count - 1 ; i++ )
+			for ( int i = 0 ; i < ( Points . Count - 1 ) ; i++ )
 			{
-				if ( Points [ i ] . X <= x
-					&& x < Points [ i + 1 ] . X )
+				if ( ( Points [ i ] . X <= x )
+					&& ( x              < Points [ i + 1 ] . X ) )
 				{
-					return ( Points [ i + 1 ] . Y - Points [ i ] . Y )
-							* ( x - Points [ i ] . X )
-							/ ( Points [ i + 1 ] . X - Points [ i ] . X )
+					return ( ( ( Points [ i + 1 ] . Y - Points [ i ] . Y ) * ( x - Points [ i ] . X ) )
+							/ ( Points [ i + 1 ] . X - Points [ i ] . X ) )
 							+ Points [ i ] . Y ;
 				}
 			}

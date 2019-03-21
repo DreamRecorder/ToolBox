@@ -15,11 +15,11 @@ namespace DreamRecorder . ToolBox . General
 
 		#region IXmlSerializable Members
 
-		public XmlSchema GetSchema ( ) { return null ; }
+		public XmlSchema GetSchema ( ) => null ;
 
 		public void ReadXml ( XmlReader reader )
 		{
-			XmlSerializer keySerializer = new XmlSerializer ( typeof ( TKey ) ) ;
+			XmlSerializer keySerializer   = new XmlSerializer ( typeof ( TKey ) ) ;
 			XmlSerializer valueSerializer = new XmlSerializer ( typeof ( TValue ) ) ;
 
 			bool wasEmpty = reader . IsEmptyElement ;
@@ -53,7 +53,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public void WriteXml ( XmlWriter writer )
 		{
-			XmlSerializer keySerializer = new XmlSerializer ( typeof ( TKey ) ) ;
+			XmlSerializer keySerializer   = new XmlSerializer ( typeof ( TKey ) ) ;
 			XmlSerializer valueSerializer = new XmlSerializer ( typeof ( TValue ) ) ;
 
 			foreach ( TKey key in Keys )

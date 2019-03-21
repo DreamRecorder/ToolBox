@@ -17,12 +17,12 @@ namespace DreamRecorder . ToolBox . Network
 		{
 			if ( socket == null )
 			{
-				throw new ArgumentNullException ( nameof(socket) ) ;
+				throw new ArgumentNullException ( nameof (socket) ) ;
 			}
 
 			try
 			{
-				return ! ( socket . Poll ( 1 , SelectMode . SelectRead ) && socket . Available == 0 ) ;
+				return ! ( socket . Poll ( 1 , SelectMode . SelectRead ) && ( socket . Available == 0 ) ) ;
 			}
 			catch ( SocketException )
 			{
@@ -34,7 +34,7 @@ namespace DreamRecorder . ToolBox . Network
 		{
 			if ( clients == null )
 			{
-				throw new ArgumentNullException ( nameof(clients) ) ;
+				throw new ArgumentNullException ( nameof (clients) ) ;
 			}
 
 			lock ( clients )
@@ -49,6 +49,7 @@ namespace DreamRecorder . ToolBox . Network
 											}
 
 											client . Dispose ( ) ;
+
 											return true ;
 										}
 									} ) ;

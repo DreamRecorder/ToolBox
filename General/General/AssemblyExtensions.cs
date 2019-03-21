@@ -17,9 +17,7 @@ namespace DreamRecorder . ToolBox . General
 		public static readonly string CommaWithNewline = $",{Environment . NewLine}" ;
 
 		public static string GetAssemblyFullName ( this Type type )
-		{
-			return type . GetTypeInfo ( ) . Assembly . GetName ( ) . FullName . Replace ( ", " , CommaWithNewline ) ;
-		}
+			=> type . GetTypeInfo ( ) . Assembly . GetName ( ) . FullName . Replace ( ", " , CommaWithNewline ) ;
 
 		public static Task Prepare ( this Assembly assembly )
 		{
@@ -50,7 +48,7 @@ namespace DreamRecorder . ToolBox . General
 		{
 			if ( assembly == null )
 			{
-				throw new ArgumentNullException ( nameof(assembly) ) ;
+				throw new ArgumentNullException ( nameof (assembly) ) ;
 			}
 
 			AssemblyDisplayNameAttribute attribute = assembly . GetCustomAttribute <AssemblyDisplayNameAttribute> ( ) ;
