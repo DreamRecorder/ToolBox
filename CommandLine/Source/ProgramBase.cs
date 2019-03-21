@@ -1,6 +1,7 @@
 ﻿using System ;
 using System . Collections ;
 using System . Collections . Generic ;
+using System . Diagnostics ;
 using System . IO ;
 using System . Linq ;
 
@@ -202,11 +203,15 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 			int Execution ( )
 			{
-				#if DEBUG
-				IsDebug = true ;
-				#else
-				IsDebug = debugOption . HasValue ( ) || Debugger . IsAttached ;
-				#endif
+				IsDebug =
+					#if DEBUG
+					// ReSharper disable once ConditionIsAlwaysTrueOrFalse
+					true
+					||
+					#endif
+					debugOption . HasValue ( )
+					|| Debugger . IsAttached ;
+
 
 				IsVerbose = verboseOption . HasValue ( ) ;
 
