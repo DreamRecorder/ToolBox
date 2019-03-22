@@ -34,7 +34,11 @@ namespace Example
 		public void DoSth ( )
 		{
 			ReadOnlyDictionary <string , string> a = Emojis . EmojisList ;
-			Console . WriteLine ( a ) ;
+
+			foreach ( KeyValuePair <string , string> pair in a )
+			{
+				Console . WriteLine ( $"{pair . Key}	{pair . Value}" ) ;
+			}
 
 			while ( IsRunning )
 			{

@@ -159,24 +159,6 @@ namespace DreamRecorder . ToolBox . CommandLine
 		{
 			Current = ( T ) this ;
 
-			#region CreateLogger
-
-			StaticServiceProvider . ServiceCollection . AddLogging ( ConfigureLogger ) ;
-
-			StaticServiceProvider . Update ( ) ;
-
-			Logger = StaticServiceProvider . Provider . GetService <ILoggerFactory> ( ) . CreateLogger <T> ( ) ;
-
-			Logger . LogInformation ( "Start with argument: {0}" , string . Join ( " " , args ) ) ;
-
-			#endregion
-
-			#region StartUp
-
-			AppDomainExtensions . PrepareCurrentDomain ( ) ;
-
-			#endregion
-
 			CommandLineApplication commandLineApplication = new CommandLineApplication ( ) ;
 
 			commandLineApplication . HelpOption ( "-?|-h|--help" ) ;
@@ -205,6 +187,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 			{
 				IsDebug =
 					#if DEBUG
+
 					// ReSharper disable once ConditionIsAlwaysTrueOrFalse
 					true
 					||
@@ -214,6 +197,19 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 
 				IsVerbose = verboseOption . HasValue ( ) ;
+
+				#region CreateLogger
+
+				StaticServiceProvider . ServiceCollection . AddLogging ( ConfigureLogger ) ;
+
+				StaticServiceProvider . Update ( ) ;
+
+				Logger = StaticServiceProvider . Provider . GetService <ILoggerFactory> ( ) . CreateLogger <T> ( ) ;
+
+				Logger . LogInformation ( "Start with argument: {0}" , string . Join ( " " , args ) ) ;
+
+				#endregion
+
 
 				if ( ! noLogoOption . HasValue ( ) )
 				{
@@ -246,6 +242,12 @@ namespace DreamRecorder . ToolBox . CommandLine
 						Logger . LogInformation ( "License Accepted by command line argument." ) ;
 					}
 				}
+
+				#endregion
+
+				#region StartUp
+
+				AppDomainExtensions . PrepareCurrentDomain ( ) ;
 
 				#endregion
 
