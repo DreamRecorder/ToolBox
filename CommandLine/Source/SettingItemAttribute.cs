@@ -49,7 +49,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 				builder . AppendLine ( "#	This setting will be applied after restart." ) ;
 			}
 
-			builder . AppendLine ( $"#	Default Value: {Introduction}" ) ;
+			builder . AppendLine ( $"#	Default Value: {DefaultValue}" ) ;
 
 			return builder . ToString ( ) ;
 		}
