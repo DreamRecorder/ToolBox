@@ -151,6 +151,10 @@ namespace DreamRecorder . ToolBox . CommandLine
 			return true ;
 		}
 
+		public virtual void BeforePrepare ( ) { }
+
+		public virtual void AfterPrepare ( ) { }
+
 		/// <summary>
 		///     Call this after Create StaticLoggerFactory
 		/// </summary>
@@ -186,12 +190,12 @@ namespace DreamRecorder . ToolBox . CommandLine
 			int Execution ( )
 			{
 				IsDebug =
-					#if DEBUG
+#if DEBUG
 
 					// ReSharper disable once ConditionIsAlwaysTrueOrFalse
 					true
 					||
-					#endif
+#endif
 					debugOption . HasValue ( )
 					|| Debugger . IsAttached ;
 

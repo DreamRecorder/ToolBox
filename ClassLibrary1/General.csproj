@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>DreamRecorder.ToolBox.AspNet.General</AssemblyName>
     <RootNamespace>DreamRecorder.ToolBox.AspNet.General</RootNamespace>
     <PackageId>DreamRecorder.ToolBox.AspNet.General</PackageId>
@@ -21,7 +21,7 @@
     <PackageProjectUrl>https://vsts.dreamry.org/DefaultCollection/ToolBox</PackageProjectUrl>
     <Copyright>Dream Recorder (c) 2019</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.1.4.38</Version>
+    <Version>1.1.4.39</Version>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 

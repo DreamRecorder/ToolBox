@@ -11,6 +11,18 @@ using JetBrains . Annotations ;
 namespace DreamRecorder . ToolBox . Network
 {
 
+	public interface IPrefix <TAddress> where TAddress : IAddress
+	{
+
+		bool Contains ( TAddress address ) ;
+
+	}
+
+	public interface IAddress
+	{
+
+	}
+
 	[PublicAPI]
 	public abstract class Prefix : ICloneable , IEquatable <Prefix>
 	{
@@ -47,7 +59,7 @@ namespace DreamRecorder . ToolBox . Network
 		{
 			if ( address == null )
 			{
-				throw new ArgumentNullException ( nameof (address) ) ;
+				throw new ArgumentNullException ( nameof(address) ) ;
 			}
 
 			if ( address . Type == Type )

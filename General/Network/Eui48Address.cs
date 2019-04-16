@@ -16,11 +16,11 @@ namespace DreamRecorder . ToolBox . Network
 
 		public Eui48Address ( ) => AddressBytes = new byte[ 6 ] ;
 
-		internal Eui48Address ( byte [ ] address )
+		public Eui48Address ( byte [ ] address )
 		{
 			if ( address == null )
 			{
-				throw new ArgumentNullException ( nameof (address) ) ;
+				throw new ArgumentNullException ( nameof(address) ) ;
 			}
 
 			if ( address . Length != 6 )
@@ -35,7 +35,7 @@ namespace DreamRecorder . ToolBox . Network
 		{
 			if ( address == null )
 			{
-				throw new ArgumentNullException ( nameof (address) ) ;
+				throw new ArgumentNullException ( nameof(address) ) ;
 			}
 
 			int      validCount = 0 ;
@@ -149,7 +149,7 @@ namespace DreamRecorder . ToolBox . Network
 		{
 			if ( address == null )
 			{
-				throw new ArgumentNullException ( nameof (address) ) ;
+				throw new ArgumentNullException ( nameof(address) ) ;
 			}
 
 			return new Eui48Address ( address ) ;

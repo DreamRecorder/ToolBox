@@ -5,11 +5,11 @@ using System . Collections . ObjectModel ;
 using System . Linq ;
 using System . Threading ;
 
-using DreamRecorder . ToolBox . CommandLine ;
-using DreamRecorder . ToolBox . General ;
-
 using Microsoft . Extensions . Logging ;
 using Microsoft . Extensions . Logging . Console ;
+
+using DreamRecorder.ToolBox.General;
+using DreamRecorder.ToolBox.CommandLine;
 
 namespace Example
 {

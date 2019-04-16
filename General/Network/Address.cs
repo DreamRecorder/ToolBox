@@ -10,7 +10,7 @@ namespace DreamRecorder . ToolBox . Network
 {
 
 	[PublicAPI]
-	public abstract class Address : ICloneable , IEquatable <Address>
+	public abstract class Address : ICloneable , IEquatable <Address> , IAddress
 	{
 
 		[Key]
@@ -22,7 +22,7 @@ namespace DreamRecorder . ToolBox . Network
 
 		public virtual bool Equals ( Address other )
 		{
-			if ( other is null)
+			if ( other is null )
 			{
 				return false ;
 			}
@@ -41,7 +41,7 @@ namespace DreamRecorder . ToolBox . Network
 
 		public override bool Equals ( object obj )
 		{
-			if ( obj is null)
+			if ( obj is null )
 			{
 				return false ;
 			}

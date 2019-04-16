@@ -8,7 +8,7 @@ using JetBrains . Annotations ;
 namespace DreamRecorder . ToolBox . Network . Ip
 {
 
-	public class Ipv4Prefix : IpPrefix
+	public class Ipv4Prefix : IpPrefix , IPrefix <Ipv4Address>
 	{
 
 		public override AddressType Type => AddressType . Ipv4 ;
@@ -23,7 +23,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 		{
 			if ( address == null )
 			{
-				throw new ArgumentNullException ( nameof (address) ) ;
+				throw new ArgumentNullException ( nameof(address) ) ;
 			}
 
 			if ( address . Length != 4 )
@@ -39,7 +39,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 		{
 			if ( addressString == null )
 			{
-				throw new ArgumentNullException ( nameof (addressString) ) ;
+				throw new ArgumentNullException ( nameof(addressString) ) ;
 			}
 
 			string [ ] data = addressString . Split ( '/' ) ;
@@ -76,11 +76,13 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			}
 		}
 
+		public bool Contains ( Ipv4Address address ) => throw new NotImplementedException ( ) ;
+
 		public static explicit operator Ipv4Prefix ( [NotNull] string address )
 		{
 			if ( address == null )
 			{
-				throw new ArgumentNullException ( nameof (address) ) ;
+				throw new ArgumentNullException ( nameof(address) ) ;
 			}
 
 			return new Ipv4Prefix ( address ) ;

@@ -84,7 +84,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 		{
 			if ( source == null )
 			{
-				throw new ArgumentNullException ( nameof (source) ) ;
+				throw new ArgumentNullException ( nameof(source) ) ;
 			}
 
 			T settings = new T ( ) ;
@@ -102,7 +102,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 		{
 			if ( stream == null )
 			{
-				throw new ArgumentNullException ( nameof (stream) ) ;
+				throw new ArgumentNullException ( nameof(stream) ) ;
 			}
 
 			T settings = new T ( ) ;

@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>DreamRecorder.ToolBox.CommandLine</AssemblyName>
     <RootNamespace>DreamRecorder.ToolBox.CommandLine</RootNamespace>
     <PackageId>DreamRecorder.ToolBox.CommandLine</PackageId>
@@ -21,7 +21,7 @@
     <PackageProjectUrl>https://vsts.dreamry.org/DefaultCollection/ToolBox</PackageProjectUrl>
     <Copyright>Dream Recorder (c) 2018</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.1.4.38</Version>
+    <Version>1.1.4.39</Version>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
 

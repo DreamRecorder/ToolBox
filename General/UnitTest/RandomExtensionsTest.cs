@@ -5,6 +5,8 @@ using System . Linq ;
 
 using Microsoft . VisualStudio . TestTools . UnitTesting ;
 
+using DreamRecorder.ToolBox.General;
+
 namespace DreamRecorder . ToolBox . General . UnitTest
 {
 
