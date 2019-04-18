@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>DreamRecorder.ToolBox.Colors</AssemblyName>
     <RootNamespace>DreamRecorder.ToolBox.Colors</RootNamespace>
     <Version>1.1.4.39</Version>

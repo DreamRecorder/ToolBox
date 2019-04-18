@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
      <AssemblyName>DreamRecorder.ToolBox.Renderer</AssemblyName>
     <RootNamespace>DreamRecorder.ToolBox.Renderer</RootNamespace>
     <PackageId>DreamRecorder.ToolBox.Renderer</PackageId>
@@ -28,6 +28,10 @@
 
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>DreamRecorder.ToolBox.AspNet.AlertHelper</AssemblyName>
     <RootNamespace>DreamRecorder.ToolBox.AspNet.AlertHelper</RootNamespace>
     <PackageId>DreamRecorder.ToolBox.AspNet.AlertHelper</PackageId>

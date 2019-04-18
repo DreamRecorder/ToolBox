@@ -47,27 +47,27 @@ namespace DreamRecorder . ToolBox . General
 			return result ;
 		}
 
-		public static bool [ ] ToBooleanArray ( [NotNull] this Span <byte> bytes )
-		{
-			if ( bytes == null )
-			{
-				throw new ArgumentNullException ( nameof(bytes) ) ;
-			}
+		//public static bool [ ] ToBooleanArray ( [NotNull] this Span <byte> bytes )
+		//{
+		//	if ( bytes == null )
+		//	{
+		//		throw new ArgumentNullException ( nameof(bytes) ) ;
+		//	}
 
-			bool [ ] result = new bool[ 8 * bytes . Length ] ;
+		//	bool [ ] result = new bool[ 8 * bytes . Length ] ;
 
-			for ( int bytePosition = 0 ; bytePosition < bytes . Length ; bytePosition++ )
-			{
-				byte b = bytes [ bytePosition ] ;
+		//	for ( int bytePosition = 0 ; bytePosition < bytes . Length ; bytePosition++ )
+		//	{
+		//		byte b = bytes [ bytePosition ] ;
 
-				for ( int bitPosition = 0 ; bitPosition < 8 ; bitPosition++ )
-				{
-					result [ ( bytePosition * 8 ) + bitPosition ] = ( b & ( 1 << ( 7 - bitPosition ) ) ) != 0 ;
-				}
-			}
+		//		for ( int bitPosition = 0 ; bitPosition < 8 ; bitPosition++ )
+		//		{
+		//			result [ ( bytePosition * 8 ) + bitPosition ] = ( b & ( 1 << ( 7 - bitPosition ) ) ) != 0 ;
+		//		}
+		//	}
 
-			return result ;
-		}
+		//	return result ;
+		//}
 
 		public static byte ToByte ( [NotNull] bool [ ] source )
 		{
