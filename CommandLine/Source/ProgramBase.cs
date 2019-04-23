@@ -214,7 +214,6 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 				#endregion
 
-
 				if ( ! noLogoOption . HasValue ( ) )
 				{
 					ShowLogo ( ) ;
@@ -251,7 +250,13 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 				#region StartUp
 
+				BeforePrepare ( ) ;
+
 				AppDomainExtensions . PrepareCurrentDomain ( ) ;
+
+				StaticServiceProvider.Update();
+
+				AfterPrepare( ) ;
 
 				#endregion
 

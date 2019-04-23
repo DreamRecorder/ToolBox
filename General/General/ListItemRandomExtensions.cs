@@ -19,7 +19,7 @@ namespace DreamRecorder . ToolBox . General
 				throw new ArgumentNullException ( nameof (list) ) ;
 			}
 
-			if ( list . Count == 0 )
+			if ( !list . Any() )
 			{
 				throw new InvalidOperationException ( "Sequence contains no elements" ) ;
 			}
@@ -29,7 +29,7 @@ namespace DreamRecorder . ToolBox . General
 			return list [ random . Next ( list . Count ) ] ;
 		}
 
-		public static T RandomItem <T> ( this Random random , IList <T> list )
+		public static T RandomItem <T> ( this IRandom random , IList <T> list )
 		{
 			if ( random == null )
 			{
@@ -41,7 +41,7 @@ namespace DreamRecorder . ToolBox . General
 				throw new ArgumentNullException ( nameof (list) ) ;
 			}
 
-			if ( list . Count == 0 )
+			if (!list.Any())
 			{
 				throw new InvalidOperationException ( "Sequence contains no elements" ) ;
 			}
@@ -69,7 +69,7 @@ namespace DreamRecorder . ToolBox . General
 				throw new ArgumentOutOfRangeException ( nameof (count) ) ;
 			}
 
-			if ( list . Count == 0 )
+			if (!list.Any())
 			{
 				throw new InvalidOperationException ( "Sequence contains no elements" ) ;
 			}
@@ -110,7 +110,7 @@ namespace DreamRecorder . ToolBox . General
 				throw new InvalidOperationException ( "Sequence contains no elements" ) ;
 			}
 
-			if ( count >= list . Count )
+			if (!list.Any())
 			{
 				throw new ArgumentOutOfRangeException ( nameof (count) ) ;
 			}
