@@ -6,7 +6,7 @@ using System . Linq ;
 namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 {
 
-	public static class StringConst
+	public static class Constants
 	{
 
 		public const string Alerts = nameof(Alerts) ;

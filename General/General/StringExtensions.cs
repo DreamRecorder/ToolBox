@@ -63,6 +63,26 @@ namespace DreamRecorder . ToolBox . General
 			return words ;
 		}
 
-	}
+		public static string TrimEnd(this string source, string suffixToRemove, StringComparison comparisonType)
+		{
+			while ((!string.IsNullOrEmpty(source)) && (!string.IsNullOrEmpty( suffixToRemove))  && source.EndsWith(suffixToRemove))
+			{
+				source = source.Substring(0, source.Length - suffixToRemove.Length);
+			}
+			return source;
+		}
+
+		public static string TrimStart(this string source, string prefixToRemove)
+		{
+			while ((!string.IsNullOrEmpty(source)) && (!string.IsNullOrEmpty(prefixToRemove)) && source.StartsWith(prefixToRemove))
+			{
+				source = source.Substring(prefixToRemove.Length, source.Length - prefixToRemove.Length);
+			}
+			return source;
+		}
+
+
+
+    }
 
 }

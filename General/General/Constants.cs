@@ -30,6 +30,8 @@ namespace DreamRecorder . ToolBox . General
 
 		public const float Sqrt6F = 2.4494897427831779f ;
 
+		public static DateTime GoStartTime { get ; } = new DateTime ( 2006 , 01 , 02 , 15 , 04 , 05 ) ;
+
 	}
 
 }

@@ -24,7 +24,7 @@ namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 			BinaryFormatter formatter = new BinaryFormatter ( ) ;
 			List <Alert>    alerts ;
 
-			if ( ViewContext . HttpContext . Session . TryGetValue ( StringConst . Alerts , out byte [ ] buffer ) )
+			if ( ViewContext . HttpContext . Session . TryGetValue ( Constants . Alerts , out byte [ ] buffer ) )
 			{
 				MemoryStream stream = new MemoryStream ( buffer ) ;
 				alerts = formatter . Deserialize ( stream ) as List <Alert> ?? new List <Alert> ( ) ;
@@ -37,7 +37,7 @@ namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 			return alerts ;
 		}
 
-		public void ClearAlerts ( ) { ViewContext . HttpContext . Session . Remove ( StringConst . Alerts ) ; }
+		public void ClearAlerts ( ) { ViewContext . HttpContext . Session . Remove ( Constants . Alerts ) ; }
 
 		public override void Process ( TagHelperContext context , TagHelperOutput output )
 		{

@@ -22,7 +22,7 @@ namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 			MemoryStream    stream    = new MemoryStream ( ) ;
 			formatter . Serialize ( stream , alerts ) ;
 
-			controller . HttpContext . Session . Set ( StringConst . Alerts , stream . GetBuffer ( ) ) ;
+			controller . HttpContext . Session . Set ( Constants . Alerts , stream . GetBuffer ( ) ) ;
 		}
 
 		public static List <Alert> GetAlerts ( [NotNull] this Controller controller )
@@ -30,7 +30,7 @@ namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 			BinaryFormatter formatter = new BinaryFormatter ( ) ;
 			List <Alert>    alerts ;
 
-			if ( controller . HttpContext . Session . TryGetValue ( StringConst . Alerts , out byte [ ] buffer ) )
+			if ( controller . HttpContext . Session . TryGetValue ( Constants . Alerts , out byte [ ] buffer ) )
 			{
 				MemoryStream stream = new MemoryStream ( buffer ) ;
 				alerts = formatter . Deserialize ( stream ) as List <Alert> ?? new List <Alert> ( ) ;
