@@ -210,19 +210,32 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 				Logger = StaticServiceProvider . Provider . GetService <ILoggerFactory> ( ) . CreateLogger <T> ( ) ;
 
-				Logger . LogInformation ( "Start with argument: {0}" , string . Join ( " " , args ) ) ;
+				Logger . LogDebug ( "Logger has been configured." ) ;
+
+
+                #endregion
+
+				Logger.LogInformation("Start with argument: {0}", string.Join(" ", args));
+
+				#region Check Debug
+
+				if ( IsDebug )
+				{
+					Logger . LogWarning ( "This program is being debugging" ) ;
+				}
 
 				#endregion
 
-				if ( ! noLogoOption . HasValue ( ) )
+                if ( ! noLogoOption . HasValue ( ) )
 				{
 					ShowLogo ( ) ;
 					ShowCopyright ( ) ;
 				}
 
-				#region Check License
 
-				if ( IsDebug )
+                #region Check License
+
+                if ( IsDebug )
 				{
 					Logger . LogInformation ( "Debug version, skip license check and you are assumed to accept license." ) ;
 				}
