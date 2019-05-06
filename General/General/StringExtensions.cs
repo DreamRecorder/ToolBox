@@ -63,18 +63,18 @@ namespace DreamRecorder . ToolBox . General
 			return words ;
 		}
 
-		public static string TrimEndPattern(this string source, string suffixToRemove, StringComparison comparisonType)
+		public static string TrimEndPattern(this string source, string suffixToRemove, StringComparison comparisonType=StringComparison.Ordinal)
 		{
-			while ((!string.IsNullOrEmpty(source)) && (!string.IsNullOrEmpty( suffixToRemove))  && source.EndsWith(suffixToRemove))
+			while ((!string.IsNullOrEmpty(source)) && (!string.IsNullOrEmpty( suffixToRemove))  && source.EndsWith(suffixToRemove,comparisonType))
 			{
 				source = source.Substring(0, source.Length - suffixToRemove.Length);
 			}
 			return source;
 		}
 
-		public static string TrimStartPattern(this string source, string prefixToRemove)
+		public static string TrimStartPattern(this string source, string prefixToRemove, StringComparison comparisonType = StringComparison.Ordinal)
 		{
-			while ((!string.IsNullOrEmpty(source)) && (!string.IsNullOrEmpty(prefixToRemove)) && source.StartsWith(prefixToRemove))
+			while ((!string.IsNullOrEmpty(source)) && (!string.IsNullOrEmpty(prefixToRemove)) && source.StartsWith(prefixToRemove,comparisonType))
 			{
 				source = source.Substring(prefixToRemove.Length, source.Length - prefixToRemove.Length);
 			}
