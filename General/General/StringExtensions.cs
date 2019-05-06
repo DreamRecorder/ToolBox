@@ -63,7 +63,7 @@ namespace DreamRecorder . ToolBox . General
 			return words ;
 		}
 
-		public static string TrimEnd(this string source, string suffixToRemove, StringComparison comparisonType)
+		public static string TrimEndPattern(this string source, string suffixToRemove, StringComparison comparisonType)
 		{
 			while ((!string.IsNullOrEmpty(source)) && (!string.IsNullOrEmpty( suffixToRemove))  && source.EndsWith(suffixToRemove))
 			{
@@ -72,7 +72,7 @@ namespace DreamRecorder . ToolBox . General
 			return source;
 		}
 
-		public static string TrimStart(this string source, string prefixToRemove)
+		public static string TrimStartPattern(this string source, string prefixToRemove)
 		{
 			while ((!string.IsNullOrEmpty(source)) && (!string.IsNullOrEmpty(prefixToRemove)) && source.StartsWith(prefixToRemove))
 			{
