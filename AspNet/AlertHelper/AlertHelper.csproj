@@ -21,7 +21,7 @@
     <PackageProjectUrl>https://vsts.dreamry.org/DefaultCollection/ToolBox</PackageProjectUrl>
     <Copyright>Dream Recorder (c) 2019</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.1.4.44</Version>
+    <Version>1.1.4.45</Version>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
@@ -31,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\General\General\General.csproj" />
+    <ProjectReference Include="..\General\General.csproj" />
   </ItemGroup>
 
 </Project>
