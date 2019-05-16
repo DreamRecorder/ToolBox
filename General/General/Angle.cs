@@ -12,9 +12,9 @@ namespace DreamRecorder . ToolBox . General
 	public struct Angle : IEquatable <Angle>
 	{
 
-		public static implicit operator Angle ( double degree ) => new Angle ( degree ) ;
+		public static implicit operator Angle ( double radius ) => FromRadius(radius) ;
 
-		public static implicit operator double ( Angle angle ) => angle . Degree ;
+		public static implicit operator double ( Angle angle ) => angle . Radius ;
 
 		public double Degree { get ; }
 
@@ -57,7 +57,6 @@ namespace DreamRecorder . ToolBox . General
 
 			return new Angle ( ( Convert . ToDouble ( value ) / Math . PI ) * 180 ) ;
 		}
-
 
 		public static Angle FromDegree ( double degree ) => new Angle ( degree ) ;
 
