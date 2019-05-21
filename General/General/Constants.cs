@@ -14,6 +14,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public static DateTime GoStartTime { get ; } = new DateTime ( 2006 , 01 , 02 , 15 , 04 , 05 ) ;
 
+
 		public const decimal AcgToCny = 9876547210.33M ;
 
 		public const double Sqrt3 = 1.7320508075688772d ;

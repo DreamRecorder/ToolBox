@@ -3,6 +3,7 @@ using System . Collections ;
 using System . Collections . Generic ;
 using System . Linq ;
 using System . Reflection ;
+using System . Runtime . InteropServices ;
 using System . Threading . Tasks ;
 
 using JetBrains . Annotations ;
@@ -54,6 +55,26 @@ namespace DreamRecorder . ToolBox . General
 			AssemblyDisplayNameAttribute attribute = assembly . GetCustomAttribute <AssemblyDisplayNameAttribute> ( ) ;
 
 			return attribute ? . Name ?? assembly . GetName ( ) . Name ;
+		}
+
+		public static Guid ? GetGuid ( [NotNull] this Assembly assembly )
+		{
+			if ( assembly == null )
+			{
+				throw new ArgumentNullException ( nameof ( assembly ) ) ;
+			}
+
+			GuidAttribute attribute = assembly . GetCustomAttributes <GuidAttribute> ( ) . FirstOrDefault ( ) ;
+			string        guid      = attribute ? . Value ;
+
+			if ( guid is null )
+			{
+				return null ;
+			}
+			else
+			{
+				return Guid . Parse ( guid ) ;
+			}
 		}
 
 	}
