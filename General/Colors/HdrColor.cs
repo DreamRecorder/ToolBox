@@ -33,7 +33,7 @@ namespace DreamRecorder . ToolBox . Colors
 		{
 			if ( color == null )
 			{
-				throw new ArgumentNullException ( nameof (color) ) ;
+				throw new ArgumentNullException ( nameof ( color ) ) ;
 			}
 
 			if ( color . Length < ( sizeof ( double ) * 3 ) )
@@ -68,18 +68,18 @@ namespace DreamRecorder . ToolBox . Colors
 		{
 			if ( element == null )
 			{
-				throw new ArgumentNullException ( nameof (element) ) ;
+				throw new ArgumentNullException ( nameof ( element ) ) ;
 			}
 
-			if ( element . Name == nameof (HdrColor) )
+			if ( element . Name == nameof ( HdrColor ) )
 			{
-				throw new ArgumentException ( ExceptionMessages . XmlNameMismatch ( nameof (element) ,
+				throw new ArgumentException ( ExceptionMessages . XmlNameMismatch ( nameof ( element ) ,
 																					typeof ( HdrColor ) ) ) ;
 			}
 
-			R = element . ReadNecessaryValue <double> ( nameof (R) ) ;
-			G = element . ReadNecessaryValue <double> ( nameof (G) ) ;
-			B = element . ReadNecessaryValue <double> ( nameof (B) ) ;
+			R = element . ReadNecessaryValue <double> ( nameof ( R ) ) ;
+			G = element . ReadNecessaryValue <double> ( nameof ( G ) ) ;
+			B = element . ReadNecessaryValue <double> ( nameof ( B ) ) ;
 		}
 
 		/// <summary>
@@ -134,11 +134,11 @@ namespace DreamRecorder . ToolBox . Colors
 
 		public XElement ToXElement ( )
 		{
-			XElement result = new XElement ( nameof (HdrColor) ) ;
+			XElement result = new XElement ( nameof ( HdrColor ) ) ;
 
-			result . SetAttributeValue ( nameof (R) , R ) ;
-			result . SetAttributeValue ( nameof (G) , G ) ;
-			result . SetAttributeValue ( nameof (B) , B ) ;
+			result . SetAttributeValue ( nameof ( R ) , R ) ;
+			result . SetAttributeValue ( nameof ( G ) , G ) ;
+			result . SetAttributeValue ( nameof ( B ) , B ) ;
 
 			return result ;
 		}
@@ -156,9 +156,9 @@ namespace DreamRecorder . ToolBox . Colors
 		/// <param name="value2">The second source vector.</param>
 		/// <returns>The minimized vector.</returns>
 		public static HdrColor Min ( HdrColor value1 , HdrColor value2 )
-			=> new HdrColor ( value1 . R < value2 . R ? value1 . R: value2 . R ,
-							value1 . G   < value2 . G ? value1 . G: value2 . G ,
-							value1 . B   < value2 . B ? value1 . B: value2 . B ) ;
+			=> new HdrColor ( value1 . R < value2 . R ? value1 . R : value2 . R ,
+							value1 . G   < value2 . G ? value1 . G : value2 . G ,
+							value1 . B   < value2 . B ? value1 . B : value2 . B ) ;
 
 		/// <summary>
 		///     Returns a vector whose elements are the maximum of each of the pairs of elements in the two source vectors.
@@ -167,9 +167,9 @@ namespace DreamRecorder . ToolBox . Colors
 		/// <param name="value2">The second source vector.</param>
 		/// <returns>The maximized vector.</returns>
 		public static HdrColor Max ( HdrColor value1 , HdrColor value2 )
-			=> new HdrColor ( value1 . R > value2 . R ? value1 . R: value2 . R ,
-							value1 . G   > value2 . G ? value1 . G: value2 . G ,
-							value1 . B   > value2 . B ? value1 . B: value2 . B ) ;
+			=> new HdrColor ( value1 . R > value2 . R ? value1 . R : value2 . R ,
+							value1 . G   > value2 . G ? value1 . G : value2 . G ,
+							value1 . B   > value2 . B ? value1 . B : value2 . B ) ;
 
 		/// <summary>
 		///     Adds two vectors together.

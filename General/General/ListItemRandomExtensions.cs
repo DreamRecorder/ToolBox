@@ -16,10 +16,10 @@ namespace DreamRecorder . ToolBox . General
 		{
 			if ( list == null )
 			{
-				throw new ArgumentNullException ( nameof (list) ) ;
+				throw new ArgumentNullException ( nameof ( list ) ) ;
 			}
 
-			if ( !list . Any() )
+			if ( ! list . Any ( ) )
 			{
 				throw new InvalidOperationException ( "Sequence contains no elements" ) ;
 			}
@@ -33,15 +33,15 @@ namespace DreamRecorder . ToolBox . General
 		{
 			if ( random == null )
 			{
-				throw new ArgumentNullException ( nameof (random) ) ;
+				throw new ArgumentNullException ( nameof ( random ) ) ;
 			}
 
 			if ( list == null )
 			{
-				throw new ArgumentNullException ( nameof (list) ) ;
+				throw new ArgumentNullException ( nameof ( list ) ) ;
 			}
 
-			if (!list.Any())
+			if ( ! list . Any ( ) )
 			{
 				throw new InvalidOperationException ( "Sequence contains no elements" ) ;
 			}
@@ -61,15 +61,15 @@ namespace DreamRecorder . ToolBox . General
 		{
 			if ( list == null )
 			{
-				throw new ArgumentNullException ( nameof (list) ) ;
+				throw new ArgumentNullException ( nameof ( list ) ) ;
 			}
 
 			if ( count <= 0 )
 			{
-				throw new ArgumentOutOfRangeException ( nameof (count) ) ;
+				throw new ArgumentOutOfRangeException ( nameof ( count ) ) ;
 			}
 
-			if (!list.Any())
+			if ( ! list . Any ( ) )
 			{
 				throw new InvalidOperationException ( "Sequence contains no elements" ) ;
 			}
@@ -97,12 +97,12 @@ namespace DreamRecorder . ToolBox . General
 		{
 			if ( list == null )
 			{
-				throw new ArgumentNullException ( nameof (list) ) ;
+				throw new ArgumentNullException ( nameof ( list ) ) ;
 			}
 
 			if ( count <= 0 )
 			{
-				throw new ArgumentOutOfRangeException ( nameof (count) ) ;
+				throw new ArgumentOutOfRangeException ( nameof ( count ) ) ;
 			}
 
 			if ( list . Count == 0 )
@@ -110,9 +110,9 @@ namespace DreamRecorder . ToolBox . General
 				throw new InvalidOperationException ( "Sequence contains no elements" ) ;
 			}
 
-			if (!list.Any())
+			if ( ! list . Any ( ) )
 			{
-				throw new ArgumentOutOfRangeException ( nameof (count) ) ;
+				throw new ArgumentOutOfRangeException ( nameof ( count ) ) ;
 			}
 
 			random = random ?? ( IRandom ) new Random ( ) ;

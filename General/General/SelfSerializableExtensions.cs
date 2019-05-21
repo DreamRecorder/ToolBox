@@ -18,7 +18,7 @@ namespace DreamRecorder . ToolBox . General
 		{
 			if ( item == null )
 			{
-				throw new ArgumentNullException ( nameof (item) ) ;
+				throw new ArgumentNullException ( nameof ( item ) ) ;
 			}
 
 			return item . ToXElement ( ) . ToString ( ) ;
@@ -28,12 +28,12 @@ namespace DreamRecorder . ToolBox . General
 		{
 			if ( element == null )
 			{
-				throw new ArgumentNullException ( nameof (element) ) ;
+				throw new ArgumentNullException ( nameof ( element ) ) ;
 			}
 
 			if ( name == null )
 			{
-				throw new ArgumentNullException ( nameof (name) ) ;
+				throw new ArgumentNullException ( nameof ( name ) ) ;
 			}
 
 			string value = element . Attribute ( name ) ? . Value ;
@@ -52,12 +52,12 @@ namespace DreamRecorder . ToolBox . General
 		{
 			if ( element == null )
 			{
-				throw new ArgumentNullException ( nameof (element) ) ;
+				throw new ArgumentNullException ( nameof ( element ) ) ;
 			}
 
 			if ( name == null )
 			{
-				throw new ArgumentNullException ( nameof (name) ) ;
+				throw new ArgumentNullException ( nameof ( name ) ) ;
 			}
 
 			string value = element . Attribute ( name ) ? . Value ;

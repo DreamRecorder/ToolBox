@@ -48,7 +48,7 @@ namespace DreamRecorder . ToolBox . General
 		{
 			if ( assembly == null )
 			{
-				throw new ArgumentNullException ( nameof (assembly) ) ;
+				throw new ArgumentNullException ( nameof ( assembly ) ) ;
 			}
 
 			AssemblyDisplayNameAttribute attribute = assembly . GetCustomAttribute <AssemblyDisplayNameAttribute> ( ) ;

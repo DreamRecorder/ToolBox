@@ -12,6 +12,8 @@ namespace DreamRecorder . ToolBox . General
 	public static class Constants
 	{
 
+		public static DateTime GoStartTime { get ; } = new DateTime ( 2006 , 01 , 02 , 15 , 04 , 05 ) ;
+
 		public const decimal AcgToCny = 9876547210.33M ;
 
 		public const double Sqrt3 = 1.7320508075688772d ;
@@ -29,8 +31,6 @@ namespace DreamRecorder . ToolBox . General
 		public const float Sqrt5F = 2.23606797749979f ;
 
 		public const float Sqrt6F = 2.4494897427831779f ;
-
-		public static DateTime GoStartTime { get ; } = new DateTime ( 2006 , 01 , 02 , 15 , 04 , 05 ) ;
 
 	}
 

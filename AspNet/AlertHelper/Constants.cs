@@ -9,7 +9,7 @@ namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 	public static class Constants
 	{
 
-		public const string Alerts = nameof(Alerts) ;
+		public const string Alerts = nameof ( Alerts ) ;
 
 	}
 

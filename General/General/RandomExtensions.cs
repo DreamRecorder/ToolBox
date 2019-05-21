@@ -24,12 +24,12 @@ namespace DreamRecorder . ToolBox . General
 		{
 			if ( random == null )
 			{
-				throw new ArgumentNullException ( nameof (random) ) ;
+				throw new ArgumentNullException ( nameof ( random ) ) ;
 			}
 
 			if ( sigma <= 0 )
 			{
-				throw new ArgumentOutOfRangeException ( nameof (sigma) ) ;
+				throw new ArgumentOutOfRangeException ( nameof ( sigma ) ) ;
 			}
 
 			double u1 = random . NextDouble ( ) ;
@@ -56,17 +56,17 @@ namespace DreamRecorder . ToolBox . General
 		{
 			if ( random == null )
 			{
-				throw new ArgumentNullException ( nameof (random) ) ;
+				throw new ArgumentNullException ( nameof ( random ) ) ;
 			}
 
 			if ( count <= 0 )
 			{
-				throw new ArgumentOutOfRangeException ( nameof (count) ) ;
+				throw new ArgumentOutOfRangeException ( nameof ( count ) ) ;
 			}
 
 			if ( maxValue < count )
 			{
-				throw new ArgumentOutOfRangeException ( nameof (maxValue) ) ;
+				throw new ArgumentOutOfRangeException ( nameof ( maxValue ) ) ;
 			}
 
 			List <int>      result = new List <int> ( count ) ;
@@ -108,12 +108,13 @@ namespace DreamRecorder . ToolBox . General
 		{
 			if ( random == null )
 			{
-				throw new ArgumentNullException ( nameof (random) ) ;
+				throw new ArgumentNullException ( nameof ( random ) ) ;
 			}
 
 			if ( ! ( ( a <= c ) && ( c <= b ) ) )
 			{
-				throw new ArgumentOutOfRangeException ( $"It should be {nameof (a)}<={nameof (c)}<={nameof (b)}" ) ;
+				throw
+					new ArgumentOutOfRangeException ( $"It should be {nameof ( a )}<={nameof ( c )}<={nameof ( b )}" ) ;
 			}
 
 			double u = random . NextDouble ( ) ;
@@ -136,7 +137,7 @@ namespace DreamRecorder . ToolBox . General
 		{
 			if ( random == null )
 			{
-				throw new ArgumentNullException ( nameof (random) ) ;
+				throw new ArgumentNullException ( nameof ( random ) ) ;
 			}
 
 			return random . Next ( 2 ) > 0 ;
@@ -151,12 +152,12 @@ namespace DreamRecorder . ToolBox . General
 		{
 			if ( random == null )
 			{
-				throw new ArgumentNullException ( nameof (random) ) ;
+				throw new ArgumentNullException ( nameof ( random ) ) ;
 			}
 
 			if ( list == null )
 			{
-				throw new ArgumentNullException ( nameof (list) ) ;
+				throw new ArgumentNullException ( nameof ( list ) ) ;
 			}
 
 			for ( int i = 0 ; i < list . Count ; i++ )
@@ -173,7 +174,7 @@ namespace DreamRecorder . ToolBox . General
 		{
 			if ( random == null )
 			{
-				throw new ArgumentNullException ( nameof (random) ) ;
+				throw new ArgumentNullException ( nameof ( random ) ) ;
 			}
 
 			if ( ! ( minValue <= maxValue ) )
@@ -188,7 +189,7 @@ namespace DreamRecorder . ToolBox . General
 		{
 			if ( random == null )
 			{
-				throw new ArgumentNullException ( nameof (random) ) ;
+				throw new ArgumentNullException ( nameof ( random ) ) ;
 			}
 
 			if ( ! ( minValue <= maxValue ) )

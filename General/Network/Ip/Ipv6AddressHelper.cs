@@ -225,7 +225,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 			for ( i = start ; i < end ; ++i )
 			{
-				if ( havePrefix ? ( name [ i ] >= '0' ) && ( name [ i ] <= '9' ): Uri . IsHexDigit ( name [ i ] ) )
+				if ( havePrefix ? ( name [ i ] >= '0' ) && ( name [ i ] <= '9' ) : Uri . IsHexDigit ( name [ i ] ) )
 				{
 					++sequenceLength ;
 					expectingNumber = false ;
@@ -246,7 +246,6 @@ namespace DreamRecorder . ToolBox . Network . Ip
 					switch ( name [ i ] )
 					{
 						case '%' :
-
 						{
 							while ( true )
 							{
@@ -268,8 +267,8 @@ namespace DreamRecorder . ToolBox . Network . Ip
 								}
 							}
 						}
-						case ']' :
 
+						case ']' :
 						{
 							start = i ;
 							i     = end ;
@@ -277,8 +276,8 @@ namespace DreamRecorder . ToolBox . Network . Ip
 							//this will make i = end+1
 							continue ;
 						}
-						case ':' :
 
+						case ':' :
 						{
 							if ( ( i                > 0 )
 								&& ( name [ i - 1 ] == ':' ) )
@@ -304,7 +303,6 @@ namespace DreamRecorder . ToolBox . Network . Ip
 						}
 
 						case '/' :
-
 						{
 							if ( validateStrictAddress )
 							{
@@ -323,7 +321,6 @@ namespace DreamRecorder . ToolBox . Network . Ip
 						}
 
 						case '.' :
-
 						{
 							if ( haveIPv4Address )
 							{
@@ -346,7 +343,6 @@ namespace DreamRecorder . ToolBox . Network . Ip
 						}
 
 						default :
-
 						{
 							return false ;
 						}
@@ -369,11 +365,11 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			// these sequence counts are -1 because it is implied in end-of-sequence
 			//
 
-			int expectedSequenceCount = 8 + ( havePrefix ? 1: 0 ) ;
+			int expectedSequenceCount = 8 + ( havePrefix ? 1 : 0 ) ;
 
 			if ( ! expectingNumber
 				&& ( sequenceLength <= 4 )
-				&& ( haveCompressor ? sequenceCount < expectedSequenceCount: sequenceCount == expectedSequenceCount ) )
+				&& ( haveCompressor ? sequenceCount < expectedSequenceCount : sequenceCount == expectedSequenceCount ) )
 			{
 				if ( i == ( end + 1 ) )
 				{

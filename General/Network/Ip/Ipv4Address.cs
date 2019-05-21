@@ -28,7 +28,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 		{
 			if ( address == null )
 			{
-				throw new ArgumentNullException ( nameof(address) ) ;
+				throw new ArgumentNullException ( nameof ( address ) ) ;
 			}
 
 			if ( ! address . Contains ( ':' ) )
@@ -71,7 +71,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 		{
 			if ( address == null )
 			{
-				throw new ArgumentNullException ( nameof(address) ) ;
+				throw new ArgumentNullException ( nameof ( address ) ) ;
 			}
 
 			return new Ipv4Address ( address ) ;

@@ -52,7 +52,7 @@ namespace DreamRecorder . ToolBox . General
 		{
 			if ( value == null )
 			{
-				throw new ArgumentNullException ( nameof (value) ) ;
+				throw new ArgumentNullException ( nameof ( value ) ) ;
 			}
 
 			string [ ] words = Regex . Matches ( value , "(^[a-z]+|[A-Z]+(?![a-z])|[A-Z][a-z]+)" ) .
@@ -63,26 +63,34 @@ namespace DreamRecorder . ToolBox . General
 			return words ;
 		}
 
-		public static string TrimEndPattern(this string source, string suffixToRemove, StringComparison comparisonType=StringComparison.Ordinal)
+		public static string TrimEndPattern ( this string    source ,
+											string           suffixToRemove ,
+											StringComparison comparisonType = StringComparison . Ordinal )
 		{
-			while ((!string.IsNullOrEmpty(source)) && (!string.IsNullOrEmpty( suffixToRemove))  && source.EndsWith(suffixToRemove,comparisonType))
+			while ( ( ! string . IsNullOrEmpty ( source ) )
+					&& ( ! string . IsNullOrEmpty ( suffixToRemove ) )
+					&& source . EndsWith ( suffixToRemove , comparisonType ) )
 			{
-				source = source.Substring(0, source.Length - suffixToRemove.Length);
+				source = source . Substring ( 0 , source . Length - suffixToRemove . Length ) ;
 			}
-			return source;
+
+			return source ;
 		}
 
-		public static string TrimStartPattern(this string source, string prefixToRemove, StringComparison comparisonType = StringComparison.Ordinal)
+		public static string TrimStartPattern ( this string      source ,
+												string           prefixToRemove ,
+												StringComparison comparisonType = StringComparison . Ordinal )
 		{
-			while ((!string.IsNullOrEmpty(source)) && (!string.IsNullOrEmpty(prefixToRemove)) && source.StartsWith(prefixToRemove,comparisonType))
+			while ( ( ! string . IsNullOrEmpty ( source ) )
+					&& ( ! string . IsNullOrEmpty ( prefixToRemove ) )
+					&& source . StartsWith ( prefixToRemove , comparisonType ) )
 			{
-				source = source.Substring(prefixToRemove.Length, source.Length - prefixToRemove.Length);
+				source = source . Substring ( prefixToRemove . Length , source . Length - prefixToRemove . Length ) ;
 			}
-			return source;
+
+			return source ;
 		}
 
-
-
-    }
+	}
 
 }

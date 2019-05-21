@@ -29,7 +29,7 @@ namespace DreamRecorder . ToolBox . General
 		{
 			if ( bytes == null )
 			{
-				throw new ArgumentNullException ( nameof(bytes) ) ;
+				throw new ArgumentNullException ( nameof ( bytes ) ) ;
 			}
 
 			bool [ ] result = new bool[ 8 * bytes . Length ] ;
@@ -73,7 +73,7 @@ namespace DreamRecorder . ToolBox . General
 		{
 			if ( source == null )
 			{
-				throw new ArgumentNullException ( nameof(source) ) ;
+				throw new ArgumentNullException ( nameof ( source ) ) ;
 			}
 
 			if ( source . Length != 8 )
@@ -104,7 +104,7 @@ namespace DreamRecorder . ToolBox . General
 		{
 			if ( source == null )
 			{
-				throw new ArgumentNullException ( nameof(source) ) ;
+				throw new ArgumentNullException ( nameof ( source ) ) ;
 			}
 
 			if ( ( source . Length % 8 ) == 0 )

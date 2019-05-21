@@ -212,10 +212,9 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 				Logger . LogDebug ( "Logger has been configured." ) ;
 
+				#endregion
 
-                #endregion
-
-				Logger.LogInformation("Start with argument: {0}", string.Join(" ", args));
+				Logger . LogInformation ( "Start with argument: {0}" , string . Join ( " " , args ) ) ;
 
 				#region Check Debug
 
@@ -226,16 +225,16 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 				#endregion
 
-                if ( ! noLogoOption . HasValue ( ) )
+				if ( ! noLogoOption . HasValue ( ) )
 				{
 					ShowLogo ( ) ;
 					ShowCopyright ( ) ;
 				}
 
 
-                #region Check License
+				#region Check License
 
-                if ( IsDebug )
+				if ( IsDebug )
 				{
 					Logger . LogInformation ( "Debug version, skip license check and you are assumed to accept license." ) ;
 				}
@@ -267,9 +266,9 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 				AppDomainExtensions . PrepareCurrentDomain ( ) ;
 
-				StaticServiceProvider.Update();
+				StaticServiceProvider . Update ( ) ;
 
-				AfterPrepare( ) ;
+				AfterPrepare ( ) ;
 
 				#endregion
 

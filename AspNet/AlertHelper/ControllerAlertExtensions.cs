@@ -47,7 +47,7 @@ namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 		{
 			if ( controller == null )
 			{
-				throw new ArgumentNullException ( nameof(controller) ) ;
+				throw new ArgumentNullException ( nameof ( controller ) ) ;
 			}
 
 			List <Alert> alerts = GetAlerts ( controller ) ;

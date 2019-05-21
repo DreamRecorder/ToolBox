@@ -16,7 +16,7 @@ namespace DreamRecorder . ToolBox . General
 		{
 			if ( random == null )
 			{
-				throw new ArgumentNullException ( nameof (random) ) ;
+				throw new ArgumentNullException ( nameof ( random ) ) ;
 			}
 
 			return random . NextNormalValue ( ) <= possibility ;

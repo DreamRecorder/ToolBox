@@ -12,9 +12,12 @@ namespace DreamRecorder . ToolBox . General
 	public static class ComparisonExtensions
 	{
 
-		public static Comparison <TSource> Select <TSource , TResult> ( Func <TSource , TResult> selector , Comparison<TResult> comparison=null)
-        {
-			return ( x , y ) => (comparison?? Comparer<TResult>.Default.Compare)(selector ( x ) , selector ( y ) ) ;
+		public static Comparison <TSource> Select
+			<TSource , TResult> ( Func <TSource , TResult> selector , Comparison <TResult> comparison = null )
+		{
+			return ( x , y )
+						=> ( comparison ?? Comparer <TResult> . Default . Compare ) ( selector ( x ) ,
+																					selector ( y ) ) ;
 		}
 
 		public static Comparison <T> Union <T> ( this Comparison <T> comparison1 , Comparison <T> comparison2 )

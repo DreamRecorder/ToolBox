@@ -59,7 +59,7 @@ namespace DreamRecorder . ToolBox . Network
 			return Equals ( ( Address ) obj ) ;
 		}
 
-		public override int GetHashCode ( ) => AddressBytes != null ? AddressBytes . GetHashCode ( ): 0 ;
+		public override int GetHashCode ( ) => AddressBytes != null ? AddressBytes . GetHashCode ( ) : 0 ;
 
 		public static bool operator == ( Address left , Address right ) => Equals ( left , right ) ;
 

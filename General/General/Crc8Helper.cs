@@ -45,7 +45,7 @@ namespace DreamRecorder . ToolBox . General
 		{
 			if ( data == null )
 			{
-				throw new ArgumentNullException ( nameof (data) ) ;
+				throw new ArgumentNullException ( nameof ( data ) ) ;
 			}
 
 			byte crc = 0 ;

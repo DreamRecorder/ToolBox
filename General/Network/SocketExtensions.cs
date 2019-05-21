@@ -17,7 +17,7 @@ namespace DreamRecorder . ToolBox . Network
 		{
 			if ( socket == null )
 			{
-				throw new ArgumentNullException ( nameof(socket) ) ;
+				throw new ArgumentNullException ( nameof ( socket ) ) ;
 			}
 
 			try
@@ -34,7 +34,7 @@ namespace DreamRecorder . ToolBox . Network
 		{
 			if ( clients == null )
 			{
-				throw new ArgumentNullException ( nameof(clients) ) ;
+				throw new ArgumentNullException ( nameof ( clients ) ) ;
 			}
 
 			lock ( clients )

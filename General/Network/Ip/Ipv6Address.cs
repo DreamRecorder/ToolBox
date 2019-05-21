@@ -22,7 +22,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 		{
 			if ( address == null )
 			{
-				throw new ArgumentNullException ( nameof(address) ) ;
+				throw new ArgumentNullException ( nameof ( address ) ) ;
 			}
 
 			if ( address . Length != 16 )
@@ -37,7 +37,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 		{
 			if ( address == null )
 			{
-				throw new ArgumentNullException ( nameof(address) ) ;
+				throw new ArgumentNullException ( nameof ( address ) ) ;
 			}
 
 			if ( address . Contains ( ':' ) )
@@ -98,7 +98,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 				throw new FormatException ( ) ;
 			}
 
-			throw new ArgumentException ( "" , nameof(address) ) ; //todo
+			throw new ArgumentException ( "" , nameof ( address ) ) ; //todo
 		}
 
 		private const int NumberOfLabels = 8 ;
@@ -107,7 +107,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 		{
 			if ( address == null )
 			{
-				throw new ArgumentNullException ( nameof(address) ) ;
+				throw new ArgumentNullException ( nameof ( address ) ) ;
 			}
 
 			return new Ipv6Address ( address ) ;

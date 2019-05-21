@@ -42,3 +42,4 @@
 
 *.ide-shm
 *.ide
+\.vs

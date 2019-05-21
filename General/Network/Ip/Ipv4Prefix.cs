@@ -23,7 +23,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 		{
 			if ( address == null )
 			{
-				throw new ArgumentNullException ( nameof(address) ) ;
+				throw new ArgumentNullException ( nameof ( address ) ) ;
 			}
 
 			if ( address . Length != 4 )
@@ -39,7 +39,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 		{
 			if ( addressString == null )
 			{
-				throw new ArgumentNullException ( nameof(addressString) ) ;
+				throw new ArgumentNullException ( nameof ( addressString ) ) ;
 			}
 
 			string [ ] data = addressString . Split ( '/' ) ;
@@ -57,6 +57,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 					break ;
 				}
+
 				case 1 :
 
 				{
@@ -68,6 +69,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 					break ;
 				}
+
 				default :
 
 				{
@@ -82,7 +84,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 		{
 			if ( address == null )
 			{
-				throw new ArgumentNullException ( nameof(address) ) ;
+				throw new ArgumentNullException ( nameof ( address ) ) ;
 			}
 
 			return new Ipv4Prefix ( address ) ;

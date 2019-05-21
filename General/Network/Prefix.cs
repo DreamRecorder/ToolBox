@@ -59,7 +59,7 @@ namespace DreamRecorder . ToolBox . Network
 		{
 			if ( address == null )
 			{
-				throw new ArgumentNullException ( nameof(address) ) ;
+				throw new ArgumentNullException ( nameof ( address ) ) ;
 			}
 
 			if ( address . Type == Type )
@@ -104,7 +104,7 @@ namespace DreamRecorder . ToolBox . Network
 		{
 			unchecked
 			{
-				return ( ( AddressBytes != null ? AddressBytes . GetHashCode ( ): 0 ) * 397 )
+				return ( ( AddressBytes != null ? AddressBytes . GetHashCode ( ) : 0 ) * 397 )
 						^ Length . GetHashCode ( ) ;
 			}
 		}
