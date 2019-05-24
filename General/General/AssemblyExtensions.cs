@@ -71,10 +71,8 @@ namespace DreamRecorder . ToolBox . General
 			{
 				return null ;
 			}
-			else
-			{
-				return Guid . Parse ( guid ) ;
-			}
+
+			return Guid . Parse ( guid ) ;
 		}
 
 	}
