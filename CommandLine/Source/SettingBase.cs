@@ -18,17 +18,30 @@ namespace DreamRecorder . ToolBox . CommandLine
 {
 
 	[PublicAPI]
-	public abstract class SettingBase <T , TSettingCategory>
+	public abstract class SettingBase <T , TSettingCategory> : ISettingProvider
 		where T : SettingBase <T , TSettingCategory> , new ( ) where TSettingCategory : Enum , IConvertible
 	{
 
-		private static ILogger Logger
-			=> _logger
-				?? ( _logger = StaticServiceProvider . Provider . GetService <ILoggerFactory> ( ) .
-														CreateLogger <T> ( ) ) ;
+		public TResult GetValue <TResult> ( [NotNull] string name , TResult defaultValue = default )
+		{
+			if ( name == null )
+			{
+				throw new ArgumentNullException ( nameof ( name ) ) ;
+			}
 
-		// ReSharper disable once StaticMemberInGenericType
-		private static ILogger _logger ;
+			PropertyInfo property = typeof ( T ) . GetProperty ( name . Trim ( ) ,
+																BindingFlags . Instance
+																| BindingFlags . IgnoreCase
+																| BindingFlags . NonPublic
+																| BindingFlags . Public
+																| BindingFlags . GetProperty ) ;
+			if ( property is null )
+			{
+				return defaultValue ;
+			}
+
+			return ( TResult ) property . GetValue ( this ) ;
+		}
 
 		public string Save ( )
 		{
@@ -45,11 +58,14 @@ namespace DreamRecorder . ToolBox . CommandLine
 				SettingItemAttribute attribute =
 					( SettingItemAttribute ) property . GetCustomAttribute ( typeof ( SettingItemAttribute ) ) ;
 
-				int           index           = attribute . SettingCategory ;
-				StringBuilder propertyBuilder = stringBuilders [ index ] ;
-				propertyBuilder . AppendLine ( attribute . ToString ( ) ) ;
-				propertyBuilder . AppendLine ( $"{property . Name} = {property . GetValue ( this )}" ) ;
-				propertyBuilder . AppendLine ( ) ;
+				if ( ! ( attribute is null ) )
+				{
+					int           index           = attribute . SettingCategory ;
+					StringBuilder propertyBuilder = stringBuilders [ index ] ;
+					propertyBuilder . AppendLine ( attribute . ToString ( ) ) ;
+					propertyBuilder . AppendLine ( $"{property . Name} = {property . GetValue ( this )}" ) ;
+					propertyBuilder . AppendLine ( ) ;
+				}
 			}
 
 			StringBuilder builder = new StringBuilder ( ) ;
@@ -74,7 +90,10 @@ namespace DreamRecorder . ToolBox . CommandLine
 				SettingItemAttribute attribute =
 					( SettingItemAttribute ) property . GetCustomAttribute ( typeof ( SettingItemAttribute ) ) ;
 
-				property . SetValue ( setting , attribute . DefaultValue ) ;
+				if ( ! ( attribute is null ) )
+				{
+					property . SetValue ( setting , attribute . DefaultValue ) ;
+				}
 			}
 
 			return setting ;
@@ -134,7 +153,8 @@ namespace DreamRecorder . ToolBox . CommandLine
 																		BindingFlags . Instance
 																		| BindingFlags . IgnoreCase
 																		| BindingFlags . NonPublic
-																		| BindingFlags . Public ) ;
+																		| BindingFlags . Public
+																		| BindingFlags . SetProperty ) ;
 
 					if ( property != null )
 					{
@@ -154,6 +174,20 @@ namespace DreamRecorder . ToolBox . CommandLine
 				}
 			}
 		}
+
+
+		#region Logger
+
+		private static ILogger Logger
+			=> _logger
+				?? ( _logger = StaticServiceProvider . Provider . GetService <ILoggerFactory> ( ) .
+														CreateLogger <T> ( ) ) ;
+
+		// ReSharper disable once StaticMemberInGenericType
+		// By design
+		private static ILogger _logger ;
+
+		#endregion
 
 	}
 

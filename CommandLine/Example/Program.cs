@@ -8,6 +8,7 @@ using System . Threading ;
 using DreamRecorder . ToolBox . CommandLine ;
 using DreamRecorder . ToolBox . General ;
 
+using Microsoft . Extensions . DependencyInjection ;
 using Microsoft . Extensions . Logging ;
 using Microsoft . Extensions . Logging . Console ;
 
@@ -33,6 +34,11 @@ namespace Example
 
 		public void DoSth ( )
 		{
+			ISettingProvider settingProvider = StaticServiceProvider . Provider . GetService <ISettingProvider> ( ) ;
+
+			Console . WriteLine ( settingProvider . GetValue <string> ( nameof ( ProgramSetting .
+																					DatabaseConnection ) ) ) ;
+
 			ReadOnlyDictionary <string , string> a = Emojis . EmojisList ;
 
 			foreach ( KeyValuePair <string , string> pair in a )

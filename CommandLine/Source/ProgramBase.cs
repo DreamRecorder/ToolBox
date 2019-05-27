@@ -260,18 +260,6 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 				#endregion
 
-				#region StartUp
-
-				BeforePrepare ( ) ;
-
-				AppDomainExtensions . PrepareCurrentDomain ( ) ;
-
-				StaticServiceProvider . Update ( ) ;
-
-				AfterPrepare ( ) ;
-
-				#endregion
-
 				#region Load Setting
 
 				if ( LoadSetting )
@@ -303,9 +291,24 @@ namespace DreamRecorder . ToolBox . CommandLine
 						Setting = SettingBase <TSetting , TSettingCategory> . GenerateNew ( ) ;
 						SaveSettingFile ( ) ;
 					}
+
+					StaticServiceProvider . ServiceCollection . AddSingleton <ISettingProvider> ( Setting ) ;
 				}
 
 				#endregion
+
+				#region StartUp
+
+				BeforePrepare ( ) ;
+
+				AppDomainExtensions . PrepareCurrentDomain ( ) ;
+
+				StaticServiceProvider . Update ( ) ;
+
+				AfterPrepare ( ) ;
+
+				#endregion
+
 
 				Start ( args ) ;
 
