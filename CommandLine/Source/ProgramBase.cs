@@ -32,6 +32,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 		public bool IsVerbose { get ; set ; }
 
+
 		public abstract bool WaitForExit { get ; }
 
 		public abstract string License { get ; }
@@ -40,8 +41,13 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 		public TSetting Setting { get ; set ; }
 
+		/// <summary>
+		///     If Program do not handle Input
+		/// </summary>
 		public abstract bool CanExit { get ; }
 
+		/// <summary>
+		/// </summary>
 		public abstract bool HandleInput { get ; }
 
 		public abstract bool LoadSetting { get ; }
@@ -185,8 +191,6 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 			RegisterArgument ( commandLineApplication ) ;
 
-			IsRunning = true ;
-
 			int Execution ( )
 			{
 				IsDebug =
@@ -314,6 +318,8 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 				return 0 ;
 			}
+
+			IsRunning = true ;
 
 			commandLineApplication . OnExecute ( Execution ) ;
 
