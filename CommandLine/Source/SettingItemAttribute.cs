@@ -23,11 +23,12 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 		public object DefaultValue { get ; set ; }
 
-		public SettingItemAttribute ( int  settingCategory ,
-									string displayName ,
-									string introduction ,
-									bool   restartRequired ,
-									object defaultValue )
+		public SettingItemAttribute (
+			int    settingCategory ,
+			string displayName ,
+			string introduction ,
+			bool   restartRequired ,
+			object defaultValue )
 		{
 			SettingCategory = settingCategory ;
 			DisplayName     = displayName  ?? throw new ArgumentNullException ( nameof ( displayName ) ) ;

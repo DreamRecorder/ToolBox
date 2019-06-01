@@ -67,7 +67,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 		public void SaveSettingFile ( )
 		{
 			string       config      = Setting ? . Save ( ) ;
-			FileStream   settingFile = File . OpenWrite ( FileNameConst . SettingFile ) ;
+			FileStream   settingFile = File . OpenWrite ( FileNameConst . SettingFileName ) ;
 			StreamWriter writer      = new StreamWriter ( settingFile ) ;
 			writer . Write ( config ) ;
 			writer . Dispose ( ) ;
@@ -114,19 +114,20 @@ namespace DreamRecorder . ToolBox . CommandLine
 		public virtual void GenerateLicenseFile ( )
 		{
 			Logger . LogInformation ( "Generating License File." ) ;
-			FileStream licenseFile = File . Open ( FileNameConst . LicenseFile , FileMode . Create ) ;
+			FileStream licenseFile = File . Open ( FileNameConst . LicenseFileName , FileMode . Create ) ;
 
 			using ( StreamWriter writer = new StreamWriter ( licenseFile ) )
 			{
 				writer . WriteLine ( License ) ;
 				writer . WriteLine ( ) ;
-				writer . WriteLine ( "To accept this license, you should write \"I accept this License.\" at the end of this file." ) ;
+				writer . WriteLine (
+									"To accept this license, you should write \"I accept this License.\" at the end of this file." ) ;
 			}
 		}
 
 		public virtual bool CheckLicenseFile ( )
 		{
-			if ( ! File . Exists ( FileNameConst . LicenseFile ) )
+			if ( ! File . Exists ( FileNameConst . LicenseFileName ) )
 			{
 				Logger . LogInformation ( "License file not found." ) ;
 				GenerateLicenseFile ( ) ;
@@ -134,7 +135,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 				return false ;
 			}
 
-			FileStream licenseFile = File . OpenRead ( FileNameConst . LicenseFile ) ;
+			FileStream licenseFile = File . OpenRead ( FileNameConst . LicenseFileName ) ;
 			string     licenseFileContent ;
 
 			using ( StreamReader reader = new StreamReader ( licenseFile ) )
@@ -176,15 +177,15 @@ namespace DreamRecorder . ToolBox . CommandLine
 			CommandOption noLogoOption =
 				commandLineApplication . Option ( @"-noLogo|--noLogo" , "Show no logo" , CommandOptionType . NoValue ) ;
 
-			CommandOption acceptLicenseOption =
-				commandLineApplication . Option ( @"-acceptLicense|--acceptLicense" ,
-												"Accept License" ,
-												CommandOptionType . NoValue ) ;
+			CommandOption acceptLicenseOption = commandLineApplication . Option (
+																				@"-acceptLicense|--acceptLicense" ,
+																				"Accept License" ,
+																				CommandOptionType . NoValue ) ;
 
-			CommandOption debugOption =
-				commandLineApplication . Option ( @"-debug|--debug" ,
-												"Launch in Debug mode" ,
-												CommandOptionType . NoValue ) ;
+			CommandOption debugOption = commandLineApplication . Option (
+																		@"-debug|--debug" ,
+																		"Launch in Debug mode" ,
+																		CommandOptionType . NoValue ) ;
 
 			CommandOption verboseOption =
 				commandLineApplication . Option ( "-v|--verbose" , "Verbose Log" , CommandOptionType . NoValue ) ;
@@ -270,13 +271,13 @@ namespace DreamRecorder . ToolBox . CommandLine
 				{
 					Logger . LogInformation ( "Loading setting file." ) ;
 
-					if ( File . Exists ( FileNameConst . SettingFile ) )
+					if ( File . Exists ( FileNameConst . SettingFileName ) )
 					{
 						Logger . LogInformation ( "Setting file exists, Reading." ) ;
 
 						try
 						{
-							using ( FileStream stream = File . OpenRead ( FileNameConst . SettingFile ) )
+							using ( FileStream stream = File . OpenRead ( FileNameConst . SettingFileName ) )
 							{
 								Setting = SettingBase <TSetting , TSettingCategory> . Load ( stream ) ;
 							}
@@ -329,7 +330,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 			{
 				while ( IsRunning )
 				{
-					if ( ( Console . ReadLine ( ) ? . Trim ( ) . ToLower ( ) == "exit" ) && CanExit )
+					if ( Console . ReadLine ( ) ? . Trim ( ) . ToLower ( ) == "exit" && CanExit )
 					{
 						Exit ( ProgramExitCode <TExitCode> . Success ) ;
 					}

@@ -29,7 +29,8 @@ namespace DreamRecorder . ToolBox . CommandLine
 				throw new ArgumentNullException ( nameof ( name ) ) ;
 			}
 
-			PropertyInfo property = typeof ( T ) . GetProperty ( name . Trim ( ) ,
+			PropertyInfo property = typeof ( T ) . GetProperty (
+																name . Trim ( ) ,
 																BindingFlags . Instance
 																| BindingFlags . IgnoreCase
 																| BindingFlags . NonPublic
@@ -72,7 +73,8 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 			for ( int i = 0 ; i < stringBuilders . Length ; i++ )
 			{
-				builder . AppendLine ( $"##{( TSettingCategory ) Enum . ToObject ( typeof ( TSettingCategory ) , i )}" ) ;
+				builder . AppendLine (
+									$"##{( TSettingCategory ) Enum . ToObject ( typeof ( TSettingCategory ) , i )}" ) ;
 				builder . AppendLine ( ) ;
 				builder . AppendLine ( stringBuilders [ i ] . ToString ( ) ) ;
 				builder . AppendLine ( ) ;
@@ -108,7 +110,8 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 			T settings = new T ( ) ;
 
-			foreach ( string line in source . Split ( new [ ] { Environment . NewLine } ,
+			foreach ( string line in source . Split (
+													new [ ] { Environment . NewLine } ,
 													StringSplitOptions . RemoveEmptyEntries ) )
 			{
 				ParseLine ( settings , line ) ;
@@ -149,7 +152,8 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 				if ( setCommand . Length == 2 )
 				{
-					PropertyInfo property = typeof ( T ) . GetProperty ( setCommand . First ( ) . Trim ( ) ,
+					PropertyInfo property = typeof ( T ) . GetProperty (
+																		setCommand . First ( ) . Trim ( ) ,
 																		BindingFlags . Instance
 																		| BindingFlags . IgnoreCase
 																		| BindingFlags . NonPublic
@@ -158,8 +162,9 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 					if ( property != null )
 					{
-						object value =
-							Convert . ChangeType ( setCommand . Last ( ) . Trim ( ) , property . PropertyType ) ;
+						object value = Convert . ChangeType (
+															setCommand . Last ( ) . Trim ( ) ,
+															property . PropertyType ) ;
 
 						property . SetValue ( settings , value ) ;
 					}
