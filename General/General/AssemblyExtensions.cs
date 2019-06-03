@@ -1,6 +1,7 @@
 ﻿using System ;
 using System . Collections ;
 using System . Collections . Generic ;
+using System . IO ;
 using System . Linq ;
 using System . Reflection ;
 using System . Runtime . InteropServices ;
@@ -19,6 +20,26 @@ namespace DreamRecorder . ToolBox . General
 
 		public static string GetAssemblyFullName ( this Type type )
 			=> type . GetTypeInfo ( ) . Assembly . GetName ( ) . FullName . Replace ( ", " , CommaWithNewline ) ;
+
+		public static string GetResourceFile <T> ( this Assembly assembly , string fileName )
+		{
+			Stream stream = assembly . GetManifestResourceStream ( typeof ( T ) , fileName ) ;
+			if ( stream != null )
+			{
+				string license ;
+
+				using ( StreamReader reader = new StreamReader ( stream ) )
+				{
+					license = reader . ReadToEnd ( ) ;
+				}
+
+				return license ;
+			}
+			else
+			{
+				return null ;
+			}
+		}
 
 		public static Task Prepare ( this Assembly assembly )
 		{
