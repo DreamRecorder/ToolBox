@@ -209,9 +209,13 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 				#region CreateLogger
 
-				StaticServiceProvider . ServiceCollection . AddLogging ( ConfigureLogger ) ;
+				lock ( StaticServiceProvider . ServiceCollection )
+				{
+					StaticServiceProvider . ServiceCollection . AddLogging ( ConfigureLogger ) ;
 
-				StaticServiceProvider . Update ( ) ;
+					StaticServiceProvider . Update ( ) ;
+				}
+
 
 				Logger = StaticServiceProvider . Provider . GetService <ILoggerFactory> ( ) . CreateLogger <T> ( ) ;
 
@@ -241,7 +245,8 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 				if ( IsDebug )
 				{
-					Logger . LogInformation ( "Debug version, skip license check and you are assumed to accept license." ) ;
+					Logger . LogInformation (
+											"Debug version, skip license check and you are assumed to accept license." ) ;
 				}
 				else
 				{
@@ -306,9 +311,12 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 				BeforePrepare ( ) ;
 
-				AppDomainExtensions . PrepareCurrentDomain ( ) ;
+				lock ( StaticServiceProvider . ServiceCollection )
+				{
+					AppDomainExtensions . PrepareCurrentDomain ( ) ;
 
-				StaticServiceProvider . Update ( ) ;
+					StaticServiceProvider . Update ( ) ;
+				}
 
 				AfterPrepare ( ) ;
 
