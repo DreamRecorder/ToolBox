@@ -18,18 +18,23 @@ namespace DreamRecorder . ToolBox . General
 
 		public static void Update ( )
 		{
-			try
+			bool notFinish = true ;
+			while ( notFinish )
 			{
-				lock ( ServiceCollection )
+				try
 				{
-					Provider = ServiceCollection . BuildServiceProvider ( true ) ;
+					lock ( ServiceCollection )
+					{
+						Provider = ServiceCollection . BuildServiceProvider ( true ) ;
+					}
+
+					notFinish = false ;
 				}
-			}
-			catch ( Exception e )
-			{
-				Thread . Yield ( ) ;
-				Thread . Sleep ( 1 ) ;
-				Update ( ) ;
+				catch ( Exception )
+				{
+					Thread . Yield ( ) ;
+					Thread . Sleep ( 1 ) ;
+				}
 			}
 		}
 
