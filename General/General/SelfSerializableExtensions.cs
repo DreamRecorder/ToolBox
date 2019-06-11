@@ -1,7 +1,6 @@
 ﻿using System ;
 using System . Collections ;
 using System . Collections . Generic ;
-using System . ComponentModel ;
 using System . Linq ;
 using System . Xml . Linq ;
 
@@ -43,9 +42,7 @@ namespace DreamRecorder . ToolBox . General
 				throw new ArgumentException ( ExceptionMessages . NecessaryValueNotFound ( element , name ) ) ;
 			}
 
-			TypeConverter typeConverter = TypeDescriptor . GetConverter ( typeof ( T ) ) ;
-
-			return ( T ) typeConverter . ConvertFromString ( value ) ;
+			return value . ParseTo <T> ( ) ;
 		}
 
 		public static T ReadUnnecessaryValue <T> ( this XElement element , string name , T defaultValue )
@@ -67,9 +64,7 @@ namespace DreamRecorder . ToolBox . General
 				return defaultValue ;
 			}
 
-			TypeConverter typeConverter = TypeDescriptor . GetConverter ( typeof ( T ) ) ;
-
-			return ( T ) typeConverter . ConvertFromString ( value ) ;
+			return value . ParseTo <T> ( ) ;
 		}
 
 	}

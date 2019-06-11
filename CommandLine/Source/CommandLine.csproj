@@ -21,7 +21,7 @@
     <PackageProjectUrl>https://vsts.dreamry.org/DefaultCollection/ToolBox</PackageProjectUrl>
     <Copyright>Dream Recorder (c) 2019</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.1.4.55</Version>
+    <Version>1.1.4.56</Version>
     <LangVersion>latest</LangVersion>
     <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
     <PackageIconUrl>https://nekomimirouter.com/assets/logo/dreamrylogowithouttext.svg</PackageIconUrl>

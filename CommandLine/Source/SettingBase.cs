@@ -162,9 +162,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 					if ( property != null )
 					{
-						object value = Convert . ChangeType (
-															setCommand . Last ( ) . Trim ( ) ,
-															property . PropertyType ) ;
+						object value = setCommand . Last ( ) . Trim ( ) . ParseTo ( property . PropertyType ) ;
 
 						property . SetValue ( settings , value ) ;
 					}

@@ -1,6 +1,7 @@
 ﻿using System ;
 using System . Collections ;
 using System . Collections . Generic ;
+using System . ComponentModel ;
 using System . Globalization ;
 using System . Linq ;
 using System . Text ;
@@ -40,13 +41,24 @@ namespace DreamRecorder . ToolBox . General
 		{
 			string normalizedInput = input . Normalize ( NormalizationForm . FormD ) ;
 
-			return new string ( normalizedInput . Where ( t => CharUnicodeInfo . GetUnicodeCategory ( t )
+			return new string (
+								normalizedInput . Where (
+														t
+															=> CharUnicodeInfo . GetUnicodeCategory ( t )
 																!= UnicodeCategory . NonSpacingMark ) .
 												ToArray ( ) ) . Normalize ( NormalizationForm . FormC ) ;
 		}
 
 		public static string ToSlug ( this string name ) => ToUrlSlug ( name ) ;
 
+		public static object ParseTo ( this string value , Type type )
+		{
+			TypeConverter typeConverter = TypeDescriptor . GetConverter ( type ) ;
+
+			return typeConverter . ConvertFromString ( value ) ;
+		}
+
+		public static T ParseTo <T> ( this string value ) => ( T ) value . ParseTo ( typeof ( T ) ) ;
 
 		public static string [ ] SplitByCamelCase ( [NotNull] string value )
 		{
@@ -63,9 +75,10 @@ namespace DreamRecorder . ToolBox . General
 			return words ;
 		}
 
-		public static string TrimEndPattern ( this string    source ,
-											string           suffixToRemove ,
-											StringComparison comparisonType = StringComparison . Ordinal )
+		public static string TrimEndPattern (
+			this string      source ,
+			string           suffixToRemove ,
+			StringComparison comparisonType = StringComparison . Ordinal )
 		{
 			while ( ( ! string . IsNullOrEmpty ( source ) )
 					&& ( ! string . IsNullOrEmpty ( suffixToRemove ) )
@@ -77,9 +90,10 @@ namespace DreamRecorder . ToolBox . General
 			return source ;
 		}
 
-		public static string TrimStartPattern ( this string      source ,
-												string           prefixToRemove ,
-												StringComparison comparisonType = StringComparison . Ordinal )
+		public static string TrimStartPattern (
+			this string      source ,
+			string           prefixToRemove ,
+			StringComparison comparisonType = StringComparison . Ordinal )
 		{
 			while ( ( ! string . IsNullOrEmpty ( source ) )
 					&& ( ! string . IsNullOrEmpty ( prefixToRemove ) )
