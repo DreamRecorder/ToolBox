@@ -36,8 +36,9 @@ namespace Example
 		{
 			ISettingProvider settingProvider = StaticServiceProvider . Provider . GetService <ISettingProvider> ( ) ;
 
-			Console . WriteLine ( settingProvider . GetValue <string> ( nameof ( ProgramSetting .
-																					DatabaseConnection ) ) ) ;
+			Console . WriteLine (
+								settingProvider . GetValue <string> (
+																	nameof ( ProgramSetting . DatabaseConnection ) ) ) ;
 
 			ReadOnlyDictionary <string , string> a = Emojis . EmojisList ;
 
@@ -54,6 +55,7 @@ namespace Example
 
 		public override void Start ( string [ ] args )
 		{
+			Console . ReadLine ( ) ;
 			Thread thread = new Thread ( DoSth ) ;
 			thread . Start ( ) ;
 		}

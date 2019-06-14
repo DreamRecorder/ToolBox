@@ -32,8 +32,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 		public bool IsVerbose { get ; set ; }
 
-
-		public abstract bool WaitForExit { get ; }
+		public virtual bool WaitForExit { get ; }
 
 		public abstract string License { get ; }
 
@@ -194,16 +193,12 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 			int Execution ( )
 			{
-				IsDebug =
+				IsDebug = debugOption . HasValue ( ) || Debugger . IsAttached ;
+
 #if DEBUG
+				IsDebug = true ;
 
-					// ReSharper disable once ConditionIsAlwaysTrueOrFalse
-					true
-					||
 #endif
-					debugOption . HasValue ( )
-					|| Debugger . IsAttached ;
-
 
 				IsVerbose = verboseOption . HasValue ( ) ;
 
@@ -229,7 +224,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 				if ( IsDebug )
 				{
-					Logger . LogWarning ( "This program is being debugging" ) ;
+					Logger . LogWarning ( "This program is being debugging." ) ;
 				}
 
 				#endregion
@@ -256,6 +251,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 						{
 							Logger . LogInformation ( "License check failed." ) ;
 							Exit ( ProgramExitCode <TExitCode> . LicenseNotAccepted ) ;
+							return ProgramExitCode <TExitCode> . LicenseNotAccepted ;
 						}
 						else
 						{
@@ -322,10 +318,18 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 				#endregion
 
+				try
+				{
+					Start ( args ) ;
+				}
+				catch ( Exception e )
+				{
+					Exit ( ProgramExitCode <TExitCode> . ExceptionUnhandled ) ;
+					return ProgramExitCode <TExitCode> . ExceptionUnhandled ;
+				}
 
-				Start ( args ) ;
 
-				return 0 ;
+				return ProgramExitCode <TExitCode> . Success ;
 			}
 
 			IsRunning = true ;
