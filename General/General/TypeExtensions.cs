@@ -15,6 +15,16 @@ namespace DreamRecorder . ToolBox . General
 	public static class TypeExtensions
 	{
 
+		public static object GetDefault ( this Type type )
+		{
+			if ( type . IsValueType )
+			{
+				return Activator . CreateInstance ( type ) ;
+			}
+
+			return null ;
+		}
+
 		#region GetInheritanceDepth
 
 		public static int GetInheritanceDepth <T> ( ) => GetInheritanceDepth ( typeof ( T ) ) ;
@@ -80,7 +90,6 @@ namespace DreamRecorder . ToolBox . General
 		}
 
 		#endregion
-
 
 		#region GetResourceFile
 
