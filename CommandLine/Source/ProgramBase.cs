@@ -72,6 +72,8 @@ namespace DreamRecorder . ToolBox . CommandLine
 			writer . Dispose ( ) ;
 		}
 
+		public virtual bool OnStartupExceptions ( Exception e ) => false ;
+
 		public void Exit ( TExitCode exitCode )
 		{
 			if ( exitCode == ProgramExitCode <TExitCode> . Success )
@@ -171,7 +173,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 			CommandLineApplication commandLineApplication = new CommandLineApplication ( ) ;
 
-			commandLineApplication . HelpOption ( "-?|-h|--help" ) ;
+			commandLineApplication . HelpOption ( "-?|-h|--help|-help" ) ;
 
 			CommandOption noLogoOption =
 				commandLineApplication . Option ( @"-noLogo|--noLogo" , "Show no logo" , CommandOptionType . NoValue ) ;
@@ -211,7 +213,6 @@ namespace DreamRecorder . ToolBox . CommandLine
 					StaticServiceProvider . Update ( ) ;
 				}
 
-
 				Logger = StaticServiceProvider . Provider . GetService <ILoggerFactory> ( ) . CreateLogger <T> ( ) ;
 
 				Logger . LogDebug ( "Logger has been configured." ) ;
@@ -234,7 +235,6 @@ namespace DreamRecorder . ToolBox . CommandLine
 					ShowLogo ( ) ;
 					ShowCopyright ( ) ;
 				}
-
 
 				#region Check License
 
@@ -328,7 +328,6 @@ namespace DreamRecorder . ToolBox . CommandLine
 					return ProgramExitCode <TExitCode> . ExceptionUnhandled ;
 				}
 
-
 				return ProgramExitCode <TExitCode> . Success ;
 			}
 
@@ -336,7 +335,17 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 			commandLineApplication . OnExecute ( Execution ) ;
 
-			commandLineApplication . Execute ( args ) ;
+			try
+			{
+				commandLineApplication . Execute ( args ) ;
+			}
+			catch ( Exception e )
+			{
+				if ( ! OnStartupExceptions ( e ) )
+				{
+					throw ;
+				}
+			}
 
 			if ( ! HandleInput )
 			{
