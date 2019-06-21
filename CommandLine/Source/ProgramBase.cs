@@ -189,7 +189,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 																		CommandOptionType . NoValue ) ;
 
 			CommandOption verboseOption =
-				commandLineApplication . Option ( "-v|--verbose" , "Verbose Log" , CommandOptionType . NoValue ) ;
+				commandLineApplication . Option ("-v|--verbose|-verbose", "Verbose Log" , CommandOptionType . NoValue ) ;
 
 			RegisterArgument ( commandLineApplication ) ;
 

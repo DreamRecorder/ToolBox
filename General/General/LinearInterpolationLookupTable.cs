@@ -48,15 +48,17 @@ namespace DreamRecorder . ToolBox . General
 
 			if ( element . Name != nameof ( LinearInterpolationLookupTable ) )
 			{
-				throw new ArgumentException ( ExceptionMessages . XmlNameMismatch ( nameof ( element ) ,
-																					typeof (
-																						LinearInterpolationLookupTable
-																					) ) ) ;
+				throw new ArgumentException (
+											ExceptionMessages . XmlNameMismatch (
+																				nameof ( element ) ,
+																				typeof ( LinearInterpolationLookupTable
+																				) ) ) ;
 			}
 
 			foreach ( XElement pointData in element . Elements ( ) )
 			{
-				PointF point = new PointF ( pointData . ReadNecessaryValue <float> ( nameof ( point . X ) ) ,
+				PointF point = new PointF (
+											pointData . ReadNecessaryValue <float> ( nameof ( point . X ) ) ,
 											pointData . ReadNecessaryValue <float> ( nameof ( point . Y ) ) ) ;
 
 				PointsList . Add ( point ) ;
@@ -80,6 +82,61 @@ namespace DreamRecorder . ToolBox . General
 			}
 
 			return result ;
+		}
+
+		/// <summary>
+		///     Fits a line to a collection of (x,y) points.
+		/// </summary>
+		/// <param name="xVals">The x-axis values.</param>
+		/// <param name="yVals">The y-axis values.</param>
+		/// <param name="rSquared">The r^2 value of the line.</param>
+		/// <param name="yIntercept">The y-intercept value of the line (i.e. y = ax + b, yIntercept is b).</param>
+		/// <param name="slope">The slop of the line (i.e. y = ax + b, slope is a).</param>
+		public static void LinearRegression (
+			double [ ] xVals ,
+			double [ ] yVals ,
+			out double rSquared ,
+			out double yIntercept ,
+			out double slope )
+		{
+			if ( xVals . Length != yVals . Length )
+			{
+				throw new Exception ( "Input values should be with the same length." ) ;
+			}
+
+			double sumOfX        = 0 ;
+			double sumOfY        = 0 ;
+			double sumOfXSq      = 0 ;
+			double sumOfYSq      = 0 ;
+			double sumCodeviates = 0 ;
+
+			for ( int i = 0 ; i < xVals . Length ; i++ )
+			{
+				double x = xVals [ i ] ;
+				double y = yVals [ i ] ;
+				sumCodeviates += x * y ;
+				sumOfX        += x ;
+				sumOfY        += y ;
+				sumOfXSq      += x * x ;
+				sumOfYSq      += y * y ;
+			}
+
+			int    count = xVals . Length ;
+			double ssX   = sumOfXSq - ( ( sumOfX * sumOfX ) / count ) ;
+			double ssY   = sumOfYSq - ( ( sumOfY * sumOfY ) / count ) ;
+
+			double rNumerator = ( count * sumCodeviates ) - ( sumOfX * sumOfY ) ;
+			double rDenom =
+				( count * sumOfXSq - ( sumOfX * sumOfX ) ) * ( count * sumOfYSq - ( sumOfY * sumOfY ) ) ;
+			double sCo = sumCodeviates - ( ( sumOfX * sumOfY ) / count ) ;
+
+			double meanX = sumOfX     / count ;
+			double meanY = sumOfY     / count ;
+			double dblR  = rNumerator / Math . Sqrt ( rDenom ) ;
+
+			rSquared   = dblR * dblR ;
+			yIntercept = meanY - ( ( sCo / ssX ) * meanX ) ;
+			slope      = sCo / ssX ;
 		}
 
 		public void AddPoint ( PointF point )
