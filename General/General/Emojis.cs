@@ -19,11 +19,13 @@ namespace DreamRecorder . ToolBox . General
 		static Emojis ( )
 		{
 			Dictionary <string , string> emojis =
-				typeof ( Emojis ) . GetFields ( BindingFlags . Static
+				typeof ( Emojis ) . GetFields (
+												BindingFlags . Static
 												| BindingFlags . Public
 												| BindingFlags . DeclaredOnly ) .
-									ToDictionary ( fieldInfo => fieldInfo . Name ,
-													fieldInfo => ( string ) fieldInfo . GetValue ( null ) ) ;
+									ToDictionary (
+												fieldInfo => fieldInfo . Name ,
+												fieldInfo => ( string ) fieldInfo . GetValue ( null ) ) ;
 
 			EmojisList = new ReadOnlyDictionary <string , string> ( emojis ) ;
 		}

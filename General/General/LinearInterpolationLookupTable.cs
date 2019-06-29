@@ -88,18 +88,18 @@ namespace DreamRecorder . ToolBox . General
 		///     Fits a line to a collection of (x,y) points.
 		/// </summary>
 		/// <param name="xValues">The x-axis values.</param>
-		/// <param name="yValues">The y-axis values.</param>
+		/// <param name="yVals">The y-axis values.</param>
 		/// <param name="rSquared">The r^2 value of the line.</param>
 		/// <param name="yIntercept">The y-intercept value of the line (i.e. y = ax + b, yIntercept is b).</param>
 		/// <param name="slope">The slop of the line (i.e. y = ax + b, slope is a).</param>
 		public static void LinearRegression (
 			double [ ] xValues ,
-			double [ ] yValues ,
+			double [ ] yVals ,
 			out double rSquared ,
 			out double yIntercept ,
 			out double slope )
 		{
-			if ( xValues . Length != yValues . Length )
+			if ( xValues . Length != yVals . Length )
 			{
 				throw new Exception ( "Input values should be with the same length." ) ;
 			}
@@ -113,7 +113,7 @@ namespace DreamRecorder . ToolBox . General
 			for ( int i = 0 ; i < xValues . Length ; i++ )
 			{
 				double x = xValues [ i ] ;
-				double y = yValues [ i ] ;
+				double y = yVals [ i ] ;
 				sumCodeviates += x * y ;
 				sumOfX        += x ;
 				sumOfY        += y ;

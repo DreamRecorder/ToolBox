@@ -113,8 +113,8 @@ namespace DreamRecorder . ToolBox . General
 
 			if ( ! ( ( a <= c ) && ( c <= b ) ) )
 			{
-				throw
-					new ArgumentOutOfRangeException ( $"It should be {nameof ( a )}<={nameof ( c )}<={nameof ( b )}" ) ;
+				throw new ArgumentOutOfRangeException (
+														$"It should be {nameof ( a )}<={nameof ( c )}<={nameof ( b )}" ) ;
 			}
 
 			double u = random . NextDouble ( ) ;

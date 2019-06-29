@@ -16,7 +16,8 @@ namespace DreamRecorder . ToolBox . General
 			<TSource , TResult> ( Func <TSource , TResult> selector , Comparison <TResult> comparison = null )
 		{
 			return ( x , y )
-						=> ( comparison ?? Comparer <TResult> . Default . Compare ) ( selector ( x ) ,
+						=> ( comparison ?? Comparer <TResult> . Default . Compare ) (
+																					selector ( x ) ,
 																					selector ( y ) ) ;
 		}
 
