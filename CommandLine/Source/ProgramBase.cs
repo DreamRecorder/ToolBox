@@ -188,8 +188,10 @@ namespace DreamRecorder . ToolBox . CommandLine
 																		"Launch in Debug mode" ,
 																		CommandOptionType . NoValue ) ;
 
-			CommandOption verboseOption =
-				commandLineApplication . Option ("-v|--verbose|-verbose", "Verbose Log" , CommandOptionType . NoValue ) ;
+			CommandOption verboseOption = commandLineApplication . Option (
+																			"-v|--verbose|-verbose" ,
+																			"Verbose Log" ,
+																			CommandOptionType . NoValue ) ;
 
 			RegisterArgument ( commandLineApplication ) ;
 
@@ -253,10 +255,8 @@ namespace DreamRecorder . ToolBox . CommandLine
 							Exit ( ProgramExitCode <TExitCode> . LicenseNotAccepted ) ;
 							return ProgramExitCode <TExitCode> . LicenseNotAccepted ;
 						}
-						else
-						{
-							Logger . LogInformation ( "License file check passed." ) ;
-						}
+
+						Logger . LogInformation ( "License file check passed." ) ;
 					}
 					else
 					{

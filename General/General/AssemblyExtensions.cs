@@ -35,10 +35,8 @@ namespace DreamRecorder . ToolBox . General
 
 				return license ;
 			}
-			else
-			{
-				return null ;
-			}
+
+			return null ;
 		}
 
 		public static Task Prepare ( this Assembly assembly )

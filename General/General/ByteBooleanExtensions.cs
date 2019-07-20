@@ -83,53 +83,39 @@ namespace DreamRecorder . ToolBox . General
 
 			byte result = 0 ;
 
-			int value = 1 ;
-
-			unsafe
+			for ( int i = 7 ; i >= 0 ; i-- )
 			{
-				for ( int i = 7 ; i >= 0 ; i-- )
-				{
-					fixed ( bool * pointer = & source [ i ] )
-					{
-						result += ( byte ) ( value * * ( byte * ) pointer ) ;
-						value  =  value << 1 ;
-					}
-				}
+				byte value = source [ i ] ? ( byte ) 1 : ( byte ) 0 ;
+
+				result = ( byte ) ( result | ( value << i ) ) ;
 			}
 
 			return result ;
 		}
 
-		public static byte [ ] ToByteArray ( [NotNull] bool [ ] source )
+		private static byte [ ] ToByteArray ( bool [ ] source )
 		{
 			if ( source == null )
 			{
 				throw new ArgumentNullException ( nameof ( source ) ) ;
 			}
 
-			if ( ( source . Length % 8 ) == 0 )
+			if ( ( source . Length % 8 ) != 0 )
 			{
 				throw new ArgumentException ( ) ;
 			}
 
-			int length = source . Length ;
+			int length = source . Length / 8 ;
 
 			byte [ ] result = new byte[ length ] ;
 
-			int value = 1 ;
-
 			for ( int j = 0 ; j < length ; j++ )
 			{
-				unsafe
+				for ( int i = 0 ; i < 8 ; i++ )
 				{
-					for ( int i = 7 ; i >= 0 ; i-- )
-					{
-						fixed ( bool * pointer = & source [ i + ( 8 * j ) ] )
-						{
-							result [ j ] += ( byte ) ( value * * ( byte * ) pointer ) ;
-							value        =  value << 1 ;
-						}
-					}
+					byte value = source [ i + 8 * j ] ? ( byte ) 1 : ( byte ) 0 ;
+
+					result [ j ] = ( byte ) ( result [ j ] | ( value << i ) ) ;
 				}
 			}
 

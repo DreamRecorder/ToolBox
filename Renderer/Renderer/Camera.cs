@@ -8,9 +8,10 @@ using DreamRecorder . ToolBox . General ;
 
 namespace DreamRecorder . ToolBox . Renderer
 {
+
 	/// <summary>
-    /// Camera have position
-    /// </summary>
+	///     Camera have position
+	/// </summary>
 	public abstract class Camera : ICamera
 	{
 

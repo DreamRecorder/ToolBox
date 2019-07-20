@@ -90,12 +90,13 @@ namespace DreamRecorder . ToolBox . Network . Ip
 		//
 
 		//Remark: MUST NOT be used unless all input indexes are are verified and trusted.
-		internal static unsafe bool IsValid ( char * name ,
-											int      start ,
-											ref int  end ,
-											bool     allowIPv6 ,
-											bool     notImplicitFile ,
-											bool     unknownScheme )
+		internal static unsafe bool IsValid (
+			char *  name ,
+			int     start ,
+			ref int end ,
+			bool    allowIPv6 ,
+			bool    notImplicitFile ,
+			bool    unknownScheme )
 		{
 			// IPv6 can only have canonical IPv4 embedded. Unknown schemes will not attempt parsing of non-canonical IPv4 addresses.
 			if ( allowIPv6 || unknownScheme )
@@ -119,11 +120,12 @@ namespace DreamRecorder . ToolBox . Network . Ip
 		//                 / "2" %x30-34 DIGIT     ; 200-249
 		//                 / "25" %x30-35          ; 250-255
 		//
-		internal static unsafe bool IsValidCanonical ( char *   name ,
-														int     start ,
-														ref int end ,
-														bool    allowIPv6 ,
-														bool    notImplicitFile )
+		internal static unsafe bool IsValidCanonical (
+			char *  name ,
+			int     start ,
+			ref int end ,
+			bool    allowIPv6 ,
+			bool    notImplicitFile )
 		{
 			int  dots            = 0 ;
 			int  number          = 0 ;

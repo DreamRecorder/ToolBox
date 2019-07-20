@@ -30,7 +30,8 @@ namespace DreamRecorder . ToolBox . Renderer
 		{
 			Vector3 sourceCenter = CenterAt - ( ( Direction / Direction . Z ) * Height ) ;
 
-			return new Ray ( ( ( CalculateProject ( point ) / ScreenWidth ) * WorldWidth ) + sourceCenter ,
+			return new Ray (
+							( ( CalculateProject ( point ) / ScreenWidth ) * WorldWidth ) + sourceCenter ,
 							Direction ) ;
 		}
 

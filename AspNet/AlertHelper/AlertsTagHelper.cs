@@ -46,7 +46,8 @@ namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 
 			foreach ( Alert alert in alerts )
 			{
-				result . AppendLine ( $"<div class=\"alert alert-{alert . Variation . ToString ( ) . ToLower ( )}\" role=\"alert\">{alert . Message}</div>" ) ;
+				result . AppendLine (
+									$"<div class=\"alert alert-{alert . Variation . ToString ( ) . ToLower ( )}\" role=\"alert\">{alert . Message}</div>" ) ;
 			}
 
 			output . TagName = @"div" ;

@@ -54,12 +54,14 @@ namespace DreamRecorder . ToolBox . Network . Ip
 				if ( ipv4Embedded && ( i == ( NumberOfLabels - 2 ) ) )
 				{
 					// Write the remaining digits as an IPv4 address
-					builder . Append ( string . Format ( CultureInfo . InvariantCulture ,
-														EmbeddedIPv4Format ,
-														numbers [ i ] >> 8 ,
-														numbers [ i ] & 0xFF ,
-														numbers [ i + 1 ] >> 8 ,
-														numbers [ i + 1 ] & 0xFF ) ) ;
+					builder . Append (
+									string . Format (
+													CultureInfo . InvariantCulture ,
+													EmbeddedIPv4Format ,
+													numbers [ i ] >> 8 ,
+													numbers [ i ] & 0xFF ,
+													numbers [ i + 1 ] >> 8 ,
+													numbers [ i + 1 ] & 0xFF ) ) ;
 
 					break ;
 				}
@@ -91,9 +93,11 @@ namespace DreamRecorder . ToolBox . Network . Ip
 					builder . Append ( Separator ) ;
 				}
 
-				builder . Append ( string . Format ( CultureInfo . InvariantCulture ,
-													CanonicalNumberFormat ,
-													numbers [ i ] ) ) ;
+				builder . Append (
+								string . Format (
+												CultureInfo . InvariantCulture ,
+												CanonicalNumberFormat ,
+												numbers [ i ] ) ) ;
 			}
 
 			return builder . ToString ( ) ;
@@ -131,7 +135,8 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 			if ( longestSequenceLength >= 2 )
 			{
-				return new KeyValuePair <int , int> ( longestSequenceStart ,
+				return new KeyValuePair <int , int> (
+													longestSequenceStart ,
 													( longestSequenceStart + longestSequenceLength ) - 1 ) ;
 			}
 
@@ -208,10 +213,11 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 		//  Remarks: MUST NOT be used unless all input indexes are verified and trusted.
 		//           start must be next to '[' position, or error is reported
-		private static unsafe bool InternalIsValid ( char * name ,
-													int     start ,
-													ref int end ,
-													bool    validateStrictAddress )
+		private static unsafe bool InternalIsValid (
+			char *  name ,
+			int     start ,
+			ref int end ,
+			bool    validateStrictAddress )
 		{
 			int  sequenceCount   = 0 ;
 			int  sequenceLength  = 0 ;

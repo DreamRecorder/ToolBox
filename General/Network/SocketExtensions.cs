@@ -39,7 +39,8 @@ namespace DreamRecorder . ToolBox . Network
 
 			lock ( clients )
 			{
-				clients . RemoveAll ( client =>
+				clients . RemoveAll (
+									client =>
 									{
 										lock ( client )
 										{

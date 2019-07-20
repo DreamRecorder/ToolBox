@@ -119,10 +119,8 @@ namespace DreamRecorder . ToolBox . General
 
 				return license ;
 			}
-			else
-			{
-				return null ;
-			}
+
+			return null ;
 		}
 
 		#endregion
