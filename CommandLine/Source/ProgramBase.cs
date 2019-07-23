@@ -72,7 +72,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 			writer . Dispose ( ) ;
 		}
 
-		public virtual bool OnStartupExceptions ( Exception e ) => false ;
+		public virtual bool OnStartupExceptions ( Exception e ) { return false ; }
 
 		public void Exit ( TExitCode exitCode )
 		{
@@ -252,6 +252,8 @@ namespace DreamRecorder . ToolBox . CommandLine
 						if ( ! CheckLicenseFile ( ) )
 						{
 							Logger . LogInformation ( "License check failed." ) ;
+							Logger . LogCritical (
+												$"You should READ and ACCEPT {FileNameConst . LicenseFileName} first." ) ;
 							Exit ( ProgramExitCode <TExitCode> . LicenseNotAccepted ) ;
 							return ProgramExitCode <TExitCode> . LicenseNotAccepted ;
 						}
