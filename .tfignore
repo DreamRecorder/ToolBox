@@ -43,3 +43,4 @@
 *.ide-shm
 *.ide
 \.vs
+*.ide-wal
