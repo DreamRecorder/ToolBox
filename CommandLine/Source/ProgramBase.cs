@@ -206,7 +206,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 				IsVerbose = verboseOption . HasValue ( ) ;
 
-				#region CreateLogger
+				#region Create Logger
 
 				lock ( StaticServiceProvider . ServiceCollection )
 				{
