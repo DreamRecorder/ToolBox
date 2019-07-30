@@ -12,6 +12,8 @@ namespace DreamRecorder . ToolBox . General
 	public struct Angle : IEquatable <Angle>
 	{
 
+		public Angle InRound => new Angle ( Radius % ( 2 * Math . PI ) ) ;
+
 		public static double DegreeToRadius ( double degree ) => degree / 180 * Math . PI ;
 
 		public static double RadiusToDegree ( double radius ) => radius / Math . PI * 180 ;
