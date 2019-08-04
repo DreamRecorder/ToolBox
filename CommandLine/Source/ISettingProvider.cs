@@ -11,6 +11,8 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 		T GetValue <T> ( string name , T defaultValue = default ) ;
 
+		string Save ( ) ;
+
 	}
 
 }
