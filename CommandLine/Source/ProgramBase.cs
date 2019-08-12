@@ -1,404 +1,441 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
+﻿using System ;
+using System . Collections ;
+using System . Collections . Generic ;
+using System . Diagnostics ;
+using System . IO ;
+using System . Linq ;
 
-using DreamRecorder.ToolBox.General;
+using DreamRecorder . ToolBox . General ;
 
-using JetBrains.Annotations;
+using JetBrains . Annotations ;
 
-using Microsoft.Extensions.CommandLineUtils;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+using Microsoft . Extensions . CommandLineUtils ;
+using Microsoft . Extensions . DependencyInjection ;
+using Microsoft . Extensions . Logging ;
 
-namespace DreamRecorder.ToolBox.CommandLine
+namespace DreamRecorder . ToolBox . CommandLine
 {
 
-    public enum FailedAction
-    {
+	[PublicAPI]
+	public abstract class ProgramBase <T , TExitCode , TSetting , TSettingCategory>
+		where T : ProgramBase <T , TExitCode , TSetting , TSettingCategory>
+		where TExitCode : ProgramExitCode <TExitCode> , new ( )
+		where TSetting : SettingBase <TSetting , TSettingCategory> , new ( )
+		where TSettingCategory : Enum , IConvertible
+	{
 
-        UseDefault,
-        InteractiveAsk,
-        Fail,
+		protected ILogger Logger { get ; private set ; }
 
-    }
+		public static T Current { get ; set ; }
 
-    [PublicAPI]
-    public abstract class ProgramBase<T, TExitCode, TSetting, TSettingCategory>
-        where T : ProgramBase<T, TExitCode, TSetting, TSettingCategory>
-        where TExitCode : ProgramExitCode<TExitCode>, new()
-        where TSetting : SettingBase<TSetting, TSettingCategory>, new()
-        where TSettingCategory : Enum, IConvertible
-    {
+		public virtual bool IsRunning { get ; set ; }
 
-        protected ILogger Logger { get; private set; }
+		public virtual bool IsInteractive { get ; set ; }
 
-        public static T Current { get; set; }
+		public bool IsVerbose { get ; set ; }
 
-        public virtual bool IsRunning { get; set; }
+		public virtual bool WaitForExit { get ; }
 
-        public virtual bool IsInteractive { get; set; }
+		public abstract string License { get ; }
 
-        public virtual FailedAction SettingFailedAction { get; set; }
+		public bool IsDebug { get ; private set ; }
 
-        public bool IsVerbose { get; set; }
+		public TSetting Setting { get ; set ; }
 
-        public virtual bool WaitForExit { get; }
+		/// <summary>
+		///     If Program do not handle Input
+		/// </summary>
+		public abstract bool CanExit { get ; }
 
-        public abstract string License { get; }
+		/// <summary>
+		/// </summary>
+		public abstract bool HandleInput { get ; }
 
-        public bool IsDebug { get; private set; }
+		public abstract bool LoadSetting { get ; }
 
-        public TSetting Setting { get; set; }
+		public abstract bool AutoSaveSetting { get ; }
 
-        /// <summary>
-        ///     If Program do not handle Input
-        /// </summary>
-        public abstract bool CanExit { get; }
+		public virtual string SettingFilePathOverride => null ;
 
-        /// <summary>
-        /// </summary>
-        public abstract bool HandleInput { get; }
+		public virtual string AcceptLicenseDeclare => "I accept this License." ;
 
-        public abstract bool LoadSetting { get; }
+		public virtual string AcceptLicenseGuide
+			=> $"To accept this license, you should write \"{AcceptLicenseDeclare}\" at the end of this file." ;
 
-        public abstract bool AutoSaveSetting { get; }
+		public virtual bool CheckLicense => true ;
 
-        /// <summary>
-        ///     This override should create a foreground thread before return or program will exit directly
-        /// </summary>
-        /// <param name="args"></param>
-        public abstract void Start(string[] args);
+		/// <summary>
+		///     This override should create a foreground thread before return or program will exit directly
+		/// </summary>
+		/// <param name="args"></param>
+		public abstract void Start ( string [ ] args ) ;
 
-        public virtual void RegisterArgument(CommandLineApplication application) { }
+		public virtual void RegisterArgument ( CommandLineApplication application ) { }
 
-        public abstract void ConfigureLogger(ILoggingBuilder builder);
+		public abstract void ConfigureLogger ( ILoggingBuilder builder ) ;
 
-        public void SaveSettingFile()
-        {
-            string config = Setting?.Save();
-            FileStream settingFile = File.OpenWrite(FileNameConst.SettingFileName);
-            StreamWriter writer = new StreamWriter(settingFile);
-            writer.Write(config);
-            writer.Dispose();
-        }
+		public void SaveSettingFile ( )
+		{
+			string config = Setting ? . Save ( ) ;
+			FileStream settingFile =
+				File . OpenWrite ( SettingFilePathOverride ?? FileNameConst . SettingFileName ) ;
+			StreamWriter writer = new StreamWriter ( settingFile ) ;
+			writer . Write ( config ) ;
+			writer . Dispose ( ) ;
+		}
 
-        public virtual bool OnStartupExceptions(Exception e) { return false; }
+		public virtual bool OnStartupExceptions ( Exception e ) => false ;
 
-        public virtual bool OnUnhandledExceptions(Exception e) { return false; }
+		public virtual bool OnUnhandledExceptions ( Exception e ) => false ;
 
-        public void Exit(TExitCode exitCode)
-        {
-            if (exitCode == ProgramExitCode<TExitCode>.Success)
-            {
-                if (AutoSaveSetting)
-                {
-                    SaveSettingFile();
-                }
-            }
-
-            ShowExit();
-
-            IsRunning = false;
-
-            OnExit(exitCode);
-
-            if (!WaitForExit)
-            {
-                Environment.Exit(exitCode.Code);
-            }
-        }
-
-        public abstract void ShowLogo();
-
-        public abstract void ShowCopyright();
-
-        private void ShowExit()
-        {
-            Logger.LogInformation("Exiting");
-            Console.WriteLine();
-            Console.WriteLine(@"Exiting...");
-            Console.WriteLine();
-        }
-
-        public abstract void OnExit(TExitCode code);
-
-        /// <summary>
-        /// </summary>
-        public virtual void GenerateLicenseFile()
-        {
-            Logger.LogInformation("Generating License File.");
-            FileStream licenseFile = File.Open(FileNameConst.LicenseFileName, FileMode.Create);
-
-            using (StreamWriter writer = new StreamWriter(licenseFile))
-            {
-                writer.WriteLine(License);
-                writer.WriteLine();
-                writer.WriteLine(
-                                    "To accept this license, you should write \"I accept this License.\" at the end of this file.");
-            }
-        }
-
-        public virtual bool CheckLicenseFile()
-        {
-            if (!File.Exists(FileNameConst.LicenseFileName))
-            {
-                Logger.LogInformation("License file not found.");
-                GenerateLicenseFile();
-
-                return false;
-            }
-
-            FileStream licenseFile = File.OpenRead(FileNameConst.LicenseFileName);
-            string licenseFileContent;
-
-            using (StreamReader reader = new StreamReader(licenseFile))
-            {
-                Logger.LogInformation("License file found, reading it.");
-                licenseFileContent = reader.ReadToEnd().TrimEnd();
-            }
-
-            if (licenseFileContent.StartsWith(License))
+		public void Exit ( TExitCode exitCode )
+		{
+			if ( exitCode == ProgramExitCode <TExitCode> . Success )
 			{
-				licenseFileContent . TrimStartPattern ( License ) ;
+				if ( AutoSaveSetting )
+				{
+					SaveSettingFile ( ) ;
+				}
+			}
 
-                if (!licenseFileContent.EndsWith("I accept this License."))
-                {
-                    Logger.LogInformation("License check error.");
+			ShowExit ( ) ;
 
-                    Console.WriteLine(@"You should read the License.txt and accept it before use this program.");
+			IsRunning = false ;
 
-                    return false;
-                }
+			OnExit ( exitCode ) ;
 
-                Logger.LogInformation("License check pass.");
-            }
+			if ( ! WaitForExit )
+			{
+				Environment . Exit ( exitCode . Code ) ;
+			}
+		}
 
-            return true;
-        }
+		public abstract void ShowLogo ( ) ;
 
-        public virtual void BeforePrepare() { }
+		public abstract void ShowCopyright ( ) ;
 
-        public virtual void AfterPrepare() { }
+		private void ShowExit ( )
+		{
+			Logger . LogInformation ( "Exiting" ) ;
+			Console . WriteLine ( ) ;
+			Console . WriteLine ( @"Exiting..." ) ;
+			Console . WriteLine ( ) ;
+		}
 
-        /// <summary>
-        ///     Call this after Create StaticLoggerFactory
-        /// </summary>
-        /// <param name="args"></param>
-        public virtual void RunMain(string[] args)
-        {
-            Current = (T)this;
+		public abstract void OnExit ( TExitCode code ) ;
 
-            CommandLineApplication commandLineApplication = new CommandLineApplication();
 
-            commandLineApplication.HelpOption("-?|-h|--help|-help");
+		/// <summary>
+		/// </summary>
+		public virtual void GenerateLicenseFile ( )
+		{
+			Logger . LogInformation ( "Generating License File." ) ;
+			FileStream licenseFile = File . Open (
+												FileNameConst . LicenseFileName ,
+												FileMode . Create ) ;
 
-            CommandOption noLogoOption =
-                commandLineApplication.Option(@"-noLogo|--noLogo", "Show no logo", CommandOptionType.NoValue);
+			using ( StreamWriter writer = new StreamWriter ( licenseFile ) )
+			{
+				writer . WriteLine ( License ) ;
+				writer . WriteLine ( ) ;
+				writer . WriteLine ( AcceptLicenseGuide ) ;
+			}
+		}
 
-            CommandOption acceptLicenseOption = commandLineApplication.Option(
-                                                                                @"-acceptLicense|--acceptLicense",
-                                                                                "Accept License",
-                                                                                CommandOptionType.NoValue);
+		public virtual bool CheckLicenseFile ( )
+		{
+			if ( ! File . Exists ( FileNameConst . LicenseFileName ) )
+			{
+				Logger . LogInformation ( "License file not found." ) ;
+				GenerateLicenseFile ( ) ;
 
-            CommandOption debugOption = commandLineApplication.Option(
-                                                                        @"-debug|--debug",
-                                                                        "Launch in Debug mode",
-                                                                        CommandOptionType.NoValue);
+				return false ;
+			}
 
-            CommandOption verboseOption = commandLineApplication.Option(
-                                                                            "-v|--verbose|-verbose",
-                                                                            "Verbose Log",
-                                                                            CommandOptionType.NoValue);
+			FileStream licenseFile = File . OpenRead ( FileNameConst . LicenseFileName ) ;
+			string     licenseFileContent ;
 
-            RegisterArgument(commandLineApplication);
+			using ( StreamReader reader = new StreamReader ( licenseFile ) )
+			{
+				Logger . LogInformation ( "License file found, reading it." ) ;
+				licenseFileContent = reader . ReadToEnd ( ) . TrimEnd ( ) ;
+			}
 
-            int Execution()
-            {
-                IsDebug = debugOption.HasValue() || Debugger.IsAttached;
+			if ( licenseFileContent . StartsWith ( License ) )
+			{
+				licenseFileContent = licenseFileContent . TrimStartPattern ( License ) ;
+
+				if ( ! licenseFileContent . EndsWith ( AcceptLicenseDeclare ) )
+				{
+					Logger . LogInformation ( "License check failed." ) ;
+
+					licenseFileContent =
+						licenseFileContent . TrimEndPattern ( AcceptLicenseGuide ) ;
+
+					if ( string . IsNullOrWhiteSpace ( licenseFileContent ) )
+					{
+						Console . WriteLine (
+											@"You should read the License.txt and accept it before use this program." ) ;
+						return false ;
+					}
+				}
+				else
+				{
+					licenseFileContent =
+						licenseFileContent . TrimEndPattern ( AcceptLicenseDeclare ) ;
+					licenseFileContent =
+						licenseFileContent . TrimEndPattern ( AcceptLicenseGuide ) ;
+
+					if ( string . IsNullOrWhiteSpace ( licenseFileContent ) )
+					{
+						Logger . LogInformation ( "License check pass." ) ;
+						return true ;
+					}
+				}
+			}
+
+			Console . WriteLine ( @"License File is now broken." ) ;
+
+			GenerateLicenseFile ( ) ;
+
+			return false ;
+		}
+
+		public virtual void BeforePrepare ( ) { }
+
+		public virtual void AfterPrepare ( ) { }
+
+		/// <summary>
+		///     Call this after Create StaticLoggerFactory
+		/// </summary>
+		/// <param name="args"></param>
+		public virtual void RunMain ( string [ ] args )
+		{
+			Current = ( T ) this ;
+
+			CommandLineApplication commandLineApplication = new CommandLineApplication ( ) ;
+
+			commandLineApplication . HelpOption ( "-?|-h|--help|-help" ) ;
+
+			CommandOption noLogoOption = commandLineApplication . Option (
+																		@"-noLogo|--noLogo" ,
+																		"Show no logo" ,
+																		CommandOptionType .
+																			NoValue ) ;
+
+			CommandOption acceptLicenseOption = commandLineApplication . Option (
+																				@"-acceptLicense|--acceptLicense" ,
+																				"Accept License" ,
+																				CommandOptionType .
+																					NoValue ) ;
+
+			CommandOption debugOption = commandLineApplication . Option (
+																		@"-debug|--debug" ,
+																		"Launch in Debug mode" ,
+																		CommandOptionType .
+																			NoValue ) ;
+
+			CommandOption verboseOption = commandLineApplication . Option (
+																			"-v|--verbose|-verbose" ,
+																			"Verbose Log" ,
+																			CommandOptionType .
+																				NoValue ) ;
+
+			RegisterArgument ( commandLineApplication ) ;
+
+			int Execution ( )
+			{
+				IsDebug = debugOption . HasValue ( ) || Debugger . IsAttached ;
 
 #if DEBUG
-                IsDebug = true;
+				IsDebug = true ;
 
 #endif
 
-                IsVerbose = verboseOption.HasValue();
+				IsVerbose = verboseOption . HasValue ( ) ;
 
-                #region Create Logger
+				#region Create Logger
 
-                lock (StaticServiceProvider.ServiceCollection)
-                {
-                    StaticServiceProvider.ServiceCollection.AddLogging(ConfigureLogger);
+				lock ( StaticServiceProvider . ServiceCollection )
+				{
+					StaticServiceProvider . ServiceCollection . AddLogging ( ConfigureLogger ) ;
 
-                    StaticServiceProvider.Update();
-                }
+					StaticServiceProvider . Update ( ) ;
+				}
 
-                Logger = StaticServiceProvider.Provider.GetService<ILoggerFactory>().CreateLogger<T>();
+				Logger = StaticServiceProvider . Provider . GetService <ILoggerFactory> ( ) .
+												CreateLogger <T> ( ) ;
 
-                Logger.LogDebug("Logger has been configured.");
+				Logger . LogDebug ( "Logger has been configured." ) ;
 
-                #endregion
+				#endregion
 
-                Logger.LogInformation("Start with argument: {0}", string.Join(" ", args));
+				Logger . LogInformation (
+										"Start with argument: {0}" ,
+										string . Join ( " " , args ) ) ;
 
-                #region Check Debug
+				#region Check Debug
 
-                if (IsDebug)
-                {
-                    Logger.LogWarning("This program is being debugging.");
-                }
+				if ( IsDebug )
+				{
+					Logger . LogWarning ( "This program is being debugging." ) ;
+				}
 
-                #endregion
+				#endregion
 
-                if (!noLogoOption.HasValue())
-                {
-                    ShowLogo();
-                    ShowCopyright();
-                }
+				if ( ! noLogoOption . HasValue ( ) )
+				{
+					ShowLogo ( ) ;
+					ShowCopyright ( ) ;
+				}
 
-                #region Check License
+				#region Check License
 
-                if (IsDebug)
-                {
-                    Logger.LogInformation(
-                                            "Debug version, skip license check and you are assumed to accept license.");
-                }
-                else
-                {
-                    if (!acceptLicenseOption.HasValue())
-                    {
-                        if (!CheckLicenseFile())
-                        {
-                            Logger.LogInformation("License check failed.");
-                            Logger.LogCritical(
-                                                $"You should READ and ACCEPT {FileNameConst.LicenseFileName} first.");
+				if ( CheckLicense )
+				{
+					if ( IsDebug )
+					{
+						Logger . LogInformation (
+												"Debug version, skip license check and you are assumed to accept license." ) ;
+					}
+					else
+					{
+						if ( ! acceptLicenseOption . HasValue ( ) )
+						{
+							if ( ! CheckLicenseFile ( ) )
+							{
+								Logger . LogInformation ( "License check failed." ) ;
+								Logger . LogCritical (
+													$"You should READ and ACCEPT {FileNameConst . LicenseFileName} first." ) ;
 
-                            Exit(ProgramExitCode<TExitCode>.LicenseNotAccepted);
-                            return ProgramExitCode<TExitCode>.LicenseNotAccepted;
-                        }
+								Exit ( ProgramExitCode <TExitCode> . LicenseNotAccepted ) ;
+								return ProgramExitCode <TExitCode> . LicenseNotAccepted ;
+							}
 
-                        Logger.LogInformation("License file check passed.");
-                    }
-                    else
-                    {
-                        Logger.LogInformation("License Accepted by command line argument.");
-                    }
-                }
+							Logger . LogInformation ( "License file check passed." ) ;
+						}
+						else
+						{
+							Logger . LogInformation (
+													"License Accepted by command line argument." ) ;
+						}
+					}
+				}
 
-                #endregion
+				#endregion
 
-                #region Load Setting
+				#region Load Setting
 
-                BeforeLoadSetting();
+				BeforeLoadSetting ( ) ;
 
-                if (LoadSetting)
-                {
-                    Logger.LogInformation("Loading setting file.");
+				if ( LoadSetting )
+				{
+					Logger . LogInformation ( "Loading setting file." ) ;
 
-                    if (File.Exists(FileNameConst.SettingFileName))
-                    {
-                        Logger.LogInformation("Setting file exists, Reading.");
+					if ( File . Exists (
+										SettingFilePathOverride
+										?? FileNameConst . SettingFileName ) )
+					{
+						Logger . LogInformation ( "Setting file exists, Reading." ) ;
 
-                        try
-                        {
-                            using (FileStream stream = File.OpenRead(FileNameConst.SettingFileName))
-                            {
-                                Setting = SettingBase<TSetting, TSettingCategory>.Load(stream);
-                            }
+						try
+						{
+							using ( FileStream stream =
+								File . OpenRead (
+												SettingFilePathOverride
+												?? FileNameConst . SettingFileName ) )
+							{
+								Setting =
+									SettingBase <TSetting , TSettingCategory> . Load ( stream ) ;
+							}
 
-                            Logger.LogInformation("Setting file loaded.");
-                        }
-                        catch (Exception)
-                        {
-                            Logger.LogInformation("Setting file error, will use default value.");
-                            Setting = SettingBase<TSetting, TSettingCategory>.GenerateNew();
-                        }
-                    }
-                    else
-                    {
-                        Logger.LogInformation("Setting file doesn't exists, generating new.");
-                        Setting = SettingBase<TSetting, TSettingCategory>.GenerateNew();
-                        SaveSettingFile();
-                    }
+							Logger . LogInformation ( "Setting file loaded." ) ;
+						}
+						catch ( Exception )
+						{
+							Logger . LogInformation (
+													"Setting file error, will use default value." ) ;
+							Setting = SettingBase <TSetting , TSettingCategory> . GenerateNew ( ) ;
+						}
+					}
+					else
+					{
+						Logger . LogInformation ( "Setting file doesn't exists, generating new." ) ;
+						Setting = SettingBase <TSetting , TSettingCategory> . GenerateNew ( ) ;
+						SaveSettingFile ( ) ;
+					}
 
-                    StaticServiceProvider.ServiceCollection.AddSingleton<ISettingProvider>(Setting);
-                }
+					StaticServiceProvider . ServiceCollection .
+											AddSingleton <ISettingProvider> ( Setting ) ;
+				}
 
 				AfterLoadSetting ( ) ;
 
-                #endregion
+				#endregion
 
-                #region StartUp
+				#region StartUp
 
-                BeforePrepare();
+				BeforePrepare ( ) ;
 
-                lock (StaticServiceProvider.ServiceCollection)
-                {
-                    AppDomainExtensions.PrepareCurrentDomain();
+				lock ( StaticServiceProvider . ServiceCollection )
+				{
+					AppDomainExtensions . PrepareCurrentDomain ( ) ;
 
-                    StaticServiceProvider.Update();
-                }
+					StaticServiceProvider . Update ( ) ;
+				}
 
-                AfterPrepare();
+				AfterPrepare ( ) ;
 
-                #endregion
+				#endregion
 
-                try
-                {
-                    Start(args);
-                }
-                catch (Exception e)
-                {
-					if (!OnUnhandledExceptions(e))
+				try
+				{
+					Start ( args ) ;
+				}
+				catch ( Exception e )
+				{
+					if ( ! OnUnhandledExceptions ( e ) )
 					{
-						Exit(ProgramExitCode<TExitCode>.ExceptionUnhandled);
-						return ProgramExitCode<TExitCode>.ExceptionUnhandled;
-                    }
-                }
+						Exit ( ProgramExitCode <TExitCode> . ExceptionUnhandled ) ;
+						return ProgramExitCode <TExitCode> . ExceptionUnhandled ;
+					}
+				}
 
-                return ProgramExitCode<TExitCode>.Success;
-            }
+				return ProgramExitCode <TExitCode> . Success ;
+			}
 
-            IsRunning = true;
+			IsRunning = true ;
 
-            commandLineApplication.OnExecute(Execution);
+			commandLineApplication . OnExecute ( Execution ) ;
 
-            try
-            {
-                commandLineApplication.Execute(args);
-            }
-            catch (Exception e)
-            {
-                if (!OnStartupExceptions(e))
-                {
-                    throw;
-                }
-            }
+			try
+			{
+				commandLineApplication . Execute ( args ) ;
+			}
+			catch ( Exception e )
+			{
+				if ( ! OnStartupExceptions ( e ) )
+				{
+					throw ;
+				}
+			}
 
-            if (!HandleInput)
-            {
-                while (IsRunning)
-                {
-                    if (Console.ReadLine()?.Trim().ToLower() == "exit" && CanExit)
-                    {
-                        Exit(ProgramExitCode<TExitCode>.Success);
-                    }
-                }
-            }
-        }
+			if ( ! HandleInput )
+			{
+				while ( IsRunning )
+				{
+					if ( Console . ReadLine ( ) ? . Trim ( ) . ToLower ( ) == "exit" && CanExit )
+					{
+						Exit ( ProgramExitCode <TExitCode> . Success ) ;
+					}
+				}
+			}
+		}
 
-        protected virtual void BeforeLoadSetting()
-        {
+		protected virtual void BeforeLoadSetting ( ) { }
 
-        }
+		protected virtual void AfterLoadSetting ( ) { }
 
-		protected virtual void AfterLoadSetting()
-        {
-
-        }
-
-    }
+	}
 
 }
