@@ -158,7 +158,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 			using ( StreamReader reader = new StreamReader ( licenseFile ) )
 			{
 				Logger . LogInformation ( "License file found, reading it." ) ;
-				licenseFileContent = reader . ReadToEnd ( ) . TrimEnd ( ) ;
+				licenseFileContent = reader . ReadToEnd ( ) . Trim ( ) ;
 			}
 
 			if ( licenseFileContent . StartsWith ( License ) )
@@ -183,6 +183,9 @@ namespace DreamRecorder . ToolBox . CommandLine
 				{
 					licenseFileContent =
 						licenseFileContent . TrimEndPattern ( AcceptLicenseDeclare ) ;
+
+					licenseFileContent = licenseFileContent . Trim ( ) ;
+
 					licenseFileContent =
 						licenseFileContent . TrimEndPattern ( AcceptLicenseGuide ) ;
 
