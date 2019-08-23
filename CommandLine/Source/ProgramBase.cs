@@ -65,7 +65,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 		public virtual bool CheckLicense => true ;
 
-		public virtual bool MainThreadWait { get ; set ; }
+		public virtual bool MainThreadWait { get ; }
 
 		/// <summary>
 		///     This override should create a foreground thread before return or program will exit directly

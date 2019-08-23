@@ -46,8 +46,6 @@ namespace Example
 			{
 				Console . WriteLine ( $"{pair . Key}	{pair . Value}" ) ;
 			}
-
-			
 		}
 
 		public override void Start ( string [ ] args )

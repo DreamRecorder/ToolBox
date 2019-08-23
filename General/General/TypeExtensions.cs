@@ -53,7 +53,7 @@ namespace DreamRecorder . ToolBox . General
 			}
 
 			Type currentType = type ;
-			int      count       = 0 ;
+			int  count       = 0 ;
 
 			while ( baseType . IsAssignableFrom ( currentType ) )
 			{
