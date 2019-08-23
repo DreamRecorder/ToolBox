@@ -24,7 +24,7 @@ namespace Example
 
 		public override bool CanExit => true ;
 
-		public override bool HandleInput => false ;
+		public override bool HandleInput => true ;
 
 		public override bool LoadSetting => true ;
 
@@ -47,10 +47,7 @@ namespace Example
 				Console . WriteLine ( $"{pair . Key}	{pair . Value}" ) ;
 			}
 
-			while ( IsRunning )
-			{
-				Thread . Sleep ( 100 ) ;
-			}
+			
 		}
 
 		public override void Start ( string [ ] args )

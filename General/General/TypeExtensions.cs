@@ -47,17 +47,17 @@ namespace DreamRecorder . ToolBox . General
 				throw new ArgumentNullException ( nameof ( baseType ) ) ;
 			}
 
-			if ( ! baseType . GetTypeInfo ( ) . IsAssignableFrom ( type . GetTypeInfo ( ) ) )
+			if ( ! baseType . IsAssignableFrom ( type ) )
 			{
 				throw new ArgumentException ( $"{nameof ( baseType )} is not assignable from {nameof ( type )}" ) ;
 			}
 
-			TypeInfo currentType = type . GetTypeInfo ( ) ;
+			Type currentType = type ;
 			int      count       = 0 ;
 
-			while ( baseType . GetTypeInfo ( ) . IsAssignableFrom ( currentType ) )
+			while ( baseType . IsAssignableFrom ( currentType ) )
 			{
-				TypeInfo currentBaseType = currentType . GetTypeInfo ( ) . BaseType ? . GetTypeInfo ( ) ;
+				Type currentBaseType = currentType . BaseType ;
 
 				if ( currentBaseType != null )
 				{
