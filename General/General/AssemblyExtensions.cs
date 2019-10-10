@@ -1,6 +1,7 @@
 ﻿using System ;
 using System . Collections ;
 using System . Collections . Generic ;
+using System . Diagnostics ;
 using System . IO ;
 using System . Linq ;
 using System . Reflection ;
@@ -53,7 +54,17 @@ namespace DreamRecorder . ToolBox . General
 					{
 						if ( method . GetCustomAttributes ( typeof ( PrepareAttribute ) ) . Any ( ) )
 						{
-							tasks . Add ( Task . Run ( ( ) => method . Invoke ( null , new object [ ] { } ) ) ) ;
+							tasks . Add ( Task . Run ( ( ) =>
+														{
+															try
+															{
+																method . Invoke ( null , new object [ ] { } ) ;
+															}
+															catch ( Exception e )
+															{
+																Debug. WriteLine ( e ) ;
+															}
+														} ) ) ;
 						}
 					}
 				}
