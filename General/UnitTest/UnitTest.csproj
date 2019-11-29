@@ -8,10 +8,10 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <IsPackable>false</IsPackable>
-    <AssemblyName>DreamRecorder.ToolBox.General.UnitTest</AssemblyName>
-    <RootNamespace>DreamRecorder.ToolBox.General.UnitTest</RootNamespace>
+    <AssemblyName>DreamRecorder.ToolBox.UnitTest</AssemblyName>
+    <RootNamespace>DreamRecorder.ToolBox.UnitTest</RootNamespace>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
@@ -22,6 +22,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\AspNet\AlertHelper\AlertHelper.csproj" />
+    <ProjectReference Include="..\..\AspNet\General\General.csproj" />
+    <ProjectReference Include="..\..\AspNet\RequestHelper\RequestHelper.csproj" />
+    <ProjectReference Include="..\..\CommandLine\Example\Example.csproj" />
+    <ProjectReference Include="..\..\CommandLine\Source\CommandLine.csproj" />
+    <ProjectReference Include="..\..\CommandLine\TelegramBot\TelegramBot.csproj" />
+    <ProjectReference Include="..\..\Renderer\Renderer\Renderer.csproj" />
+    <ProjectReference Include="..\..\Uwp\General\General.csproj" />
     <ProjectReference Include="..\Colors\Colors.csproj" />
     <ProjectReference Include="..\General\General.csproj" />
     <ProjectReference Include="..\Network\Network.csproj" />

@@ -1,11 +1,13 @@
 using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
+using System.Collections ;
+using System.Collections.Generic ;
+using System.Linq ;
 
-using Microsoft . VisualStudio . TestTools . UnitTesting ;
+using DreamRecorder . ToolBox . General ;
 
-namespace DreamRecorder . ToolBox . General . UnitTest
+using Microsoft.VisualStudio.TestTools.UnitTesting ;
+
+namespace DreamRecorder . ToolBox . UnitTest
 {
 
 	[TestClass]
@@ -25,5 +27,6 @@ namespace DreamRecorder . ToolBox . General . UnitTest
 		public void NullListRandomItemTest ( ) { ListItemRandomExtensions . RandomItem <object> ( null ) ; }
 
 	}
+
 
 }

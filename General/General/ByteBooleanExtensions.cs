@@ -69,7 +69,7 @@ namespace DreamRecorder . ToolBox . General
 		//	return result ;
 		//}
 
-		public static byte ToByte ( [NotNull] bool [ ] source )
+		public static byte ToByte ([NotNull]this bool [ ] source )
 		{
 			if ( source == null )
 			{
@@ -93,7 +93,7 @@ namespace DreamRecorder . ToolBox . General
 			return result ;
 		}
 
-		private static byte [ ] ToByteArray ( bool [ ] source )
+		public static byte [ ] ToByteArray (this bool [ ] source )
 		{
 			if ( source == null )
 			{
