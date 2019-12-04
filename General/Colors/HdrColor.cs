@@ -274,15 +274,11 @@ namespace DreamRecorder . ToolBox . Colors
 			return ( different * ( saturation / Saturation ) ) + Brightness ;
 		}
 
-		public Color ToDrawingColor ( ToneMappingAlgorithm mappingAlgorithm = null )
+		public (byte R,byte G,byte B) ToDrawingColor ( ToneMappingAlgorithm mappingAlgorithm = null )
 		{
-			mappingAlgorithm = mappingAlgorithm ?? KnowToneMapping . Drop ;
+			mappingAlgorithm??=KnowToneMapping . AcesMapping ;
 
-			return Color . FromArgb (
-									byte . MaxValue ,
-									mappingAlgorithm ( R ) ,
-									mappingAlgorithm ( G ) ,
-									mappingAlgorithm ( B ) ) ;
+			return  (mappingAlgorithm ( R ) ,mappingAlgorithm ( G ) ,mappingAlgorithm ( B ) ) ;
 		}
 
 		public static implicit operator HdrColor ( Color color )

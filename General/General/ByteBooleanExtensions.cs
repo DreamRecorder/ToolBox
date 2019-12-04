@@ -8,11 +8,17 @@ using JetBrains . Annotations ;
 
 namespace DreamRecorder . ToolBox . General
 {
-
+	/// <summary>
+	/// Provide method to convert between Byte and Boolean Array
+	/// </summary>
 	[PublicAPI]
 	public static class ByteBooleanExtensions
 	{
-
+		/// <summary>
+		/// Convert a byte as boolean array
+		/// </summary>
+		/// <param name="b">the byte</param>
+		/// <returns></returns>
 		public static bool [ ] ToBooleanArray ( this byte b )
 		{
 			bool [ ] result = new bool[ 8 ] ;
@@ -25,6 +31,11 @@ namespace DreamRecorder . ToolBox . General
 			return result ;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="bytes"></param>
+		/// <returns></returns>
 		public static bool [ ] ToBooleanArray ( [NotNull] this byte [ ] bytes )
 		{
 			if ( bytes == null )
@@ -69,6 +80,11 @@ namespace DreamRecorder . ToolBox . General
 		//	return result ;
 		//}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="source"></param>
+		/// <returns></returns>
 		public static byte ToByte ([NotNull]this bool [ ] source )
 		{
 			if ( source == null )
@@ -93,6 +109,11 @@ namespace DreamRecorder . ToolBox . General
 			return result ;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="source"></param>
+		/// <returns></returns>
 		public static byte [ ] ToByteArray (this bool [ ] source )
 		{
 			if ( source == null )
@@ -122,6 +143,12 @@ namespace DreamRecorder . ToolBox . General
 			return result ;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="bytes"></param>
+		/// <returns></returns>
 		public static T BytesToStruct <T> ( this byte [ ] bytes )
 		{
 			int    size   = Marshal . SizeOf ( typeof ( T ) ) ;
@@ -139,6 +166,12 @@ namespace DreamRecorder . ToolBox . General
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="value"></param>
+		/// <returns></returns>
 		public static byte [ ] StructToBytes <T> ( this T value ) where T : struct
 		{
 			int size = Marshal . SizeOf ( typeof ( T ) ) ;
