@@ -47,7 +47,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 			if ( RestartRequired )
 			{
-				builder . AppendLine ( "#	This setting will be applied after restart." ) ;
+				builder . AppendLine ( "#	This setting will be applied at next time this program is started." ) ;
 			}
 
 			builder . AppendLine ( $"#	Default Value: {DefaultValue}" ) ;

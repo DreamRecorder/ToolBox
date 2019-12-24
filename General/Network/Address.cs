@@ -14,11 +14,11 @@ namespace DreamRecorder . ToolBox . Network
 	{
 
 		[Key]
-		public byte [ ] AddressBytes { get ; set ; }
+		public Memory<byte> AddressBytes { get ; set ; }
 
 		public abstract AddressType Type { get ; }
 
-		public abstract object Clone ( ) ;
+		public abstract object Clone () ;
 
 		public virtual bool Equals ( Address other )
 		{
@@ -35,7 +35,7 @@ namespace DreamRecorder . ToolBox . Network
 			return Equals ( AddressBytes , other . AddressBytes ) && ( Type == other . Type ) ;
 		}
 
-		public static implicit operator byte [ ] ( Address address ) => address . AddressBytes ;
+		public static implicit operator byte [ ] ( Address address ) => address . AddressBytes.ToArray() ;
 
 		public static explicit operator string ( Address address ) => address . ToString ( ) ;
 
@@ -59,7 +59,7 @@ namespace DreamRecorder . ToolBox . Network
 			return Equals ( ( Address ) obj ) ;
 		}
 
-		public override int GetHashCode ( ) => AddressBytes != null ? AddressBytes . GetHashCode ( ) : 0 ;
+		public override int GetHashCode ( ) => AddressBytes . GetHashCode ( ) ;
 
 		public static bool operator == ( Address left , Address right ) => Equals ( left , right ) ;
 

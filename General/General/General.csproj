@@ -24,23 +24,15 @@
     <Version>1.1.4.70</Version>
     <LangVersion>latest</LangVersion>    
     <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
-    <PackageIconUrl>https://webresources.dreamry.org/DreamryLogo.svg</PackageIconUrl>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>DreamRecorder.ToolBox.General.xml</DocumentationFile>
+    <PackageIcon>DreamryLogo.svg</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2019.1.3" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Properties\" />
   </ItemGroup>
 
 </Project>

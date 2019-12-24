@@ -17,11 +17,12 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 		public Ipv4Address ( long address ) : this ( )
 		{
-			AddressBytes       = new byte[ 4 ] ;
-			AddressBytes [ 0 ] = ( byte ) address ;
-			AddressBytes [ 1 ] = ( byte ) ( address >> 8 ) ;
-			AddressBytes [ 2 ] = ( byte ) ( address >> 16 ) ;
-			AddressBytes [ 3 ] = ( byte ) ( address >> 24 ) ;
+			byte[] addressBytes = new byte[ 4 ] ;
+			addressBytes [ 0 ] = ( byte ) address ;
+			addressBytes [ 1 ] = ( byte ) ( address >> 8 ) ;
+			addressBytes [ 2 ] = ( byte ) ( address >> 16 ) ;
+			addressBytes [ 3 ] = ( byte ) ( address >> 24 ) ;
+			AddressBytes = addressBytes;
 		}
 
 		public Ipv4Address ( string address ) : this ( )
@@ -56,10 +57,15 @@ namespace DreamRecorder . ToolBox . Network . Ip
 						| ( ( result & 0x00FF0000 ) >> 8 )
 						| ( ( result & 0xFF000000 ) >> 24 ) ;
 
-				AddressBytes [ 0 ] = ( byte ) result ;
-				AddressBytes [ 1 ] = ( byte ) ( result >> 8 ) ;
-				AddressBytes [ 2 ] = ( byte ) ( result >> 16 ) ;
-				AddressBytes [ 3 ] = ( byte ) ( result >> 24 ) ;
+				byte[] addressBytes = new byte[4];
+
+				addressBytes[ 0 ] = ( byte ) result ;
+				addressBytes [ 1 ] = ( byte ) ( result >> 8 ) ;
+				addressBytes [ 2 ] = ( byte ) ( result >> 16 ) ;
+				addressBytes [ 3 ] = ( byte ) ( result >> 24 ) ;
+
+				AddressBytes = addressBytes;
+
 			}
 			else
 			{
@@ -80,7 +86,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 		public override object Clone ( ) => throw new NotImplementedException ( ) ;
 
 		public override string ToString ( )
-			=> $"{AddressBytes [ 0 ]}.{AddressBytes [ 1 ]}.{AddressBytes [ 2 ]}.{AddressBytes [ 3 ]}" ;
+			=> $"{AddressBytes.Span [ 0 ]}.{AddressBytes.Span[ 1 ]}.{AddressBytes.Span[ 2 ]}.{AddressBytes.Span[ 3 ]}" ;
 
 	}
 

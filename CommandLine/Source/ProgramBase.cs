@@ -27,7 +27,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 		protected ILogger Logger { get ; private set ; }
 
-		public static T Current { get ; set ; }
+		public static T Current { get ;private set ; }
 
 		public virtual bool IsRunning { get ; set ; }
 
@@ -299,7 +299,9 @@ namespace DreamRecorder . ToolBox . CommandLine
 							{
 								Logger . LogInformation ( "License check failed." ) ;
 								Logger . LogCritical (
-													$"You should READ and ACCEPT {FileNameConst . LicenseFileName} first." ) ;
+													string . Format (
+																	"You should READ and ACCEPT {0} first." ,
+																	FileNameConst . LicenseFileName ) ) ;
 
 								Exit ( ProgramExitCode <TExitCode> . LicenseNotAccepted ) ;
 								return ProgramExitCode <TExitCode> . LicenseNotAccepted ;

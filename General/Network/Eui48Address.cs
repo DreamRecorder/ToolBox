@@ -16,13 +16,9 @@ namespace DreamRecorder . ToolBox . Network
 
 		public Eui48Address ( ) => AddressBytes = new byte[ 6 ] ;
 
-		public Eui48Address ( byte [ ] address )
+		public Eui48Address ( Memory<byte> address )
 		{
-			if ( address == null )
-			{
-				throw new ArgumentNullException ( nameof ( address ) ) ;
-			}
-
+		
 			if ( address . Length != 6 )
 			{
 				throw new ArgumentException ( ) ;
@@ -123,7 +119,7 @@ namespace DreamRecorder . ToolBox . Network
 		{
 			StringBuilder addressString = new StringBuilder ( ) ;
 
-			foreach ( byte value in AddressBytes )
+			foreach ( byte value in AddressBytes.Span )
 			{
 				int tmp = ( value >> 4 ) & 0x0F ;
 

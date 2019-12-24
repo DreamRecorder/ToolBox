@@ -24,6 +24,8 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 		public static implicit operator ProgramExitCode <T> ( int item ) => new ProgramExitCode <T> { Code = item } ;
 
+
+
 		public static implicit operator T ( ProgramExitCode <T> item )
 		{
 			T result = new T { Code = item } ;

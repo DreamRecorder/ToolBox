@@ -19,19 +19,14 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			Length       = 0 ;
 		}
 
-		private Ipv6Prefix ( [NotNull] byte [ ] address , byte length )
+		private Ipv6Prefix ( Memory<byte> address , byte length )
 		{
-			if ( address == null )
-			{
-				throw new ArgumentNullException ( nameof ( address ) ) ;
-			}
-
 			if ( address . Length != 6 )
 			{
 				throw new ArgumentException ( ) ; //todo
 			}
 
-			AddressBytes = ( byte [ ] ) address . Clone ( ) ;
+			AddressBytes =address ;
 			Length       = length ;
 		}
 

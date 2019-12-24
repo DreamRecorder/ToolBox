@@ -497,7 +497,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			bool numberIsValid   = true ;
 
 			//This used to be a class instance member but have not been used so far
-			int PrefixLength = 0 ;
+			int prefixLength = 0 ;
 
 			if ( address [ start ] == '[' )
 			{
@@ -624,7 +624,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 						for ( ++i ; address [ i ] != ']' ; ++i )
 						{
-							PrefixLength = ( PrefixLength * 10 ) + ( address [ i ] - '0' ) ;
+							prefixLength = ( prefixLength * 10 ) + ( address [ i ] - '0' ) ;
 						}
 
 						break ;

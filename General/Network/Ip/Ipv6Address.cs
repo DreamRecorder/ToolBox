@@ -18,13 +18,8 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 		public Ipv6Address ( ) => AddressBytes = new byte[ 16 ] ;
 
-		public Ipv6Address ( byte [ ] address )
+		public Ipv6Address ( Memory<byte> address )
 		{
-			if ( address == null )
-			{
-				throw new ArgumentNullException ( nameof ( address ) ) ;
-			}
-
 			if ( address . Length != 16 )
 			{
 				throw new ArgumentException ( ) ;
@@ -48,7 +43,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 					if ( address [ 0 ] != '[' )
 					{
-						address = address + ']' ; //for Uri parser to find the terminator.
+						address += ']' ; //for Uri parser to find the terminator.
 					}
 					else
 					{
@@ -84,11 +79,15 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 							int j = 0 ;
 
+							byte[] addressBytes = new byte[16];
+
 							for ( int i = 0 ; i < NumberOfLabels ; i++ )
 							{
-								AddressBytes [ j++ ] = ( byte ) ( ( address [ i ] >> 8 ) & 0xFF ) ;
-								AddressBytes [ j++ ] = ( byte ) ( address [ i ]          & 0xFF ) ;
+								addressBytes [ j++ ] = ( byte ) ( ( address [ i ] >> 8 ) & 0xFF ) ;
+								addressBytes [ j++ ] = ( byte ) ( address [ i ]          & 0xFF ) ;
 							}
+
+							AddressBytes = addressBytes;
 
 							ScopeId = scopeId ;
 						}
@@ -121,7 +120,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 			for ( int i = 0 ; i < AddressBytes . Length ; i += 2 )
 			{
-				int segment = ( ushort ) ( AddressBytes [ i ] << 8 ) | AddressBytes [ i + 1 ] ;
+				int segment = ( ushort ) ( AddressBytes.Span [ i ] << 8 ) | AddressBytes.Span[ i + 1 ] ;
 				str . AppendFormat ( "{0:X}" , segment ) ;
 
 				if ( ( i + 2 ) != AddressBytes . Length )
