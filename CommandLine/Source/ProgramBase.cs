@@ -31,8 +31,6 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 		public virtual bool IsRunning { get ; set ; }
 
-		public virtual bool IsInteractive { get ; set ; }
-
 		public bool IsVerbose { get ; set ; }
 
 		public virtual bool WaitForExit { get ; }
