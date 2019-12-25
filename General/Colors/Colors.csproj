@@ -27,6 +27,7 @@
     <PackageIconUrl>https://webresources.dreamry.org/DreamryLogo.svg</PackageIconUrl>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageIcon>DreamryLogo.svg</PackageIcon>
  </PropertyGroup>
 
   <ItemGroup>
@@ -35,6 +36,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\General\General.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\DreamryLogo.svg">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
