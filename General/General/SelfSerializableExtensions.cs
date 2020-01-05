@@ -1,8 +1,11 @@
 ﻿using System ;
 using System . Collections ;
 using System . Collections . Generic ;
+using System . IO ;
 using System . Linq ;
+using System . Text ;
 using System . Xml . Linq ;
+using System . Xml . Serialization ;
 
 using JetBrains . Annotations ;
 
@@ -65,6 +68,23 @@ namespace DreamRecorder . ToolBox . General
 			}
 
 			return value . ParseTo <T> ( ) ;
+		}
+
+		public static XElement ToXElement<T>(this T obj)
+		{
+			using MemoryStream memoryStream = new MemoryStream() ;
+			using StreamWriter streamWriter = new StreamWriter(memoryStream) ;
+
+			XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
+			xmlSerializer.Serialize(streamWriter, obj);
+
+			return XElement.Parse(Encoding.UTF8.GetString(memoryStream.ToArray()));
+		}
+
+		public static T FromXElement<T>(this XElement xElement)
+		{
+			XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
+			return (T)xmlSerializer.Deserialize(xElement.CreateReader());
 		}
 
 	}
