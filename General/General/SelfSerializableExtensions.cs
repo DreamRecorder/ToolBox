@@ -16,7 +16,7 @@ namespace DreamRecorder . ToolBox . General
 	public static class SelfSerializableExtensions
 	{
 
-		public static string ToXmlString ( [NotNull] this ISelfSerializable item )
+		public static string ToXmlString<T> ( [NotNull] this T item )
 		{
 			if ( item == null )
 			{
