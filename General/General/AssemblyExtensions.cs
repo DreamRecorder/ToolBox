@@ -72,7 +72,7 @@ namespace DreamRecorder . ToolBox . General
 				return Task . WhenAll ( tasks ) ;
 			}
 
-			return TaskExtensions . CompletedTask ;
+			return Task. CompletedTask ;
 		}
 
 		public static string GetDisplayName ( [NotNull] this Assembly assembly )

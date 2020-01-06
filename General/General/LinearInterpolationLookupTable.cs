@@ -12,7 +12,7 @@ namespace DreamRecorder . ToolBox . General
 {
 
 	[PublicAPI]
-	public class LinearInterpolationLookupTable
+	public class LinearInterpolationLookupTable : ISelfSerializable
 	{
 
 		public ReadOnlyCollection <PointF> Points { get ; }

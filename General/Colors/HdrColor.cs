@@ -15,7 +15,7 @@ namespace DreamRecorder . ToolBox . Colors
 
 	[PublicAPI]
 	[DataContract]
-	public struct HdrColor : IEquatable <HdrColor>
+	public struct HdrColor : IEquatable <HdrColor> , ISelfSerializable
 	{
 
 		public static explicit operator byte [ ] ( HdrColor color )
