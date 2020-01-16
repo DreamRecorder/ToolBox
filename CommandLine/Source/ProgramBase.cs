@@ -108,6 +108,10 @@ namespace DreamRecorder . ToolBox . CommandLine
 			{
 				Environment . Exit ( exitCode . Code ) ;
 			}
+			else
+			{
+				Environment.ExitCode = exitCode.Code;
+			}
 		}
 
 		public abstract void ShowLogo ( ) ;
