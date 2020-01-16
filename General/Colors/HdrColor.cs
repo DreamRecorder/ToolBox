@@ -41,11 +41,11 @@ namespace DreamRecorder . ToolBox . Colors
 				throw new ArgumentException ( ) ;
 			}
 
-			double R = BitConverter . ToDouble ( color , sizeof ( double ) * 0 ) ;
-			double G = BitConverter . ToDouble ( color , sizeof ( double ) * 1 ) ;
-			double B = BitConverter . ToDouble ( color , sizeof ( double ) * 2 ) ;
+			double r = BitConverter . ToDouble ( color , sizeof ( double ) * 0 ) ;
+			double g = BitConverter . ToDouble ( color , sizeof ( double ) * 1 ) ;
+			double b = BitConverter . ToDouble ( color , sizeof ( double ) * 2 ) ;
 
-			return new HdrColor ( R , G , B ) ;
+			return new HdrColor ( r , g , b ) ;
 		}
 
 		[DataMember]

@@ -273,7 +273,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 				if ( IsDebug )
 				{
-					Logger . LogWarning ( "This program is being debugging." ) ;
+					Logger . LogWarning ( "This program is considered as being debugging." ) ;
 				}
 
 				#endregion
@@ -301,9 +301,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 							{
 								Logger . LogInformation ( "License check failed." ) ;
 								Logger . LogCritical (
-													string . Format (
-																	"You should READ and ACCEPT {0} first." ,
-																	FileNameConst . LicenseFileName ) ) ;
+													$"You should READ and ACCEPT {FileNameConst . LicenseFileName} first." ) ;
 
 								Exit ( ProgramExitCode <TExitCode> . LicenseNotAccepted ) ;
 								return ProgramExitCode <TExitCode> . LicenseNotAccepted ;
@@ -315,6 +313,14 @@ namespace DreamRecorder . ToolBox . CommandLine
 						{
 							Logger . LogInformation ( "License Accepted by command line argument." ) ;
 						}
+					}
+				}
+				else
+				{
+					if (!File.Exists(FileNameConst.LicenseFileName))
+					{
+						Logger.LogInformation($"You can found license of this program at \"{FileNameConst.LicenseFileName}\".");
+						GenerateLicenseFile();
 					}
 				}
 
