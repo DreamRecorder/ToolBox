@@ -1,108 +1,172 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Diagnostics ;
-using System . IO ;
-using System . Linq ;
-using System . Reflection ;
-using System . Runtime . InteropServices ;
-using System . Threading . Tasks ;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
-using JetBrains . Annotations ;
+using JetBrains.Annotations;
 
-namespace DreamRecorder . ToolBox . General
+namespace DreamRecorder.ToolBox.General
 {
 
 	[PublicAPI]
 	public static class AssemblyExtensions
 	{
 
-		public static readonly string CommaWithNewline = $",{Environment . NewLine}" ;
+		public static readonly string CommaWithNewline = $",{Environment.NewLine}";
 
-		public static string GetAssemblyFullName ( this Type type )
-			=> type . GetTypeInfo ( ) . Assembly . GetName ( ) . FullName . Replace ( ", " , CommaWithNewline ) ;
+		public static string GetAssemblyFullName(this Type type)
+			=> type.GetTypeInfo().Assembly.GetName().FullName.Replace(", ", CommaWithNewline);
 
-		public static string GetResourceFile <T> ( this Assembly assembly , string fileName )
+		public static string GetResourceFile<T>(this Assembly assembly, string fileName)
 		{
-			Stream stream = assembly . GetManifestResourceStream ( typeof ( T ) , fileName ) ;
-			if ( stream != null )
+			Stream stream = assembly.GetManifestResourceStream(typeof(T), fileName);
+			if (stream != null)
 			{
-				string license ;
+				string license;
 
-				using ( StreamReader reader = new StreamReader ( stream ) )
+				using (StreamReader reader = new StreamReader(stream))
 				{
-					license = reader . ReadToEnd ( ) ;
+					license = reader.ReadToEnd();
 				}
 
-				return license ;
+				return license;
 			}
 
-			return null ;
+			return null;
 		}
 
-		public static Task Prepare ( this Assembly assembly )
+		public static Task Prepare(this Assembly assembly)
 		{
-			PrepareAttribute attribute = assembly . GetCustomAttribute <PrepareAttribute> ( ) ;
+			PrepareAttribute attribute = assembly.GetCustomAttribute<PrepareAttribute>();
 
-			if ( attribute != null )
+			if (attribute != null)
 			{
-				List <Task> tasks = new List <Task> ( ) ;
+				List<Task> tasks = new List<Task>();
 
-				foreach ( TypeInfo type in assembly . DefinedTypes )
+				foreach (TypeInfo type in assembly.DefinedTypes)
 				{
-					foreach ( MethodInfo method in type . DeclaredMethods )
+					foreach (MethodInfo method in type.DeclaredMethods)
 					{
-						if ( method . GetCustomAttributes ( typeof ( PrepareAttribute ) ) . Any ( ) )
+						if (method.GetCustomAttributes(typeof(PrepareAttribute)).Any())
 						{
-							tasks . Add ( Task . Run ( ( ) =>
-														{
-															try
-															{
-																method . Invoke ( null , new object [ ] { } ) ;
-															}
-															catch ( Exception e )
-															{
-																Debug. WriteLine ( e ) ;
-															}
-														} ) ) ;
+							tasks.Add(Task.Run(() =>
+												{
+													try
+													{
+														method.Invoke(null, new object[] { });
+													}
+													catch (Exception e)
+													{
+														Debug.WriteLine(e);
+													}
+												}));
 						}
 					}
 				}
 
-				return Task . WhenAll ( tasks ) ;
+				return Task.WhenAll(tasks);
 			}
 
-			return Task. CompletedTask ;
+			return Task.CompletedTask;
 		}
 
-		public static string GetDisplayName ( [NotNull] this Assembly assembly )
+		public static string GetDisplayName([NotNull] this Assembly assembly)
 		{
-			if ( assembly == null )
+			if (assembly == null)
 			{
-				throw new ArgumentNullException ( nameof ( assembly ) ) ;
+				throw new ArgumentNullException(nameof(assembly));
 			}
 
-			AssemblyDisplayNameAttribute attribute = assembly . GetCustomAttribute <AssemblyDisplayNameAttribute> ( ) ;
+			AssemblyDisplayNameAttribute attribute = assembly.GetCustomAttribute<AssemblyDisplayNameAttribute>();
 
-			return attribute ? . Name ?? assembly . GetName ( ) . Name ;
+			return attribute?.Name ?? assembly.GetName().Name;
 		}
 
-		public static Guid ? GetGuid ( [NotNull] this Assembly assembly )
+		public static Guid? GetGuid([NotNull] this Assembly assembly)
 		{
-			if ( assembly == null )
+			if (assembly == null)
 			{
-				throw new ArgumentNullException ( nameof ( assembly ) ) ;
+				throw new ArgumentNullException(nameof(assembly));
 			}
 
-			GuidAttribute attribute = assembly . GetCustomAttributes <GuidAttribute> ( ) . FirstOrDefault ( ) ;
-			string        guid      = attribute ? . Value ;
+			GuidAttribute attribute = assembly.GetCustomAttributes<GuidAttribute>().FirstOrDefault();
+			string guid = attribute?.Value;
 
-			if ( guid is null )
+			if (guid is null)
 			{
-				return null ;
+				return null;
 			}
 
-			return Guid . Parse ( guid ) ;
+			return Guid.Parse(guid);
+		}
+
+		public static Regex InformationalVersionRegex = new Regex("Code version \"([^\"]+)\" build by \"([^\"]+)\" at \"([^\"]+)\"", RegexOptions.Compiled);
+
+		public static (string SourceCodeVersion , string Builder , DateTimeOffset ? BuildTime)?
+			GetInformationalVersion ( [NotNull] this Assembly assembly )
+		{
+			if (assembly == null)
+			{
+				throw new ArgumentNullException(nameof(assembly));
+			}
+
+			AssemblyInformationalVersionAttribute attribute =
+				assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+			string value = attribute?.InformationalVersion;
+
+			if (value != null)
+			{
+				Match match = InformationalVersionRegex.Match(value);
+
+				if (match.Success)
+				{
+					return (match.Captures[0].Value, match.Captures[1].Value, new DateTimeOffset(
+																								DateTime.Parse(match.Captures[2].Value),
+																								TimeSpan.Zero));
+				}
+
+			}
+
+			return default;
+		}
+
+		public static string GetSourceCodeVersion([NotNull] this Assembly assembly)
+		{
+			if (assembly == null)
+			{
+				throw new ArgumentNullException(nameof(assembly));
+			}
+
+			return assembly.GetInformationalVersion()?.SourceCodeVersion;
+
+		}
+
+		public static string GetBuilder([NotNull] this Assembly assembly)
+		{
+			if (assembly == null)
+			{
+				throw new ArgumentNullException(nameof(assembly));
+			}
+
+			return assembly.GetInformationalVersion()?.Builder;
+
+		}
+
+		public static DateTimeOffset? GetBuildTime([NotNull] this Assembly assembly)
+		{
+			if (assembly == null)
+			{
+				throw new ArgumentNullException(nameof(assembly));
+			}
+
+			return assembly.GetInformationalVersion()?.BuildTime;
+
 		}
 
 	}
