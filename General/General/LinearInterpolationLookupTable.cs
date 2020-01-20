@@ -51,15 +51,22 @@ namespace DreamRecorder . ToolBox . General
 				throw new ArgumentException (
 											ExceptionMessages . XmlNameMismatch (
 																				nameof ( element ) ,
-																				typeof ( LinearInterpolationLookupTable
+																				typeof (
+																					LinearInterpolationLookupTable
 																				) ) ) ;
 			}
 
 			foreach ( XElement pointData in element . Elements ( ) )
 			{
 				PointF point = new PointF (
-											pointData . ReadNecessaryValue <float> ( nameof ( point . X ) ) ,
-											pointData . ReadNecessaryValue <float> ( nameof ( point . Y ) ) ) ;
+											pointData . ReadNecessaryValue <float> (
+																					nameof (
+																						point . X
+																					) ) ,
+											pointData . ReadNecessaryValue <float> (
+																					nameof (
+																						point . Y
+																					) ) ) ;
 
 				PointsList . Add ( point ) ;
 			}
@@ -122,20 +129,20 @@ namespace DreamRecorder . ToolBox . General
 			}
 
 			int    count = xValues . Length ;
-			double ssX   = sumOfXSq - ( ( sumOfX * sumOfX ) / count ) ;
-			double ssY   = sumOfYSq - ( ( sumOfY * sumOfY ) / count ) ;
+			double ssX   = sumOfXSq - sumOfX * sumOfX / count ;
+			double ssY   = sumOfYSq - sumOfY * sumOfY / count ;
 
-			double rNumerator = ( count * sumCodeviates ) - ( sumOfX * sumOfY ) ;
-			double rDenom =
-				( count * sumOfXSq - ( sumOfX * sumOfX ) ) * ( count * sumOfYSq - ( sumOfY * sumOfY ) ) ;
-			double sCo = sumCodeviates - ( ( sumOfX * sumOfY ) / count ) ;
+			double rNumerator = count * sumCodeviates - sumOfX * sumOfY ;
+			double rDenom = ( count * sumOfXSq - sumOfX * sumOfX )
+						* ( count   * sumOfYSq - sumOfY * sumOfY ) ;
+			double sCo = sumCodeviates - sumOfX * sumOfY / count ;
 
 			double meanX = sumOfX     / count ;
 			double meanY = sumOfY     / count ;
 			double dblR  = rNumerator / Math . Sqrt ( rDenom ) ;
 
 			rSquared   = dblR * dblR ;
-			yIntercept = meanY - ( ( sCo / ssX ) * meanX ) ;
+			yIntercept = meanY - sCo / ssX * meanX ;
 			slope      = sCo / ssX ;
 		}
 
@@ -145,18 +152,22 @@ namespace DreamRecorder . ToolBox . General
 			Sort ( ) ;
 		}
 
-		public void Sort ( ) { PointsList . Sort ( ( left , right ) => left . X . CompareTo ( right . X ) ) ; }
+		public void Sort ( )
+		{
+			PointsList . Sort ( ( left , right ) => left . X . CompareTo ( right . X ) ) ;
+		}
 
 		public double Find ( double x )
 		{
-			for ( int i = 0 ; i < ( Points . Count - 1 ) ; i++ )
+			for ( int i = 0 ; i < Points . Count - 1 ; i++ )
 			{
-				if ( ( Points [ i ] . X <= x )
-					&& ( x              < Points [ i + 1 ] . X ) )
+				if ( Points [ i ] . X <= x
+				&& x                  < Points [ i + 1 ] . X )
 				{
-					return ( ( ( Points [ i + 1 ] . Y - Points [ i ] . Y ) * ( x - Points [ i ] . X ) )
-							/ ( Points [ i + 1 ] . X - Points [ i ] . X ) )
-							+ Points [ i ] . Y ;
+					return ( Points [ i + 1 ] . Y - Points [ i ] . Y )
+						* ( x                     - Points [ i ] . X )
+						/ ( Points [ i + 1 ] . X - Points [ i ] . X )
+						+ Points [ i ] . Y ;
 				}
 			}
 

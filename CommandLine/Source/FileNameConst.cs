@@ -15,9 +15,11 @@ namespace DreamRecorder . ToolBox . CommandLine
 	public static class FileNameConst
 	{
 
-		public static string LicenseFileName => AppDomain . CurrentDomain . BaseDirectory + LicenseFile ;
+		public static string LicenseFileName
+			=> AppDomain . CurrentDomain . BaseDirectory + LicenseFile ;
 
-		public static string SettingFileName => AppDomain . CurrentDomain . BaseDirectory + SettingFile ;
+		public static string SettingFileName
+			=> AppDomain . CurrentDomain . BaseDirectory + SettingFile ;
 
 		public const string LicenseFile = "License.txt" ;
 

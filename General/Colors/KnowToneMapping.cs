@@ -27,8 +27,10 @@ namespace DreamRecorder . ToolBox . Colors
 			const float d = 0.59f ;
 			const float e = 0.14f ;
 
-			return ( byte ) ( ( ( value * ( ( a * value ) + b ) ) / ( ( value * ( ( c * value ) + d ) ) + e ) )
-							* 255 ) ;
+			return ( byte ) ( value
+						* ( a * value + b )
+						/ ( value * ( c * value + d ) + e )
+						* 255 ) ;
 		}
 
 	}

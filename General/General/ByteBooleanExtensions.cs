@@ -8,14 +8,16 @@ using JetBrains . Annotations ;
 
 namespace DreamRecorder . ToolBox . General
 {
+
 	/// <summary>
-	/// Provide method to convert between Byte and Boolean Array
+	///     Provide method to convert between Byte and Boolean Array
 	/// </summary>
 	[PublicAPI]
 	public static class ByteBooleanExtensions
 	{
+
 		/// <summary>
-		/// Convert a byte as boolean array
+		///     Convert a byte as boolean array
 		/// </summary>
 		/// <param name="b">the byte</param>
 		/// <returns></returns>
@@ -32,7 +34,6 @@ namespace DreamRecorder . ToolBox . General
 		}
 
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <param name="bytes"></param>
 		/// <returns></returns>
@@ -51,7 +52,8 @@ namespace DreamRecorder . ToolBox . General
 
 				for ( int bitPosition = 0 ; bitPosition < 8 ; bitPosition++ )
 				{
-					result [ ( bytePosition * 8 ) + bitPosition ] = ( b & ( 1 << ( 7 - bitPosition ) ) ) != 0 ;
+					result [ bytePosition * 8 + bitPosition ] =
+						( b & ( 1 << ( 7 - bitPosition ) ) ) != 0 ;
 				}
 			}
 
@@ -81,11 +83,10 @@ namespace DreamRecorder . ToolBox . General
 		//}
 
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <param name="source"></param>
 		/// <returns></returns>
-		public static byte ToByte ([NotNull]this bool [ ] source )
+		public static byte ToByte ( [NotNull] this bool [ ] source )
 		{
 			if ( source == null )
 			{
@@ -110,18 +111,17 @@ namespace DreamRecorder . ToolBox . General
 		}
 
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <param name="source"></param>
 		/// <returns></returns>
-		public static byte [ ] ToByteArray (this bool [ ] source )
+		public static byte [ ] ToByteArray ( this bool [ ] source )
 		{
 			if ( source == null )
 			{
 				throw new ArgumentNullException ( nameof ( source ) ) ;
 			}
 
-			if ( ( source . Length % 8 ) != 0 )
+			if ( source . Length % 8 != 0 )
 			{
 				throw new ArgumentException ( ) ;
 			}
@@ -144,7 +144,6 @@ namespace DreamRecorder . ToolBox . General
 		}
 
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="bytes"></param>
@@ -167,7 +166,6 @@ namespace DreamRecorder . ToolBox . General
 		}
 
 		/// <summary>
-		/// 
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="value"></param>

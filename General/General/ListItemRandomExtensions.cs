@@ -57,7 +57,10 @@ namespace DreamRecorder . ToolBox . General
 		/// <param name="count"></param>
 		/// <param name="random"></param>
 		/// <returns></returns>
-		public static List <T> RandomChoose <T> ( this IList <T> list , int count , IRandom random = null )
+		public static List <T> RandomChoose <T> (
+			this IList <T> list ,
+			int            count ,
+			IRandom        random = null )
 		{
 			if ( list == null )
 			{
@@ -93,7 +96,10 @@ namespace DreamRecorder . ToolBox . General
 		/// <param name="count"></param>
 		/// <param name="random"></param>
 		/// <returns></returns>
-		public static List <T> RandomUniqueChoose <T> ( this IList <T> list , int count , IRandom random = null )
+		public static List <T> RandomUniqueChoose <T> (
+			this IList <T> list ,
+			int            count ,
+			IRandom        random = null )
 		{
 			if ( list == null )
 			{
@@ -117,7 +123,9 @@ namespace DreamRecorder . ToolBox . General
 
 			random = random ?? ( IRandom ) new Random ( ) ;
 
-			return random . Permutation ( list . Count - 1 , count ) . Select ( index => list [ index ] ) . ToList ( ) ;
+			return random . Permutation ( list . Count - 1 , count ) .
+							Select ( index => list [ index ] ) .
+							ToList ( ) ;
 		}
 
 	}

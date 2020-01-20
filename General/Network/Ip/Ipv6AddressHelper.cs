@@ -24,7 +24,11 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 		// methods
 
-		internal static string ParseCanonicalName ( string str , int start , ref bool isLoopback , ref string scopeId )
+		internal static string ParseCanonicalName (
+			string     str ,
+			int        start ,
+			ref bool   isLoopback ,
+			ref string scopeId )
 		{
 			unsafe
 			{
@@ -51,7 +55,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 			for ( int i = 0 ; i < NumberOfLabels ; i++ )
 			{
-				if ( ipv4Embedded && ( i == ( NumberOfLabels - 2 ) ) )
+				if ( ipv4Embedded && i == NumberOfLabels - 2 )
 				{
 					// Write the remaining digits as an IPv4 address
 					builder . Append (
@@ -73,8 +77,8 @@ namespace DreamRecorder . ToolBox . Network . Ip
 					builder . Append ( Separator ) ;
 				}
 
-				if ( ( range . Key     <= i )
-					&& ( range . Value == ( NumberOfLabels - 1 ) ) )
+				if ( range . Key <= i
+				&& range . Value == NumberOfLabels - 1 )
 				{
 					// Remainder compressed; 1::
 					builder . Append ( Separator ) ;
@@ -82,8 +86,8 @@ namespace DreamRecorder . ToolBox . Network . Ip
 					break ;
 				}
 
-				if ( ( range . Key <= i )
-					&& ( i         <= range . Value ) )
+				if ( range . Key <= i
+				&& i             <= range . Value )
 				{
 					continue ; // Compressed
 				}
@@ -124,7 +128,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 					if ( currentSequenceLength > longestSequenceLength )
 					{
 						longestSequenceLength = currentSequenceLength ;
-						longestSequenceStart  = ( i - currentSequenceLength ) + 1 ;
+						longestSequenceStart  = i - currentSequenceLength + 1 ;
 					}
 				}
 				else
@@ -137,7 +141,9 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			{
 				return new KeyValuePair <int , int> (
 													longestSequenceStart ,
-													( longestSequenceStart + longestSequenceLength ) - 1 ) ;
+													longestSequenceStart
+												+ longestSequenceLength
+												- 1 ) ;
 			}
 
 			return new KeyValuePair <int , int> ( - 1 , - 1 ) ; // No compression
@@ -148,31 +154,31 @@ namespace DreamRecorder . ToolBox . Network . Ip
 		private static unsafe bool ShouldHaveIpv4Embedded ( ushort * numbers )
 		{
 			// 0:0 : 0:0 : x:x : x.x.x.x
-			if ( ( numbers [ 0 ]   == 0 )
-				&& ( numbers [ 1 ] == 0 )
-				&& ( numbers [ 2 ] == 0 )
-				&& ( numbers [ 3 ] == 0 )
-				&& ( numbers [ 6 ] != 0 ) )
+			if ( numbers [ 0 ] == 0
+			&& numbers [ 1 ]   == 0
+			&& numbers [ 2 ]   == 0
+			&& numbers [ 3 ]   == 0
+			&& numbers [ 6 ]   != 0 )
 			{
 				// RFC 5952 Section 5 - 0:0 : 0:0 : 0:[0 | FFFF] : x.x.x.x
-				if ( ( numbers [ 4 ] == 0 )
-					&& ( ( numbers [ 5 ] == 0 ) || ( numbers [ 5 ] == 0xFFFF ) ) )
+				if ( numbers [ 4 ] == 0
+				&& ( numbers [ 5 ] == 0 || numbers [ 5 ] == 0xFFFF ) )
 				{
 					return true ;
 				}
 
 				// SIIT - 0:0 : 0:0 : FFFF:0 : x.x.x.x
 
-				if ( ( numbers [ 4 ]   == 0xFFFF )
-					&& ( numbers [ 5 ] == 0 ) )
+				if ( numbers [ 4 ] == 0xFFFF
+				&& numbers [ 5 ]   == 0 )
 				{
 					return true ;
 				}
 			}
 
 			// ISATAP
-			if ( ( numbers [ 4 ]   == 0 )
-				&& ( numbers [ 5 ] == 0x5EFE ) )
+			if ( numbers [ 4 ] == 0
+			&& numbers [ 5 ]   == 0x5EFE )
 			{
 				return true ;
 			}
@@ -231,7 +237,9 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 			for ( i = start ; i < end ; ++i )
 			{
-				if ( havePrefix ? ( name [ i ] >= '0' ) && ( name [ i ] <= '9' ) : Uri . IsHexDigit ( name [ i ] ) )
+				if ( havePrefix
+						? name [ i ] >= '0' && name [ i ] <= '9'
+						: Uri . IsHexDigit ( name [ i ] ) )
 				{
 					++sequenceLength ;
 					expectingNumber = false ;
@@ -285,8 +293,8 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 						case ':' :
 						{
-							if ( ( i                > 0 )
-								&& ( name [ i - 1 ] == ':' ) )
+							if ( i            > 0
+							&& name [ i - 1 ] == ':' )
 							{
 								if ( haveCompressor )
 								{
@@ -315,7 +323,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 								return false ;
 							}
 
-							if ( ( sequenceCount == 0 ) || havePrefix )
+							if ( sequenceCount == 0 || havePrefix )
 							{
 								return false ;
 							}
@@ -335,7 +343,13 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 							i = end ;
 
-							if ( ! Ipv4AddressHelper . IsValid ( name , lastSequence , ref i , true , false , false ) )
+							if ( ! Ipv4AddressHelper . IsValid (
+																name ,
+																lastSequence ,
+																ref i ,
+																true ,
+																false ,
+																false ) )
 							{
 								return false ;
 							}
@@ -362,7 +376,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			// if the last token was a prefix, check number of digits
 			//
 
-			if ( havePrefix && ( ( sequenceLength < 1 ) || ( sequenceLength > 2 ) ) )
+			if ( havePrefix && ( sequenceLength < 1 || sequenceLength > 2 ) )
 			{
 				return false ;
 			}
@@ -374,10 +388,12 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			int expectedSequenceCount = 8 + ( havePrefix ? 1 : 0 ) ;
 
 			if ( ! expectingNumber
-				&& ( sequenceLength <= 4 )
-				&& ( haveCompressor ? sequenceCount < expectedSequenceCount : sequenceCount == expectedSequenceCount ) )
+			&& sequenceLength <= 4
+			&& ( haveCompressor
+					? sequenceCount < expectedSequenceCount
+					: sequenceCount == expectedSequenceCount ) )
 			{
-				if ( i == ( end + 1 ) )
+				if ( i == end + 1 )
 				{
 					// ']' was found
 					end = start + 1 ;
@@ -489,7 +505,11 @@ namespace DreamRecorder . ToolBox . Network . Ip
 		//  Nothing
 		//
 
-		internal static unsafe bool Parse ( string address , ushort * numbers , int start , ref string scopeId )
+		internal static unsafe bool Parse (
+			string     address ,
+			ushort *   numbers ,
+			int        start ,
+			ref string scopeId )
 		{
 			int  number          = 0 ;
 			int  index           = 0 ;
@@ -504,7 +524,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 				++start ;
 			}
 
-			for ( int i = start ; ( i < address . Length ) && ( address [ i ] != ']' ) ; )
+			for ( int i = start ; i < address . Length && address [ i ] != ']' ; )
 			{
 				switch ( address [ i ] )
 				{
@@ -519,7 +539,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 						start = i ;
 
-						for ( ++i ; ( address [ i ] != ']' ) && ( address [ i ] != '/' ) ; ++i )
+						for ( ++i ; address [ i ] != ']' && address [ i ] != '/' ; ++i )
 						{
 						}
 
@@ -545,8 +565,8 @@ namespace DreamRecorder . ToolBox . Network . Ip
 							compressorIndex = index ;
 							++i ;
 						}
-						else if ( ( compressorIndex < 0 )
-								&& ( index          < 6 ) )
+						else if ( compressorIndex < 0
+							&& index              < 6 )
 						{
 							//
 							// no point checking for IPv4 address if we don't
@@ -563,11 +583,11 @@ namespace DreamRecorder . ToolBox . Network . Ip
 						//
 
 						for ( int j = i ;
-							( address [ j ]    != ']' )
-							&& ( address [ j ] != ':' )
-							&& ( address [ j ] != '%' )
-							&& ( address [ j ] != '/' )
-							&& ( j             < ( i + 4 ) ) ;
+							address [ j ] != ']'
+						&& address [ j ]  != ':'
+						&& address [ j ]  != '%'
+						&& address [ j ]  != '/'
+						&& j              < i + 4 ;
 							++j )
 						{
 							if ( address [ j ] == '.' )
@@ -581,14 +601,15 @@ namespace DreamRecorder . ToolBox . Network . Ip
 								// delimited with ']')
 								//
 
-								while ( ( address [ j ]    != ']' )
-										&& ( address [ j ] != '/' )
-										&& ( address [ j ] != '%' ) )
+								while ( address [ j ] != ']'
+									&& address [ j ]  != '/'
+									&& address [ j ]  != '%' )
 								{
 									++j ;
 								}
 
-								number              = Ipv4AddressHelper . ParseHostNumber ( address , i , j ) ;
+								number =
+									Ipv4AddressHelper . ParseHostNumber ( address , i , j ) ;
 								numbers [ index++ ] = ( ushort ) ( number >> 16 ) ;
 								numbers [ index++ ] = ( ushort ) number ;
 								i                   = j ;
@@ -624,7 +645,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 						for ( ++i ; address [ i ] != ']' ; ++i )
 						{
-							prefixLength = ( prefixLength * 10 ) + ( address [ i ] - '0' ) ;
+							prefixLength = prefixLength * 10 + ( address [ i ] - '0' ) ;
 						}
 
 						break ;
@@ -633,7 +654,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 					default :
 
 					{
-						number = ( number * 16 ) + Uri . FromHex ( address [ i++ ] ) ;
+						number = number * 16 + Uri . FromHex ( address [ i++ ] ) ;
 
 						break ;
 					}
@@ -675,15 +696,15 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			//  0:0:0:0:0:FFFF:127.0.0.1    == 0:0:0:0:0:FFFF:7F00:0001
 			//
 
-			return ( numbers [ 0 ]     == 0 )
-					&& ( numbers [ 1 ] == 0 )
-					&& ( numbers [ 2 ] == 0 )
-					&& ( numbers [ 3 ] == 0 )
-					&& ( numbers [ 4 ] == 0 )
-					&& ( ( ( numbers [ 5 ] == 0 ) && ( numbers [ 6 ] == 0 ) && ( numbers [ 7 ] == 1 ) )
-						|| ( ( numbers [ 6 ]   == 0x7F00 )
-							&& ( numbers [ 7 ] == 0x0001 )
-							&& ( ( numbers [ 5 ] == 0 ) || ( numbers [ 5 ] == 0xFFFF ) ) ) ) ;
+			return numbers [ 0 ] == 0
+				&& numbers [ 1 ] == 0
+				&& numbers [ 2 ] == 0
+				&& numbers [ 3 ] == 0
+				&& numbers [ 4 ] == 0
+				&& ( numbers [ 5 ] == 0 && numbers [ 6 ] == 0 && numbers [ 7 ] == 1
+				|| numbers [ 6 ] == 0x7F00
+				&& numbers [ 7 ] == 0x0001
+				&& ( numbers [ 5 ] == 0 || numbers [ 5 ] == 0xFFFF ) ) ;
 		}
 
 	}

@@ -18,14 +18,16 @@ namespace DreamRecorder . ToolBox . Colors
 
 		static KnownColor ( )
 		{
-			Dictionary <string , HdrColor> colors =
-				typeof ( KnownColor ) . GetFields (
-													BindingFlags . Static
-													| BindingFlags . Public
-													| BindingFlags . DeclaredOnly ) .
-										ToDictionary (
-													fieldInfo => fieldInfo . Name ,
-													fieldInfo => ( HdrColor ) fieldInfo . GetValue ( null ) ) ;
+			Dictionary <string , HdrColor> colors = typeof ( KnownColor ) .
+													GetFields (
+																BindingFlags . Static
+															| BindingFlags . Public
+															| BindingFlags . DeclaredOnly ) .
+													ToDictionary (
+																fieldInfo => fieldInfo . Name ,
+																fieldInfo
+																	=> ( HdrColor ) fieldInfo .
+																		GetValue ( null ) ) ;
 
 			Colors = new ReadOnlyDictionary <string , HdrColor> ( colors ) ;
 		}
@@ -96,7 +98,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.576470588235294 ,
 																0.0392156862745098 ) ;
 
-		public static readonly HdrColor Pms112 = new HdrColor ( 0.6 , 0.517647058823529 , 0.0392156862745098 ) ;
+		public static readonly HdrColor Pms112 =
+			new HdrColor ( 0.6 , 0.517647058823529 , 0.0392156862745098 ) ;
 
 		public static readonly HdrColor Pms113 = new HdrColor (
 																0.976470588235294 ,
@@ -148,7 +151,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.847058823529412 ,
 																0.337254901960784 ) ;
 
-		public static readonly HdrColor Pms123 = new HdrColor ( 1 , 0.776470588235294 , 0.117647058823529 ) ;
+		public static readonly HdrColor Pms123 =
+			new HdrColor ( 1 , 0.776470588235294 , 0.117647058823529 ) ;
 
 		public static readonly HdrColor Pms124 = new HdrColor (
 																0.87843137254902 ,
@@ -227,7 +231,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.356862745098039 ,
 																0.0392156862745098 ) ;
 
-		public static readonly HdrColor Pms134 = new HdrColor ( 1 , 0.847058823529412 , 0.498039215686275 ) ;
+		public static readonly HdrColor Pms134 =
+			new HdrColor ( 1 , 0.847058823529412 , 0.498039215686275 ) ;
 
 		public static readonly HdrColor Pms135 = new HdrColor (
 																0.988235294117647 ,
@@ -259,7 +264,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.356862745098039 ,
 																0.0666666666666667 ) ;
 
-		public static readonly HdrColor Pms1345 = new HdrColor ( 1 , 0.83921568627451 , 0.568627450980392 ) ;
+		public static readonly HdrColor Pms1345 =
+			new HdrColor ( 1 , 0.83921568627451 , 0.568627450980392 ) ;
 
 		public static readonly HdrColor Pms1355 = new HdrColor (
 																0.988235294117647 ,
@@ -276,9 +282,11 @@ namespace DreamRecorder . ToolBox . Colors
 																0.607843137254902 ,
 																0.0470588235294118 ) ;
 
-		public static readonly HdrColor Pms1385 = new HdrColor ( 0.8 , 0.47843137254902 , 0.00784313725490196 ) ;
+		public static readonly HdrColor Pms1385 =
+			new HdrColor ( 0.8 , 0.47843137254902 , 0.00784313725490196 ) ;
 
-		public static readonly HdrColor Pms1395 = new HdrColor ( 0.6 , 0.376470588235294 , 0.0274509803921569 ) ;
+		public static readonly HdrColor Pms1395 =
+			new HdrColor ( 0.6 , 0.376470588235294 , 0.0274509803921569 ) ;
 
 		public static readonly HdrColor Pms1405 = new HdrColor (
 																0.419607843137255 ,
@@ -320,37 +328,47 @@ namespace DreamRecorder . ToolBox . Colors
 																0.368627450980392 ,
 																0.149019607843137 ) ;
 
-		public static readonly HdrColor Pms148 = new HdrColor ( 1 , 0.83921568627451 , 0.607843137254902 ) ;
+		public static readonly HdrColor Pms148 =
+			new HdrColor ( 1 , 0.83921568627451 , 0.607843137254902 ) ;
 
-		public static readonly HdrColor Pms149 = new HdrColor ( 0.988235294117647 , 0.8 , 0.576470588235294 ) ;
+		public static readonly HdrColor Pms149 =
+			new HdrColor ( 0.988235294117647 , 0.8 , 0.576470588235294 ) ;
 
 		public static readonly HdrColor Pms150 = new HdrColor (
 																0.988235294117647 ,
 																0.67843137254902 ,
 																0.337254901960784 ) ;
 
-		public static readonly HdrColor Pms151 = new HdrColor ( 0.968627450980392 , 0.498039215686275 , 0 ) ;
+		public static readonly HdrColor Pms151 =
+			new HdrColor ( 0.968627450980392 , 0.498039215686275 , 0 ) ;
 
-		public static readonly HdrColor Pms152 = new HdrColor ( 0.866666666666667 , 0.458823529411765 , 0 ) ;
+		public static readonly HdrColor Pms152 =
+			new HdrColor ( 0.866666666666667 , 0.458823529411765 , 0 ) ;
 
 		public static readonly HdrColor Pms153 = new HdrColor (
 																0.737254901960784 ,
 																0.427450980392157 ,
 																0.0392156862745098 ) ;
 
-		public static readonly HdrColor Pms154 = new HdrColor ( 0.6 , 0.349019607843137 , 0.0196078431372549 ) ;
+		public static readonly HdrColor Pms154 =
+			new HdrColor ( 0.6 , 0.349019607843137 , 0.0196078431372549 ) ;
 
-		public static readonly HdrColor Pms1485 = new HdrColor ( 1 , 0.717647058823529 , 0.466666666666667 ) ;
+		public static readonly HdrColor Pms1485 =
+			new HdrColor ( 1 , 0.717647058823529 , 0.466666666666667 ) ;
 
 		public static readonly HdrColor Pms1495 = new HdrColor ( 1 , 0.6 , 0.247058823529412 ) ;
 
-		public static readonly HdrColor Pms1505 = new HdrColor ( 0.956862745098039 , 0.486274509803922 , 0 ) ;
+		public static readonly HdrColor Pms1505 =
+			new HdrColor ( 0.956862745098039 , 0.486274509803922 , 0 ) ;
 
-		public static readonly HdrColor Orange021 = new HdrColor ( 0.937254901960784 , 0.419607843137255 , 0 ) ;
+		public static readonly HdrColor Orange021 =
+			new HdrColor ( 0.937254901960784 , 0.419607843137255 , 0 ) ;
 
-		public static readonly HdrColor Pms1525 = new HdrColor ( 0.709803921568627 , 0.329411764705882 , 0 ) ;
+		public static readonly HdrColor Pms1525 =
+			new HdrColor ( 0.709803921568627 , 0.329411764705882 , 0 ) ;
 
-		public static readonly HdrColor Pms1535 = new HdrColor ( 0.549019607843137 , 0.266666666666667 , 0 ) ;
+		public static readonly HdrColor Pms1535 =
+			new HdrColor ( 0.549019607843137 , 0.266666666666667 , 0 ) ;
 
 		public static readonly HdrColor Pms1545 = new HdrColor (
 																0.298039215686275 ,
@@ -447,7 +465,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.388235294117647 ,
 																0.00784313725490196 ) ;
 
-		public static readonly HdrColor Pms166 = new HdrColor ( 0.866666666666667 , 0.349019607843137 , 0 ) ;
+		public static readonly HdrColor Pms166 =
+			new HdrColor ( 0.866666666666667 , 0.349019607843137 , 0 ) ;
 
 		public static readonly HdrColor Pms167 = new HdrColor (
 																0.737254901960784 ,
@@ -519,9 +538,11 @@ namespace DreamRecorder . ToolBox . Colors
 																0.266666666666667 ,
 																0.0784313725490196 ) ;
 
-		public static readonly HdrColor Pms174 = new HdrColor ( 0.576470588235294 , 0.2 , 0.0666666666666667 ) ;
+		public static readonly HdrColor Pms174 =
+			new HdrColor ( 0.576470588235294 , 0.2 , 0.0666666666666667 ) ;
 
-		public static readonly HdrColor Pms175 = new HdrColor ( 0.427450980392157 , 0.2 , 0.129411764705882 ) ;
+		public static readonly HdrColor Pms175 =
+			new HdrColor ( 0.427450980392157 , 0.2 , 0.129411764705882 ) ;
 
 		public static readonly HdrColor Pms176 = new HdrColor (
 																0.976470588235294 ,
@@ -598,7 +619,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.698039215686274 ,
 																0.717647058823529 ) ;
 
-		public static readonly HdrColor Pms1777 = new HdrColor ( 0.988235294117647 , 0.4 , 0.458823529411765 ) ;
+		public static readonly HdrColor Pms1777 =
+			new HdrColor ( 0.988235294117647 , 0.4 , 0.458823529411765 ) ;
 
 		public static readonly HdrColor Pms1787 = new HdrColor (
 																0.956862745098039 ,
@@ -610,9 +632,11 @@ namespace DreamRecorder . ToolBox . Colors
 																0.168627450980392 ,
 																0.176470588235294 ) ;
 
-		public static readonly HdrColor Pms1797 = new HdrColor ( 0.8 , 0.176470588235294 , 0.188235294117647 ) ;
+		public static readonly HdrColor Pms1797 =
+			new HdrColor ( 0.8 , 0.176470588235294 , 0.188235294117647 ) ;
 
-		public static readonly HdrColor Pms1807 = new HdrColor ( 0.627450980392157 , 0.188235294117647 , 0.2 ) ;
+		public static readonly HdrColor Pms1807 =
+			new HdrColor ( 0.627450980392157 , 0.188235294117647 , 0.2 ) ;
 
 		public static readonly HdrColor Pms1817 = new HdrColor (
 																0.356862745098039 ,
@@ -624,7 +648,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.749019607843137 ,
 																0.756862745098039 ) ;
 
-		public static readonly HdrColor Pms183 = new HdrColor ( 0.988235294117647 , 0.549019607843137 , 0.6 ) ;
+		public static readonly HdrColor Pms183 =
+			new HdrColor ( 0.988235294117647 , 0.549019607843137 , 0.6 ) ;
 
 		public static readonly HdrColor Pms184 = new HdrColor (
 																0.988235294117647 ,
@@ -651,7 +676,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.129411764705882 ,
 																0.156862745098039 ) ;
 
-		public static readonly HdrColor Pms189 = new HdrColor ( 1 , 0.63921568627451 , 0.698039215686274 ) ;
+		public static readonly HdrColor Pms189 =
+			new HdrColor ( 1 , 0.63921568627451 , 0.698039215686274 ) ;
 
 		public static readonly HdrColor Pms190 = new HdrColor (
 																0.988235294117647 ,
@@ -673,7 +699,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.0392156862745098 ,
 																0.188235294117647 ) ;
 
-		public static readonly HdrColor Pms194 = new HdrColor ( 0.6 , 0.129411764705882 , 0.207843137254902 ) ;
+		public static readonly HdrColor Pms194 =
+			new HdrColor ( 0.6 , 0.129411764705882 , 0.207843137254902 ) ;
 
 		public static readonly HdrColor Pms195 = new HdrColor (
 																0.466666666666667 ,
@@ -720,7 +747,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.788235294117647 ,
 																0.788235294117647 ) ;
 
-		public static readonly HdrColor Pms197 = new HdrColor ( 0.937254901960784 , 0.6 , 0.63921568627451 ) ;
+		public static readonly HdrColor Pms197 =
+			new HdrColor ( 0.937254901960784 , 0.6 , 0.63921568627451 ) ;
 
 		public static readonly HdrColor Pms198 = new HdrColor (
 																0.898039215686275 ,
@@ -742,7 +770,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.149019607843137 ,
 																0.219607843137255 ) ;
 
-		public static readonly HdrColor Pms202 = new HdrColor ( 0.549019607843137 , 0.149019607843137 , 0.2 ) ;
+		public static readonly HdrColor Pms202 =
+			new HdrColor ( 0.549019607843137 , 0.149019607843137 , 0.2 ) ;
 
 		public static readonly HdrColor Pms203 = new HdrColor (
 																0.949019607843137 ,
@@ -764,7 +793,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.0196078431372549 ,
 																0.27843137254902 ) ;
 
-		public static readonly HdrColor Pms207 = new HdrColor ( 0.686274509803922 , 0 , 0.23921568627451 ) ;
+		public static readonly HdrColor Pms207 =
+			new HdrColor ( 0.686274509803922 , 0 , 0.23921568627451 ) ;
 
 		public static readonly HdrColor Pms208 = new HdrColor (
 																0.556862745098039 ,
@@ -776,9 +806,11 @@ namespace DreamRecorder . ToolBox . Colors
 																0.149019607843137 ,
 																0.23921568627451 ) ;
 
-		public static readonly HdrColor Pms210 = new HdrColor ( 1 , 0.627450980392157 , 0.749019607843137 ) ;
+		public static readonly HdrColor Pms210 =
+			new HdrColor ( 1 , 0.627450980392157 , 0.749019607843137 ) ;
 
-		public static readonly HdrColor Pms211 = new HdrColor ( 1 , 0.466666666666667 , 0.658823529411765 ) ;
+		public static readonly HdrColor Pms211 =
+			new HdrColor ( 1 , 0.466666666666667 , 0.658823529411765 ) ;
 
 		public static readonly HdrColor Pms212 = new HdrColor (
 																0.976470588235294 ,
@@ -790,7 +822,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.0588235294117647 ,
 																0.419607843137255 ) ;
 
-		public static readonly HdrColor Pms214 = new HdrColor ( 0.8 , 0.00784313725490196 , 0.337254901960784 ) ;
+		public static readonly HdrColor Pms214 =
+			new HdrColor ( 0.8 , 0.00784313725490196 , 0.337254901960784 ) ;
 
 		public static readonly HdrColor Pms215 = new HdrColor (
 																0.647058823529412 ,
@@ -817,11 +850,14 @@ namespace DreamRecorder . ToolBox . Colors
 																0.156862745098039 ,
 																0.509803921568627 ) ;
 
-		public static readonly HdrColor RubineRed = new HdrColor ( 0.819607843137255 , 0 , 0.337254901960784 ) ;
+		public static readonly HdrColor RubineRed =
+			new HdrColor ( 0.819607843137255 , 0 , 0.337254901960784 ) ;
 
-		public static readonly HdrColor Pms220 = new HdrColor ( 0.666666666666667 , 0 , 0.309803921568627 ) ;
+		public static readonly HdrColor Pms220 =
+			new HdrColor ( 0.666666666666667 , 0 , 0.309803921568627 ) ;
 
-		public static readonly HdrColor Pms221 = new HdrColor ( 0.576470588235294 , 0 , 0.258823529411765 ) ;
+		public static readonly HdrColor Pms221 =
+			new HdrColor ( 0.576470588235294 , 0 , 0.258823529411765 ) ;
 
 		public static readonly HdrColor Pms222 = new HdrColor (
 																0.43921568627451 ,
@@ -848,9 +884,11 @@ namespace DreamRecorder . ToolBox . Colors
 																0.00784313725490196 ,
 																0.43921568627451 ) ;
 
-		public static readonly HdrColor Pms227 = new HdrColor ( 0.67843137254902 , 0 , 0.356862745098039 ) ;
+		public static readonly HdrColor Pms227 =
+			new HdrColor ( 0.67843137254902 , 0 , 0.356862745098039 ) ;
 
-		public static readonly HdrColor Pms228 = new HdrColor ( 0.549019607843137 , 0 , 0.298039215686275 ) ;
+		public static readonly HdrColor Pms228 =
+			new HdrColor ( 0.549019607843137 , 0 , 0.298039215686275 ) ;
 
 		public static readonly HdrColor Pms229 = new HdrColor (
 																0.427450980392157 ,
@@ -869,9 +907,11 @@ namespace DreamRecorder . ToolBox . Colors
 																0.247058823529412 ,
 																0.647058823529412 ) ;
 
-		public static readonly HdrColor RhodamineRed = new HdrColor ( 0.929411764705882 , 0 , 0.568627450980392 ) ;
+		public static readonly HdrColor RhodamineRed =
+			new HdrColor ( 0.929411764705882 , 0 , 0.568627450980392 ) ;
 
-		public static readonly HdrColor Pms233 = new HdrColor ( 0.807843137254902 , 0 , 0.486274509803922 ) ;
+		public static readonly HdrColor Pms233 =
+			new HdrColor ( 0.807843137254902 , 0 , 0.486274509803922 ) ;
 
 		public static readonly HdrColor Pms234 = new HdrColor ( 0.666666666666667 , 0 , 0.4 ) ;
 
@@ -905,7 +945,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.0588235294117647 ,
 																0.537254901960784 ) ;
 
-		public static readonly HdrColor Pms241 = new HdrColor ( 0.67843137254902 , 0 , 0.458823529411765 ) ;
+		public static readonly HdrColor Pms241 =
+			new HdrColor ( 0.67843137254902 , 0 , 0.458823529411765 ) ;
 
 		public static readonly HdrColor Pms242 = new HdrColor (
 																0.486274509803922 ,
@@ -927,13 +968,17 @@ namespace DreamRecorder . ToolBox . Colors
 																0.156862745098039 ,
 																0.647058823529412 ) ;
 
-		public static readonly HdrColor Pms2395 = new HdrColor ( 0.768627450980392 , 0 , 0.549019607843137 ) ;
+		public static readonly HdrColor Pms2395 =
+			new HdrColor ( 0.768627450980392 , 0 , 0.549019607843137 ) ;
 
-		public static readonly HdrColor Pms2405 = new HdrColor ( 0.658823529411765 , 0 , 0.47843137254902 ) ;
+		public static readonly HdrColor Pms2405 =
+			new HdrColor ( 0.658823529411765 , 0 , 0.47843137254902 ) ;
 
-		public static readonly HdrColor Pms2415 = new HdrColor ( 0.607843137254902 , 0 , 0.43921568627451 ) ;
+		public static readonly HdrColor Pms2415 =
+			new HdrColor ( 0.607843137254902 , 0 , 0.43921568627451 ) ;
 
-		public static readonly HdrColor Pms2425 = new HdrColor ( 0.529411764705882 , 0 , 0.356862745098039 ) ;
+		public static readonly HdrColor Pms2425 =
+			new HdrColor ( 0.529411764705882 , 0 , 0.356862745098039 ) ;
 
 		public static readonly HdrColor Pms243 = new HdrColor (
 																0.949019607843137 ,
@@ -952,7 +997,8 @@ namespace DreamRecorder . ToolBox . Colors
 
 		public static readonly HdrColor Pms246 = new HdrColor ( 0.8 , 0 , 0.627450980392157 ) ;
 
-		public static readonly HdrColor Pms247 = new HdrColor ( 0.717647058823529 , 0 , 0.556862745098039 ) ;
+		public static readonly HdrColor Pms247 =
+			new HdrColor ( 0.717647058823529 , 0 , 0.556862745098039 ) ;
 
 		public static readonly HdrColor Pms248 = new HdrColor (
 																0.63921568627451 ,
@@ -1069,7 +1115,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.176470588235294 ,
 																0.349019607843137 ) ;
 
-		public static readonly HdrColor Pms2563 = new HdrColor ( 0.819607843137255 , 0.627450980392157 , 0.8 ) ;
+		public static readonly HdrColor Pms2563 =
+			new HdrColor ( 0.819607843137255 , 0.627450980392157 , 0.8 ) ;
 
 		public static readonly HdrColor Pms2573 = new HdrColor (
 																0.729411764705882 ,
@@ -1091,14 +1138,16 @@ namespace DreamRecorder . ToolBox . Colors
 																0.0784313725490196 ,
 																0.47843137254902 ) ;
 
-		public static readonly HdrColor Pms2613 = new HdrColor ( 0.4 , 0.0666666666666667 , 0.427450980392157 ) ;
+		public static readonly HdrColor Pms2613 =
+			new HdrColor ( 0.4 , 0.0666666666666667 , 0.427450980392157 ) ;
 
 		public static readonly HdrColor Pms2623 = new HdrColor (
 																0.356862745098039 ,
 																0.0980392156862745 ,
 																0.368627450980392 ) ;
 
-		public static readonly HdrColor Pms2567 = new HdrColor ( 0.749019607843137 , 0.576470588235294 , 0.8 ) ;
+		public static readonly HdrColor Pms2567 =
+			new HdrColor ( 0.749019607843137 , 0.576470588235294 , 0.8 ) ;
 
 		public static readonly HdrColor Pms2577 = new HdrColor (
 																0.666666666666667 ,
@@ -1182,9 +1231,11 @@ namespace DreamRecorder . ToolBox . Colors
 																0.309803921568627 ,
 																0.749019607843137 ) ;
 
-		public static readonly HdrColor Violet = new HdrColor ( 0.4 , 0.0274509803921569 , 0.647058823529412 ) ;
+		public static readonly HdrColor Violet =
+			new HdrColor ( 0.4 , 0.0274509803921569 , 0.647058823529412 ) ;
 
-		public static readonly HdrColor Pms2685 = new HdrColor ( 0.337254901960784 , 0 , 0.549019607843137 ) ;
+		public static readonly HdrColor Pms2685 =
+			new HdrColor ( 0.337254901960784 , 0 , 0.549019607843137 ) ;
 
 		public static readonly HdrColor Pms2695 = new HdrColor (
 																0.266666666666667 ,
@@ -1211,7 +1262,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.0980392156862745 ,
 																0.47843137254902 ) ;
 
-		public static readonly HdrColor Pms274 = new HdrColor ( 0.168627450980392 , 0.0666666666666667 , 0.4 ) ;
+		public static readonly HdrColor Pms274 =
+			new HdrColor ( 0.168627450980392 , 0.0666666666666667 , 0.4 ) ;
 
 		public static readonly HdrColor Pms275 = new HdrColor (
 																0.149019607843137 ,
@@ -1228,18 +1280,22 @@ namespace DreamRecorder . ToolBox . Colors
 																0.619607843137255 ,
 																0.827450980392157 ) ;
 
-		public static readonly HdrColor Pms2715 = new HdrColor ( 0.576470588235294 , 0.47843137254902 , 0.8 ) ;
+		public static readonly HdrColor Pms2715 =
+			new HdrColor ( 0.576470588235294 , 0.47843137254902 , 0.8 ) ;
 
 		public static readonly HdrColor Pms2725 = new HdrColor (
 																0.447058823529412 ,
 																0.317647058823529 ,
 																0.737254901960784 ) ;
 
-		public static readonly HdrColor Pms2735 = new HdrColor ( 0.309803921568627 , 0 , 0.576470588235294 ) ;
+		public static readonly HdrColor Pms2735 =
+			new HdrColor ( 0.309803921568627 , 0 , 0.576470588235294 ) ;
 
-		public static readonly HdrColor Pms2745 = new HdrColor ( 0.247058823529412 , 0 , 0.466666666666667 ) ;
+		public static readonly HdrColor Pms2745 =
+			new HdrColor ( 0.247058823529412 , 0 , 0.466666666666667 ) ;
 
-		public static readonly HdrColor Pms2755 = new HdrColor ( 0.207843137254902 , 0 , 0.427450980392157 ) ;
+		public static readonly HdrColor Pms2755 =
+			new HdrColor ( 0.207843137254902 , 0 , 0.427450980392157 ) ;
 
 		public static readonly HdrColor Pms2765 = new HdrColor (
 																0.168627450980392 ,
@@ -1256,7 +1312,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.627450980392157 ,
 																0.83921568627451 ) ;
 
-		public static readonly HdrColor Pms2726 = new HdrColor ( 0.4 , 0.337254901960784 , 0.737254901960784 ) ;
+		public static readonly HdrColor Pms2726 =
+			new HdrColor ( 0.4 , 0.337254901960784 , 0.737254901960784 ) ;
 
 		public static readonly HdrColor Pms2736 = new HdrColor (
 																0.286274509803922 ,
@@ -1268,7 +1325,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.156862745098039 ,
 																0.576470588235294 ) ;
 
-		public static readonly HdrColor Pms2756 = new HdrColor ( 0.2 , 0.156862745098039 , 0.458823529411765 ) ;
+		public static readonly HdrColor Pms2756 =
+			new HdrColor ( 0.2 , 0.156862745098039 , 0.458823529411765 ) ;
 
 		public static readonly HdrColor Pms2766 = new HdrColor (
 																0.168627450980392 ,
@@ -1290,7 +1348,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.407843137254902 ,
 																0.768627450980392 ) ;
 
-		public static readonly HdrColor Blue072 = new HdrColor ( 0.219607843137255 , 0 , 0.588235294117647 ) ;
+		public static readonly HdrColor Blue072 =
+			new HdrColor ( 0.219607843137255 , 0 , 0.588235294117647 ) ;
 
 		public static readonly HdrColor Pms2747 = new HdrColor (
 																0.109803921568627 ,
@@ -1312,14 +1371,16 @@ namespace DreamRecorder . ToolBox . Colors
 																0.737254901960784 ,
 																0.858823529411765 ) ;
 
-		public static readonly HdrColor Pms2718 = new HdrColor ( 0.356862745098039 , 0.466666666666667 , 0.8 ) ;
+		public static readonly HdrColor Pms2718 =
+			new HdrColor ( 0.356862745098039 , 0.466666666666667 , 0.8 ) ;
 
 		public static readonly HdrColor Pms2728 = new HdrColor (
 																0.188235294117647 ,
 																0.266666666666667 ,
 																0.709803921568627 ) ;
 
-		public static readonly HdrColor Pms2738 = new HdrColor ( 0.176470588235294 , 0 , 0.556862745098039 ) ;
+		public static readonly HdrColor Pms2738 =
+			new HdrColor ( 0.176470588235294 , 0 , 0.556862745098039 ) ;
 
 		public static readonly HdrColor Pms2748 = new HdrColor (
 																0.117647058823529 ,
@@ -1341,18 +1402,22 @@ namespace DreamRecorder . ToolBox . Colors
 																0.819607843137255 ,
 																0.909803921568627 ) ;
 
-		public static readonly HdrColor Pms278 = new HdrColor ( 0.6 , 0.729411764705882 , 0.866666666666667 ) ;
+		public static readonly HdrColor Pms278 =
+			new HdrColor ( 0.6 , 0.729411764705882 , 0.866666666666667 ) ;
 
 		public static readonly HdrColor Pms279 = new HdrColor ( 0.4 , 0.537254901960784 , 0.8 ) ;
 
 		public static readonly HdrColor ReflexBlue =
 			new HdrColor ( 0.0470588235294118 , 0.109803921568627 , 0.549019607843137 ) ;
 
-		public static readonly HdrColor Pms280 = new HdrColor ( 0 , 0.168627450980392 , 0.498039215686275 ) ;
+		public static readonly HdrColor Pms280 =
+			new HdrColor ( 0 , 0.168627450980392 , 0.498039215686275 ) ;
 
-		public static readonly HdrColor Pms281 = new HdrColor ( 0 , 0.156862745098039 , 0.407843137254902 ) ;
+		public static readonly HdrColor Pms281 =
+			new HdrColor ( 0 , 0.156862745098039 , 0.407843137254902 ) ;
 
-		public static readonly HdrColor Pms282 = new HdrColor ( 0 , 0.149019607843137 , 0.329411764705882 ) ;
+		public static readonly HdrColor Pms282 =
+			new HdrColor ( 0 , 0.149019607843137 , 0.329411764705882 ) ;
 
 		public static readonly HdrColor Pms283 = new HdrColor (
 																0.607843137254902 ,
@@ -1369,13 +1434,16 @@ namespace DreamRecorder . ToolBox . Colors
 																0.458823529411765 ,
 																0.768627450980392 ) ;
 
-		public static readonly HdrColor Pms286 = new HdrColor ( 0 , 0.219607843137255 , 0.658823529411765 ) ;
+		public static readonly HdrColor Pms286 =
+			new HdrColor ( 0 , 0.219607843137255 , 0.658823529411765 ) ;
 
-		public static readonly HdrColor Pms287 = new HdrColor ( 0 , 0.219607843137255 , 0.576470588235294 ) ;
+		public static readonly HdrColor Pms287 =
+			new HdrColor ( 0 , 0.219607843137255 , 0.576470588235294 ) ;
 
 		public static readonly HdrColor Pms288 = new HdrColor ( 0 , 0.2 , 0.498039215686275 ) ;
 
-		public static readonly HdrColor Pms289 = new HdrColor ( 0 , 0.149019607843137 , 0.286274509803922 ) ;
+		public static readonly HdrColor Pms289 =
+			new HdrColor ( 0 , 0.149019607843137 , 0.286274509803922 ) ;
 
 		public static readonly HdrColor Pms290 = new HdrColor (
 																0.768627450980392 ,
@@ -1392,13 +1460,17 @@ namespace DreamRecorder . ToolBox . Colors
 																0.698039215686274 ,
 																0.866666666666667 ) ;
 
-		public static readonly HdrColor Pms293 = new HdrColor ( 0 , 0.317647058823529 , 0.729411764705882 ) ;
+		public static readonly HdrColor Pms293 =
+			new HdrColor ( 0 , 0.317647058823529 , 0.729411764705882 ) ;
 
-		public static readonly HdrColor Pms294 = new HdrColor ( 0 , 0.247058823529412 , 0.529411764705882 ) ;
+		public static readonly HdrColor Pms294 =
+			new HdrColor ( 0 , 0.247058823529412 , 0.529411764705882 ) ;
 
-		public static readonly HdrColor Pms295 = new HdrColor ( 0 , 0.219607843137255 , 0.419607843137255 ) ;
+		public static readonly HdrColor Pms295 =
+			new HdrColor ( 0 , 0.219607843137255 , 0.419607843137255 ) ;
 
-		public static readonly HdrColor Pms296 = new HdrColor ( 0 , 0.176470588235294 , 0.27843137254902 ) ;
+		public static readonly HdrColor Pms296 =
+			new HdrColor ( 0 , 0.176470588235294 , 0.27843137254902 ) ;
 
 		public static readonly HdrColor Pms2905 = new HdrColor (
 																0.576470588235294 ,
@@ -1410,13 +1482,17 @@ namespace DreamRecorder . ToolBox . Colors
 																0.686274509803922 ,
 																0.866666666666667 ) ;
 
-		public static readonly HdrColor Pms2925 = new HdrColor ( 0 , 0.556862745098039 , 0.83921568627451 ) ;
+		public static readonly HdrColor Pms2925 =
+			new HdrColor ( 0 , 0.556862745098039 , 0.83921568627451 ) ;
 
-		public static readonly HdrColor Pms2935 = new HdrColor ( 0 , 0.356862745098039 , 0.749019607843137 ) ;
+		public static readonly HdrColor Pms2935 =
+			new HdrColor ( 0 , 0.356862745098039 , 0.749019607843137 ) ;
 
-		public static readonly HdrColor Pms2945 = new HdrColor ( 0 , 0.329411764705882 , 0.627450980392157 ) ;
+		public static readonly HdrColor Pms2945 =
+			new HdrColor ( 0 , 0.329411764705882 , 0.627450980392157 ) ;
 
-		public static readonly HdrColor Pms2955 = new HdrColor ( 0 , 0.23921568627451 , 0.419607843137255 ) ;
+		public static readonly HdrColor Pms2955 =
+			new HdrColor ( 0 , 0.23921568627451 , 0.419607843137255 ) ;
 
 		public static readonly HdrColor Pms2965 = new HdrColor ( 0 , 0.2 , 0.298039215686275 ) ;
 
@@ -1430,15 +1506,19 @@ namespace DreamRecorder . ToolBox . Colors
 																0.709803921568627 ,
 																0.87843137254902 ) ;
 
-		public static readonly HdrColor Pms299 = new HdrColor ( 0 , 0.63921568627451 , 0.866666666666667 ) ;
+		public static readonly HdrColor Pms299 =
+			new HdrColor ( 0 , 0.63921568627451 , 0.866666666666667 ) ;
 
-		public static readonly HdrColor Pms300 = new HdrColor ( 0 , 0.447058823529412 , 0.776470588235294 ) ;
+		public static readonly HdrColor Pms300 =
+			new HdrColor ( 0 , 0.447058823529412 , 0.776470588235294 ) ;
 
 		public static readonly HdrColor Pms301 = new HdrColor ( 0 , 0.356862745098039 , 0.6 ) ;
 
-		public static readonly HdrColor Pms302 = new HdrColor ( 0 , 0.309803921568627 , 0.427450980392157 ) ;
+		public static readonly HdrColor Pms302 =
+			new HdrColor ( 0 , 0.309803921568627 , 0.427450980392157 ) ;
 
-		public static readonly HdrColor Pms303 = new HdrColor ( 0 , 0.247058823529412 , 0.329411764705882 ) ;
+		public static readonly HdrColor Pms303 =
+			new HdrColor ( 0 , 0.247058823529412 , 0.329411764705882 ) ;
 
 		public static readonly HdrColor Pms2975 = new HdrColor (
 																0.729411764705882 ,
@@ -1450,15 +1530,20 @@ namespace DreamRecorder . ToolBox . Colors
 																0.749019607843137 ,
 																0.886274509803922 ) ;
 
-		public static readonly HdrColor Pms2995 = new HdrColor ( 0 , 0.647058823529412 , 0.858823529411765 ) ;
+		public static readonly HdrColor Pms2995 =
+			new HdrColor ( 0 , 0.647058823529412 , 0.858823529411765 ) ;
 
-		public static readonly HdrColor Pms3005 = new HdrColor ( 0 , 0.517647058823529 , 0.788235294117647 ) ;
+		public static readonly HdrColor Pms3005 =
+			new HdrColor ( 0 , 0.517647058823529 , 0.788235294117647 ) ;
 
-		public static readonly HdrColor Pms3015 = new HdrColor ( 0 , 0.43921568627451 , 0.619607843137255 ) ;
+		public static readonly HdrColor Pms3015 =
+			new HdrColor ( 0 , 0.43921568627451 , 0.619607843137255 ) ;
 
-		public static readonly HdrColor Pms3025 = new HdrColor ( 0 , 0.329411764705882 , 0.419607843137255 ) ;
+		public static readonly HdrColor Pms3025 =
+			new HdrColor ( 0 , 0.329411764705882 , 0.419607843137255 ) ;
 
-		public static readonly HdrColor Pms3035 = new HdrColor ( 0 , 0.266666666666667 , 0.329411764705882 ) ;
+		public static readonly HdrColor Pms3035 =
+			new HdrColor ( 0 , 0.266666666666667 , 0.329411764705882 ) ;
 
 		public static readonly HdrColor Pms304 = new HdrColor (
 																0.647058823529412 ,
@@ -1470,15 +1555,20 @@ namespace DreamRecorder . ToolBox . Colors
 																0.807843137254902 ,
 																0.886274509803922 ) ;
 
-		public static readonly HdrColor Pms306 = new HdrColor ( 0 , 0.737254901960784 , 0.886274509803922 ) ;
+		public static readonly HdrColor Pms306 =
+			new HdrColor ( 0 , 0.737254901960784 , 0.886274509803922 ) ;
 
-		public static readonly HdrColor ProcessBlue = new HdrColor ( 0 , 0.568627450980392 , 0.788235294117647 ) ;
+		public static readonly HdrColor ProcessBlue =
+			new HdrColor ( 0 , 0.568627450980392 , 0.788235294117647 ) ;
 
-		public static readonly HdrColor Pms307 = new HdrColor ( 0 , 0.47843137254902 , 0.647058823529412 ) ;
+		public static readonly HdrColor Pms307 =
+			new HdrColor ( 0 , 0.47843137254902 , 0.647058823529412 ) ;
 
-		public static readonly HdrColor Pms308 = new HdrColor ( 0 , 0.376470588235294 , 0.486274509803922 ) ;
+		public static readonly HdrColor Pms308 =
+			new HdrColor ( 0 , 0.376470588235294 , 0.486274509803922 ) ;
 
-		public static readonly HdrColor Pms309 = new HdrColor ( 0 , 0.247058823529412 , 0.286274509803922 ) ;
+		public static readonly HdrColor Pms309 =
+			new HdrColor ( 0 , 0.247058823529412 , 0.286274509803922 ) ;
 
 		public static readonly HdrColor Pms310 = new HdrColor (
 																0.447058823529412 ,
@@ -1490,15 +1580,19 @@ namespace DreamRecorder . ToolBox . Colors
 																0.768627450980392 ,
 																0.847058823529412 ) ;
 
-		public static readonly HdrColor Pms312 = new HdrColor ( 0 , 0.67843137254902 , 0.776470588235294 ) ;
+		public static readonly HdrColor Pms312 =
+			new HdrColor ( 0 , 0.67843137254902 , 0.776470588235294 ) ;
 
 		public static readonly HdrColor Pms313 = new HdrColor ( 0 , 0.6 , 0.709803921568627 ) ;
 
-		public static readonly HdrColor Pms314 = new HdrColor ( 0 , 0.509803921568627 , 0.607843137254902 ) ;
+		public static readonly HdrColor Pms314 =
+			new HdrColor ( 0 , 0.509803921568627 , 0.607843137254902 ) ;
 
-		public static readonly HdrColor Pms315 = new HdrColor ( 0 , 0.419607843137255 , 0.466666666666667 ) ;
+		public static readonly HdrColor Pms315 =
+			new HdrColor ( 0 , 0.419607843137255 , 0.466666666666667 ) ;
 
-		public static readonly HdrColor Pms316 = new HdrColor ( 0 , 0.286274509803922 , 0.309803921568627 ) ;
+		public static readonly HdrColor Pms316 =
+			new HdrColor ( 0 , 0.286274509803922 , 0.309803921568627 ) ;
 
 		public static readonly HdrColor Pms3105 = new HdrColor (
 																0.498039215686275 ,
@@ -1510,15 +1604,20 @@ namespace DreamRecorder . ToolBox . Colors
 																0.776470588235294 ,
 																0.83921568627451 ) ;
 
-		public static readonly HdrColor Pms3125 = new HdrColor ( 0 , 0.717647058823529 , 0.776470588235294 ) ;
+		public static readonly HdrColor Pms3125 =
+			new HdrColor ( 0 , 0.717647058823529 , 0.776470588235294 ) ;
 
-		public static readonly HdrColor Pms3135 = new HdrColor ( 0 , 0.607843137254902 , 0.666666666666667 ) ;
+		public static readonly HdrColor Pms3135 =
+			new HdrColor ( 0 , 0.607843137254902 , 0.666666666666667 ) ;
 
-		public static readonly HdrColor Pms3145 = new HdrColor ( 0 , 0.517647058823529 , 0.556862745098039 ) ;
+		public static readonly HdrColor Pms3145 =
+			new HdrColor ( 0 , 0.517647058823529 , 0.556862745098039 ) ;
 
-		public static readonly HdrColor Pms3155 = new HdrColor ( 0 , 0.427450980392157 , 0.458823529411765 ) ;
+		public static readonly HdrColor Pms3155 =
+			new HdrColor ( 0 , 0.427450980392157 , 0.458823529411765 ) ;
 
-		public static readonly HdrColor Pms3165 = new HdrColor ( 0 , 0.337254901960784 , 0.356862745098039 ) ;
+		public static readonly HdrColor Pms3165 =
+			new HdrColor ( 0 , 0.337254901960784 , 0.356862745098039 ) ;
 
 		public static readonly HdrColor Pms317 = new HdrColor (
 																0.788235294117647 ,
@@ -1535,11 +1634,14 @@ namespace DreamRecorder . ToolBox . Colors
 																0.807843137254902 ,
 																0.819607843137255 ) ;
 
-		public static readonly HdrColor Pms320 = new HdrColor ( 0 , 0.619607843137255 , 0.627450980392157 ) ;
+		public static readonly HdrColor Pms320 =
+			new HdrColor ( 0 , 0.619607843137255 , 0.627450980392157 ) ;
 
-		public static readonly HdrColor Pms321 = new HdrColor ( 0 , 0.529411764705882 , 0.537254901960784 ) ;
+		public static readonly HdrColor Pms321 =
+			new HdrColor ( 0 , 0.529411764705882 , 0.537254901960784 ) ;
 
-		public static readonly HdrColor Pms322 = new HdrColor ( 0 , 0.447058823529412 , 0.447058823529412 ) ;
+		public static readonly HdrColor Pms322 =
+			new HdrColor ( 0 , 0.447058823529412 , 0.447058823529412 ) ;
 
 		public static readonly HdrColor Pms323 = new HdrColor ( 0 , 0.4 , 0.388235294117647 ) ;
 
@@ -1553,15 +1655,19 @@ namespace DreamRecorder . ToolBox . Colors
 																0.788235294117647 ,
 																0.756862745098039 ) ;
 
-		public static readonly HdrColor Pms326 = new HdrColor ( 0 , 0.698039215686274 , 0.666666666666667 ) ;
+		public static readonly HdrColor Pms326 =
+			new HdrColor ( 0 , 0.698039215686274 , 0.666666666666667 ) ;
 
-		public static readonly HdrColor Pms327 = new HdrColor ( 0 , 0.549019607843137 , 0.509803921568627 ) ;
+		public static readonly HdrColor Pms327 =
+			new HdrColor ( 0 , 0.549019607843137 , 0.509803921568627 ) ;
 
-		public static readonly HdrColor Pms328 = new HdrColor ( 0 , 0.466666666666667 , 0.43921568627451 ) ;
+		public static readonly HdrColor Pms328 =
+			new HdrColor ( 0 , 0.466666666666667 , 0.43921568627451 ) ;
 
 		public static readonly HdrColor Pms329 = new HdrColor ( 0 , 0.427450980392157 , 0.4 ) ;
 
-		public static readonly HdrColor Pms330 = new HdrColor ( 0 , 0.349019607843137 , 0.317647058823529 ) ;
+		public static readonly HdrColor Pms330 =
+			new HdrColor ( 0 , 0.349019607843137 , 0.317647058823529 ) ;
 
 		public static readonly HdrColor Pms3242 = new HdrColor (
 																0.529411764705882 ,
@@ -1573,15 +1679,20 @@ namespace DreamRecorder . ToolBox . Colors
 																0.83921568627451 ,
 																0.788235294117647 ) ;
 
-		public static readonly HdrColor Pms3262 = new HdrColor ( 0 , 0.756862745098039 , 0.709803921568627 ) ;
+		public static readonly HdrColor Pms3262 =
+			new HdrColor ( 0 , 0.756862745098039 , 0.709803921568627 ) ;
 
-		public static readonly HdrColor Pms3272 = new HdrColor ( 0 , 0.666666666666667 , 0.619607843137255 ) ;
+		public static readonly HdrColor Pms3272 =
+			new HdrColor ( 0 , 0.666666666666667 , 0.619607843137255 ) ;
 
-		public static readonly HdrColor Pms3282 = new HdrColor ( 0 , 0.549019607843137 , 0.509803921568627 ) ;
+		public static readonly HdrColor Pms3282 =
+			new HdrColor ( 0 , 0.549019607843137 , 0.509803921568627 ) ;
 
-		public static readonly HdrColor Pms3292 = new HdrColor ( 0 , 0.376470588235294 , 0.337254901960784 ) ;
+		public static readonly HdrColor Pms3292 =
+			new HdrColor ( 0 , 0.376470588235294 , 0.337254901960784 ) ;
 
-		public static readonly HdrColor Pms3302 = new HdrColor ( 0 , 0.286274509803922 , 0.247058823529412 ) ;
+		public static readonly HdrColor Pms3302 =
+			new HdrColor ( 0 , 0.286274509803922 , 0.247058823529412 ) ;
 
 		public static readonly HdrColor Pms3245 = new HdrColor (
 																0.549019607843137 ,
@@ -1593,15 +1704,19 @@ namespace DreamRecorder . ToolBox . Colors
 																0.83921568627451 ,
 																0.756862745098039 ) ;
 
-		public static readonly HdrColor Pms3265 = new HdrColor ( 0 , 0.776470588235294 , 0.698039215686274 ) ;
+		public static readonly HdrColor Pms3265 =
+			new HdrColor ( 0 , 0.776470588235294 , 0.698039215686274 ) ;
 
-		public static readonly HdrColor Pms3275 = new HdrColor ( 0 , 0.698039215686274 , 0.627450980392157 ) ;
+		public static readonly HdrColor Pms3275 =
+			new HdrColor ( 0 , 0.698039215686274 , 0.627450980392157 ) ;
 
 		public static readonly HdrColor Pms3285 = new HdrColor ( 0 , 0.6 , 0.529411764705882 ) ;
 
-		public static readonly HdrColor Pms3295 = new HdrColor ( 0 , 0.509803921568627 , 0.447058823529412 ) ;
+		public static readonly HdrColor Pms3295 =
+			new HdrColor ( 0 , 0.509803921568627 , 0.447058823529412 ) ;
 
-		public static readonly HdrColor Pms3305 = new HdrColor ( 0 , 0.309803921568627 , 0.258823529411765 ) ;
+		public static readonly HdrColor Pms3305 =
+			new HdrColor ( 0 , 0.309803921568627 , 0.258823529411765 ) ;
 
 		public static readonly HdrColor Pms3248 = new HdrColor (
 																0.47843137254902 ,
@@ -1615,13 +1730,17 @@ namespace DreamRecorder . ToolBox . Colors
 
 		public static readonly HdrColor Pms3268 = new HdrColor ( 0 , 0.686274509803922 , 0.6 ) ;
 
-		public static readonly HdrColor Pms3278 = new HdrColor ( 0 , 0.607843137254902 , 0.517647058823529 ) ;
+		public static readonly HdrColor Pms3278 =
+			new HdrColor ( 0 , 0.607843137254902 , 0.517647058823529 ) ;
 
-		public static readonly HdrColor Pms3288 = new HdrColor ( 0 , 0.509803921568627 , 0.43921568627451 ) ;
+		public static readonly HdrColor Pms3288 =
+			new HdrColor ( 0 , 0.509803921568627 , 0.43921568627451 ) ;
 
-		public static readonly HdrColor Pms3298 = new HdrColor ( 0 , 0.419607843137255 , 0.356862745098039 ) ;
+		public static readonly HdrColor Pms3298 =
+			new HdrColor ( 0 , 0.419607843137255 , 0.356862745098039 ) ;
 
-		public static readonly HdrColor Pms3308 = new HdrColor ( 0 , 0.266666666666667 , 0.219607843137255 ) ;
+		public static readonly HdrColor Pms3308 =
+			new HdrColor ( 0 , 0.266666666666667 , 0.219607843137255 ) ;
 
 		public static readonly HdrColor Pms331 = new HdrColor (
 																0.729411764705882 ,
@@ -1638,13 +1757,15 @@ namespace DreamRecorder . ToolBox . Colors
 																0.866666666666667 ,
 																0.756862745098039 ) ;
 
-		public static readonly HdrColor Green = new HdrColor ( 0 , 0.686274509803922 , 0.576470588235294 ) ;
+		public static readonly HdrColor Green =
+			new HdrColor ( 0 , 0.686274509803922 , 0.576470588235294 ) ;
 
 		public static readonly HdrColor Pms334 = new HdrColor ( 0 , 0.6 , 0.486274509803922 ) ;
 
 		public static readonly HdrColor Pms335 = new HdrColor ( 0 , 0.486274509803922 , 0.4 ) ;
 
-		public static readonly HdrColor Pms336 = new HdrColor ( 0 , 0.407843137254902 , 0.329411764705882 ) ;
+		public static readonly HdrColor Pms336 =
+			new HdrColor ( 0 , 0.407843137254902 , 0.329411764705882 ) ;
 
 		public static readonly HdrColor Pms337 = new HdrColor (
 																0.607843137254902 ,
@@ -1656,15 +1777,19 @@ namespace DreamRecorder . ToolBox . Colors
 																0.819607843137255 ,
 																0.709803921568627 ) ;
 
-		public static readonly HdrColor Pms339 = new HdrColor ( 0 , 0.698039215686274 , 0.549019607843137 ) ;
+		public static readonly HdrColor Pms339 =
+			new HdrColor ( 0 , 0.698039215686274 , 0.549019607843137 ) ;
 
 		public static readonly HdrColor Pms340 = new HdrColor ( 0 , 0.6 , 0.466666666666667 ) ;
 
-		public static readonly HdrColor Pms341 = new HdrColor ( 0 , 0.47843137254902 , 0.368627450980392 ) ;
+		public static readonly HdrColor Pms341 =
+			new HdrColor ( 0 , 0.47843137254902 , 0.368627450980392 ) ;
 
-		public static readonly HdrColor Pms342 = new HdrColor ( 0 , 0.419607843137255 , 0.329411764705882 ) ;
+		public static readonly HdrColor Pms342 =
+			new HdrColor ( 0 , 0.419607843137255 , 0.329411764705882 ) ;
 
-		public static readonly HdrColor Pms343 = new HdrColor ( 0 , 0.337254901960784 , 0.247058823529412 ) ;
+		public static readonly HdrColor Pms343 =
+			new HdrColor ( 0 , 0.337254901960784 , 0.247058823529412 ) ;
 
 		public static readonly HdrColor Pms3375 = new HdrColor (
 																0.556862745098039 ,
@@ -1676,13 +1801,17 @@ namespace DreamRecorder . ToolBox . Colors
 																0.847058823529412 ,
 																0.658823529411765 ) ;
 
-		public static readonly HdrColor Pms3395 = new HdrColor ( 0 , 0.788235294117647 , 0.576470588235294 ) ;
+		public static readonly HdrColor Pms3395 =
+			new HdrColor ( 0 , 0.788235294117647 , 0.576470588235294 ) ;
 
-		public static readonly HdrColor Pms3405 = new HdrColor ( 0 , 0.698039215686274 , 0.47843137254902 ) ;
+		public static readonly HdrColor Pms3405 =
+			new HdrColor ( 0 , 0.698039215686274 , 0.47843137254902 ) ;
 
-		public static readonly HdrColor Pms3415 = new HdrColor ( 0 , 0.486274509803922 , 0.349019607843137 ) ;
+		public static readonly HdrColor Pms3415 =
+			new HdrColor ( 0 , 0.486274509803922 , 0.349019607843137 ) ;
 
-		public static readonly HdrColor Pms3425 = new HdrColor ( 0 , 0.407843137254902 , 0.27843137254902 ) ;
+		public static readonly HdrColor Pms3425 =
+			new HdrColor ( 0 , 0.407843137254902 , 0.27843137254902 ) ;
 
 		public static readonly HdrColor Pms3435 = new HdrColor (
 																0.00784313725490196 ,
@@ -1704,33 +1833,42 @@ namespace DreamRecorder . ToolBox . Colors
 																0.807843137254902 ,
 																0.607843137254902 ) ;
 
-		public static readonly HdrColor Pms347 = new HdrColor ( 0 , 0.619607843137255 , 0.376470588235294 ) ;
+		public static readonly HdrColor Pms347 =
+			new HdrColor ( 0 , 0.619607843137255 , 0.376470588235294 ) ;
 
-		public static readonly HdrColor Pms348 = new HdrColor ( 0 , 0.529411764705882 , 0.317647058823529 ) ;
+		public static readonly HdrColor Pms348 =
+			new HdrColor ( 0 , 0.529411764705882 , 0.317647058823529 ) ;
 
-		public static readonly HdrColor Pms349 = new HdrColor ( 0 , 0.419607843137255 , 0.247058823529412 ) ;
+		public static readonly HdrColor Pms349 =
+			new HdrColor ( 0 , 0.419607843137255 , 0.247058823529412 ) ;
 
-		public static readonly HdrColor Pms350 = new HdrColor ( 0.137254901960784 , 0.309803921568627 , 0.2 ) ;
+		public static readonly HdrColor Pms350 =
+			new HdrColor ( 0.137254901960784 , 0.309803921568627 , 0.2 ) ;
 
 		public static readonly HdrColor Pms351 = new HdrColor (
 																0.709803921568627 ,
 																0.909803921568627 ,
 																0.749019607843137 ) ;
 
-		public static readonly HdrColor Pms352 = new HdrColor ( 0.6 , 0.898039215686275 , 0.698039215686274 ) ;
+		public static readonly HdrColor Pms352 =
+			new HdrColor ( 0.6 , 0.898039215686275 , 0.698039215686274 ) ;
 
 		public static readonly HdrColor Pms353 = new HdrColor (
 																0.517647058823529 ,
 																0.886274509803922 ,
 																0.658823529411765 ) ;
 
-		public static readonly HdrColor Pms354 = new HdrColor ( 0 , 0.717647058823529 , 0.376470588235294 ) ;
+		public static readonly HdrColor Pms354 =
+			new HdrColor ( 0 , 0.717647058823529 , 0.376470588235294 ) ;
 
-		public static readonly HdrColor Pms355 = new HdrColor ( 0 , 0.619607843137255 , 0.286274509803922 ) ;
+		public static readonly HdrColor Pms355 =
+			new HdrColor ( 0 , 0.619607843137255 , 0.286274509803922 ) ;
 
-		public static readonly HdrColor Pms356 = new HdrColor ( 0 , 0.47843137254902 , 0.23921568627451 ) ;
+		public static readonly HdrColor Pms356 =
+			new HdrColor ( 0 , 0.47843137254902 , 0.23921568627451 ) ;
 
-		public static readonly HdrColor Pms357 = new HdrColor ( 0.129411764705882 , 0.356862745098039 , 0.2 ) ;
+		public static readonly HdrColor Pms357 =
+			new HdrColor ( 0.129411764705882 , 0.356862745098039 , 0.2 ) ;
 
 		public static readonly HdrColor Pms358 = new HdrColor (
 																0.666666666666667 ,
@@ -1752,9 +1890,11 @@ namespace DreamRecorder . ToolBox . Colors
 																0.709803921568627 ,
 																0.227450980392157 ) ;
 
-		public static readonly HdrColor Pms362 = new HdrColor ( 0.2 , 0.619607843137255 , 0.207843137254902 ) ;
+		public static readonly HdrColor Pms362 =
+			new HdrColor ( 0.2 , 0.619607843137255 , 0.207843137254902 ) ;
 
-		public static readonly HdrColor Pms363 = new HdrColor ( 0.23921568627451 , 0.556862745098039 , 0.2 ) ;
+		public static readonly HdrColor Pms363 =
+			new HdrColor ( 0.23921568627451 , 0.556862745098039 , 0.2 ) ;
 
 		public static readonly HdrColor Pms364 = new HdrColor (
 																0.227450980392157 ,
@@ -1811,9 +1951,11 @@ namespace DreamRecorder . ToolBox . Colors
 																0.909803921568627 ,
 																0.376470588235294 ) ;
 
-		public static readonly HdrColor Pms375 = new HdrColor ( 0.549019607843137 , 0.83921568627451 , 0 ) ;
+		public static readonly HdrColor Pms375 =
+			new HdrColor ( 0.549019607843137 , 0.83921568627451 , 0 ) ;
 
-		public static readonly HdrColor Pms376 = new HdrColor ( 0.498039215686275 , 0.729411764705882 , 0 ) ;
+		public static readonly HdrColor Pms376 =
+			new HdrColor ( 0.498039215686275 , 0.729411764705882 , 0 ) ;
 
 		public static readonly HdrColor Pms377 = new HdrColor (
 																0.43921568627451 ,
@@ -1835,7 +1977,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.898039215686275 ,
 																0.258823529411765 ) ;
 
-		public static readonly HdrColor Pms381 = new HdrColor ( 0.8 , 0.886274509803922 , 0.149019607843137 ) ;
+		public static readonly HdrColor Pms381 =
+			new HdrColor ( 0.8 , 0.886274509803922 , 0.149019607843137 ) ;
 
 		public static readonly HdrColor Pms382 = new HdrColor (
 																0.729411764705882 ,
@@ -1847,7 +1990,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.686274509803922 ,
 																0.0274509803921569 ) ;
 
-		public static readonly HdrColor Pms384 = new HdrColor ( 0.576470588235294 , 0.6 , 0.0196078431372549 ) ;
+		public static readonly HdrColor Pms384 =
+			new HdrColor ( 0.576470588235294 , 0.6 , 0.0196078431372549 ) ;
 
 		public static readonly HdrColor Pms385 = new HdrColor (
 																0.43921568627451 ,
@@ -1919,7 +2063,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.658823529411765 ,
 																0.0392156862745098 ) ;
 
-		public static readonly HdrColor Pms399 = new HdrColor ( 0.6 , 0.556862745098039 , 0.0274509803921569 ) ;
+		public static readonly HdrColor Pms399 =
+			new HdrColor ( 0.6 , 0.556862745098039 , 0.0274509803921569 ) ;
 
 		public static readonly HdrColor Pms3935 = new HdrColor (
 																0.949019607843137 ,
@@ -1946,7 +2091,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.658823529411765 ,
 																0.0470588235294118 ) ;
 
-		public static readonly HdrColor Pms3985 = new HdrColor ( 0.6 , 0.549019607843137 , 0.0392156862745098 ) ;
+		public static readonly HdrColor Pms3985 =
+			new HdrColor ( 0.6 , 0.549019607843137 , 0.0392156862745098 ) ;
 
 		public static readonly HdrColor Pms3995 = new HdrColor (
 																0.427450980392157 ,
@@ -1968,16 +2114,19 @@ namespace DreamRecorder . ToolBox . Colors
 																0.647058823529412 ,
 																0.576470588235294 ) ;
 
-		public static readonly HdrColor Pms403 = new HdrColor ( 0.6 , 0.549019607843137 , 0.486274509803922 ) ;
+		public static readonly HdrColor Pms403 =
+			new HdrColor ( 0.6 , 0.549019607843137 , 0.486274509803922 ) ;
 
-		public static readonly HdrColor Pms404 = new HdrColor ( 0.509803921568627 , 0.458823529411765 , 0.4 ) ;
+		public static readonly HdrColor Pms404 =
+			new HdrColor ( 0.509803921568627 , 0.458823529411765 , 0.4 ) ;
 
 		public static readonly HdrColor Pms405 = new HdrColor (
 																0.419607843137255 ,
 																0.368627450980392 ,
 																0.309803921568627 ) ;
 
-		public static readonly HdrColor Black = new HdrColor ( 0.23921568627451 , 0.2 , 0.168627450980392 ) ;
+		public static readonly HdrColor Black =
+			new HdrColor ( 0.23921568627451 , 0.2 , 0.168627450980392 ) ;
 
 		public static readonly HdrColor Pms406 = new HdrColor (
 																0.807843137254902 ,
@@ -1989,16 +2138,19 @@ namespace DreamRecorder . ToolBox . Colors
 																0.666666666666667 ,
 																0.619607843137255 ) ;
 
-		public static readonly HdrColor Pms408 = new HdrColor ( 0.658823529411765 , 0.6 , 0.549019607843137 ) ;
+		public static readonly HdrColor Pms408 =
+			new HdrColor ( 0.658823529411765 , 0.6 , 0.549019607843137 ) ;
 
-		public static readonly HdrColor Pms409 = new HdrColor ( 0.6 , 0.537254901960784 , 0.486274509803922 ) ;
+		public static readonly HdrColor Pms409 =
+			new HdrColor ( 0.6 , 0.537254901960784 , 0.486274509803922 ) ;
 
 		public static readonly HdrColor Pms410 = new HdrColor (
 																0.486274509803922 ,
 																0.427450980392157 ,
 																0.388235294117647 ) ;
 
-		public static readonly HdrColor Pms411 = new HdrColor ( 0.4 , 0.349019607843137 , 0.298039215686275 ) ;
+		public static readonly HdrColor Pms411 =
+			new HdrColor ( 0.4 , 0.349019607843137 , 0.298039215686275 ) ;
 
 		public static readonly HdrColor Pms412 = new HdrColor (
 																0.23921568627451 ,
@@ -2040,7 +2192,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.156862745098039 ,
 																0.129411764705882 ) ;
 
-		public static readonly HdrColor Pms420 = new HdrColor ( 0.819607843137255 , 0.8 , 0.749019607843137 ) ;
+		public static readonly HdrColor Pms420 =
+			new HdrColor ( 0.819607843137255 , 0.8 , 0.749019607843137 ) ;
 
 		public static readonly HdrColor Pms421 = new HdrColor (
 																0.749019607843137 ,
@@ -2092,7 +2245,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.588235294117647 ,
 																0.576470588235294 ) ;
 
-		public static readonly HdrColor Pms431 = new HdrColor ( 0.4 , 0.427450980392157 , 0.43921568627451 ) ;
+		public static readonly HdrColor Pms431 =
+			new HdrColor ( 0.4 , 0.427450980392157 , 0.43921568627451 ) ;
 
 		public static readonly HdrColor Pms432 = new HdrColor (
 																0.266666666666667 ,
@@ -2129,7 +2283,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.247058823529412 ,
 																0.23921568627451 ) ;
 
-		public static readonly HdrColor Pms439 = new HdrColor ( 0.286274509803922 , 0.207843137254902 , 0.2 ) ;
+		public static readonly HdrColor Pms439 =
+			new HdrColor ( 0.286274509803922 , 0.207843137254902 , 0.2 ) ;
 
 		public static readonly HdrColor Pms440 = new HdrColor (
 																0.247058823529412 ,
@@ -2171,21 +2326,24 @@ namespace DreamRecorder . ToolBox . Colors
 																0.247058823529412 ,
 																0.219607843137255 ) ;
 
-		public static readonly HdrColor WarmGray1 = new HdrColor ( 0.898039215686275 , 0.858823529411765 , 0.8 ) ;
+		public static readonly HdrColor WarmGray1 =
+			new HdrColor ( 0.898039215686275 , 0.858823529411765 , 0.8 ) ;
 
 		public static readonly HdrColor WarmGray2 = new HdrColor (
 																0.866666666666667 ,
 																0.819607843137255 ,
 																0.756862745098039 ) ;
 
-		public static readonly HdrColor WarmGray3 = new HdrColor ( 0.8 , 0.756862745098039 , 0.698039215686274 ) ;
+		public static readonly HdrColor WarmGray3 =
+			new HdrColor ( 0.8 , 0.756862745098039 , 0.698039215686274 ) ;
 
 		public static readonly HdrColor WarmGray4 = new HdrColor (
 																0.756862745098039 ,
 																0.709803921568627 ,
 																0.647058823529412 ) ;
 
-		public static readonly HdrColor WarmGray5 = new HdrColor ( 0.709803921568627 , 0.658823529411765 , 0.6 ) ;
+		public static readonly HdrColor WarmGray5 =
+			new HdrColor ( 0.709803921568627 , 0.658823529411765 , 0.6 ) ;
 
 		public static readonly HdrColor WarmGray6 = new HdrColor (
 																0.686274509803922 ,
@@ -2248,7 +2406,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.63921568627451 ,
 																0.619607843137255 ) ;
 
-		public static readonly HdrColor CoolGray8 = new HdrColor ( 0.607843137254902 , 0.6 , 0.576470588235294 ) ;
+		public static readonly HdrColor CoolGray8 =
+			new HdrColor ( 0.607843137254902 , 0.6 , 0.576470588235294 ) ;
 
 		public static readonly HdrColor CoolGray9 = new HdrColor (
 																0.549019607843137 ,
@@ -2258,7 +2417,8 @@ namespace DreamRecorder . ToolBox . Colors
 		public static readonly HdrColor CoolGray10 =
 			new HdrColor ( 0.466666666666667 , 0.466666666666667 , 0.447058823529412 ) ;
 
-		public static readonly HdrColor CoolGray11 = new HdrColor ( 0.407843137254902 , 0.4 , 0.388235294117647 ) ;
+		public static readonly HdrColor CoolGray11 =
+			new HdrColor ( 0.407843137254902 , 0.4 , 0.388235294117647 ) ;
 
 		public static readonly HdrColor Pms448 = new HdrColor (
 																0.329411764705882 ,
@@ -2285,7 +2445,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.717647058823529 ,
 																0.588235294117647 ) ;
 
-		public static readonly HdrColor Pms453 = new HdrColor ( 0.83921568627451 , 0.8 , 0.686274509803922 ) ;
+		public static readonly HdrColor Pms453 =
+			new HdrColor ( 0.83921568627451 , 0.8 , 0.686274509803922 ) ;
 
 		public static readonly HdrColor Pms454 = new HdrColor (
 																0.886274509803922 ,
@@ -2312,7 +2473,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.67843137254902 ,
 																0.458823529411765 ) ;
 
-		public static readonly HdrColor Pms4525 = new HdrColor ( 0.8 , 0.749019607843137 , 0.556862745098039 ) ;
+		public static readonly HdrColor Pms4525 =
+			new HdrColor ( 0.8 , 0.749019607843137 , 0.556862745098039 ) ;
 
 		public static readonly HdrColor Pms4535 = new HdrColor (
 																0.858823529411765 ,
@@ -2324,16 +2486,19 @@ namespace DreamRecorder . ToolBox . Colors
 																0.858823529411765 ,
 																0.729411764705882 ) ;
 
-		public static readonly HdrColor Pms455 = new HdrColor ( 0.4 , 0.337254901960784 , 0.0784313725490196 ) ;
+		public static readonly HdrColor Pms455 =
+			new HdrColor ( 0.4 , 0.337254901960784 , 0.0784313725490196 ) ;
 
-		public static readonly HdrColor Pms456 = new HdrColor ( 0.6 , 0.529411764705882 , 0.0784313725490196 ) ;
+		public static readonly HdrColor Pms456 =
+			new HdrColor ( 0.6 , 0.529411764705882 , 0.0784313725490196 ) ;
 
 		public static readonly HdrColor Pms457 = new HdrColor (
 																0.709803921568627 ,
 																0.607843137254902 ,
 																0.0470588235294118 ) ;
 
-		public static readonly HdrColor Pms458 = new HdrColor ( 0.866666666666667 , 0.8 , 0.419607843137255 ) ;
+		public static readonly HdrColor Pms458 =
+			new HdrColor ( 0.866666666666667 , 0.8 , 0.419607843137255 ) ;
 
 		public static readonly HdrColor Pms459 = new HdrColor (
 																0.886274509803922 ,
@@ -2375,7 +2540,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.749019607843137 ,
 																0.568627450980392 ) ;
 
-		public static readonly HdrColor Pms467 = new HdrColor ( 0.866666666666667 , 0.8 , 0.647058823529412 ) ;
+		public static readonly HdrColor Pms467 =
+			new HdrColor ( 0.866666666666667 , 0.8 , 0.647058823529412 ) ;
 
 		public static readonly HdrColor Pms468 = new HdrColor (
 																0.886274509803922 ,
@@ -2387,14 +2553,16 @@ namespace DreamRecorder . ToolBox . Colors
 																0.137254901960784 ,
 																0.0666666666666667 ) ;
 
-		public static readonly HdrColor Pms4635 = new HdrColor ( 0.549019607843137 , 0.349019607843137 , 0.2 ) ;
+		public static readonly HdrColor Pms4635 =
+			new HdrColor ( 0.549019607843137 , 0.349019607843137 , 0.2 ) ;
 
 		public static readonly HdrColor Pms4645 = new HdrColor (
 																0.698039215686274 ,
 																0.509803921568627 ,
 																0.376470588235294 ) ;
 
-		public static readonly HdrColor Pms4655 = new HdrColor ( 0.768627450980392 , 0.6 , 0.466666666666667 ) ;
+		public static readonly HdrColor Pms4655 =
+			new HdrColor ( 0.768627450980392 , 0.6 , 0.466666666666667 ) ;
 
 		public static readonly HdrColor Pms4665 = new HdrColor (
 																0.847058823529412 ,
@@ -2411,7 +2579,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.827450980392157 ,
 																0.737254901960784 ) ;
 
-		public static readonly HdrColor Pms469 = new HdrColor ( 0.376470588235294 , 0.2 , 0.0666666666666667 ) ;
+		public static readonly HdrColor Pms469 =
+			new HdrColor ( 0.376470588235294 , 0.2 , 0.0666666666666667 ) ;
 
 		public static readonly HdrColor Pms4695 = new HdrColor (
 																0.317647058823529 ,
@@ -2423,21 +2592,24 @@ namespace DreamRecorder . ToolBox . Colors
 																0.317647058823529 ,
 																0.23921568627451 ) ;
 
-		public static readonly HdrColor Pms4715 = new HdrColor ( 0.6 , 0.43921568627451 , 0.356862745098039 ) ;
+		public static readonly HdrColor Pms4715 =
+			new HdrColor ( 0.6 , 0.43921568627451 , 0.356862745098039 ) ;
 
 		public static readonly HdrColor Pms4725 = new HdrColor (
 																0.709803921568627 ,
 																0.568627450980392 ,
 																0.486274509803922 ) ;
 
-		public static readonly HdrColor Pms4735 = new HdrColor ( 0.8 , 0.686274509803922 , 0.607843137254902 ) ;
+		public static readonly HdrColor Pms4735 =
+			new HdrColor ( 0.8 , 0.686274509803922 , 0.607843137254902 ) ;
 
 		public static readonly HdrColor Pms4745 = new HdrColor (
 																0.847058823529412 ,
 																0.749019607843137 ,
 																0.666666666666667 ) ;
 
-		public static readonly HdrColor Pms4755 = new HdrColor ( 0.886274509803922 , 0.8 , 0.729411764705882 ) ;
+		public static readonly HdrColor Pms4755 =
+			new HdrColor ( 0.886274509803922 , 0.8 , 0.729411764705882 ) ;
 
 		public static readonly HdrColor Pms476 = new HdrColor (
 																0.349019607843137 ,
@@ -2464,7 +2636,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.717647058823529 ,
 																0.63921568627451 ) ;
 
-		public static readonly HdrColor Pms481 = new HdrColor ( 0.87843137254902 , 0.8 , 0.729411764705882 ) ;
+		public static readonly HdrColor Pms481 =
+			new HdrColor ( 0.87843137254902 , 0.8 , 0.729411764705882 ) ;
 
 		public static readonly HdrColor Pms482 = new HdrColor (
 																0.898039215686275 ,
@@ -2516,7 +2689,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.156862745098039 ,
 																0.156862745098039 ) ;
 
-		public static readonly HdrColor Pms492 = new HdrColor ( 0.568627450980392 , 0.2 , 0.219607843137255 ) ;
+		public static readonly HdrColor Pms492 =
+			new HdrColor ( 0.568627450980392 , 0.2 , 0.219607843137255 ) ;
 
 		public static readonly HdrColor Pms493 = new HdrColor (
 																0.858823529411765 ,
@@ -2543,7 +2717,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.156862745098039 ,
 																0.149019607843137 ) ;
 
-		public static readonly HdrColor Pms498 = new HdrColor ( 0.427450980392157 , 0.2 , 0.168627450980392 ) ;
+		public static readonly HdrColor Pms498 =
+			new HdrColor ( 0.427450980392157 , 0.2 , 0.168627450980392 ) ;
 
 		public static readonly HdrColor Pms499 = new HdrColor (
 																0.47843137254902 ,
@@ -2565,7 +2740,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.776470588235294 ,
 																0.768627450980392 ) ;
 
-		public static readonly HdrColor Pms503 = new HdrColor ( 0.956862745098039 , 0.819607843137255 , 0.8 ) ;
+		public static readonly HdrColor Pms503 =
+			new HdrColor ( 0.956862745098039 , 0.819607843137255 , 0.8 ) ;
 
 		public static readonly HdrColor Pms4975 = new HdrColor (
 																0.266666666666667 ,
@@ -2607,7 +2783,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.117647058823529 ,
 																0.149019607843137 ) ;
 
-		public static readonly HdrColor Pms505 = new HdrColor ( 0.4 , 0.117647058823529 , 0.168627450980392 ) ;
+		public static readonly HdrColor Pms505 =
+			new HdrColor ( 0.4 , 0.117647058823529 , 0.168627450980392 ) ;
 
 		public static readonly HdrColor Pms506 = new HdrColor (
 																0.47843137254902 ,
@@ -2664,7 +2841,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.729411764705882 ,
 																0.827450980392157 ) ;
 
-		public static readonly HdrColor Pms517 = new HdrColor ( 0.956862745098039 , 0.8 , 0.847058823529412 ) ;
+		public static readonly HdrColor Pms517 =
+			new HdrColor ( 0.956862745098039 , 0.8 , 0.847058823529412 ) ;
 
 		public static readonly HdrColor Pms5115 = new HdrColor (
 																0.309803921568627 ,
@@ -2681,11 +2859,14 @@ namespace DreamRecorder . ToolBox . Colors
 																0.419607843137255 ,
 																0.498039215686275 ) ;
 
-		public static readonly HdrColor Pms5145 = new HdrColor ( 0.67843137254902 , 0.529411764705882 , 0.6 ) ;
+		public static readonly HdrColor Pms5145 =
+			new HdrColor ( 0.67843137254902 , 0.529411764705882 , 0.6 ) ;
 
-		public static readonly HdrColor Pms5155 = new HdrColor ( 0.8 , 0.686274509803922 , 0.717647058823529 ) ;
+		public static readonly HdrColor Pms5155 =
+			new HdrColor ( 0.8 , 0.686274509803922 , 0.717647058823529 ) ;
 
-		public static readonly HdrColor Pms5165 = new HdrColor ( 0.87843137254902 , 0.788235294117647 , 0.8 ) ;
+		public static readonly HdrColor Pms5165 =
+			new HdrColor ( 0.87843137254902 , 0.788235294117647 , 0.8 ) ;
 
 		public static readonly HdrColor Pms5175 = new HdrColor (
 																0.909803921568627 ,
@@ -2717,16 +2898,19 @@ namespace DreamRecorder . ToolBox . Colors
 																0.63921568627451 ,
 																0.756862745098039 ) ;
 
-		public static readonly HdrColor Pms523 = new HdrColor ( 0.827450980392157 , 0.717647058823529 , 0.8 ) ;
+		public static readonly HdrColor Pms523 =
+			new HdrColor ( 0.827450980392157 , 0.717647058823529 , 0.8 ) ;
 
-		public static readonly HdrColor Pms524 = new HdrColor ( 0.886274509803922 , 0.8 , 0.827450980392157 ) ;
+		public static readonly HdrColor Pms524 =
+			new HdrColor ( 0.886274509803922 , 0.8 , 0.827450980392157 ) ;
 
 		public static readonly HdrColor Pms5185 = new HdrColor (
 																0.27843137254902 ,
 																0.156862745098039 ,
 																0.207843137254902 ) ;
 
-		public static readonly HdrColor Pms5195 = new HdrColor ( 0.349019607843137 , 0.2 , 0.266666666666667 ) ;
+		public static readonly HdrColor Pms5195 =
+			new HdrColor ( 0.349019607843137 , 0.2 , 0.266666666666667 ) ;
 
 		public static readonly HdrColor Pms5205 = new HdrColor (
 																0.556862745098039 ,
@@ -2738,14 +2922,16 @@ namespace DreamRecorder . ToolBox . Colors
 																0.576470588235294 ,
 																0.607843137254902 ) ;
 
-		public static readonly HdrColor Pms5225 = new HdrColor ( 0.8 , 0.67843137254902 , 0.686274509803922 ) ;
+		public static readonly HdrColor Pms5225 =
+			new HdrColor ( 0.8 , 0.67843137254902 , 0.686274509803922 ) ;
 
 		public static readonly HdrColor Pms5235 = new HdrColor (
 																0.866666666666667 ,
 																0.776470588235294 ,
 																0.768627450980392 ) ;
 
-		public static readonly HdrColor Pms5245 = new HdrColor ( 0.898039215686275 , 0.827450980392157 , 0.8 ) ;
+		public static readonly HdrColor Pms5245 =
+			new HdrColor ( 0.898039215686275 , 0.827450980392157 , 0.8 ) ;
 
 		public static readonly HdrColor Pms525 = new HdrColor (
 																0.317647058823529 ,
@@ -2757,7 +2943,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.129411764705882 ,
 																0.47843137254902 ) ;
 
-		public static readonly HdrColor Pms527 = new HdrColor ( 0.47843137254902 , 0.117647058823529 , 0.6 ) ;
+		public static readonly HdrColor Pms527 =
+			new HdrColor ( 0.47843137254902 , 0.117647058823529 , 0.6 ) ;
 
 		public static readonly HdrColor Pms528 = new HdrColor (
 																0.686274509803922 ,
@@ -2794,14 +2981,16 @@ namespace DreamRecorder . ToolBox . Colors
 																0.337254901960784 ,
 																0.466666666666667 ) ;
 
-		public static readonly HdrColor Pms5285 = new HdrColor ( 0.549019607843137 , 0.509803921568627 , 0.6 ) ;
+		public static readonly HdrColor Pms5285 =
+			new HdrColor ( 0.549019607843137 , 0.509803921568627 , 0.6 ) ;
 
 		public static readonly HdrColor Pms5295 = new HdrColor (
 																0.698039215686274 ,
 																0.658823529411765 ,
 																0.709803921568627 ) ;
 
-		public static readonly HdrColor Pms5305 = new HdrColor ( 0.8 , 0.756862745098039 , 0.776470588235294 ) ;
+		public static readonly HdrColor Pms5305 =
+			new HdrColor ( 0.8 , 0.756862745098039 , 0.776470588235294 ) ;
 
 		public static readonly HdrColor Pms5315 = new HdrColor (
 																0.858823529411765 ,
@@ -2843,20 +3032,24 @@ namespace DreamRecorder . ToolBox . Colors
 																0.827450980392157 ,
 																0.83921568627451 ) ;
 
-		public static readonly HdrColor Pms539 = new HdrColor ( 0 , 0.188235294117647 , 0.286274509803922 ) ;
+		public static readonly HdrColor Pms539 =
+			new HdrColor ( 0 , 0.188235294117647 , 0.286274509803922 ) ;
 
 		public static readonly HdrColor Pms540 = new HdrColor ( 0 , 0.2 , 0.356862745098039 ) ;
 
-		public static readonly HdrColor Pms541 = new HdrColor ( 0 , 0.247058823529412 , 0.466666666666667 ) ;
+		public static readonly HdrColor Pms541 =
+			new HdrColor ( 0 , 0.247058823529412 , 0.466666666666667 ) ;
 
-		public static readonly HdrColor Pms542 = new HdrColor ( 0.4 , 0.576470588235294 , 0.737254901960784 ) ;
+		public static readonly HdrColor Pms542 =
+			new HdrColor ( 0.4 , 0.576470588235294 , 0.737254901960784 ) ;
 
 		public static readonly HdrColor Pms543 = new HdrColor (
 																0.576470588235294 ,
 																0.717647058823529 ,
 																0.819607843137255 ) ;
 
-		public static readonly HdrColor Pms544 = new HdrColor ( 0.717647058823529 , 0.8 , 0.858823529411765 ) ;
+		public static readonly HdrColor Pms544 =
+			new HdrColor ( 0.717647058823529 , 0.8 , 0.858823529411765 ) ;
 
 		public static readonly HdrColor Pms545 = new HdrColor (
 																0.768627450980392 ,
@@ -2878,7 +3071,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.486274509803922 ,
 																0.549019607843137 ) ;
 
-		public static readonly HdrColor Pms5425 = new HdrColor ( 0.517647058823529 , 0.6 , 0.647058823529412 ) ;
+		public static readonly HdrColor Pms5425 =
+			new HdrColor ( 0.517647058823529 , 0.6 , 0.647058823529412 ) ;
 
 		public static readonly HdrColor Pms5435 = new HdrColor (
 																0.686274509803922 ,
@@ -2897,11 +3091,14 @@ namespace DreamRecorder . ToolBox . Colors
 																0.219607843137255 ,
 																0.266666666666667 ) ;
 
-		public static readonly HdrColor Pms547 = new HdrColor ( 0 , 0.247058823529412 , 0.329411764705882 ) ;
+		public static readonly HdrColor Pms547 =
+			new HdrColor ( 0 , 0.247058823529412 , 0.329411764705882 ) ;
 
-		public static readonly HdrColor Pms548 = new HdrColor ( 0 , 0.266666666666667 , 0.349019607843137 ) ;
+		public static readonly HdrColor Pms548 =
+			new HdrColor ( 0 , 0.266666666666667 , 0.349019607843137 ) ;
 
-		public static readonly HdrColor Pms549 = new HdrColor ( 0.368627450980392 , 0.6 , 0.666666666666667 ) ;
+		public static readonly HdrColor Pms549 =
+			new HdrColor ( 0.368627450980392 , 0.6 , 0.666666666666667 ) ;
 
 		public static readonly HdrColor Pms550 = new HdrColor (
 																0.529411764705882 ,
@@ -2918,7 +3115,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.83921568627451 ,
 																0.83921568627451 ) ;
 
-		public static readonly HdrColor Pms5463 = new HdrColor ( 0 , 0.207843137254902 , 0.227450980392157 ) ;
+		public static readonly HdrColor Pms5463 =
+			new HdrColor ( 0 , 0.207843137254902 , 0.227450980392157 ) ;
 
 		public static readonly HdrColor Pms5473 = new HdrColor (
 																0.149019607843137 ,
@@ -2950,16 +3148,19 @@ namespace DreamRecorder . ToolBox . Colors
 																0.866666666666667 ,
 																0.83921568627451 ) ;
 
-		public static readonly HdrColor Pms5467 = new HdrColor ( 0.0980392156862745 , 0.219607843137255 , 0.2 ) ;
+		public static readonly HdrColor Pms5467 =
+			new HdrColor ( 0.0980392156862745 , 0.219607843137255 , 0.2 ) ;
 
 		public static readonly HdrColor Pms5477 = new HdrColor (
 																0.227450980392157 ,
 																0.337254901960784 ,
 																0.309803921568627 ) ;
 
-		public static readonly HdrColor Pms5487 = new HdrColor ( 0.4 , 0.486274509803922 , 0.447058823529412 ) ;
+		public static readonly HdrColor Pms5487 =
+			new HdrColor ( 0.4 , 0.486274509803922 , 0.447058823529412 ) ;
 
-		public static readonly HdrColor Pms5497 = new HdrColor ( 0.568627450980392 , 0.63921568627451 , 0.6 ) ;
+		public static readonly HdrColor Pms5497 =
+			new HdrColor ( 0.568627450980392 , 0.63921568627451 , 0.6 ) ;
 
 		public static readonly HdrColor Pms5507 = new HdrColor (
 																0.686274509803922 ,
@@ -3026,7 +3227,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.568627450980392 ,
 																0.509803921568627 ) ;
 
-		public static readonly HdrColor Pms5565 = new HdrColor ( 0.588235294117647 , 0.666666666666667 , 0.6 ) ;
+		public static readonly HdrColor Pms5565 =
+			new HdrColor ( 0.588235294117647 , 0.666666666666667 , 0.6 ) ;
 
 		public static readonly HdrColor Pms5575 = new HdrColor (
 																0.686274509803922 ,
@@ -3038,14 +3240,16 @@ namespace DreamRecorder . ToolBox . Colors
 																0.807843137254902 ,
 																0.749019607843137 ) ;
 
-		public static readonly HdrColor Pms5595 = new HdrColor ( 0.847058823529412 , 0.858823529411765 , 0.8 ) ;
+		public static readonly HdrColor Pms5595 =
+			new HdrColor ( 0.847058823529412 , 0.858823529411765 , 0.8 ) ;
 
 		public static readonly HdrColor Pms560 = new HdrColor (
 																0.168627450980392 ,
 																0.298039215686275 ,
 																0.247058823529412 ) ;
 
-		public static readonly HdrColor Pms561 = new HdrColor ( 0.149019607843137 , 0.4 , 0.349019607843137 ) ;
+		public static readonly HdrColor Pms561 =
+			new HdrColor ( 0.149019607843137 , 0.4 , 0.349019607843137 ) ;
 
 		public static readonly HdrColor Pms562 = new HdrColor (
 																0.117647058823529 ,
@@ -3062,7 +3266,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.807843137254902 ,
 																0.737254901960784 ) ;
 
-		public static readonly HdrColor Pms565 = new HdrColor ( 0.737254901960784 , 0.858823529411765 , 0.8 ) ;
+		public static readonly HdrColor Pms565 =
+			new HdrColor ( 0.737254901960784 , 0.858823529411765 , 0.8 ) ;
 
 		public static readonly HdrColor Pms566 = new HdrColor (
 																0.819607843137255 ,
@@ -3084,14 +3289,16 @@ namespace DreamRecorder . ToolBox . Colors
 																0.517647058823529 ,
 																0.43921568627451 ) ;
 
-		public static readonly HdrColor Pms5635 = new HdrColor ( 0.619607843137255 , 0.666666666666667 , 0.6 ) ;
+		public static readonly HdrColor Pms5635 =
+			new HdrColor ( 0.619607843137255 , 0.666666666666667 , 0.6 ) ;
 
 		public static readonly HdrColor Pms5645 = new HdrColor (
 																0.737254901960784 ,
 																0.756862745098039 ,
 																0.698039215686274 ) ;
 
-		public static readonly HdrColor Pms5655 = new HdrColor ( 0.776470588235294 , 0.8 , 0.729411764705882 ) ;
+		public static readonly HdrColor Pms5655 =
+			new HdrColor ( 0.776470588235294 , 0.8 , 0.729411764705882 ) ;
 
 		public static readonly HdrColor Pms568 = new HdrColor (
 																0.83921568627451 ,
@@ -3103,7 +3310,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.43921568627451 ,
 																0.368627450980392 ) ;
 
-		public static readonly HdrColor Pms570 = new HdrColor ( 0 , 0.529411764705882 , 0.447058823529412 ) ;
+		public static readonly HdrColor Pms570 =
+			new HdrColor ( 0 , 0.529411764705882 , 0.447058823529412 ) ;
 
 		public static readonly HdrColor Pms571 = new HdrColor (
 																0.498039215686275 ,
@@ -3120,7 +3328,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.886274509803922 ,
 																0.807843137254902 ) ;
 
-		public static readonly HdrColor Pms574 = new HdrColor ( 0.8 , 0.898039215686275 , 0.83921568627451 ) ;
+		public static readonly HdrColor Pms574 =
+			new HdrColor ( 0.8 , 0.898039215686275 , 0.83921568627451 ) ;
 
 		public static readonly HdrColor Pms575 = new HdrColor (
 																0.286274509803922 ,
@@ -3137,7 +3346,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.556862745098039 ,
 																0.227450980392157 ) ;
 
-		public static readonly HdrColor Pms578 = new HdrColor ( 0.709803921568627 , 0.8 , 0.556862745098039 ) ;
+		public static readonly HdrColor Pms578 =
+			new HdrColor ( 0.709803921568627 , 0.8 , 0.556862745098039 ) ;
 
 		public static readonly HdrColor Pms579 = new HdrColor (
 																0.776470588235294 ,
@@ -3159,7 +3369,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.286274509803922 ,
 																0.149019607843137 ) ;
 
-		public static readonly HdrColor Pms5763 = new HdrColor ( 0.368627450980392 , 0.4 , 0.227450980392157 ) ;
+		public static readonly HdrColor Pms5763 =
+			new HdrColor ( 0.368627450980392 , 0.4 , 0.227450980392157 ) ;
 
 		public static readonly HdrColor Pms5773 = new HdrColor (
 																0.466666666666667 ,
@@ -3176,7 +3387,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.709803921568627 ,
 																0.556862745098039 ) ;
 
-		public static readonly HdrColor Pms803 = new HdrColor ( 1 , 0.929411764705882 , 0.219607843137255 ) ;
+		public static readonly HdrColor Pms803 =
+			new HdrColor ( 1 , 0.929411764705882 , 0.219607843137255 ) ;
 
 		public static readonly HdrColor Pms5747 = new HdrColor (
 																0.847058823529412 ,
@@ -3203,7 +3415,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.67843137254902 ,
 																0.458823529411765 ) ;
 
-		public static readonly HdrColor Pms5797 = new HdrColor ( 0.776470588235294 , 0.776470588235294 , 0.6 ) ;
+		public static readonly HdrColor Pms5797 =
+			new HdrColor ( 0.776470588235294 , 0.776470588235294 , 0.6 ) ;
 
 		public static readonly HdrColor Pms5807 = new HdrColor (
 																0.827450980392157 ,
@@ -3255,14 +3468,16 @@ namespace DreamRecorder . ToolBox . Colors
 																0.43921568627451 ,
 																0.168627450980392 ) ;
 
-		public static readonly HdrColor Pms5835 = new HdrColor ( 0.619607843137255 , 0.6 , 0.349019607843137 ) ;
+		public static readonly HdrColor Pms5835 =
+			new HdrColor ( 0.619607843137255 , 0.6 , 0.349019607843137 ) ;
 
 		public static readonly HdrColor Pms5845 = new HdrColor (
 																0.698039215686274 ,
 																0.666666666666667 ,
 																0.43921568627451 ) ;
 
-		public static readonly HdrColor Pms5855 = new HdrColor ( 0.8 , 0.776470588235294 , 0.576470588235294 ) ;
+		public static readonly HdrColor Pms5855 =
+			new HdrColor ( 0.8 , 0.776470588235294 , 0.576470588235294 ) ;
 
 		public static readonly HdrColor Pms5865 = new HdrColor (
 																0.83921568627451 ,
@@ -3334,7 +3549,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.807843137254902 ,
 																0.286274509803922 ) ;
 
-		public static readonly HdrColor Pms612 = new HdrColor ( 0.768627450980392 , 0.729411764705882 , 0 ) ;
+		public static readonly HdrColor Pms612 =
+			new HdrColor ( 0.768627450980392 , 0.729411764705882 , 0 ) ;
 
 		public static readonly HdrColor Pms613 = new HdrColor (
 																0.686274509803922 ,
@@ -3356,7 +3572,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.83921568627451 ,
 																0.607843137254902 ) ;
 
-		public static readonly HdrColor Pms617 = new HdrColor ( 0.8 , 0.768627450980392 , 0.486274509803922 ) ;
+		public static readonly HdrColor Pms617 =
+			new HdrColor ( 0.8 , 0.768627450980392 , 0.486274509803922 ) ;
 
 		public static readonly HdrColor Pms618 = new HdrColor (
 																0.709803921568627 ,
@@ -3408,21 +3625,24 @@ namespace DreamRecorder . ToolBox . Colors
 																0.188235294117647 ,
 																0.149019607843137 ) ;
 
-		public static readonly HdrColor Pms628 = new HdrColor ( 0.8 , 0.886274509803922 , 0.866666666666667 ) ;
+		public static readonly HdrColor Pms628 =
+			new HdrColor ( 0.8 , 0.886274509803922 , 0.866666666666667 ) ;
 
 		public static readonly HdrColor Pms629 = new HdrColor (
 																0.698039215686274 ,
 																0.847058823529412 ,
 																0.847058823529412 ) ;
 
-		public static readonly HdrColor Pms630 = new HdrColor ( 0.549019607843137 , 0.8 , 0.827450980392157 ) ;
+		public static readonly HdrColor Pms630 =
+			new HdrColor ( 0.549019607843137 , 0.8 , 0.827450980392157 ) ;
 
 		public static readonly HdrColor Pms631 = new HdrColor (
 																0.329411764705882 ,
 																0.717647058823529 ,
 																0.776470588235294 ) ;
 
-		public static readonly HdrColor Pms632 = new HdrColor ( 0 , 0.627450980392157 , 0.729411764705882 ) ;
+		public static readonly HdrColor Pms632 =
+			new HdrColor ( 0 , 0.627450980392157 , 0.729411764705882 ) ;
 
 		public static readonly HdrColor Pms633 = new HdrColor ( 0 , 0.498039215686275 , 0.6 ) ;
 
@@ -3433,20 +3653,25 @@ namespace DreamRecorder . ToolBox . Colors
 																0.87843137254902 ,
 																0.87843137254902 ) ;
 
-		public static readonly HdrColor Pms636 = new HdrColor ( 0.6 , 0.83921568627451 , 0.866666666666667 ) ;
+		public static readonly HdrColor Pms636 =
+			new HdrColor ( 0.6 , 0.83921568627451 , 0.866666666666667 ) ;
 
 		public static readonly HdrColor Pms637 = new HdrColor (
 																0.419607843137255 ,
 																0.788235294117647 ,
 																0.858823529411765 ) ;
 
-		public static readonly HdrColor Pms638 = new HdrColor ( 0 , 0.709803921568627 , 0.83921568627451 ) ;
+		public static readonly HdrColor Pms638 =
+			new HdrColor ( 0 , 0.709803921568627 , 0.83921568627451 ) ;
 
-		public static readonly HdrColor Pms639 = new HdrColor ( 0 , 0.627450980392157 , 0.768627450980392 ) ;
+		public static readonly HdrColor Pms639 =
+			new HdrColor ( 0 , 0.627450980392157 , 0.768627450980392 ) ;
 
-		public static readonly HdrColor Pms640 = new HdrColor ( 0 , 0.549019607843137 , 0.698039215686274 ) ;
+		public static readonly HdrColor Pms640 =
+			new HdrColor ( 0 , 0.549019607843137 , 0.698039215686274 ) ;
 
-		public static readonly HdrColor Pms641 = new HdrColor ( 0 , 0.47843137254902 , 0.647058823529412 ) ;
+		public static readonly HdrColor Pms641 =
+			new HdrColor ( 0 , 0.47843137254902 , 0.647058823529412 ) ;
 
 		public static readonly HdrColor Pms642 = new HdrColor (
 																0.819607843137255 ,
@@ -3478,7 +3703,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.329411764705882 ,
 																0.486274509803922 ) ;
 
-		public static readonly HdrColor Pms648 = new HdrColor ( 0 , 0.188235294117647 , 0.368627450980392 ) ;
+		public static readonly HdrColor Pms648 =
+			new HdrColor ( 0 , 0.188235294117647 , 0.368627450980392 ) ;
 
 		public static readonly HdrColor Pms649 = new HdrColor (
 																0.83921568627451 ,
@@ -3500,7 +3726,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.529411764705882 ,
 																0.658823529411765 ) ;
 
-		public static readonly HdrColor Pms653 = new HdrColor ( 0.2 , 0.337254901960784 , 0.529411764705882 ) ;
+		public static readonly HdrColor Pms653 =
+			new HdrColor ( 0.2 , 0.337254901960784 , 0.529411764705882 ) ;
 
 		public static readonly HdrColor Pms654 = new HdrColor (
 																0.0588235294117647 ,
@@ -3537,7 +3764,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.376470588235294 ,
 																0.658823529411765 ) ;
 
-		public static readonly HdrColor Pms661 = new HdrColor ( 0.176470588235294 , 0.2 , 0.556862745098039 ) ;
+		public static readonly HdrColor Pms661 =
+			new HdrColor ( 0.176470588235294 , 0.2 , 0.556862745098039 ) ;
 
 		public static readonly HdrColor Pms662 = new HdrColor (
 																0.0470588235294118 ,
@@ -3549,7 +3777,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.827450980392157 ,
 																0.83921568627451 ) ;
 
-		public static readonly HdrColor Pms664 = new HdrColor ( 0.847058823529412 , 0.8 , 0.819607843137255 ) ;
+		public static readonly HdrColor Pms664 =
+			new HdrColor ( 0.847058823529412 , 0.8 , 0.819607843137255 ) ;
 
 		public static readonly HdrColor Pms665 = new HdrColor (
 																0.776470588235294 ,
@@ -3561,9 +3790,11 @@ namespace DreamRecorder . ToolBox . Colors
 																0.576470588235294 ,
 																0.67843137254902 ) ;
 
-		public static readonly HdrColor Pms667 = new HdrColor ( 0.498039215686275 , 0.4 , 0.537254901960784 ) ;
+		public static readonly HdrColor Pms667 =
+			new HdrColor ( 0.498039215686275 , 0.4 , 0.537254901960784 ) ;
 
-		public static readonly HdrColor Pms668 = new HdrColor ( 0.4 , 0.286274509803922 , 0.458823529411765 ) ;
+		public static readonly HdrColor Pms668 =
+			new HdrColor ( 0.4 , 0.286274509803922 , 0.458823529411765 ) ;
 
 		public static readonly HdrColor Pms669 = new HdrColor (
 																0.27843137254902 ,
@@ -3600,14 +3831,16 @@ namespace DreamRecorder . ToolBox . Colors
 																0.219607843137255 ,
 																0.466666666666667 ) ;
 
-		public static readonly HdrColor Pms676 = new HdrColor ( 0.627450980392157 , 0 , 0.329411764705882 ) ;
+		public static readonly HdrColor Pms676 =
+			new HdrColor ( 0.627450980392157 , 0 , 0.329411764705882 ) ;
 
 		public static readonly HdrColor Pms677 = new HdrColor (
 																0.929411764705882 ,
 																0.83921568627451 ,
 																0.83921568627451 ) ;
 
-		public static readonly HdrColor Pms678 = new HdrColor ( 0.917647058823529 , 0.8 , 0.807843137254902 ) ;
+		public static readonly HdrColor Pms678 =
+			new HdrColor ( 0.917647058823529 , 0.8 , 0.807843137254902 ) ;
 
 		public static readonly HdrColor Pms679 = new HdrColor (
 																0.898039215686275 ,
@@ -3634,7 +3867,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.156862745098039 ,
 																0.309803921568627 ) ;
 
-		public static readonly HdrColor Pms684 = new HdrColor ( 0.937254901960784 , 0.8 , 0.807843137254902 ) ;
+		public static readonly HdrColor Pms684 =
+			new HdrColor ( 0.937254901960784 , 0.8 , 0.807843137254902 ) ;
 
 		public static readonly HdrColor Pms685 = new HdrColor (
 																0.917647058823529 ,
@@ -3651,9 +3885,11 @@ namespace DreamRecorder . ToolBox . Colors
 																0.537254901960784 ,
 																0.619607843137255 ) ;
 
-		public static readonly HdrColor Pms688 = new HdrColor ( 0.698039215686274 , 0.4 , 0.517647058823529 ) ;
+		public static readonly HdrColor Pms688 =
+			new HdrColor ( 0.698039215686274 , 0.4 , 0.517647058823529 ) ;
 
-		public static readonly HdrColor Pms689 = new HdrColor ( 0.576470588235294 , 0.258823529411765 , 0.4 ) ;
+		public static readonly HdrColor Pms689 =
+			new HdrColor ( 0.576470588235294 , 0.258823529411765 , 0.4 ) ;
 
 		public static readonly HdrColor Pms690 = new HdrColor (
 																0.43921568627451 ,
@@ -3695,7 +3931,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.219607843137255 ,
 																0.227450980392157 ) ;
 
-		public static readonly HdrColor Pms698 = new HdrColor ( 0.968627450980392 , 0.819607843137255 , 0.8 ) ;
+		public static readonly HdrColor Pms698 =
+			new HdrColor ( 0.968627450980392 , 0.819607843137255 , 0.8 ) ;
 
 		public static readonly HdrColor Pms699 = new HdrColor (
 																0.968627450980392 ,
@@ -3742,7 +3979,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.67843137254902 ,
 																0.686274509803922 ) ;
 
-		public static readonly HdrColor Pms708 = new HdrColor ( 0.976470588235294 , 0.556862745098039 , 0.6 ) ;
+		public static readonly HdrColor Pms708 =
+			new HdrColor ( 0.976470588235294 , 0.556862745098039 , 0.6 ) ;
 
 		public static readonly HdrColor Pms709 = new HdrColor (
 																0.949019607843137 ,
@@ -3754,9 +3992,11 @@ namespace DreamRecorder . ToolBox . Colors
 																0.258823529411765 ,
 																0.317647058823529 ) ;
 
-		public static readonly HdrColor Pms711 = new HdrColor ( 0.819607843137255 , 0.176470588235294 , 0.2 ) ;
+		public static readonly HdrColor Pms711 =
+			new HdrColor ( 0.819607843137255 , 0.176470588235294 , 0.2 ) ;
 
-		public static readonly HdrColor Pms712 = new HdrColor ( 1 , 0.827450980392157 , 0.666666666666667 ) ;
+		public static readonly HdrColor Pms712 =
+			new HdrColor ( 1 , 0.827450980392157 , 0.666666666666667 ) ;
 
 		public static readonly HdrColor Pms713 = new HdrColor (
 																0.976470588235294 ,
@@ -3778,9 +4018,11 @@ namespace DreamRecorder . ToolBox . Colors
 																0.517647058823529 ,
 																0.0666666666666667 ) ;
 
-		public static readonly HdrColor Pms717 = new HdrColor ( 0.827450980392157 , 0.427450980392157 , 0 ) ;
+		public static readonly HdrColor Pms717 =
+			new HdrColor ( 0.827450980392157 , 0.427450980392157 , 0 ) ;
 
-		public static readonly HdrColor Pms718 = new HdrColor ( 0.749019607843137 , 0.356862745098039 , 0 ) ;
+		public static readonly HdrColor Pms718 =
+			new HdrColor ( 0.749019607843137 , 0.356862745098039 , 0 ) ;
 
 		public static readonly HdrColor Pms719 = new HdrColor (
 																0.956862745098039 ,
@@ -3847,7 +4089,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.247058823529412 ,
 																0.0392156862745098 ) ;
 
-		public static readonly HdrColor Pms732 = new HdrColor ( 0.376470588235294 , 0.2 , 0.0392156862745098 ) ;
+		public static readonly HdrColor Pms732 =
+			new HdrColor ( 0.376470588235294 , 0.2 , 0.0392156862745098 ) ;
 
 		public static readonly HdrColor Yellow2X = new HdrColor (
 																0.988235294117647 ,
@@ -3859,19 +4102,25 @@ namespace DreamRecorder . ToolBox . Colors
 																0.709803921568627 ,
 																0.0470588235294118 ) ;
 
-		public static readonly HdrColor Pms1302X = new HdrColor ( 0.886274509803922 , 0.568627450980392 , 0 ) ;
+		public static readonly HdrColor Pms1302X =
+			new HdrColor ( 0.886274509803922 , 0.568627450980392 , 0 ) ;
 
-		public static readonly HdrColor Pms1652X = new HdrColor ( 0.917647058823529 , 0.309803921568627 , 0 ) ;
+		public static readonly HdrColor Pms1652X =
+			new HdrColor ( 0.917647058823529 , 0.309803921568627 , 0 ) ;
 
-		public static readonly HdrColor WarmRed2X = new HdrColor ( 0.87843137254902 , 0.227450980392157 , 0 ) ;
+		public static readonly HdrColor WarmRed2X =
+			new HdrColor ( 0.87843137254902 , 0.227450980392157 , 0 ) ;
 
-		public static readonly HdrColor Pms17882X = new HdrColor ( 0.83921568627451 , 0.129411764705882 , 0 ) ;
+		public static readonly HdrColor Pms17882X =
+			new HdrColor ( 0.83921568627451 , 0.129411764705882 , 0 ) ;
 
-		public static readonly HdrColor Pms18522X = new HdrColor ( 0.819607843137255 , 0.0862745098039216 , 0 ) ;
+		public static readonly HdrColor Pms18522X =
+			new HdrColor ( 0.819607843137255 , 0.0862745098039216 , 0 ) ;
 
 		public static readonly HdrColor Pms4852X = new HdrColor ( 0.8 , 0.0470588235294118 , 0 ) ;
 
-		public static readonly HdrColor RubineRed2X = new HdrColor ( 0.776470588235294 , 0 , 0.23921568627451 ) ;
+		public static readonly HdrColor RubineRed2X =
+			new HdrColor ( 0.776470588235294 , 0 , 0.23921568627451 ) ;
 
 		public static readonly HdrColor RhodamineRed2X =
 			new HdrColor ( 0.819607843137255 , 0.0196078431372549 , 0.447058823529412 ) ;
@@ -3881,33 +4130,45 @@ namespace DreamRecorder . ToolBox . Colors
 																0.0196078431372549 ,
 																0.486274509803922 ) ;
 
-		public static readonly HdrColor Purple2X = new HdrColor ( 0.666666666666667 , 0 , 0.588235294117647 ) ;
+		public static readonly HdrColor Purple2X =
+			new HdrColor ( 0.666666666666667 , 0 , 0.588235294117647 ) ;
 
-		public static readonly HdrColor Pms25922X = new HdrColor ( 0.447058823529412 , 0 , 0.509803921568627 ) ;
+		public static readonly HdrColor Pms25922X =
+			new HdrColor ( 0.447058823529412 , 0 , 0.509803921568627 ) ;
 
-		public static readonly HdrColor Violet2X = new HdrColor ( 0.349019607843137 , 0 , 0.556862745098039 ) ;
+		public static readonly HdrColor Violet2X =
+			new HdrColor ( 0.349019607843137 , 0 , 0.556862745098039 ) ;
 
-		public static readonly HdrColor ReflexBlue2X = new HdrColor ( 0.109803921568627 , 0 , 0.47843137254902 ) ;
+		public static readonly HdrColor ReflexBlue2X =
+			new HdrColor ( 0.109803921568627 , 0 , 0.47843137254902 ) ;
 
-		public static readonly HdrColor ProcessBlue2X = new HdrColor ( 0 , 0.466666666666667 , 0.749019607843137 ) ;
+		public static readonly HdrColor ProcessBlue2X =
+			new HdrColor ( 0 , 0.466666666666667 , 0.749019607843137 ) ;
 
 		public static readonly HdrColor Pms2992X = new HdrColor ( 0 , 0.498039215686275 , 0.8 ) ;
 
-		public static readonly HdrColor Pms3062X = new HdrColor ( 0 , 0.63921568627451 , 0.819607843137255 ) ;
+		public static readonly HdrColor Pms3062X =
+			new HdrColor ( 0 , 0.63921568627451 , 0.819607843137255 ) ;
 
-		public static readonly HdrColor Pms3202X = new HdrColor ( 0 , 0.498039215686275 , 0.509803921568627 ) ;
+		public static readonly HdrColor Pms3202X =
+			new HdrColor ( 0 , 0.498039215686275 , 0.509803921568627 ) ;
 
-		public static readonly HdrColor Pms3272X = new HdrColor ( 0 , 0.537254901960784 , 0.466666666666667 ) ;
+		public static readonly HdrColor Pms3272X =
+			new HdrColor ( 0 , 0.537254901960784 , 0.466666666666667 ) ;
 
-		public static readonly HdrColor Green2X = new HdrColor ( 0 , 0.588235294117647 , 0.466666666666667 ) ;
+		public static readonly HdrColor Green2X =
+			new HdrColor ( 0 , 0.588235294117647 , 0.466666666666667 ) ;
 
 		public static readonly HdrColor Pms3542X = new HdrColor ( 0 , 0.6 , 0.266666666666667 ) ;
 
-		public static readonly HdrColor Pms3682X = new HdrColor ( 0 , 0.619607843137255 , 0.0588235294117647 ) ;
+		public static readonly HdrColor Pms3682X =
+			new HdrColor ( 0 , 0.619607843137255 , 0.0588235294117647 ) ;
 
-		public static readonly HdrColor Pms3752X = new HdrColor ( 0.329411764705882 , 0.737254901960784 , 0 ) ;
+		public static readonly HdrColor Pms3752X =
+			new HdrColor ( 0.329411764705882 , 0.737254901960784 , 0 ) ;
 
-		public static readonly HdrColor Pms3822X = new HdrColor ( 0.619607843137255 , 0.768627450980392 , 0 ) ;
+		public static readonly HdrColor Pms3822X =
+			new HdrColor ( 0.619607843137255 , 0.768627450980392 , 0 ) ;
 
 		public static readonly HdrColor Pms4712X = new HdrColor (
 																0.63921568627451 ,
@@ -3924,7 +4185,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.0470588235294118 ,
 																0.0666666666666667 ) ;
 
-		public static readonly HdrColor Black2 = new HdrColor ( 0.227450980392157 , 0.2 , 0.129411764705882 ) ;
+		public static readonly HdrColor Black2 =
+			new HdrColor ( 0.227450980392157 , 0.2 , 0.129411764705882 ) ;
 
 		public static readonly HdrColor Black3 = new HdrColor (
 																0.156862745098039 ,
@@ -3976,7 +4238,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.0470588235294118 ,
 																0.0588235294117647 ) ;
 
-		public static readonly HdrColor Black72X = new HdrColor ( 0.2 , 0.188235294117647 , 0.168627450980392 ) ;
+		public static readonly HdrColor Black72X =
+			new HdrColor ( 0.2 , 0.188235294117647 , 0.168627450980392 ) ;
 
 		public static readonly HdrColor Pms801 = new HdrColor ( 0 , 0.666666666666667 , 0.8 ) ;
 
@@ -3985,7 +4248,8 @@ namespace DreamRecorder . ToolBox . Colors
 																0.866666666666667 ,
 																0.286274509803922 ) ;
 
-		public static readonly HdrColor Pms804 = new HdrColor ( 1 , 0.576470588235294 , 0.219607843137255 ) ;
+		public static readonly HdrColor Pms804 =
+			new HdrColor ( 1 , 0.576470588235294 , 0.219607843137255 ) ;
 
 		public static readonly HdrColor Pms805 = new HdrColor (
 																0.976470588235294 ,
@@ -3994,18 +4258,22 @@ namespace DreamRecorder . ToolBox . Colors
 
 		public static readonly HdrColor Pms806 = new HdrColor ( 1 , 0 , 0.576470588235294 ) ;
 
-		public static readonly HdrColor Pms807 = new HdrColor ( 0.83921568627451 , 0 , 0.619607843137255 ) ;
+		public static readonly HdrColor Pms807 =
+			new HdrColor ( 0.83921568627451 , 0 , 0.619607843137255 ) ;
 
-		public static readonly HdrColor Pms8012X = new HdrColor ( 0 , 0.537254901960784 , 0.686274509803922 ) ;
+		public static readonly HdrColor Pms8012X =
+			new HdrColor ( 0 , 0.537254901960784 , 0.686274509803922 ) ;
 
 		public static readonly HdrColor Pms8022X = new HdrColor (
 																0.109803921568627 ,
 																0.807843137254902 ,
 																0.156862745098039 ) ;
 
-		public static readonly HdrColor Pms8032X = new HdrColor ( 1 , 0.847058823529412 , 0.0862745098039216 ) ;
+		public static readonly HdrColor Pms8032X =
+			new HdrColor ( 1 , 0.847058823529412 , 0.0862745098039216 ) ;
 
-		public static readonly HdrColor Pms8042X = new HdrColor ( 1 , 0.498039215686275 , 0.117647058823529 ) ;
+		public static readonly HdrColor Pms8042X =
+			new HdrColor ( 1 , 0.498039215686275 , 0.117647058823529 ) ;
 
 		public static readonly HdrColor Pms8052X = new HdrColor (
 																0.976470588235294 ,
@@ -4017,9 +4285,11 @@ namespace DreamRecorder . ToolBox . Colors
 																0.00784313725490196 ,
 																0.486274509803922 ) ;
 
-		public static readonly HdrColor Pms8072X = new HdrColor ( 0.749019607843137 , 0 , 0.549019607843137 ) ;
+		public static readonly HdrColor Pms8072X =
+			new HdrColor ( 0.749019607843137 , 0 , 0.549019607843137 ) ;
 
-		public static readonly HdrColor Pms808 = new HdrColor ( 0 , 0.709803921568627 , 0.607843137254902 ) ;
+		public static readonly HdrColor Pms808 =
+			new HdrColor ( 0 , 0.709803921568627 , 0.607843137254902 ) ;
 
 		public static readonly HdrColor Pms809 = new HdrColor (
 																0.866666666666667 ,
@@ -4028,9 +4298,11 @@ namespace DreamRecorder . ToolBox . Colors
 
 		public static readonly HdrColor Pms810 = new HdrColor ( 1 , 0.8 , 0.117647058823529 ) ;
 
-		public static readonly HdrColor Pms811 = new HdrColor ( 1 , 0.447058823529412 , 0.27843137254902 ) ;
+		public static readonly HdrColor Pms811 =
+			new HdrColor ( 1 , 0.447058823529412 , 0.27843137254902 ) ;
 
-		public static readonly HdrColor Pms812 = new HdrColor ( 0.988235294117647 , 0.137254901960784 , 0.4 ) ;
+		public static readonly HdrColor Pms812 =
+			new HdrColor ( 0.988235294117647 , 0.137254901960784 , 0.4 ) ;
 
 		public static readonly HdrColor Pms813 = new HdrColor ( 0.898039215686275 , 0 , 0.6 ) ;
 
@@ -4039,23 +4311,27 @@ namespace DreamRecorder . ToolBox . Colors
 																0.376470588235294 ,
 																0.756862745098039 ) ;
 
-		public static readonly HdrColor Pms8082X = new HdrColor ( 0 , 0.627450980392157 , 0.529411764705882 ) ;
+		public static readonly HdrColor Pms8082X =
+			new HdrColor ( 0 , 0.627450980392157 , 0.529411764705882 ) ;
 
 		public static readonly HdrColor Pms8092X = new HdrColor (
 																0.83921568627451 ,
 																0.83921568627451 ,
 																0.0470588235294118 ) ;
 
-		public static readonly HdrColor Pms8102X = new HdrColor ( 1 , 0.737254901960784 , 0.129411764705882 ) ;
+		public static readonly HdrColor Pms8102X =
+			new HdrColor ( 1 , 0.737254901960784 , 0.129411764705882 ) ;
 
-		public static readonly HdrColor Pms8112X = new HdrColor ( 1 , 0.329411764705882 , 0.0862745098039216 ) ;
+		public static readonly HdrColor Pms8112X =
+			new HdrColor ( 1 , 0.329411764705882 , 0.0862745098039216 ) ;
 
 		public static readonly HdrColor Pms8122X = new HdrColor (
 																0.988235294117647 ,
 																0.0274509803921569 ,
 																0.309803921568627 ) ;
 
-		public static readonly HdrColor Pms8132X = new HdrColor ( 0.819607843137255 , 0 , 0.517647058823529 ) ;
+		public static readonly HdrColor Pms8132X =
+			new HdrColor ( 0.819607843137255 , 0 , 0.517647058823529 ) ;
 
 		public static readonly HdrColor Pms8142X = new HdrColor (
 																0.43921568627451 ,

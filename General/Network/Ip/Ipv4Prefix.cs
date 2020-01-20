@@ -19,7 +19,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			Length       = 0 ;
 		}
 
-		private Ipv4Prefix ( [NotNull] Memory<byte> address , byte length )
+		private Ipv4Prefix ( [NotNull] Memory <byte> address , byte length )
 		{
 			if ( address . Length != 4 )
 			{

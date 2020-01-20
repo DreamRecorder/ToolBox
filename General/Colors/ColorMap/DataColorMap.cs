@@ -18,7 +18,7 @@ namespace DreamRecorder . ToolBox . Colors . ColorMap
 			double lastValue    = value - flooredValue ;
 
 			HdrColor data = Data [ flooredValue ]
-							+ ( lastValue * ( Data [ flooredValue + 1 ] - Data [ flooredValue ] ) ) ;
+						+ lastValue * ( Data [ flooredValue + 1 ] - Data [ flooredValue ] ) ;
 
 			return data ;
 		}

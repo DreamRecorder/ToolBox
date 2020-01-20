@@ -16,9 +16,8 @@ namespace DreamRecorder . ToolBox . Network
 
 		public Eui48Address ( ) => AddressBytes = new byte[ 6 ] ;
 
-		public Eui48Address ( Memory<byte> address )
+		public Eui48Address ( Memory <byte> address )
 		{
-		
 			if ( address . Length != 6 )
 			{
 				throw new ArgumentException ( ) ;
@@ -47,7 +46,7 @@ namespace DreamRecorder . ToolBox . Network
 			}
 			else
 			{
-				if ( ( address . Length % 2 ) > 0 )
+				if ( address . Length % 2 > 0 )
 				{
 					//should be even
 					throw new FormatException ( ) ;
@@ -62,13 +61,13 @@ namespace DreamRecorder . ToolBox . Network
 			{
 				int value = t ;
 
-				if ( ( value   >= 0x30 )
-					&& ( value <= 0x39 ) )
+				if ( value >= 0x30
+				&& value   <= 0x39 )
 				{
 					value -= 0x30 ;
 				}
-				else if ( ( value  >= 0x41 )
-						&& ( value <= 0x46 ) )
+				else if ( value >= 0x41
+					&& value    <= 0x46 )
 				{
 					value -= 0x37 ;
 				}
@@ -89,12 +88,12 @@ namespace DreamRecorder . ToolBox . Network
 				}
 
 				//we had too many characters after the last dash
-				if ( hasDashes && ( validCount >= 2 ) )
+				if ( hasDashes && validCount >= 2 )
 				{
 					throw new FormatException ( ) ;
 				}
 
-				if ( ( validCount % 2 ) == 0 )
+				if ( validCount % 2 == 0 )
 				{
 					buffer [ j ] = ( byte ) ( value << 4 ) ;
 				}
@@ -119,7 +118,7 @@ namespace DreamRecorder . ToolBox . Network
 		{
 			StringBuilder addressString = new StringBuilder ( ) ;
 
-			foreach ( byte value in AddressBytes.Span )
+			foreach ( byte value in AddressBytes . Span )
 			{
 				int tmp = ( value >> 4 ) & 0x0F ;
 

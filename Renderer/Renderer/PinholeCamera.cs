@@ -12,10 +12,10 @@ namespace DreamRecorder . ToolBox . Renderer
 
 		protected override Vector3 CalculateProject ( Vector2 point )
 		{
-			float x = ( ( float ) HalfFovTan * point . X ) / ScreenWidth ;
-			float y = ( ( float ) HalfFovTan * point . Y ) / ScreenWidth ;
+			float x = ( float ) HalfFovTan * point . X / ScreenWidth ;
+			float y = ( float ) HalfFovTan * point . Y / ScreenWidth ;
 
-			return ( x * Right ) + ( y * Up ) + Forward ;
+			return x * Right + y * Up + Forward ;
 		}
 
 		protected override Vector2 CalculateProject ( Vector3 point )

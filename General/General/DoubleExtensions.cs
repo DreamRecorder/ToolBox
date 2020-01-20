@@ -17,13 +17,14 @@ namespace DreamRecorder . ToolBox . General
 		/// </summary>
 		public const double Epsilon = 2.2204460492503131e-016 ;
 
-		public static bool IsAboutZero ( this double value ) => value < Epsilon && - value > Epsilon ;
+		public static bool IsAboutZero ( this double value )
+			=> value < Epsilon && - value > Epsilon ;
 
 		public static bool DefinitelyGreaterThan ( double a , double b )
-			=> ( a - b ) > ( Math . Max ( Math . Abs ( a ) , Math . Abs ( b ) ) ) * Epsilon ;
+			=> a - b > Math . Max ( Math . Abs ( a ) , Math . Abs ( b ) ) * Epsilon ;
 
 		public static bool DefinitelyLessThan ( double a , double b )
-			=> ( b - a ) > ( Math . Max ( Math . Abs ( a ) , Math . Abs ( b ) ) ) * Epsilon ;
+			=> b - a > Math . Max ( Math . Abs ( a ) , Math . Abs ( b ) ) * Epsilon ;
 
 	}
 

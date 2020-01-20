@@ -29,12 +29,14 @@ namespace DreamRecorder . ToolBox . General
 
 		public bool Equals ( NormalValue other ) => Value == other . Value ;
 
-		public static bool operator == ( NormalValue left , NormalValue right ) => left . Equals ( right ) ;
+		public static bool operator == ( NormalValue left , NormalValue right )
+			=> left . Equals ( right ) ;
 
-		public static bool operator != ( NormalValue left , NormalValue right ) => ! left . Equals ( right ) ;
+		public static bool operator != ( NormalValue left , NormalValue right )
+			=> ! left . Equals ( right ) ;
 
 		public static NormalValue operator * ( NormalValue left , NormalValue right )
-			=> ( left . Value * right . Value ) / MaxValue ;
+			=> left . Value * right . Value / MaxValue ;
 
 		public static explicit operator NormalValue ( decimal value )
 			=> new NormalValue ( Convert . ToInt32 ( value * MaxValue ) ) ;
@@ -54,11 +56,13 @@ namespace DreamRecorder . ToolBox . General
 
 		}
 
-		public static IEqualityComparer <NormalValue> ValueComparer { get ; } = new ValueEqualityComparer ( ) ;
+		public static IEqualityComparer <NormalValue> ValueComparer { get ; } =
+			new ValueEqualityComparer ( ) ;
 
 		public int ToInt32 ( ) => this ;
 
-		public NormalValue ( int value ) => Value = Math . Min ( Math . Max ( value , 0 ) , 10000 ) ;
+		public NormalValue ( int value )
+			=> Value = Math . Min ( Math . Max ( value , 0 ) , 10000 ) ;
 
 		public static implicit operator NormalValue ( int value ) => new NormalValue ( value ) ;
 

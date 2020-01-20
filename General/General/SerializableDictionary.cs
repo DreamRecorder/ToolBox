@@ -10,7 +10,8 @@ namespace DreamRecorder . ToolBox . General
 {
 
 	[XmlRoot ( "dictionary" )]
-	public class SerializableDictionary <TKey , TValue> : Dictionary <TKey , TValue> , IXmlSerializable
+	public class SerializableDictionary
+		<TKey , TValue> : Dictionary <TKey , TValue> , IXmlSerializable
 	{
 
 		#region IXmlSerializable Members

@@ -18,7 +18,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 		public Ipv6Address ( ) => AddressBytes = new byte[ 16 ] ;
 
-		public Ipv6Address ( Memory<byte> address )
+		public Ipv6Address ( Memory <byte> address )
 		{
 			if ( address . Length != 16 )
 			{
@@ -55,7 +55,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 					fixed ( char * name = address )
 					{
 						if ( Ipv6AddressHelper . IsValidStrict ( name , offset , ref end )
-							|| ( end != address . Length ) )
+						|| end != address . Length )
 						{
 							ushort [ ] numbers = new ushort[ NumberOfLabels ] ;
 							string     scopeId = null ;
@@ -79,7 +79,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 							int j = 0 ;
 
-							byte[] addressBytes = new byte[16];
+							byte [ ] addressBytes = new byte[ 16 ] ;
 
 							for ( int i = 0 ; i < NumberOfLabels ; i++ )
 							{
@@ -87,7 +87,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 								addressBytes [ j++ ] = ( byte ) ( address [ i ]          & 0xFF ) ;
 							}
 
-							AddressBytes = addressBytes;
+							AddressBytes = addressBytes ;
 
 							ScopeId = scopeId ;
 						}
@@ -120,10 +120,11 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 			for ( int i = 0 ; i < AddressBytes . Length ; i += 2 )
 			{
-				int segment = ( ushort ) ( AddressBytes.Span [ i ] << 8 ) | AddressBytes.Span[ i + 1 ] ;
+				int segment = ( ushort ) ( AddressBytes . Span [ i ] << 8 )
+						| AddressBytes . Span [ i + 1 ] ;
 				str . AppendFormat ( "{0:X}" , segment ) ;
 
-				if ( ( i + 2 ) != AddressBytes . Length )
+				if ( i + 2 != AddressBytes . Length )
 				{
 					str . Append ( ':' ) ;
 				}

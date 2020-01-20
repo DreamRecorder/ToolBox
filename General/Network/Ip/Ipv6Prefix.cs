@@ -19,14 +19,14 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			Length       = 0 ;
 		}
 
-		private Ipv6Prefix ( Memory<byte> address , byte length )
+		private Ipv6Prefix ( Memory <byte> address , byte length )
 		{
 			if ( address . Length != 6 )
 			{
 				throw new ArgumentException ( ) ; //todo
 			}
 
-			AddressBytes =address ;
+			AddressBytes = address ;
 			Length       = length ;
 		}
 

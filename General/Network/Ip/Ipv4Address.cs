@@ -17,12 +17,12 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 		public Ipv4Address ( long address ) : this ( )
 		{
-			byte[] addressBytes = new byte[ 4 ] ;
+			byte [ ] addressBytes = new byte[ 4 ] ;
 			addressBytes [ 0 ] = ( byte ) address ;
 			addressBytes [ 1 ] = ( byte ) ( address >> 8 ) ;
 			addressBytes [ 2 ] = ( byte ) ( address >> 16 ) ;
 			addressBytes [ 3 ] = ( byte ) ( address >> 24 ) ;
-			AddressBytes = addressBytes;
+			AddressBytes       = addressBytes ;
 		}
 
 		public Ipv4Address ( string address ) : this ( )
@@ -41,31 +41,34 @@ namespace DreamRecorder . ToolBox . Network . Ip
 				{
 					fixed ( char * name = address )
 					{
-						result = Ipv4AddressHelper . ParseNonCanonical ( name , 0 , ref end , true ) ;
+						result = Ipv4AddressHelper . ParseNonCanonical (
+																		name ,
+																		0 ,
+																		ref end ,
+																		true ) ;
 					}
 				}
 
-				if ( ( result == Ipv4AddressHelper . Invalid )
-					|| ( end  != address . Length ) )
+				if ( result == Ipv4AddressHelper . Invalid
+				|| end      != address . Length )
 				{
 					throw new FormatException ( ) ;
 				}
 
 				// IPv4AddressHelper always returns IP address in a format that we need to reverse.
-				result = ( ( result  & 0x000000FF ) << 24 )
-						| ( ( result & 0x0000FF00 ) << 8 )
-						| ( ( result & 0x00FF0000 ) >> 8 )
-						| ( ( result & 0xFF000000 ) >> 24 ) ;
+				result = ( ( result & 0x000000FF ) << 24 )
+					| ( ( result    & 0x0000FF00 ) << 8 )
+					| ( ( result    & 0x00FF0000 ) >> 8 )
+					| ( ( result    & 0xFF000000 ) >> 24 ) ;
 
-				byte[] addressBytes = new byte[4];
+				byte [ ] addressBytes = new byte[ 4 ] ;
 
-				addressBytes[ 0 ] = ( byte ) result ;
+				addressBytes [ 0 ] = ( byte ) result ;
 				addressBytes [ 1 ] = ( byte ) ( result >> 8 ) ;
 				addressBytes [ 2 ] = ( byte ) ( result >> 16 ) ;
 				addressBytes [ 3 ] = ( byte ) ( result >> 24 ) ;
 
-				AddressBytes = addressBytes;
-
+				AddressBytes = addressBytes ;
 			}
 			else
 			{
@@ -86,7 +89,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 		public override object Clone ( ) => throw new NotImplementedException ( ) ;
 
 		public override string ToString ( )
-			=> $"{AddressBytes.Span [ 0 ]}.{AddressBytes.Span[ 1 ]}.{AddressBytes.Span[ 2 ]}.{AddressBytes.Span[ 3 ]}" ;
+			=> $"{AddressBytes . Span [ 0 ]}.{AddressBytes . Span [ 1 ]}.{AddressBytes . Span [ 2 ]}.{AddressBytes . Span [ 3 ]}" ;
 
 	}
 

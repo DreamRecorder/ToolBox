@@ -21,7 +21,7 @@ namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 		}
 
 		public bool Equals ( Alert other )
-			=> ( Variation == other . Variation ) && string . Equals ( Message , other . Message ) ;
+			=> Variation == other . Variation && string . Equals ( Message , other . Message ) ;
 
 		public override bool Equals ( object obj )
 		{
@@ -37,7 +37,8 @@ namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 		{
 			unchecked
 			{
-				return ( ( int ) Variation * 397 ) ^ ( Message != null ? Message . GetHashCode ( ) : 0 ) ;
+				return ( ( int ) Variation * 397 )
+					^ ( Message != null ? Message . GetHashCode ( ) : 0 ) ;
 			}
 		}
 

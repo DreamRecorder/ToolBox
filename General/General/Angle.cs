@@ -18,9 +18,9 @@ namespace DreamRecorder . ToolBox . General
 
 		public static double RadiusToDegree ( double radius ) => radius / Math . PI * 180 ;
 
-		public static double DegreeToGrad ( double degree ) => ( degree / 9 ) * 10 ;
+		public static double DegreeToGrad ( double degree ) => degree / 9 * 10 ;
 
-		public static double GradToDegree ( double grad ) => ( grad / 10 ) * 9 ;
+		public static double GradToDegree ( double grad ) => grad / 10 * 9 ;
 
 		public double Radius { get ; }
 
@@ -32,9 +32,11 @@ namespace DreamRecorder . ToolBox . General
 
 		public static Angle FromRadius ( double radius ) => new Angle ( radius ) ;
 
-		public static Angle FromDegree ( double degree ) => new Angle ( DegreeToRadius ( degree ) ) ;
+		public static Angle FromDegree ( double degree )
+			=> new Angle ( DegreeToRadius ( degree ) ) ;
 
-		public static Angle FromGrad ( double grad ) => new Angle ( DegreeToRadius ( GradToDegree ( grad ) ) ) ;
+		public static Angle FromGrad ( double grad )
+			=> new Angle ( DegreeToRadius ( GradToDegree ( grad ) ) ) ;
 
 		public static implicit operator Angle ( double radius ) => FromRadius ( radius ) ;
 
@@ -67,12 +69,16 @@ namespace DreamRecorder . ToolBox . General
 			}
 
 			if ( value . EndsWith ( "ᵍ" )
-				|| value . EndsWith ( "gon" ) )
+			|| value . EndsWith ( "gon" ) )
 			{
-				return FromGrad ( Convert . ToDouble ( value . TrimEnd ( ( "ᵍ" + "gon" ) . ToCharArray ( ) ) ) ) ;
+				return FromGrad (
+								Convert . ToDouble (
+													value . TrimEnd (
+																	( "ᵍ" + "gon" ) .
+																	ToCharArray ( ) ) ) ) ;
 			}
 
-			return FromRadius ( ( Convert . ToDouble ( value ) / Math . PI ) * 180 ) ;
+			return FromRadius ( Convert . ToDouble ( value ) / Math . PI * 180 ) ;
 		}
 
 		public override string ToString ( ) => $"{Degree}°" ;
