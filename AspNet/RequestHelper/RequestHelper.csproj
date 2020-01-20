@@ -21,7 +21,7 @@
     <PackageProjectUrl>https://vsts.dreamry.org/DefaultCollection/ToolBox</PackageProjectUrl>
     <Copyright>Dream Recorder (c) $([System.DateTime]::UtcNow.Year)</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.1.5.$(SourceVersion)</Version>
+    <Version>1.1.5.$([MSBuild]::ValueOrDefault('$(SourceVersion)', '0'))</Version>
     <InformationalVersion>Code version "$(SourceVersion)" build by "$([System.Environment]::GetEnvironmentVariable("UserDomain"))\$([System.Environment]::GetEnvironmentVariable("UserName"))" at "$([System.DateTime]::UtcNow.ToString())"</InformationalVersion>
 	  <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
     <LangVersion>latest</LangVersion>
