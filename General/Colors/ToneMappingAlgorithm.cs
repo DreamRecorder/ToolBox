@@ -8,6 +8,6 @@ namespace DreamRecorder . ToolBox . Colors
 
 	public delegate byte ToneMappingAlgorithm ( double value ) ;
 
-	//public delegate double ToneMappingAlgorithm()
+	public delegate double HdrToneMappingAlgorithm ( double value , double upperLimit ) ;
 
 }
