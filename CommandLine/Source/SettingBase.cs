@@ -165,10 +165,10 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 				if ( match . Success )
 				{
+					string propertyName = match . Groups [ 1 ] . Value . Trim ( ) ;
+
 					PropertyInfo property = typeof ( T ) . GetProperty (
-																		match .
-																			Captures [ 0 ] .
-																			Value . Trim ( ) ,
+																		propertyName ,
 																		BindingFlags . Instance
 																	| BindingFlags . IgnoreCase
 																	| BindingFlags . NonPublic
@@ -178,7 +178,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 					if ( property != null )
 					{
 						object value = match .
-										Captures [ 1 ] .
+										Groups [ 2 ] .
 										Value . Trim ( ) .
 										ParseTo ( property . PropertyType ) ;
 
@@ -186,7 +186,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 					}
 					else
 					{
-						Logger . LogError ( "Cannot find property with name: {0}" , line ) ;
+						Logger . LogError ( "Cannot find property with name: {0}" , propertyName ) ;
 					}
 				}
 				else
