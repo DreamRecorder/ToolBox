@@ -6,6 +6,7 @@ using System . IO ;
 using System . Linq ;
 using System . Reflection ;
 using System . Text ;
+using System . Text . RegularExpressions ;
 
 using DreamRecorder . ToolBox . General ;
 
@@ -152,19 +153,22 @@ namespace DreamRecorder . ToolBox . CommandLine
 		}
 
 
+		public static Regex LineValuePattern =
+			new Regex ( "^(?:\\s*)([^=#]+)=(.+)" , RegexOptions . Compiled ) ;
+
 		public static void ParseLine ( T settings , string line )
 		{
 			if ( ! string . IsNullOrWhiteSpace ( line )
 			&& ! line . StartsWith ( "#" ) )
 			{
-				string [ ] setCommand = line . Split ( '=' ) ;
+				Match match = LineValuePattern . Match ( line ) ;
 
-				if ( setCommand . Length == 2 )
+				if ( match . Success )
 				{
 					PropertyInfo property = typeof ( T ) . GetProperty (
-																		setCommand .
-																			First ( ) .
-																			Trim ( ) ,
+																		match .
+																			Captures [ 0 ] .
+																			Value . Trim ( ) ,
 																		BindingFlags . Instance
 																	| BindingFlags . IgnoreCase
 																	| BindingFlags . NonPublic
@@ -173,9 +177,9 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 					if ( property != null )
 					{
-						object value = setCommand .
-										Last ( ) .
-										Trim ( ) .
+						object value = match .
+										Captures [ 1 ] .
+										Value . Trim ( ) .
 										ParseTo ( property . PropertyType ) ;
 
 						property . SetValue ( settings , value ) ;
@@ -196,9 +200,8 @@ namespace DreamRecorder . ToolBox . CommandLine
 		#region Logger
 
 		private static ILogger Logger
-			=> _logger
-			?? ( _logger = StaticServiceProvider . Provider . GetService <ILoggerFactory> ( ) .
-													CreateLogger <T> ( ) ) ;
+			=> _logger ??= StaticServiceProvider . Provider . GetService <ILoggerFactory> ( ) .
+													CreateLogger <T> ( ) ;
 
 		// ReSharper disable once StaticMemberInGenericType
 		// By design
