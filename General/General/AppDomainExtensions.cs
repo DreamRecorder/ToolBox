@@ -3,6 +3,7 @@ using System . Collections ;
 using System . Collections . Generic ;
 using System . Linq ;
 using System . Reflection ;
+using System . Threading . Tasks ;
 
 namespace DreamRecorder . ToolBox . General
 {
@@ -18,22 +19,28 @@ namespace DreamRecorder . ToolBox . General
 
 				Assembly [ ] assemblies = AppDomain . CurrentDomain . GetAssemblies ( ) ;
 
-				foreach ( Assembly assembly in assemblies )
+				int assembliesCount = assemblies . Length ;
+
+				Task [ ] tasks = new Task[ assembliesCount ] ;
+
+				for ( int i = 0 ; i < assembliesCount ; i++ )
 				{
-					assembly . Prepare ( ) ;
+					Assembly assembly = assemblies [ i ] ;
+
+					tasks [ i ] = assembly . Prepare ( ) ;
 				}
+
+				Task . WaitAll ( tasks ) ;
 
 				StaticServiceProvider . Update ( ) ;
 			}
 		}
 
-		private static void CurrentDomain_AssemblyLoad (
-			object                sender ,
-			AssemblyLoadEventArgs args )
+		private static void CurrentDomain_AssemblyLoad ( object sender , AssemblyLoadEventArgs args )
 		{
 			lock ( StaticServiceProvider . ServiceCollection )
 			{
-				args . LoadedAssembly . Prepare ( ) ;
+				args . LoadedAssembly . Prepare ( ) . Wait ( ) ;
 
 				StaticServiceProvider . Update ( ) ;
 			}

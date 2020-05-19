@@ -39,7 +39,7 @@ namespace DreamRecorder . ToolBox . General
 
 		private static readonly byte [ ] Table = new byte[ 256 ] ;
 
-		public static byte CalculateCrc8 ( this byte [ ] data ) => ComputeChecksum ( data ) ;
+		public static byte CalculateCrc8 ( this byte [ ] data ) { return ComputeChecksum ( data ) ; }
 
 		public static byte ComputeChecksum ( [NotNull] params byte [ ] data )
 		{

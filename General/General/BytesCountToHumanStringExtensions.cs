@@ -24,11 +24,7 @@ namespace DreamRecorder . ToolBox . General
 			long bytes = Math . Abs ( bytesCount ) ;
 
 			int place = Math . Min (
-									Convert . ToInt32 (
-														Math . Floor (
-																	Math . Log (
-																				bytes ,
-																				1024 ) ) ) ,
+									Convert . ToInt32 ( Math . Floor ( Math . Log ( bytes , 1024 ) ) ) ,
 									Suffixes . Length - 1 ) ;
 
 			double num = Math . Round ( bytes / Math . Pow ( 1024 , place ) , 1 ) ;

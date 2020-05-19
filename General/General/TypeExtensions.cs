@@ -27,14 +27,18 @@ namespace DreamRecorder . ToolBox . General
 
 		#region GetInheritanceDepth
 
-		public static int GetInheritanceDepth <T> ( ) => GetInheritanceDepth ( typeof ( T ) ) ;
+		public static int GetInheritanceDepth <T> ( ) { return GetInheritanceDepth ( typeof ( T ) ) ; }
 
 		public static int GetInheritanceDepth <T , TBase> ( )
-			=> GetInheritanceDepth ( typeof ( T ) , typeof ( TBase ) ) ;
+		{
+			return GetInheritanceDepth ( typeof ( T ) , typeof ( TBase ) ) ;
+		}
 
 
 		public static int GetInheritanceDepth ( this Type type )
-			=> GetInheritanceDepth ( type , typeof ( object ) ) ;
+		{
+			return GetInheritanceDepth ( type , typeof ( object ) ) ;
+		}
 
 		public static int GetInheritanceDepth ( this Type type , Type baseType )
 		{
@@ -50,8 +54,7 @@ namespace DreamRecorder . ToolBox . General
 
 			if ( ! baseType . IsAssignableFrom ( type ) )
 			{
-				throw new ArgumentException (
-											$"{nameof ( baseType )} is not assignable from {nameof ( type )}" ) ;
+				throw new ArgumentException ( $"{nameof ( baseType )} is not assignable from {nameof ( type )}." ) ;
 			}
 
 			Type currentType = type ;
@@ -79,7 +82,7 @@ namespace DreamRecorder . ToolBox . General
 
 		#region PrepareAssembly
 
-		public static Task PrepareAssembly <T> ( ) => PrepareAssembly ( typeof ( T ) ) ;
+		public static Task PrepareAssembly <T> ( ) { return PrepareAssembly ( typeof ( T ) ) ; }
 
 		public static Task PrepareAssembly ( [NotNull] this Type type )
 		{
@@ -96,11 +99,11 @@ namespace DreamRecorder . ToolBox . General
 		#region GetResourceFile
 
 		public static string GetResourceFile <T> ( string fileName )
-			=> GetResourceFile ( typeof ( T ) , fileName ) ;
+		{
+			return GetResourceFile ( typeof ( T ) , fileName ) ;
+		}
 
-		public static string GetResourceFile (
-			[NotNull] this Type   type ,
-			[NotNull]      string fileName )
+		public static string GetResourceFile ( [NotNull] this Type type , [NotNull] string fileName )
 		{
 			if ( type == null )
 			{
@@ -133,7 +136,9 @@ namespace DreamRecorder . ToolBox . General
 		#region GetSortedProperties
 
 		public static List <PropertyInfo> GetSortedProperties <T> ( )
-			=> typeof ( T ) . GetSortedProperties ( ) ;
+		{
+			return typeof ( T ) . GetSortedProperties ( ) ;
+		}
 
 		public static List <PropertyInfo> GetSortedProperties ( [NotNull] this Type type )
 		{
@@ -145,28 +150,19 @@ namespace DreamRecorder . ToolBox . General
 			List <PropertyInfo> result = type . GetProperties ( ) .
 												Where (
 														prop
-															=> prop .
-																	GetCustomAttribute <
-																		IgnoreAttribute> ( )
-															== null ) .
+															=> prop . GetCustomAttribute <IgnoreAttribute> ( )
+																== null ) .
 												ToList ( ) ;
 
 			Comparison <PropertyInfo> comp = ( x , y )
-												=> ( x . GetCustomAttribute <SortIndexAttribute
-														> ( ) ? .
-														Value
-												?? int . MaxValue ) . CompareTo (
-																				y .
-																					GetCustomAttribute
-																					<SortIndexAttribute
-																					> ( ) ? .
-																					Value
-																			?? int . MaxValue ) ;
+												=> ( x . GetCustomAttribute <SortIndexAttribute> ( ) ? . Value
+													?? int . MaxValue ) . CompareTo (
+																					y . GetCustomAttribute <
+																							SortIndexAttribute> ( ) ? .
+																						Value
+																					?? int . MaxValue ) ;
 
-			result . Sort (
-							comp . Union (
-										( x , y )
-											=> string . CompareOrdinal ( x . Name , y . Name ) ) ) ;
+			result . Sort ( comp . Union ( ( x , y ) => string . CompareOrdinal ( x . Name , y . Name ) ) ) ;
 
 			return result ;
 		}
@@ -175,13 +171,14 @@ namespace DreamRecorder . ToolBox . General
 
 		#region GetSortedPropertiesWithAttribute
 
-		public static List <(PropertyInfo PropertyInfo , TAttribute Attribute)>
-			GetSortedPropertiesWithAttribute <T , TAttribute> ( ) where TAttribute : Attribute
-			=> typeof ( T ) . GetSortedPropertiesWithAttribute <TAttribute> ( ) ;
+		public static List <(PropertyInfo PropertyInfo , TAttribute Attribute)> GetSortedPropertiesWithAttribute
+			<T , TAttribute> ( ) where TAttribute : Attribute
+		{
+			return typeof ( T ) . GetSortedPropertiesWithAttribute <TAttribute> ( ) ;
+		}
 
-		public static List <(PropertyInfo PropertyInfo , TAttribute Attribute)>
-			GetSortedPropertiesWithAttribute <TAttribute> ( [NotNull] this Type type )
-			where TAttribute : Attribute
+		public static List <(PropertyInfo PropertyInfo , TAttribute Attribute)> GetSortedPropertiesWithAttribute
+			<TAttribute> ( [NotNull] this Type type ) where TAttribute : Attribute
 		{
 			if ( type == null )
 			{
@@ -197,14 +194,14 @@ namespace DreamRecorder . ToolBox . General
 
 		#region GetSortedPropertiesWithNullableAttribute
 
-		public static List <(PropertyInfo PropertyInfo , TAttribute Attribute)>
-			GetSortedPropertiesWithNullableAttribute <T , TAttribute> ( )
-			where TAttribute : Attribute
-			=> typeof ( T ) . GetSortedPropertiesWithNullableAttribute <TAttribute> ( ) ;
+		public static List <(PropertyInfo PropertyInfo , TAttribute Attribute)> GetSortedPropertiesWithNullableAttribute
+			<T , TAttribute> ( ) where TAttribute : Attribute
+		{
+			return typeof ( T ) . GetSortedPropertiesWithNullableAttribute <TAttribute> ( ) ;
+		}
 
-		public static List <(PropertyInfo , TAttribute Attribute)>
-			GetSortedPropertiesWithNullableAttribute <TAttribute> ( [NotNull] this Type type )
-			where TAttribute : Attribute
+		public static List <(PropertyInfo , TAttribute Attribute)> GetSortedPropertiesWithNullableAttribute
+			<TAttribute> ( [NotNull] this Type type ) where TAttribute : Attribute
 		{
 			if ( type == null )
 			{

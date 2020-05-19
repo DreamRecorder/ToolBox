@@ -52,8 +52,7 @@ namespace DreamRecorder . ToolBox . General
 
 				for ( int bitPosition = 0 ; bitPosition < 8 ; bitPosition++ )
 				{
-					result [ bytePosition * 8 + bitPosition ] =
-						( b & ( 1 << ( 7 - bitPosition ) ) ) != 0 ;
+					result [ bytePosition * 8 + bitPosition ] = ( b & ( 1 << ( 7 - bitPosition ) ) ) != 0 ;
 				}
 			}
 

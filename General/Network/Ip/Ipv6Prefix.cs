@@ -80,7 +80,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			return new Ipv6Prefix ( address ) ;
 		}
 
-		public override object Clone ( ) => new Ipv6Prefix ( AddressBytes , Length ) ;
+		public override object Clone ( ) { return new Ipv6Prefix ( AddressBytes , Length ) ; }
 
 	}
 

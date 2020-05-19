@@ -25,24 +25,14 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 		// methods
 		// Parse and canonicalize
-		internal static string ParseCanonicalName (
-			string   str ,
-			int      start ,
-			int      end ,
-			ref bool isLoopback )
+		internal static string ParseCanonicalName ( string str , int start , int end , ref bool isLoopback )
 		{
 			unsafe
 			{
 				byte * numbers = stackalloc byte [ NumberOfLabels ] ;
 				isLoopback = Parse ( str , numbers , start , end ) ;
 
-				return numbers [ 0 ]
-					+ "."
-					+ numbers [ 1 ]
-					+ "."
-					+ numbers [ 2 ]
-					+ "."
-					+ numbers [ 3 ] ;
+				return numbers [ 0 ] + "." + numbers [ 1 ] + "." + numbers [ 2 ] + "." + numbers [ 3 ] ;
 			}
 		}
 
@@ -54,10 +44,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 				byte * numbers = stackalloc byte [ NumberOfLabels ] ;
 				ParseCanonical ( str , numbers , start , end ) ;
 
-				return ( numbers [ 0 ] << 24 )
-					+ ( numbers [ 1 ]  << 16 )
-					+ ( numbers [ 2 ]  << 8 )
-					+ numbers [ 3 ] ;
+				return ( numbers [ 0 ] << 24 ) + ( numbers [ 1 ] << 16 ) + ( numbers [ 2 ] << 8 ) + numbers [ 3 ] ;
 			}
 		}
 
@@ -152,28 +139,28 @@ namespace DreamRecorder . ToolBox . Network . Ip
 				if ( allowIPv6 )
 				{
 					// for ipv4 inside ipv6 the terminator is either ScopeId, prefix or ipv6 terminator
-					if ( ch == ']'
-					|| ch   == '/'
-					|| ch   == '%' )
+					if ( ch   == ']'
+						|| ch == '/'
+						|| ch == '%' )
 					{
 						break ;
 					}
 				}
-				else if ( ch == '/'
-					|| ch    == '\\'
-					|| notImplicitFile && ( ch == ':' || ch == '?' || ch == '#' ) )
+				else if ( ch  == '/'
+						|| ch == '\\'
+						|| notImplicitFile && ( ch == ':' || ch == '?' || ch == '#' ) )
 				{
 					break ;
 				}
 
-				if ( ch <= '9'
-				&& ch   >= '0' )
+				if ( ch   <= '9'
+					&& ch >= '0' )
 				{
 					if ( ! haveNumber
-					&& ch == '0' )
+						&& ch == '0' )
 					{
-						if ( start + 1        < end
-						&& name [ start + 1 ] == '0' )
+						if ( start + 1            < end
+							&& name [ start + 1 ] == '0' )
 						{
 							// 00 is not allowed as a prefix.
 							return false ;
@@ -193,7 +180,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 				else if ( ch == '.' )
 				{
 					if ( ! haveNumber
-					|| number > 0 && firstCharIsZero )
+						|| number > 0 && firstCharIsZero )
 					{
 						// 0 is not allowed to prefix a number.
 						return false ;
@@ -226,11 +213,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 		// Return Invalid (-1) for failures.
 		// If the address has less than three dots, only the rightmost section is assumed to contain the combined value for
 		// the missing sections: 0xFF00FFFF == 0xFF.0x00.0xFF.0xFF == 0xFF.0xFFFF
-		internal static unsafe long ParseNonCanonical (
-			char *  name ,
-			int     start ,
-			ref int end ,
-			bool    notImplicitFile )
+		internal static unsafe long ParseNonCanonical ( char * name , int start , ref int end , bool notImplicitFile )
 		{
 			char     ch ;
 			long [ ] parts          = new long[ 4 ] ;
@@ -259,8 +242,8 @@ namespace DreamRecorder . ToolBox . Network . Ip
 					{
 						ch = name [ current ] ;
 
-						if ( ch == 'x'
-						|| ch   == 'X' )
+						if ( ch   == 'x'
+							|| ch == 'X' )
 						{
 							numberBase = Hex ;
 							current++ ;
@@ -276,26 +259,26 @@ namespace DreamRecorder . ToolBox . Network . Ip
 					int digitValue ;
 
 					if ( ( numberBase == Decimal || numberBase == Hex )
-					&& '0' <= ch
-					&& ch  <= '9' )
+						&& '0' <= ch
+						&& ch  <= '9' )
 					{
 						digitValue = ch - '0' ;
 					}
 					else if ( numberBase == Octal
-						&& '0'           <= ch
-						&& ch            <= '7' )
+							&& '0'       <= ch
+							&& ch        <= '7' )
 					{
 						digitValue = ch - '0' ;
 					}
 					else if ( numberBase == Hex
-						&& 'a'           <= ch
-						&& ch            <= 'f' )
+							&& 'a'       <= ch
+							&& ch        <= 'f' )
 					{
 						digitValue = ch + 10 - 'a' ;
 					}
 					else if ( numberBase == Hex
-						&& 'A'           <= ch
-						&& ch            <= 'F' )
+							&& 'A'       <= ch
+							&& ch        <= 'F' )
 					{
 						digitValue = ch + 10 - 'A' ;
 					}
@@ -314,13 +297,13 @@ namespace DreamRecorder . ToolBox . Network . Ip
 					atLeastOneChar = true ;
 				}
 
-				if ( current        < end
-				&& name [ current ] == '.' )
+				if ( current            < end
+					&& name [ current ] == '.' )
 				{
-					if ( dotCount >= 3  // Max of 3 dots and 4 segments
-					|| ! atLeastOneChar // No empty segmets: 1...1
+					if ( dotCount >= 3      // Max of 3 dots and 4 segments
+						|| ! atLeastOneChar // No empty segmets: 1...1
 						// Only the last segment can be more than 255 (if there are less than 3 dots)
-					|| currentValue > 0xFF )
+						|| currentValue > 0xFF )
 					{
 						return Invalid ;
 					}
@@ -347,8 +330,8 @@ namespace DreamRecorder . ToolBox . Network . Ip
 				// end of string, allowed
 			}
 			else if ( ( ch = name [ current ] ) == '/'
-				|| ch                           == '\\'
-				|| notImplicitFile && ( ch == ':' || ch == '?' || ch == '#' ) )
+					|| ch                       == '\\'
+					|| notImplicitFile && ( ch == ':' || ch == '?' || ch == '#' ) )
 			{
 				end = current ;
 			}
@@ -386,9 +369,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 						return Invalid ;
 					}
 
-					return ( parts [ 0 ]           << 24 )
-						| ( ( parts [ 1 ] & 0xff ) << 16 )
-						| ( parts [ 2 ] & 0xffff ) ;
+					return ( parts [ 0 ] << 24 ) | ( ( parts [ 1 ] & 0xff ) << 16 ) | ( parts [ 2 ] & 0xffff ) ;
 				case 3 : // 0xFF.0xFF.0xFF.0xFF
 
 					if ( parts [ 3 ] > 0xff )
@@ -396,10 +377,10 @@ namespace DreamRecorder . ToolBox . Network . Ip
 						return Invalid ;
 					}
 
-					return ( parts [ 0 ]           << 24 )
-						| ( ( parts [ 1 ] & 0xff ) << 16 )
-						| ( ( parts [ 2 ] & 0xff ) << 8 )
-						| ( parts [ 3 ] & 0xff ) ;
+					return ( parts [ 0 ]               << 24 )
+							| ( ( parts [ 1 ] & 0xff ) << 16 )
+							| ( ( parts [ 2 ] & 0xff ) << 8 )
+							| ( parts [ 3 ] & 0xff ) ;
 				default :
 
 					return Invalid ;
@@ -419,9 +400,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 				long result     = ParseNonCanonical ( ipString , start , ref changedEnd , true ) ;
 
 				// end includes ports, so changedEnd may be different from end
-				Debug . Assert (
-								result != Invalid ,
-								"Failed to parse after already validated: " + name ) ;
+				Debug . Assert ( result != Invalid , "Failed to parse after already validated: " + name ) ;
 
 				numbers [ 0 ] = ( byte ) ( result >> 24 ) ;
 				numbers [ 1 ] = ( byte ) ( result >> 16 ) ;
@@ -437,11 +416,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 		//  of 8-bit numbers and the characters '.'
 		//  Address may terminate with ':' or with the end of the string
 		//
-		private static unsafe bool ParseCanonical (
-			string name ,
-			byte * numbers ,
-			int    start ,
-			int    end )
+		private static unsafe bool ParseCanonical ( string name , byte * numbers , int start , int end )
 		{
 			for ( int i = 0 ; i < NumberOfLabels ; ++i )
 			{

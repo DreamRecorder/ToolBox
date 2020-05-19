@@ -73,7 +73,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			}
 		}
 
-		public bool Contains ( Ipv4Address address ) => throw new NotImplementedException ( ) ;
+		public bool Contains ( Ipv4Address address ) { throw new NotImplementedException ( ) ; }
 
 		public static explicit operator Ipv4Prefix ( [NotNull] string address )
 		{
@@ -85,7 +85,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			return new Ipv4Prefix ( address ) ;
 		}
 
-		public override object Clone ( ) => new Ipv4Prefix ( AddressBytes , Length ) ;
+		public override object Clone ( ) { return new Ipv4Prefix ( AddressBytes , Length ) ; }
 
 	}
 

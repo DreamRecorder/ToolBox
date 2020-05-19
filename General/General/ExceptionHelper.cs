@@ -10,9 +10,11 @@ namespace DreamRecorder . ToolBox . General
 	{
 
 		public static ArgumentException XmlNameMismatch ( string argumentName , Type type )
-			=> new ArgumentException (
-									ExceptionMessages . XmlNameMismatch ( argumentName , type ) ,
-									argumentName ) ;
+		{
+			return new ArgumentException (
+										ExceptionMessages . XmlNameMismatch ( argumentName , type ) ,
+										argumentName ) ;
+		}
 
 	}
 

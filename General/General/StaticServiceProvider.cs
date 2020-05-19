@@ -14,8 +14,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public static IServiceProvider Provider { get ; private set ; }
 
-		public static IServiceCollection ServiceCollection { get ; set ; } =
-			new ServiceCollection ( ) ;
+		public static IServiceCollection ServiceCollection { get ; set ; } = new ServiceCollection ( ) ;
 
 		public static void Update ( )
 		{

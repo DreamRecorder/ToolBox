@@ -9,8 +9,7 @@ namespace DreamRecorder . ToolBox . General
 {
 
 	[PublicAPI]
-	public class MarkedValue
-		<TValue , TMark> : ICloneable , IEquatable <MarkedValue <TValue , TMark>>
+	public class MarkedValue <TValue , TMark> : ICloneable , IEquatable <MarkedValue <TValue , TMark>>
 		where TValue : IEquatable <TValue>
 	{
 
@@ -24,7 +23,7 @@ namespace DreamRecorder . ToolBox . General
 			Mark  = mark ;
 		}
 
-		public object Clone ( ) => new MarkedValue <TValue , TMark> ( Value , Mark ) ;
+		public object Clone ( ) { return new MarkedValue <TValue , TMark> ( Value , Mark ) ; }
 
 		public bool Equals ( MarkedValue <TValue , TMark> other )
 		{
@@ -34,7 +33,7 @@ namespace DreamRecorder . ToolBox . General
 			}
 
 			return ReferenceEquals ( this , other )
-				|| EqualityComparer <TValue> . Default . Equals ( Value , other . Value ) ;
+					|| EqualityComparer <TValue> . Default . Equals ( Value , other . Value ) ;
 		}
 
 		public override bool Equals ( object obj )
@@ -49,28 +48,27 @@ namespace DreamRecorder . ToolBox . General
 				return true ;
 			}
 
-			return obj . GetType ( ) == GetType ( )
-				&& Equals ( ( MarkedValue <TValue , TMark> ) obj ) ;
+			return obj . GetType ( ) == GetType ( ) && Equals ( ( MarkedValue <TValue , TMark> ) obj ) ;
 		}
 
-		public override int GetHashCode ( )
-			=> EqualityComparer <TValue> . Default . GetHashCode ( Value ) ;
+		public override int GetHashCode ( ) { return EqualityComparer <TValue> . Default . GetHashCode ( Value ) ; }
 
-		public static bool operator == (
-			MarkedValue <TValue , TMark> left ,
-			MarkedValue <TValue , TMark> right )
-			=> Equals ( left , right ) ;
+		public static bool operator == ( MarkedValue <TValue , TMark> left , MarkedValue <TValue , TMark> right )
+		{
+			return Equals ( left , right ) ;
+		}
 
-		public static bool operator != (
-			MarkedValue <TValue , TMark> left ,
-			MarkedValue <TValue , TMark> right )
-			=> ! Equals ( left , right ) ;
+		public static bool operator != ( MarkedValue <TValue , TMark> left , MarkedValue <TValue , TMark> right )
+		{
+			return ! Equals ( left , right ) ;
+		}
 
-		public static implicit operator TValue ( MarkedValue <TValue , TMark> value )
-			=> value . Value ;
+		public static implicit operator TValue ( MarkedValue <TValue , TMark> value ) { return value . Value ; }
 
 		public static implicit operator MarkedValue <TValue , TMark> ( TValue value )
-			=> new MarkedValue <TValue , TMark> ( value , default ) ;
+		{
+			return new MarkedValue <TValue , TMark> ( value , default ) ;
+		}
 
 	}
 

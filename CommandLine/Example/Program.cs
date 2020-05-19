@@ -15,8 +15,7 @@ using Microsoft . Extensions . Logging . Console ;
 namespace Example
 {
 
-	public class Program
-		: ProgramBase <Program , ProgramExitCode , ProgramSetting , ProgramSettingCatalog>
+	public class Program : ProgramBase <Program , ProgramExitCode , ProgramSetting , ProgramSettingCatalog>
 	{
 
 		public override bool WaitForExit => true ;
@@ -25,24 +24,27 @@ namespace Example
 
 		public override bool CanExit => true ;
 
-		public override bool HandleInput => true ;
+		public override bool HandleInput => false ;
 
 		public override bool LoadSetting => true ;
 
 		public override bool AutoSaveSetting => true ;
 
+		private ITaskDispatcher Dispatcher { get ; set ; }
+
+		public override bool LoadPlugin => true ;
+
 		public static void Main ( string [ ] args ) { new Program ( ) . RunMain ( args ) ; }
 
 		public void DoSth ( )
 		{
-			ISettingProvider settingProvider =
-				StaticServiceProvider . Provider . GetService <ISettingProvider> ( ) ;
+			Console . ReadLine ( ) ;
+
+			ISettingProvider settingProvider = StaticServiceProvider . Provider . GetService <ISettingProvider> ( ) ;
 
 			Console . WriteLine (
 								settingProvider . GetValue <string> (
-																	nameof ( ProgramSetting .
-																				DatabaseConnection
-																	) ) ) ;
+																	nameof ( ProgramSetting . DatabaseConnection ) ) ) ;
 
 			ReadOnlyDictionary <string , string> a = Emojis . EmojisList ;
 
@@ -52,25 +54,46 @@ namespace Example
 			}
 		}
 
+
 		public override void Start ( string [ ] args )
 		{
-			Console . ReadLine ( ) ;
 			Thread thread = new Thread ( DoSth ) ;
 			thread . Start ( ) ;
+
+			Dispatcher = StaticServiceProvider . Provider . GetService <ITaskDispatcher> ( ) ;
+
+			Dispatcher . Start ( ) ;
+
+			OnetimeTask task1 = new OnetimeTask ( PrintTime1 , default ) ;
+			Dispatcher . Dispatch ( task1 ) ;
+
+			IntervalTask task2 = new IntervalTask (
+													PrintTime2 ,
+													TimeSpan . FromSeconds ( 1 ) ,
+													priority : TaskPriority . Background ) ;
+
+			Dispatcher . Dispatch ( task2 ) ;
 		}
+
+		public void PrintTime1 ( )
+		{
+			Console . WriteLine ( $"1:{DateTimeOffset . Now}" ) ;
+			Thread . Sleep ( 1000 ) ;
+		}
+
+		public void PrintTime2 ( ) { Console . WriteLine ( $"2:{DateTimeOffset . Now}" ) ; }
 
 		public override void ConfigureLogger ( ILoggingBuilder builder )
 		{
 			builder . AddDebug ( ) ;
-			builder . AddFilter <ConsoleLoggerProvider> ( "Default" , LogLevel . Information ) .
-					AddConsole ( ) ;
+			builder . AddFilter <ConsoleLoggerProvider> ( "Default" , LogLevel . Information ) . AddConsole ( ) ;
 		}
 
 		public override void ShowLogo ( ) { Console . WriteLine ( "Logo" ) ; }
 
 		public override void ShowCopyright ( ) { Console . WriteLine ( "Copyright" ) ; }
 
-		public override void OnExit ( ProgramExitCode code ) { }
+		public override void OnExit ( ProgramExitCode code ) { Dispatcher . Stop ( ) ; }
 
 	}
 

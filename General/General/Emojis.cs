@@ -18,15 +18,14 @@ namespace DreamRecorder . ToolBox . General
 
 		static Emojis ( )
 		{
-			Dictionary <string , string> emojis = typeof ( Emojis ) .
-												GetFields (
-															BindingFlags . Static
-														| BindingFlags . Public
-														| BindingFlags . DeclaredOnly ) .
-												ToDictionary (
-															fieldInfo => fieldInfo . Name ,
-															fieldInfo => ( string ) fieldInfo .
-																GetValue ( null ) ) ;
+			Dictionary <string , string> emojis =
+				typeof ( Emojis ) . GetFields (
+												BindingFlags . Static
+												| BindingFlags . Public
+												| BindingFlags . DeclaredOnly ) .
+									ToDictionary (
+												fieldInfo => fieldInfo . Name ,
+												fieldInfo => ( string ) fieldInfo . GetValue ( null ) ) ;
 
 			EmojisList = new ReadOnlyDictionary <string , string> ( emojis ) ;
 		}
@@ -4627,8 +4626,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string PeopleHoldingHandsMediumDarkSkinToneLightSkinTone = "🧑🏾‍🤝‍🧑🏻" ;
 
-		public const string PeopleHoldingHandsMediumDarkSkinToneMediumLightSkinTone =
-			"🧑🏾‍🤝‍🧑🏼" ;
+		public const string PeopleHoldingHandsMediumDarkSkinToneMediumLightSkinTone = "🧑🏾‍🤝‍🧑🏼" ;
 
 		public const string PeopleHoldingHandsMediumDarkSkinToneMediumSkinTone = "🧑🏾‍🤝‍🧑🏽" ;
 
@@ -4660,8 +4658,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string WomenHoldingHandsMediumDarkSkinToneLightSkinTone = "👩🏾‍🤝‍👩🏻" ;
 
-		public const string WomenHoldingHandsMediumDarkSkinToneMediumLightSkinTone =
-			"👩🏾‍🤝‍👩🏼" ;
+		public const string WomenHoldingHandsMediumDarkSkinToneMediumLightSkinTone = "👩🏾‍🤝‍👩🏼" ;
 
 		public const string WomenHoldingHandsMediumDarkSkinToneMediumSkinTone = "👩🏾‍🤝‍👩🏽" ;
 
@@ -4681,50 +4678,39 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string WomanAndManHoldingHandsLightSkinTone = "👫🏻" ;
 
-		public const string WomanAndManHoldingHandsLightSkinToneMediumLightSkinTone =
-			"👩🏻‍🤝‍👨🏼" ;
+		public const string WomanAndManHoldingHandsLightSkinToneMediumLightSkinTone = "👩🏻‍🤝‍👨🏼" ;
 
 		public const string WomanAndManHoldingHandsLightSkinToneMediumSkinTone = "👩🏻‍🤝‍👨🏽" ;
 
-		public const string WomanAndManHoldingHandsLightSkinToneMediumDarkSkinTone =
-			"👩🏻‍🤝‍👨🏾" ;
+		public const string WomanAndManHoldingHandsLightSkinToneMediumDarkSkinTone = "👩🏻‍🤝‍👨🏾" ;
 
 		public const string WomanAndManHoldingHandsLightSkinToneDarkSkinTone = "👩🏻‍🤝‍👨🏿" ;
 
-		public const string WomanAndManHoldingHandsMediumLightSkinToneLightSkinTone =
-			"👩🏼‍🤝‍👨🏻" ;
+		public const string WomanAndManHoldingHandsMediumLightSkinToneLightSkinTone = "👩🏼‍🤝‍👨🏻" ;
 
 		public const string WomanAndManHoldingHandsMediumLightSkinTone = "👫🏼" ;
 
-		public const string WomanAndManHoldingHandsMediumLightSkinToneMediumSkinTone =
-			"👩🏼‍🤝‍👨🏽" ;
+		public const string WomanAndManHoldingHandsMediumLightSkinToneMediumSkinTone = "👩🏼‍🤝‍👨🏽" ;
 
-		public const string WomanAndManHoldingHandsMediumLightSkinToneMediumDarkSkinTone =
-			"👩🏼‍🤝‍👨🏾" ;
+		public const string WomanAndManHoldingHandsMediumLightSkinToneMediumDarkSkinTone = "👩🏼‍🤝‍👨🏾" ;
 
-		public const string WomanAndManHoldingHandsMediumLightSkinToneDarkSkinTone =
-			"👩🏼‍🤝‍👨🏿" ;
+		public const string WomanAndManHoldingHandsMediumLightSkinToneDarkSkinTone = "👩🏼‍🤝‍👨🏿" ;
 
 		public const string WomanAndManHoldingHandsMediumSkinToneLightSkinTone = "👩🏽‍🤝‍👨🏻" ;
 
-		public const string WomanAndManHoldingHandsMediumSkinToneMediumLightSkinTone =
-			"👩🏽‍🤝‍👨🏼" ;
+		public const string WomanAndManHoldingHandsMediumSkinToneMediumLightSkinTone = "👩🏽‍🤝‍👨🏼" ;
 
 		public const string WomanAndManHoldingHandsMediumSkinTone = "👫🏽" ;
 
-		public const string WomanAndManHoldingHandsMediumSkinToneMediumDarkSkinTone =
-			"👩🏽‍🤝‍👨🏾" ;
+		public const string WomanAndManHoldingHandsMediumSkinToneMediumDarkSkinTone = "👩🏽‍🤝‍👨🏾" ;
 
 		public const string WomanAndManHoldingHandsMediumSkinToneDarkSkinTone = "👩🏽‍🤝‍👨🏿" ;
 
-		public const string WomanAndManHoldingHandsMediumDarkSkinToneLightSkinTone =
-			"👩🏾‍🤝‍👨🏻" ;
+		public const string WomanAndManHoldingHandsMediumDarkSkinToneLightSkinTone = "👩🏾‍🤝‍👨🏻" ;
 
-		public const string WomanAndManHoldingHandsMediumDarkSkinToneMediumLightSkinTone =
-			"👩🏾‍🤝‍👨🏼" ;
+		public const string WomanAndManHoldingHandsMediumDarkSkinToneMediumLightSkinTone = "👩🏾‍🤝‍👨🏼" ;
 
-		public const string WomanAndManHoldingHandsMediumDarkSkinToneMediumSkinTone =
-			"👩🏾‍🤝‍👨🏽" ;
+		public const string WomanAndManHoldingHandsMediumDarkSkinToneMediumSkinTone = "👩🏾‍🤝‍👨🏽" ;
 
 		public const string WomanAndManHoldingHandsMediumDarkSkinTone = "👫🏾" ;
 
@@ -4732,8 +4718,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string WomanAndManHoldingHandsDarkSkinToneLightSkinTone = "👩🏿‍🤝‍👨🏻" ;
 
-		public const string WomanAndManHoldingHandsDarkSkinToneMediumLightSkinTone =
-			"👩🏿‍🤝‍👨🏼" ;
+		public const string WomanAndManHoldingHandsDarkSkinToneMediumLightSkinTone = "👩🏿‍🤝‍👨🏼" ;
 
 		public const string WomanAndManHoldingHandsDarkSkinToneMediumSkinTone = "👩🏿‍🤝‍👨🏽" ;
 

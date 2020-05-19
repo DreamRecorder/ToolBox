@@ -11,16 +11,22 @@ namespace DreamRecorder . ToolBox . General
 	{
 
 		public static string XmlNameMismatch ( string argumentName , Type type )
-			=> $"{argumentName} do not perform a {type . FullName}." ;
+		{
+			return $"{argumentName} do not perform a {type . FullName}." ;
+		}
 
 		public static string XmlWrongData ( string argumentName )
-			=> $"{argumentName} has wrong data or lack of data." ;
+		{
+			return $"{argumentName} has wrong data or lack of data." ;
+		}
 
 		public static string NecessaryValueNotFound ( XElement element , string name )
-			=> $"{element} should have property {name}." ;
+		{
+			return $"{element} should have property {name}." ;
+		}
 
 
-		public static string NotPrepared ( ) => "this assembly is not prepared." ;
+		public static string NotPrepared ( ) { return "this assembly is not prepared." ; }
 
 	}
 

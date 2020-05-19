@@ -15,7 +15,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public string Name { get ; }
 
-		public AssemblyDisplayNameAttribute ( string name ) => Name = name ;
+		public AssemblyDisplayNameAttribute ( string name ) { Name = name ; }
 
 	}
 

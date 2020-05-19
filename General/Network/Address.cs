@@ -35,10 +35,9 @@ namespace DreamRecorder . ToolBox . Network
 			return Equals ( AddressBytes , other . AddressBytes ) && Type == other . Type ;
 		}
 
-		public static implicit operator byte [ ] ( Address address )
-			=> address . AddressBytes . ToArray ( ) ;
+		public static implicit operator byte [ ] ( Address address ) { return address . AddressBytes . ToArray ( ) ; }
 
-		public static explicit operator string ( Address address ) => address . ToString ( ) ;
+		public static explicit operator string ( Address address ) { return address . ToString ( ) ; }
 
 		public override bool Equals ( object obj )
 		{
@@ -60,12 +59,11 @@ namespace DreamRecorder . ToolBox . Network
 			return Equals ( ( Address ) obj ) ;
 		}
 
-		public override int GetHashCode ( ) => AddressBytes . GetHashCode ( ) ;
+		public override int GetHashCode ( ) { return AddressBytes . GetHashCode ( ) ; }
 
-		public static bool operator == ( Address left , Address right ) => Equals ( left , right ) ;
+		public static bool operator == ( Address left , Address right ) { return Equals ( left , right ) ; }
 
-		public static bool operator != ( Address left , Address right )
-			=> ! Equals ( left , right ) ;
+		public static bool operator != ( Address left , Address right ) { return ! Equals ( left , right ) ; }
 
 	}
 

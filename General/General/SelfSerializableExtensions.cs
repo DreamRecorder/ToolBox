@@ -3,7 +3,10 @@ using System . Collections ;
 using System . Collections . Generic ;
 using System . IO ;
 using System . Linq ;
+using System . Reflection ;
+using System . Runtime . Serialization ;
 using System . Text ;
+using System . Xml ;
 using System . Xml . Linq ;
 using System . Xml . Serialization ;
 
@@ -42,19 +45,13 @@ namespace DreamRecorder . ToolBox . General
 
 			if ( value == null )
 			{
-				throw new ArgumentException (
-											ExceptionMessages . NecessaryValueNotFound (
-																						element ,
-																						name ) ) ;
+				throw new ArgumentException ( ExceptionMessages . NecessaryValueNotFound ( element , name ) ) ;
 			}
 
 			return value . ParseTo <T> ( ) ;
 		}
 
-		public static T ReadUnnecessaryValue <T> (
-			this XElement element ,
-			string        name ,
-			T             defaultValue )
+		public static T ReadUnnecessaryValue <T> ( this XElement element , string name , T defaultValue )
 		{
 			if ( element == null )
 			{
@@ -76,7 +73,7 @@ namespace DreamRecorder . ToolBox . General
 			return value . ParseTo <T> ( ) ;
 		}
 
-		public static XElement Serialize <T> ( [NotNull] this T obj )
+		public static string Serialize <T> ( [NotNull] this T obj , Type [ ] types = null )
 		{
 			if ( obj == null )
 			{
@@ -85,23 +82,49 @@ namespace DreamRecorder . ToolBox . General
 
 			if ( typeof ( ISelfSerializable ) . IsAssignableFrom ( typeof ( T ) ) )
 			{
-				return ( ( ISelfSerializable ) obj ) . ToXElement ( ) ;
+				return ( ( ISelfSerializable ) obj ) . ToXElement ( ) . ToString ( ) ;
 			}
 			else
 			{
 				using MemoryStream memoryStream = new MemoryStream ( ) ;
-				using StreamWriter streamWriter = new StreamWriter ( memoryStream ) ;
 
-				XmlSerializer xmlSerializer = new XmlSerializer ( typeof ( T ) ) ;
-				xmlSerializer . Serialize ( streamWriter , obj ) ;
+				using XmlWriter xmlWriter = XmlWriter . Create (
+																memoryStream ,
+																new XmlWriterSettings
+																{
+																	Async              = false ,
+																	Encoding           = Encoding . UTF8 ,
+																	OmitXmlDeclaration = true
+																} ) ;
 
-				return XElement . Parse (
-										Encoding . UTF8 . GetString (
-																	memoryStream . ToArray ( ) ) ) ;
+				if ( typeof ( T ) . GetCustomAttribute <DataContractAttribute> ( )   != null
+					|| typeof ( T ) . GetCustomAttribute <SerializableAttribute> ( ) != null )
+				{
+					DataContractSerializer dataContractSerializer =
+						new DataContractSerializer ( typeof ( T ) , types ?? typeof ( T ) . Assembly . GetTypes ( ) ) ;
+
+					dataContractSerializer . WriteObject ( xmlWriter , obj ) ;
+				}
+				else
+				{
+					XmlSerializer xmlSerializer = new XmlSerializer (
+																	typeof ( T ) ,
+																	types
+																	?? typeof ( T ) . Assembly .
+																					GetExportedTypes ( ) ) ;
+					xmlSerializer . Serialize (
+												xmlWriter ,
+												obj ,
+												new XmlSerializerNamespaces ( new [ ] { XmlQualifiedName . Empty } ) ) ;
+				}
+
+				xmlWriter . Flush ( ) ;
+
+				return Encoding . UTF8 . GetString ( memoryStream . ToArray ( ) ) ;
 			}
 		}
 
-		public static T Deserialize <T> ( [NotNull] this XElement element )
+		public static T Deserialize <T> ( [NotNull] this string element , Type [ ] types = null )
 		{
 			if ( element == null )
 			{
@@ -110,12 +133,31 @@ namespace DreamRecorder . ToolBox . General
 
 			if ( typeof ( ISelfSerializable ) . IsAssignableFrom ( typeof ( T ) ) )
 			{
-				return ( T ) Activator . CreateInstance ( typeof ( T ) , element ) ;
+				return ( T ) Activator . CreateInstance ( typeof ( T ) , XElement . Parse ( element ) ) ;
 			}
 			else
 			{
-				XmlSerializer xmlSerializer = new XmlSerializer ( typeof ( T ) ) ;
-				return ( T ) xmlSerializer . Deserialize ( element . CreateReader ( ) ) ;
+				if ( typeof ( T ) . GetCustomAttribute <DataContractAttribute> ( )   != null
+					|| typeof ( T ) . GetCustomAttribute <SerializableAttribute> ( ) != null )
+				{
+					DataContractSerializer dataContractSerializer =
+						new DataContractSerializer ( typeof ( T ) , types ?? typeof ( T ) . Assembly . GetTypes ( ) ) ;
+					return ( T ) dataContractSerializer . ReadObject (
+																	new MemoryStream (
+																					Encoding . UTF8 . GetBytes (
+																												element ) ) ) ;
+				}
+				else
+				{
+					XmlSerializer xmlSerializer = new XmlSerializer (
+																	typeof ( T ) ,
+																	types
+																	?? typeof ( T ) . Assembly .
+																					GetExportedTypes ( ) ) ;
+					return ( T ) xmlSerializer . Deserialize (
+															new MemoryStream (
+																			Encoding . UTF8 . GetBytes ( element ) ) ) ;
+				}
 			}
 		}
 

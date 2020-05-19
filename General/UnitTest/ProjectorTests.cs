@@ -11,14 +11,14 @@ using Microsoft . VisualStudio . TestTools . UnitTesting ;
 namespace DreamRecorder . ToolBox . UnitTest
 {
 
-	[TestClass ( )]
+	[TestClass]
 	public class ProjectorTests
 	{
 
-		[TestMethod ( )]
+		[TestMethod]
 		public void ProjectTest ( ) { }
 
-		[TestMethod ( )]
+		[TestMethod]
 		public void IsometricProjectorTest ( )
 		{
 			IsometricProjector projector = new IsometricProjector ( ) ;
@@ -26,7 +26,7 @@ namespace DreamRecorder . ToolBox . UnitTest
 			projector . Project ( Vector3 . Zero ) ;
 		}
 
-		[TestMethod ( )]
+		[TestMethod]
 		public void ObliqueProjectorTest ( )
 		{
 			ObliqueProjector projector = new ObliqueProjector ( ) ;
