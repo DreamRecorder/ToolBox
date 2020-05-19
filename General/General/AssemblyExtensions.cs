@@ -6,6 +6,7 @@ using System . IO ;
 using System . Linq ;
 using System . Reflection ;
 using System . Runtime . InteropServices ;
+using System . Text ;
 using System . Text . RegularExpressions ;
 using System . Threading . Tasks ;
 
@@ -27,6 +28,34 @@ namespace DreamRecorder . ToolBox . General
 		public static string GetAssemblyFullName ( this Type type )
 		{
 			return type . GetTypeInfo ( ) . Assembly . GetName ( ) . FullName . Replace ( ", " , CommaWithNewline ) ;
+		}
+
+		public static void GetAssemblyInfo <T> ( [NotNull] StringBuilder builder )
+		{
+			if ( builder == null )
+			{
+				throw new ArgumentNullException ( nameof ( builder ) ) ;
+			}
+
+			builder . AppendLine ( typeof ( T ) . Assembly . GetName ( ) . Name ) ;
+
+			builder . AppendLine (
+								typeof ( T ) . Assembly . GetName ( ) . Version . ToString ( ) ) ;
+
+
+			builder . AppendLine (
+								typeof ( T ) . Assembly .
+												GetCustomAttribute <
+													AssemblyInformationalVersionAttribute> ( ) ? .
+												InformationalVersion ) ;
+
+			builder . AppendLine (
+								typeof ( T ) . Assembly .
+												GetCustomAttribute <AssemblyCopyrightAttribute
+												> ( ) ? .
+												Copyright ) ;
+
+			builder . AppendLine ( ) ;
 		}
 
 		public static string GetResourceFile <T> ( this Assembly assembly , string fileName )
