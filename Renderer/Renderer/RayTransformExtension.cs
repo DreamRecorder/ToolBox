@@ -11,11 +11,9 @@ namespace DreamRecorder . ToolBox . Renderer
 	{
 
 		public static Ray Transform ( this Ray source , Matrix4x4 matrix )
-		{
-			return new Ray (
-							Vector3 . Transform ( source . StartPosition , matrix ) ,
-							Vector3 . Transform ( source . Direction ,     matrix ) ) ;
-		}
+			=> new Ray (
+						Vector3 . Transform ( source . StartPosition , matrix ) ,
+						Vector3 . Transform ( source . Direction ,     matrix ) ) ;
 
 	}
 

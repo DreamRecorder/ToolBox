@@ -26,9 +26,9 @@ namespace DreamRecorder . ToolBox . General
 																	RegexOptions . Compiled ) ;
 
 		public static string GetAssemblyFullName ( this Type type )
-		{
-			return type . GetTypeInfo ( ) . Assembly . GetName ( ) . FullName . Replace ( ", " , CommaWithNewline ) ;
-		}
+			=> type . GetTypeInfo ( ) .
+					Assembly . GetName ( ) .
+					FullName . Replace ( ", " , CommaWithNewline ) ;
 
 		public static void GetAssemblyInfo <T> ( [NotNull] StringBuilder builder )
 		{
@@ -88,7 +88,8 @@ namespace DreamRecorder . ToolBox . General
 				{
 					foreach ( MethodInfo method in type . DeclaredMethods )
 					{
-						if ( method . GetCustomAttributes ( typeof ( PrepareAttribute ) ) . Any ( ) )
+						if ( method . GetCustomAttributes ( typeof ( PrepareAttribute ) ) .
+									Any ( ) )
 						{
 							tasks . Add (
 										Task . Run (
@@ -96,7 +97,9 @@ namespace DreamRecorder . ToolBox . General
 													{
 														try
 														{
-															method . Invoke ( null , new object [ ] { } ) ;
+															method . Invoke (
+																			null ,
+																			new object [ ] { } ) ;
 														}
 														catch ( Exception e )
 														{
@@ -120,7 +123,8 @@ namespace DreamRecorder . ToolBox . General
 				throw new ArgumentNullException ( nameof ( assembly ) ) ;
 			}
 
-			AssemblyDisplayNameAttribute attribute = assembly . GetCustomAttribute <AssemblyDisplayNameAttribute> ( ) ;
+			AssemblyDisplayNameAttribute attribute =
+				assembly . GetCustomAttribute <AssemblyDisplayNameAttribute> ( ) ;
 
 			return attribute ? . Name ?? assembly . GetName ( ) . Name ;
 		}
@@ -132,8 +136,9 @@ namespace DreamRecorder . ToolBox . General
 				throw new ArgumentNullException ( nameof ( assembly ) ) ;
 			}
 
-			GuidAttribute attribute = assembly . GetCustomAttributes <GuidAttribute> ( ) . FirstOrDefault ( ) ;
-			string        guid      = attribute ? . Value ;
+			GuidAttribute attribute =
+				assembly . GetCustomAttributes <GuidAttribute> ( ) . FirstOrDefault ( ) ;
+			string guid = attribute ? . Value ;
 
 			if ( guid is null )
 			{
@@ -162,9 +167,10 @@ namespace DreamRecorder . ToolBox . General
 				if ( match . Success )
 				{
 					return ( match . Captures [ 0 ] . Value , match . Captures [ 1 ] . Value ,
-								new DateTimeOffset (
-													DateTime . Parse ( match . Captures [ 2 ] . Value ) ,
-													TimeSpan . Zero ) ) ;
+							new DateTimeOffset (
+												DateTime . Parse (
+																match . Captures [ 2 ] . Value ) ,
+												TimeSpan . Zero ) ) ;
 				}
 			}
 

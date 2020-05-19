@@ -17,7 +17,8 @@ namespace DreamRecorder . ToolBox . Colors . ColorMap
 			int    flooredValue = Convert . ToInt32 ( Math . Floor ( value ) ) ;
 			double lastValue    = value - flooredValue ;
 
-			HdrColor data = Data [ flooredValue ] + lastValue * ( Data [ flooredValue + 1 ] - Data [ flooredValue ] ) ;
+			HdrColor data = Data [ flooredValue ]
+						+ lastValue * ( Data [ flooredValue + 1 ] - Data [ flooredValue ] ) ;
 
 			return data ;
 		}

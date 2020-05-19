@@ -19,30 +19,57 @@ namespace DreamRecorder . ToolBox . UnitTest
 		{
 			Assert . AreEqual (
 								0b0000_0001 ,
-								new [ ] { true , false , false , false , false , false , false , false } .
-									ToByte ( ) ) ;
+								new [ ]
+								{
+									true , false , false , false , false , false , false , false
+								} . ToByte ( ) ) ;
 			Assert . AreEqual (
 								0b0000_1000 ,
-								new [ ] { false , false , false , true , false , false , false , false } .
-									ToByte ( ) ) ;
+								new [ ]
+								{
+									false , false , false , true , false , false , false , false
+								} . ToByte ( ) ) ;
 			Assert . AreEqual (
 								0b0001_0000 ,
-								new [ ] { false , false , false , false , true , false , false , false } .
-									ToByte ( ) ) ;
+								new [ ]
+								{
+									false , false , false , false , true , false , false , false
+								} . ToByte ( ) ) ;
 			Assert . AreEqual (
 								0b1000_0000 ,
-								new [ ] { false , false , false , false , false , false , false , true } .
-									ToByte ( ) ) ;
+								new [ ]
+								{
+									false , false , false , false , false , false , false , true
+								} . ToByte ( ) ) ;
 
 			Assert . AreEqual (
-								new [ ] { true , true , true , true , true , true , true , true } . ToByte ( ) ,
+								new [ ] { true , true , true , true , true , true , true , true } .
+									ToByte ( ) ,
 								0b1111_1111 ) ;
 			Assert . AreEqual (
-								new [ ] { false , false , false , false , false , false , false , false } . ToByte ( ) ,
+								new [ ]
+								{
+									false ,
+									false ,
+									false ,
+									false ,
+									false ,
+									false ,
+									false ,
+									false
+								} . ToByte ( ) ,
 								0b0000_0000 ) ;
 
-			Assert . ThrowsException <ArgumentException> ( ( ) => { new bool [ ] { } . ToByte ( ) ; } ) ;
-			Assert . ThrowsException <ArgumentException> ( ( ) => { new [ ] { false , true } . ToByte ( ) ; } ) ;
+			Assert . ThrowsException <ArgumentException> (
+														( ) =>
+														{
+															new bool [ ] { } . ToByte ( ) ;
+														} ) ;
+			Assert . ThrowsException <ArgumentException> (
+														( ) =>
+														{
+															new [ ] { false , true } . ToByte ( ) ;
+														} ) ;
 		}
 
 		[TestMethod]

@@ -24,7 +24,10 @@ namespace DreamRecorder . ToolBox . UnitTest
 
 		[TestMethod]
 		[ExpectedException ( typeof ( ArgumentNullException ) )]
-		public void NullListRandomItemTest ( ) { ListItemRandomExtensions . RandomItem <object> ( null ) ; }
+		public void NullListRandomItemTest ( )
+		{
+			ListItemRandomExtensions . RandomItem <object> ( null ) ;
+		}
 
 	}
 

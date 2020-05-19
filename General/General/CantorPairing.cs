@@ -12,14 +12,18 @@ namespace DreamRecorder . ToolBox . General
 	public static class CantorPairing
 	{
 
-		public static long Calculate ( int x , int y ) { return ( x + y ) * ( x + y + 1L ) / 2L + y ; }
+		public static long Calculate ( int x , int y ) => ( x + y ) * ( x + y + 1L ) / 2L + y ;
 
 		public static (int X , int Y) Calculate ( long value )
 		{
 			long w = Convert . ToInt64 (
 										Math . Floor (
-													( Math . Sqrt ( Convert . ToDouble ( 8L * value + 1L ) ) - 1L )
-													/ 2L ) ) ;
+													( Math . Sqrt (
+																	Convert . ToDouble (
+																						8L * value
+																					+ 1L ) )
+												- 1L )
+												/ 2L ) ) ;
 
 			long t = ( w * w + w ) / 2L ;
 

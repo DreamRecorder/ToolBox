@@ -11,7 +11,7 @@ namespace DreamRecorder . ToolBox . Colors . ColorMap
 
 		protected abstract HdrColor MapOverride ( double value ) ;
 
-		public HdrColor Map ( double value ) { return MapOverride ( value ) ; }
+		public HdrColor Map ( double value ) => MapOverride ( value ) ;
 
 	}
 

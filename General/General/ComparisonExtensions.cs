@@ -13,15 +13,19 @@ namespace DreamRecorder . ToolBox . General
 	{
 
 		public static Comparison <TSource> Select
-			<TSource , TResult> ( Func <TSource , TResult> selector , Comparison <TResult> comparison = null )
+			<TSource , TResult> (
+				Func <TSource , TResult> selector ,
+				Comparison <TResult>     comparison = null )
 		{
 			return ( x , y )
 						=> ( comparison ?? Comparer <TResult> . Default . Compare ) (
 																					selector ( x ) ,
-																					selector ( y ) ) ;
+																					selector (
+																							y ) ) ;
 		}
 
-		public static Comparison <T> Union <T> ( this Comparison <T> comparison1 , Comparison <T> comparison2 )
+		public static Comparison <T> Union
+			<T> ( this Comparison <T> comparison1 , Comparison <T> comparison2 )
 		{
 			return ( x , y ) =>
 					{

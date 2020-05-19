@@ -66,7 +66,10 @@ namespace DreamRecorder . ToolBox . General
 
 				lock ( RunningTasks )
 				{
-					Task . WaitAll ( RunningTasks . Select ( taskPair => taskPair . RunningTask ) . ToArray ( ) ) ;
+					Task . WaitAll (
+									RunningTasks .
+										Select ( taskPair => taskPair . RunningTask ) .
+										ToArray ( ) ) ;
 
 					RunningTasks . Clear ( ) ;
 				}
@@ -76,7 +79,8 @@ namespace DreamRecorder . ToolBox . General
 		[Prepare]
 		public static void Prepare ( )
 		{
-			StaticServiceProvider . ServiceCollection . AddSingleton <ITaskDispatcher , TaskDispatcher> ( ) ;
+			StaticServiceProvider . ServiceCollection .
+									AddSingleton <ITaskDispatcher , TaskDispatcher> ( ) ;
 		}
 
 		private void Execute ( )
@@ -88,7 +92,7 @@ namespace DreamRecorder . ToolBox . General
 					if ( taskQueue . TryDequeue ( out ITask task ) )
 					{
 						if ( task . Status == TaskStatus . Ready
-							&& ( RunningTasks . All ( taskPair => taskPair . Task != task ) ) )
+						&& RunningTasks . All ( taskPair => taskPair . Task != task ) )
 						{
 							Task runningTask = Task . Run (
 															( ) =>
@@ -102,7 +106,9 @@ namespace DreamRecorder . ToolBox . General
 																	Logger . LogWarning (
 																						e ,
 																						"Task {0} throw unhandled exception." ,
-																						task . GetType ( ) . Name ) ;
+																						task .
+																							GetType ( ) .
+																							Name ) ;
 																}
 															} ) ;
 
@@ -121,11 +127,13 @@ namespace DreamRecorder . ToolBox . General
 
 				lock ( RunningTasks )
 				{
-					LinkedListNode <(Task RunningTask , ITask task)> currentNode = RunningTasks . First ;
+					LinkedListNode <(Task RunningTask , ITask task)> currentNode =
+						RunningTasks . First ;
 
 					while ( currentNode != null )
 					{
-						LinkedListNode <(Task RunningTask , ITask task)> nextNode = currentNode . Next ;
+						LinkedListNode <(Task RunningTask , ITask task)> nextNode =
+							currentNode . Next ;
 
 						Task task = currentNode . Value . RunningTask ;
 
@@ -166,7 +174,8 @@ namespace DreamRecorder . ToolBox . General
 
 		public TaskDispatcher ( )
 		{
-			int queueCount = Enum . GetValues ( typeof ( TaskPriority ) ) . Cast <int> ( ) . Max ( ) + 1 ;
+			int queueCount = Enum . GetValues ( typeof ( TaskPriority ) ) . Cast <int> ( ) . Max ( )
+						+ 1 ;
 
 			TaskQueues = new ConcurrentQueue <ITask>[ queueCount ] ;
 			for ( int i = 0 ; i < queueCount ; i++ )

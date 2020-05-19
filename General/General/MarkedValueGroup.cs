@@ -34,16 +34,19 @@ namespace DreamRecorder . ToolBox . General
 			}
 		}
 
-		IEnumerator <MarkedValue <TValue , TMark>> IEnumerable <MarkedValue <TValue , TMark>> . GetEnumerator ( )
-		{
-			return Values . Values . GetEnumerator ( ) ;
-		}
+		IEnumerator <MarkedValue <TValue , TMark>> IEnumerable <MarkedValue <TValue , TMark>> .
+			GetEnumerator ( )
+			=> Values . Values . GetEnumerator ( ) ;
 
-		public void Add ( MarkedValue <TValue , TMark> item ) { Values . Add ( item . Value , item ) ; }
+		public void Add ( MarkedValue <TValue , TMark> item )
+		{
+			Values . Add ( item . Value , item ) ;
+		}
 
 		public void Clear ( ) { Values . Clear ( ) ; }
 
-		public bool Contains ( MarkedValue <TValue , TMark> item ) { return Values . Values . Contains ( item ) ; }
+		public bool Contains ( MarkedValue <TValue , TMark> item )
+			=> Values . Values . Contains ( item ) ;
 
 		public void CopyTo ( MarkedValue <TValue , TMark> [ ] array , int arrayIndex )
 		{
@@ -64,7 +67,7 @@ namespace DreamRecorder . ToolBox . General
 
 		bool ICollection <MarkedValue <TValue , TMark>> . IsReadOnly => false ;
 
-		public IEnumerator GetEnumerator ( ) { return Values . GetEnumerator ( ) ; }
+		public IEnumerator GetEnumerator ( ) => Values . GetEnumerator ( ) ;
 
 	}
 

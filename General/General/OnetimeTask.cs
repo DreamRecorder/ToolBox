@@ -14,7 +14,10 @@ namespace DreamRecorder . ToolBox . General
 
 		public Action Action { get ; private set ; }
 
-		public OnetimeTask ( Action action , TimeSpan timeout , TaskPriority priority = TaskPriority . Normal )
+		public OnetimeTask (
+			Action       action ,
+			TimeSpan     timeout ,
+			TaskPriority priority = TaskPriority . Normal )
 		{
 			Action   = action ;
 			Timeout  = timeout ;
@@ -41,7 +44,9 @@ namespace DreamRecorder . ToolBox . General
 					}
 					catch ( Exception e )
 					{
-						Logger ? . LogError ( e , $"{nameof ( OnetimeTask )} thrown unhandled exception." ) ;
+						Logger ? . LogError (
+											e ,
+											$"{nameof ( OnetimeTask )} thrown unhandled exception." ) ;
 
 						Status = TaskStatus . Ready ;
 

@@ -15,7 +15,8 @@ using Microsoft . Extensions . Logging . Console ;
 namespace Example
 {
 
-	public class Program : ProgramBase <Program , ProgramExitCode , ProgramSetting , ProgramSettingCatalog>
+	public class Program
+		: ProgramBase <Program , ProgramExitCode , ProgramSetting , ProgramSettingCatalog>
 	{
 
 		public override bool WaitForExit => true ;
@@ -40,11 +41,14 @@ namespace Example
 		{
 			Console . ReadLine ( ) ;
 
-			ISettingProvider settingProvider = StaticServiceProvider . Provider . GetService <ISettingProvider> ( ) ;
+			ISettingProvider settingProvider =
+				StaticServiceProvider . Provider . GetService <ISettingProvider> ( ) ;
 
 			Console . WriteLine (
 								settingProvider . GetValue <string> (
-																	nameof ( ProgramSetting . DatabaseConnection ) ) ) ;
+																	nameof ( ProgramSetting .
+																				DatabaseConnection
+																	) ) ) ;
 
 			ReadOnlyDictionary <string , string> a = Emojis . EmojisList ;
 
@@ -86,7 +90,8 @@ namespace Example
 		public override void ConfigureLogger ( ILoggingBuilder builder )
 		{
 			builder . AddDebug ( ) ;
-			builder . AddFilter <ConsoleLoggerProvider> ( "Default" , LogLevel . Information ) . AddConsole ( ) ;
+			builder . AddFilter <ConsoleLoggerProvider> ( "Default" , LogLevel . Information ) .
+					AddConsole ( ) ;
 		}
 
 		public override void ShowLogo ( ) { Console . WriteLine ( "Logo" ) ; }

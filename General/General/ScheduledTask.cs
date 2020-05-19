@@ -85,7 +85,9 @@ namespace DreamRecorder . ToolBox . General
 						}
 						catch ( Exception e )
 						{
-							Logger ? . LogError ( e , $"{nameof ( ScheduledTask )} thrown unhandled exception." ) ;
+							Logger ? . LogError (
+												e ,
+												$"{nameof ( ScheduledTask )} thrown unhandled exception." ) ;
 						}
 
 						RunCount++ ;

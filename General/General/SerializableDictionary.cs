@@ -10,12 +10,13 @@ namespace DreamRecorder . ToolBox . General
 {
 
 	[XmlRoot ( "dictionary" )]
-	public class SerializableDictionary <TKey , TValue> : Dictionary <TKey , TValue> , IXmlSerializable
+	public class SerializableDictionary
+		<TKey , TValue> : Dictionary <TKey , TValue> , IXmlSerializable
 	{
 
 		#region IXmlSerializable Members
 
-		public XmlSchema GetSchema ( ) { return null ; }
+		public XmlSchema GetSchema ( ) => null ;
 
 		public void ReadXml ( XmlReader reader )
 		{

@@ -23,22 +23,16 @@ namespace DreamRecorder . ToolBox . General
 		}
 
 		public static NormalValue NextNormalValue ( this IRandom random )
-		{
-			return random . Next ( NormalValue . MaxValue + 1 ) ;
-		}
+			=> random . Next ( NormalValue . MaxValue + 1 ) ;
 
 		public static NormalValue NextNormalValue (
 			this IRandom random ,
 			NormalValue  lowerBound ,
 			NormalValue  higherBound )
-		{
-			return random . Next ( lowerBound , higherBound + 1 ) ;
-		}
+			=> random . Next ( lowerBound , higherBound + 1 ) ;
 
 		public static NormalValue NextNormalValue ( this IRandom random , NormalValue lowerBound )
-		{
-			return random . Next ( lowerBound , NormalValue . MaxValue + 1 ) ;
-		}
+			=> random . Next ( lowerBound , NormalValue . MaxValue + 1 ) ;
 
 	}
 

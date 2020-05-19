@@ -87,20 +87,21 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 		public void SaveSettingFile ( )
 		{
-			string       config      = Setting ? . Save ( ) ;
-			FileStream   settingFile = File . OpenWrite ( SettingFilePathOverride ?? FileNameConst . SettingFilePath ) ;
-			StreamWriter writer      = new StreamWriter ( settingFile ) ;
+			string config = Setting ? . Save ( ) ;
+			FileStream settingFile =
+				File . OpenWrite ( SettingFilePathOverride ?? FileNameConst . SettingFilePath ) ;
+			StreamWriter writer = new StreamWriter ( settingFile ) ;
 			writer . Write ( config ) ;
 			writer . Dispose ( ) ;
 		}
 
-		public virtual bool OnStartupExceptions ( Exception e ) { return false ; }
+		public virtual bool OnStartupExceptions ( Exception e ) => false ;
 
-		public virtual bool OnUnhandledExceptions ( Exception e ) { return false ; }
+		public virtual bool OnUnhandledExceptions ( Exception e ) => false ;
 
 		public void Exit ( TExitCode exitCode = null )
 		{
-			exitCode??=ProgramExitCode <TExitCode> . Success ;
+			exitCode ??= ProgramExitCode <TExitCode> . Success ;
 
 			if ( IsRunning && ! IsExiting )
 			{
@@ -152,7 +153,9 @@ namespace DreamRecorder . ToolBox . CommandLine
 		public virtual void GenerateLicenseFile ( )
 		{
 			Logger . LogInformation ( "Generating License File." ) ;
-			FileStream licenseFile = File . Open ( FileNameConst . LicenseFilePath , FileMode . Create ) ;
+			FileStream licenseFile = File . Open (
+												FileNameConst . LicenseFilePath ,
+												FileMode . Create ) ;
 
 			using ( StreamWriter writer = new StreamWriter ( licenseFile ) )
 			{
@@ -189,7 +192,8 @@ namespace DreamRecorder . ToolBox . CommandLine
 				{
 					Logger . LogInformation ( "License check failed." ) ;
 
-					licenseFileContent = licenseFileContent . TrimEndPattern ( AcceptLicenseGuide ) ;
+					licenseFileContent =
+						licenseFileContent . TrimEndPattern ( AcceptLicenseGuide ) ;
 
 					if ( string . IsNullOrWhiteSpace ( licenseFileContent ) )
 					{
@@ -200,11 +204,13 @@ namespace DreamRecorder . ToolBox . CommandLine
 				}
 				else
 				{
-					licenseFileContent = licenseFileContent . TrimEndPattern ( AcceptLicenseDeclare ) ;
+					licenseFileContent =
+						licenseFileContent . TrimEndPattern ( AcceptLicenseDeclare ) ;
 
 					licenseFileContent = licenseFileContent . Trim ( ) ;
 
-					licenseFileContent = licenseFileContent . TrimEndPattern ( AcceptLicenseGuide ) ;
+					licenseFileContent =
+						licenseFileContent . TrimEndPattern ( AcceptLicenseGuide ) ;
 
 					if ( string . IsNullOrWhiteSpace ( licenseFileContent ) )
 					{
@@ -240,22 +246,26 @@ namespace DreamRecorder . ToolBox . CommandLine
 			CommandOption noLogoOption = commandLineApplication . Option (
 																		@"-noLogo|--noLogo" ,
 																		"Show no logo" ,
-																		CommandOptionType . NoValue ) ;
+																		CommandOptionType .
+																			NoValue ) ;
 
 			CommandOption acceptLicenseOption = commandLineApplication . Option (
 																				@"-acceptLicense|--acceptLicense" ,
 																				"Accept License" ,
-																				CommandOptionType . NoValue ) ;
+																				CommandOptionType .
+																					NoValue ) ;
 
 			CommandOption debugOption = commandLineApplication . Option (
 																		@"-debug|--debug" ,
 																		"Launch in Debug mode" ,
-																		CommandOptionType . NoValue ) ;
+																		CommandOptionType .
+																			NoValue ) ;
 
 			CommandOption verboseOption = commandLineApplication . Option (
 																			"-v|-verbose|--verbose" ,
 																			"Verbose Log" ,
-																			CommandOptionType . NoValue ) ;
+																			CommandOptionType .
+																				NoValue ) ;
 
 			RegisterArgument ( commandLineApplication ) ;
 
@@ -279,13 +289,17 @@ namespace DreamRecorder . ToolBox . CommandLine
 					StaticServiceProvider . Update ( ) ;
 				}
 
-				Logger = StaticServiceProvider . Provider . GetService <ILoggerFactory> ( ) . CreateLogger <T> ( ) ;
+				Logger = StaticServiceProvider .
+						Provider . GetService <ILoggerFactory> ( ) .
+						CreateLogger <T> ( ) ;
 
 				Logger . LogDebug ( "Logger has been configured." ) ;
 
 				#endregion
 
-				Logger . LogInformation ( "Start with argument: {0}" , string . Join ( " " , args ) ) ;
+				Logger . LogInformation (
+										"Start with argument: {0}" ,
+										string . Join ( " " , args ) ) ;
 
 				#region Check Debug
 
@@ -329,7 +343,8 @@ namespace DreamRecorder . ToolBox . CommandLine
 						}
 						else
 						{
-							Logger . LogInformation ( "License Accepted by command line argument." ) ;
+							Logger . LogInformation (
+													"License Accepted by command line argument." ) ;
 						}
 					}
 				}
@@ -353,23 +368,29 @@ namespace DreamRecorder . ToolBox . CommandLine
 				{
 					Logger . LogInformation ( "Loading setting file." ) ;
 
-					if ( File . Exists ( SettingFilePathOverride ?? FileNameConst . SettingFilePath ) )
+					if ( File . Exists (
+										SettingFilePathOverride
+									?? FileNameConst . SettingFilePath ) )
 					{
 						Logger . LogInformation ( "Setting file exists, Reading." ) ;
 
 						try
 						{
 							using ( FileStream stream =
-								File . OpenRead ( SettingFilePathOverride ?? FileNameConst . SettingFilePath ) )
+								File . OpenRead (
+												SettingFilePathOverride
+											?? FileNameConst . SettingFilePath ) )
 							{
-								Setting = SettingBase <TSetting , TSettingCategory> . Load ( stream ) ;
+								Setting =
+									SettingBase <TSetting , TSettingCategory> . Load ( stream ) ;
 							}
 
 							Logger . LogInformation ( "Setting file loaded." ) ;
 						}
 						catch ( Exception )
 						{
-							Logger . LogInformation ( "Setting file error, will use default value." ) ;
+							Logger . LogInformation (
+													"Setting file error, will use default value." ) ;
 							Setting = SettingBase <TSetting , TSettingCategory> . GenerateNew ( ) ;
 						}
 					}
@@ -380,7 +401,8 @@ namespace DreamRecorder . ToolBox . CommandLine
 						SaveSettingFile ( ) ;
 					}
 
-					StaticServiceProvider . ServiceCollection . AddSingleton <ISettingProvider> ( Setting ) ;
+					StaticServiceProvider .
+						ServiceCollection . AddSingleton <ISettingProvider> ( Setting ) ;
 				}
 
 				AfterLoadSetting ( ) ;
@@ -393,7 +415,9 @@ namespace DreamRecorder . ToolBox . CommandLine
 				{
 					string pluginDirectoryPath = FileNameConst . PluginsFolderPath ;
 
-					Logger . LogInformation ( "Finding plugin directory: {0}" , pluginDirectoryPath ) ;
+					Logger . LogInformation (
+											"Finding plugin directory: {0}" ,
+											pluginDirectoryPath ) ;
 
 					if ( Directory . Exists ( pluginDirectoryPath ) )
 					{
@@ -448,7 +472,8 @@ namespace DreamRecorder . ToolBox . CommandLine
 				{
 					while ( IsRunning )
 					{
-						if ( ConsoleReader . ReadLine ( 1000 / 60 ) ? . Trim ( ) ? . ToLower ( ) == "exit" )
+						if ( ConsoleReader . ReadLine ( 1000 / 60 ) ? . Trim ( ) ? . ToLower ( )
+						== "exit" )
 						{
 							if ( CanExit )
 							{

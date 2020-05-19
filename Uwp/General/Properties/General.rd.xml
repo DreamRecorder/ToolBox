@@ -1,4 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml
+	version="1.0"
+	encoding="utf-8"?>
 
 <!--
     This file contains Runtime Directives, specifications about types your application accesses
@@ -25,8 +27,10 @@
     For more information on writing Runtime Directives for libraries, please visit
     https://go.microsoft.com/fwlink/?LinkID=391919
 -->
-<Directives xmlns="http://schemas.microsoft.com/netfx/2013/01/metadata" >
-	<Library Name="General" >
+<Directives
+	xmlns="http://schemas.microsoft.com/netfx/2013/01/metadata" >
+	<Library
+		Name="General" >
 
 		<!-- add directives for your library here -->
 

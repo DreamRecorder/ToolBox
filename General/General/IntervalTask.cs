@@ -84,7 +84,9 @@ namespace DreamRecorder . ToolBox . General
 					}
 					catch ( Exception e )
 					{
-						Logger ? . LogError ( e , $"{nameof ( IntervalTask )} thrown unhandled exception." ) ;
+						Logger ? . LogError (
+											e ,
+											$"{nameof ( IntervalTask )} thrown unhandled exception." ) ;
 					}
 
 					RunCount++ ;

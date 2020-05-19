@@ -14,7 +14,7 @@ namespace DreamRecorder . ToolBox . Network
 
 		public override AddressType Type => AddressType . Mac ;
 
-		public Eui48Address ( ) { AddressBytes = new byte[ 6 ] ; }
+		public Eui48Address ( ) => AddressBytes = new byte[ 6 ] ;
 
 		public Eui48Address ( Memory <byte> address )
 		{
@@ -61,13 +61,13 @@ namespace DreamRecorder . ToolBox . Network
 			{
 				int value = t ;
 
-				if ( value   >= 0x30
-					&& value <= 0x39 )
+				if ( value >= 0x30
+				&& value   <= 0x39 )
 				{
 					value -= 0x30 ;
 				}
-				else if ( value  >= 0x41
-						&& value <= 0x46 )
+				else if ( value >= 0x41
+					&& value    <= 0x46 )
 				{
 					value -= 0x37 ;
 				}
@@ -150,7 +150,7 @@ namespace DreamRecorder . ToolBox . Network
 			return new Eui48Address ( address ) ;
 		}
 
-		public override object Clone ( ) { return new Eui48Address ( AddressBytes ) ; }
+		public override object Clone ( ) => new Eui48Address ( AddressBytes ) ;
 
 	}
 

@@ -51,7 +51,9 @@ namespace DreamRecorder . ToolBox . Network
 				return true ;
 			}
 
-			return Equals ( AddressBytes , other . AddressBytes ) && Length == other . Length && Type == other . Type ;
+			return Equals ( AddressBytes , other . AddressBytes )
+				&& Length == other . Length
+				&& Type   == other . Type ;
 		}
 
 		public virtual bool Contains ( [NotNull] Address address )
@@ -83,7 +85,7 @@ namespace DreamRecorder . ToolBox . Network
 			return false ;
 		}
 
-		public static explicit operator string ( Prefix prefix ) { return prefix . ToString ( ) ; }
+		public static explicit operator string ( Prefix prefix ) => prefix . ToString ( ) ;
 
 		public override bool Equals ( object obj )
 		{
@@ -113,9 +115,9 @@ namespace DreamRecorder . ToolBox . Network
 			}
 		}
 
-		public static bool operator == ( Prefix left , Prefix right ) { return Equals ( left , right ) ; }
+		public static bool operator == ( Prefix left , Prefix right ) => Equals ( left , right ) ;
 
-		public static bool operator != ( Prefix left , Prefix right ) { return ! Equals ( left , right ) ; }
+		public static bool operator != ( Prefix left , Prefix right ) => ! Equals ( left , right ) ;
 
 	}
 

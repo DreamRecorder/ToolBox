@@ -16,7 +16,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 		public string ScopeId { get ; set ; }
 
-		public Ipv6Address ( ) { AddressBytes = new byte[ 16 ] ; }
+		public Ipv6Address ( ) => AddressBytes = new byte[ 16 ] ;
 
 		public Ipv6Address ( Memory <byte> address )
 		{
@@ -55,7 +55,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 					fixed ( char * name = address )
 					{
 						if ( Ipv6AddressHelper . IsValidStrict ( name , offset , ref end )
-							|| end != address . Length )
+						|| end != address . Length )
 						{
 							ushort [ ] numbers = new ushort[ NumberOfLabels ] ;
 							string     scopeId = null ;
@@ -112,7 +112,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			return new Ipv6Address ( address ) ;
 		}
 
-		public override object Clone ( ) { return new Ipv6Address ( AddressBytes ) ; }
+		public override object Clone ( ) => new Ipv6Address ( AddressBytes ) ;
 
 		public override string ToString ( )
 		{
@@ -120,7 +120,8 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 			for ( int i = 0 ; i < AddressBytes . Length ; i += 2 )
 			{
-				int segment = ( ushort ) ( AddressBytes . Span [ i ] << 8 ) | AddressBytes . Span [ i + 1 ] ;
+				int segment = ( ushort ) ( AddressBytes . Span [ i ] << 8 )
+						| AddressBytes . Span [ i + 1 ] ;
 				str . AppendFormat ( "{0:X}" , segment ) ;
 
 				if ( i + 2 != AddressBytes . Length )

@@ -24,15 +24,15 @@ namespace DreamRecorder . ToolBox . Renderer
 		public float ScreenWidth { get ; set ; }
 
 		public Vector2 Project ( Vector3 point )
-		{
-			return CalculateProject ( point - CenterAt ) * ScreenWidth / WorldWidth ;
-		}
+			=> CalculateProject ( point - CenterAt ) * ScreenWidth / WorldWidth ;
 
 		public Ray Project ( Vector2 point )
 		{
 			Vector3 sourceCenter = CenterAt - Direction / Direction . Z * Height ;
 
-			return new Ray ( CalculateProject ( point ) / ScreenWidth * WorldWidth + sourceCenter , Direction ) ;
+			return new Ray (
+							CalculateProject ( point ) / ScreenWidth * WorldWidth + sourceCenter ,
+							Direction ) ;
 		}
 
 		protected abstract Vector2 CalculateProject ( Vector3 relativePoint ) ;

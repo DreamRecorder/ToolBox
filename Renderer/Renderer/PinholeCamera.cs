@@ -19,9 +19,7 @@ namespace DreamRecorder . ToolBox . Renderer
 		}
 
 		protected override Vector2 CalculateProject ( Vector3 point )
-		{
-			return new Vector2 ( point . X / point . Z , point . Y / point . Z ) ;
-		}
+			=> new Vector2 ( point . X / point . Z , point . Y / point . Z ) ;
 
 	}
 
