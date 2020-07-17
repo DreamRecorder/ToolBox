@@ -29,7 +29,7 @@
     <PackageIconUrl>https://webresources.dreamry.org/DreamryLogo.svg</PackageIconUrl>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <PackageIcon>DreamryLogo.svg</PackageIcon>
+    <PackageIcon>DreamryLogo.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -43,7 +43,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\DreamryLogo.svg">
+    <None Include="..\..\DreamryLogo.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
