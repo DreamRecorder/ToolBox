@@ -470,6 +470,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 				if ( ! HandleInput )
 				{
+					ConsoleReader . Start ( ) ;
 					while ( IsRunning )
 					{
 						if ( ConsoleReader . ReadLine ( 1000 / 60 ) ? . Trim ( ) ? . ToLower ( )
