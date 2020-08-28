@@ -46,13 +46,8 @@ namespace DreamRecorder . ToolBox . General
 
 			return new string (
 								normalizedInput . Where (
-														t
-															=> CharUnicodeInfo .
-																	GetUnicodeCategory ( t )
-															!= UnicodeCategory . NonSpacingMark ) .
-												ToArray ( ) ) . Normalize (
-																			NormalizationForm .
-																				FormC ) ;
+														c => CharUnicodeInfo . GetUnicodeCategory ( c ) != UnicodeCategory . NonSpacingMark ) .
+												ToArray ( ) ) . Normalize ( NormalizationForm . FormC ) ;
 		}
 
 		public static string ToSlug ( this string name ) => ToUrlSlug ( name ) ;
