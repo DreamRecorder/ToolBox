@@ -31,10 +31,8 @@ namespace DreamRecorder . ToolBox . CommandLine
 			object defaultValue )
 		{
 			SettingCategory = settingCategory ;
-			DisplayName =
-				displayName ?? throw new ArgumentNullException ( nameof ( displayName ) ) ;
-			Introduction =
-				introduction ?? throw new ArgumentNullException ( nameof ( introduction ) ) ;
+			DisplayName     = displayName  ?? throw new ArgumentNullException ( nameof ( displayName ) ) ;
+			Introduction    = introduction ?? throw new ArgumentNullException ( nameof ( introduction ) ) ;
 			RestartRequired = restartRequired ;
 			DefaultValue    = defaultValue ;
 		}
@@ -49,8 +47,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 			if ( RestartRequired )
 			{
-				builder . AppendLine (
-									"#	This setting will be applied at next time this program is started." ) ;
+				builder . AppendLine ( "#	This setting will be applied at next time this program is started." ) ;
 			}
 
 			builder . AppendLine ( $"#	Default Value: {DefaultValue}" ) ;

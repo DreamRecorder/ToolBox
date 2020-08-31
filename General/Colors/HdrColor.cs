@@ -29,7 +29,9 @@ namespace DreamRecorder . ToolBox . Colors
 			return result ;
 		}
 
-		public static explicit operator HdrColor ( [NotNull] byte [ ] color )
+		public static explicit operator HdrColor (
+			[NotNull]
+			byte [ ] color )
 		{
 			if ( color == null )
 			{
@@ -75,9 +77,8 @@ namespace DreamRecorder . ToolBox . Colors
 			{
 				throw new ArgumentException (
 											ExceptionMessages . XmlNameMismatch (
-																				nameof ( element ) ,
-																				typeof ( HdrColor
-																				) ) ) ;
+											nameof ( element ) ,
+											typeof ( HdrColor ) ) ) ;
 			}
 
 			R = element . ReadNecessaryValue <double> ( nameof ( R ) ) ;
@@ -147,11 +148,9 @@ namespace DreamRecorder . ToolBox . Colors
 		}
 
 
-		public static bool operator == ( HdrColor left , HdrColor right )
-			=> Equals ( left , right ) ;
+		public static bool operator == ( HdrColor left , HdrColor right ) => Equals ( left , right ) ;
 
-		public static bool operator != ( HdrColor left , HdrColor right )
-			=> ! Equals ( left , right ) ;
+		public static bool operator != ( HdrColor left , HdrColor right ) => ! Equals ( left , right ) ;
 
 
 		/// <summary>
@@ -217,8 +216,7 @@ namespace DreamRecorder . ToolBox . Colors
 		/// <param name="left">The source vector.</param>
 		/// <param name="right">The scalar value.</param>
 		/// <returns>The scaled vector.</returns>
-		public static HdrColor operator * ( HdrColor left , double right )
-			=> left * new HdrColor ( right ) ;
+		public static HdrColor operator * ( HdrColor left , double right ) => left * new HdrColor ( right ) ;
 
 		/// <summary>
 		///     Multiplies a vector by the given scalar.
@@ -226,8 +224,7 @@ namespace DreamRecorder . ToolBox . Colors
 		/// <param name="left">The scalar value.</param>
 		/// <param name="right">The source vector.</param>
 		/// <returns>The scaled vector.</returns>
-		public static HdrColor operator * ( double left , HdrColor right )
-			=> new HdrColor ( left ) * right ;
+		public static HdrColor operator * ( double left , HdrColor right ) => new HdrColor ( left ) * right ;
 
 		public HdrColor ( double value ) : this ( value , value , value ) { }
 
@@ -250,10 +247,7 @@ namespace DreamRecorder . ToolBox . Colors
 		{
 			double invDiv = 1.0f / value2 ;
 
-			return new HdrColor (
-								value1 . R * invDiv ,
-								value1 . G * invDiv ,
-								value1 . B * invDiv ) ;
+			return new HdrColor ( value1 . R * invDiv , value1 . G * invDiv , value1 . B * invDiv ) ;
 		}
 
 
@@ -282,8 +276,7 @@ namespace DreamRecorder . ToolBox . Colors
 			return different * ( saturation / Saturation ) + Brightness ;
 		}
 
-		public (byte R , byte G , byte B) ToDrawingColor (
-			ToneMappingAlgorithm mappingAlgorithm = null )
+		public (byte R , byte G , byte B) ToDrawingColor ( ToneMappingAlgorithm mappingAlgorithm = null )
 		{
 			mappingAlgorithm ??= KnowToneMapping . AcesMapping ;
 

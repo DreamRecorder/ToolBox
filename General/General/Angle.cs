@@ -35,11 +35,9 @@ namespace DreamRecorder . ToolBox . General
 
 		public static Angle FromRadius ( double radius ) => new Angle ( radius ) ;
 
-		public static Angle FromDegree ( double degree )
-			=> new Angle ( DegreeToRadius ( degree ) ) ;
+		public static Angle FromDegree ( double degree ) => new Angle ( DegreeToRadius ( degree ) ) ;
 
-		public static Angle FromGrad ( double grad )
-			=> new Angle ( DegreeToRadius ( GradToDegree ( grad ) ) ) ;
+		public static Angle FromGrad ( double grad ) => new Angle ( DegreeToRadius ( GradToDegree ( grad ) ) ) ;
 
 		public static implicit operator Angle ( double radius ) => FromRadius ( radius ) ;
 
@@ -72,13 +70,9 @@ namespace DreamRecorder . ToolBox . General
 			}
 
 			if ( value . EndsWith ( "ᵍ" )
-			|| value . EndsWith ( "gon" ) )
+				|| value . EndsWith ( "gon" ) )
 			{
-				return FromGrad (
-								Convert . ToDouble (
-													value . TrimEnd (
-																	( "ᵍ" + "gon" ) .
-																	ToCharArray ( ) ) ) ) ;
+				return FromGrad ( Convert . ToDouble ( value . TrimEnd ( ( "ᵍ" + "gon" ) . ToCharArray ( ) ) ) ) ;
 			}
 
 			return FromRadius ( Convert . ToDouble ( value ) / Math . PI * 180 ) ;

@@ -36,9 +36,7 @@ namespace DreamRecorder . ToolBox . General
 			}
 		}
 
-		private static void CurrentDomain_AssemblyLoad (
-			object                sender ,
-			AssemblyLoadEventArgs args )
+		private static void CurrentDomain_AssemblyLoad ( object sender , AssemblyLoadEventArgs args )
 		{
 			lock ( StaticServiceProvider . ServiceCollection )
 			{

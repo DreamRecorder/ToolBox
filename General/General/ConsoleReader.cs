@@ -27,10 +27,7 @@ namespace DreamRecorder . ToolBox . General
 			InputThread = new Thread ( Reader ) { IsBackground = true } ;
 		}
 
-		public static void Start ( )
-		{
-			InputThread.Start();
-		}
+		public static void Start ( ) { InputThread . Start ( ) ; }
 
 		private static void Reader ( )
 		{

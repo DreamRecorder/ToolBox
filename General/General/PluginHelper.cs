@@ -17,21 +17,19 @@ namespace DreamRecorder . ToolBox . General
 	{
 
 		public static void LoadPlugin (
-			[NotNull] string pluginDirectoryPath ,
-			[NotNull] string searchPattern )
+			[NotNull]
+			string pluginDirectoryPath ,
+			[NotNull]
+			string searchPattern )
 		{
 			if ( string . IsNullOrWhiteSpace ( pluginDirectoryPath ) )
 			{
-				throw new ArgumentException (
-											"Value cannot be null or whitespace." ,
-											nameof ( pluginDirectoryPath ) ) ;
+				throw new ArgumentException ( "Value cannot be null or whitespace." , nameof ( pluginDirectoryPath ) ) ;
 			}
 
 			if ( string . IsNullOrWhiteSpace ( searchPattern ) )
 			{
-				throw new ArgumentException (
-											"Value cannot be null or whitespace." ,
-											nameof ( searchPattern ) ) ;
+				throw new ArgumentException ( "Value cannot be null or whitespace." , nameof ( searchPattern ) ) ;
 			}
 
 			string [ ] fileNames = Directory . GetFiles ( pluginDirectoryPath , searchPattern ) ;
@@ -62,9 +60,7 @@ namespace DreamRecorder . ToolBox . General
 					//}
 
 					Assembly assembly = Assembly . LoadFile ( file . FullName ) ;
-					Logger . LogInformation (
-											"Loaded plugin {0}." ,
-											assembly . GetDisplayName ( ) ) ;
+					Logger . LogInformation ( "Loaded plugin {0}." , assembly . GetDisplayName ( ) ) ;
 				}
 				catch ( Exception e )
 				{

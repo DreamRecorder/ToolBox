@@ -21,9 +21,7 @@ namespace DreamRecorder . ToolBox . UnitTest
 		{
 			string result = new DataContractTestStub ( ) . Serialize ( ) ;
 			Console . WriteLine ( result ) ;
-			Assert . AreEqual (
-								result ,
-								result . Deserialize <DataContractTestStub> ( ) . Serialize ( ) ) ;
+			Assert . AreEqual ( result , result . Deserialize <DataContractTestStub> ( ) . Serialize ( ) ) ;
 		}
 
 		[TestMethod]
@@ -32,10 +30,7 @@ namespace DreamRecorder . ToolBox . UnitTest
 			string result = new SelfSerializableTestStub ( ) . Serialize ( ) ;
 			Console . WriteLine ( result ) ;
 
-			Assert . AreEqual (
-								result ,
-								result . Deserialize <SelfSerializableTestStub> ( ) .
-										Serialize ( ) ) ;
+			Assert . AreEqual ( result , result . Deserialize <SelfSerializableTestStub> ( ) . Serialize ( ) ) ;
 		}
 
 		[TestMethod]

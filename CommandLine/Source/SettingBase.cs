@@ -20,16 +20,17 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 	[PublicAPI]
 	public abstract class SettingBase <T , TSettingCategory> : ISettingProvider
-		where T : SettingBase <T , TSettingCategory> , new ( )
-		where TSettingCategory : Enum , IConvertible
+		where T : SettingBase <T , TSettingCategory> , new ( ) where TSettingCategory : Enum , IConvertible
 	{
 
 		// ReSharper disable once StaticMemberInGenericType
 		// By design
-		public static Regex LineValuePattern =
-			new Regex ( "^(?:\\s*)([^=#]+)=(.+)" , RegexOptions . Compiled ) ;
+		public static Regex LineValuePattern = new Regex ( "^(?:\\s*)([^=#]+)=(.+)" , RegexOptions . Compiled ) ;
 
-		public TResult GetValue <TResult> ( [NotNull] string name , TResult defaultValue = default )
+		public TResult GetValue <TResult> (
+			[NotNull]
+			string name ,
+			TResult defaultValue = default )
 		{
 			if ( name == null )
 			{
@@ -39,10 +40,10 @@ namespace DreamRecorder . ToolBox . CommandLine
 			PropertyInfo property = typeof ( T ) . GetProperty (
 																name . Trim ( ) ,
 																BindingFlags . Instance
-															| BindingFlags . IgnoreCase
-															| BindingFlags . NonPublic
-															| BindingFlags . Public
-															| BindingFlags . GetProperty ) ;
+																| BindingFlags . IgnoreCase
+																| BindingFlags . NonPublic
+																| BindingFlags . Public
+																| BindingFlags . GetProperty ) ;
 			if ( property is null )
 			{
 				return defaultValue ;
@@ -58,25 +59,20 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 			foreach ( TSettingCategory type in Enum . GetValues ( typeof ( TSettingCategory ) ) )
 			{
-				stringBuilders [ type . ToInt32 ( CultureInfo . InvariantCulture ) ] =
-					new StringBuilder ( ) ;
+				stringBuilders [ type . ToInt32 ( CultureInfo . InvariantCulture ) ] = new StringBuilder ( ) ;
 			}
 
 			foreach ( PropertyInfo property in typeof ( T ) . GetProperties ( ) )
 			{
 				SettingItemAttribute attribute =
-					( SettingItemAttribute ) property . GetCustomAttribute (
-																			typeof (
-																				SettingItemAttribute
-																			) ) ;
+					( SettingItemAttribute ) property . GetCustomAttribute ( typeof ( SettingItemAttribute ) ) ;
 
 				if ( ! ( attribute is null ) )
 				{
 					int           index           = attribute . SettingCategory ;
 					StringBuilder propertyBuilder = stringBuilders [ index ] ;
 					propertyBuilder . AppendLine ( attribute . ToString ( ) ) ;
-					propertyBuilder . AppendLine (
-												$"{property . Name} = {property . GetValue ( this )}" ) ;
+					propertyBuilder . AppendLine ( $"{property . Name} = {property . GetValue ( this )}" ) ;
 					propertyBuilder . AppendLine ( ) ;
 				}
 			}
@@ -102,10 +98,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 			foreach ( PropertyInfo property in typeof ( T ) . GetProperties ( ) )
 			{
 				SettingItemAttribute attribute =
-					( SettingItemAttribute ) property . GetCustomAttribute (
-																			typeof (
-																				SettingItemAttribute
-																			) ) ;
+					( SettingItemAttribute ) property . GetCustomAttribute ( typeof ( SettingItemAttribute ) ) ;
 
 				if ( ! ( attribute is null ) )
 				{
@@ -116,7 +109,9 @@ namespace DreamRecorder . ToolBox . CommandLine
 			return setting ;
 		}
 
-		public static T Load ( [NotNull] string source )
+		public static T Load (
+			[NotNull]
+			string source )
 		{
 			if ( source == null )
 			{
@@ -135,7 +130,9 @@ namespace DreamRecorder . ToolBox . CommandLine
 			return settings ;
 		}
 
-		public static T Load ( [NotNull] Stream stream )
+		public static T Load (
+			[NotNull]
+			Stream stream )
 		{
 			if ( stream == null )
 			{
@@ -160,7 +157,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 		public static void ParseLine ( T settings , string line )
 		{
 			if ( ! string . IsNullOrWhiteSpace ( line )
-			&& ! line . StartsWith ( "#" ) )
+				&& ! line . StartsWith ( "#" ) )
 			{
 				Match match = LineValuePattern . Match ( line ) ;
 
@@ -171,17 +168,14 @@ namespace DreamRecorder . ToolBox . CommandLine
 					PropertyInfo property = typeof ( T ) . GetProperty (
 																		propertyName ,
 																		BindingFlags . Instance
-																	| BindingFlags . IgnoreCase
-																	| BindingFlags . NonPublic
-																	| BindingFlags . Public
-																	| BindingFlags . SetProperty ) ;
+																		| BindingFlags . IgnoreCase
+																		| BindingFlags . NonPublic
+																		| BindingFlags . Public
+																		| BindingFlags . SetProperty ) ;
 
 					if ( property != null )
 					{
-						object value = match .
-										Groups [ 2 ] .
-										Value . Trim ( ) .
-										ParseTo ( property . PropertyType ) ;
+						object value = match . Groups [ 2 ] . Value . Trim ( ) . ParseTo ( property . PropertyType ) ;
 
 						property . SetValue ( settings , value ) ;
 					}
@@ -201,9 +195,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 		#region Logger
 
 		private static ILogger Logger
-			=> _logger ??= StaticServiceProvider .
-							Provider . GetService <ILoggerFactory> ( ) .
-							CreateLogger <T> ( ) ;
+			=> _logger ??= StaticServiceProvider . Provider . GetService <ILoggerFactory> ( ) . CreateLogger <T> ( ) ;
 
 		// ReSharper disable once StaticMemberInGenericType
 		// By design

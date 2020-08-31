@@ -30,7 +30,9 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			Length       = length ;
 		}
 
-		public Ipv6Prefix ( [NotNull] string addressString )
+		public Ipv6Prefix (
+			[NotNull]
+			string addressString )
 		{
 			if ( addressString == null )
 			{
@@ -70,7 +72,9 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			}
 		}
 
-		public static explicit operator Ipv6Prefix ( [NotNull] string address )
+		public static explicit operator Ipv6Prefix (
+			[NotNull]
+			string address )
 		{
 			if ( address == null )
 			{

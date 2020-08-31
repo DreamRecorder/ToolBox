@@ -37,7 +37,9 @@ namespace DreamRecorder . ToolBox . General
 		/// </summary>
 		/// <param name="bytes"></param>
 		/// <returns></returns>
-		public static bool [ ] ToBooleanArray ( [NotNull] this byte [ ] bytes )
+		public static bool [ ] ToBooleanArray (
+			[NotNull]
+			this byte [ ] bytes )
 		{
 			if ( bytes == null )
 			{
@@ -52,8 +54,7 @@ namespace DreamRecorder . ToolBox . General
 
 				for ( int bitPosition = 0 ; bitPosition < 8 ; bitPosition++ )
 				{
-					result [ bytePosition * 8 + bitPosition ] =
-						( b & ( 1 << ( 7 - bitPosition ) ) ) != 0 ;
+					result [ bytePosition * 8 + bitPosition ] = ( b & ( 1 << ( 7 - bitPosition ) ) ) != 0 ;
 				}
 			}
 
@@ -86,7 +87,9 @@ namespace DreamRecorder . ToolBox . General
 		/// </summary>
 		/// <param name="source"></param>
 		/// <returns></returns>
-		public static byte ToByte ( [NotNull] this bool [ ] source )
+		public static byte ToByte (
+			[NotNull]
+			this bool [ ] source )
 		{
 			if ( source == null )
 			{

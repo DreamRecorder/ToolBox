@@ -37,8 +37,7 @@ namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 		{
 			unchecked
 			{
-				return ( ( int ) Variation * 397 )
-					^ ( Message != null ? Message . GetHashCode ( ) : 0 ) ;
+				return ( ( int ) Variation * 397 ) ^ ( Message != null ? Message . GetHashCode ( ) : 0 ) ;
 			}
 		}
 

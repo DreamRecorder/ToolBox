@@ -25,8 +25,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public static implicit operator Random ( SystemRandomWrapper wrapper ) => wrapper . _item ;
 
-		public static implicit operator SystemRandomWrapper ( Random item )
-			=> new SystemRandomWrapper ( item ) ;
+		public static implicit operator SystemRandomWrapper ( Random item ) => new SystemRandomWrapper ( item ) ;
 
 	}
 

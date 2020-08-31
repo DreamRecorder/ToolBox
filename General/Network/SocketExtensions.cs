@@ -13,7 +13,9 @@ namespace DreamRecorder . ToolBox . Network
 	public static class SocketExtensions
 	{
 
-		public static bool IsAvailable ( [NotNull] this Socket socket )
+		public static bool IsAvailable (
+			[NotNull]
+			this Socket socket )
 		{
 			if ( socket == null )
 			{
@@ -22,8 +24,7 @@ namespace DreamRecorder . ToolBox . Network
 
 			try
 			{
-				return ! ( socket . Poll ( 1 , SelectMode . SelectRead )
-						&& socket . Available == 0 ) ;
+				return ! ( socket . Poll ( 1 , SelectMode . SelectRead ) && socket . Available == 0 ) ;
 			}
 			catch ( SocketException )
 			{
@@ -31,7 +32,9 @@ namespace DreamRecorder . ToolBox . Network
 			}
 		}
 
-		public static void CleanTcpClient ( [NotNull] this List <TcpClient> clients )
+		public static void CleanTcpClient (
+			[NotNull]
+			this List <TcpClient> clients )
 		{
 			if ( clients == null )
 			{

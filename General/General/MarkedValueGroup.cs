@@ -34,19 +34,14 @@ namespace DreamRecorder . ToolBox . General
 			}
 		}
 
-		IEnumerator <MarkedValue <TValue , TMark>> IEnumerable <MarkedValue <TValue , TMark>> .
-			GetEnumerator ( )
+		IEnumerator <MarkedValue <TValue , TMark>> IEnumerable <MarkedValue <TValue , TMark>> . GetEnumerator ( )
 			=> Values . Values . GetEnumerator ( ) ;
 
-		public void Add ( MarkedValue <TValue , TMark> item )
-		{
-			Values . Add ( item . Value , item ) ;
-		}
+		public void Add ( MarkedValue <TValue , TMark> item ) { Values . Add ( item . Value , item ) ; }
 
 		public void Clear ( ) { Values . Clear ( ) ; }
 
-		public bool Contains ( MarkedValue <TValue , TMark> item )
-			=> Values . Values . Contains ( item ) ;
+		public bool Contains ( MarkedValue <TValue , TMark> item ) => Values . Values . Contains ( item ) ;
 
 		public void CopyTo ( MarkedValue <TValue , TMark> [ ] array , int arrayIndex )
 		{

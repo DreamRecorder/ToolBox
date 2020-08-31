@@ -16,14 +16,11 @@ namespace DreamRecorder . ToolBox . General
 	public static class StringExtensions
 	{
 
-		public static readonly Regex WordDelimiters =
-			new Regex ( @"[\s—–_]" , RegexOptions . Compiled ) ;
+		public static readonly Regex WordDelimiters = new Regex ( @"[\s—–_]" , RegexOptions . Compiled ) ;
 
-		public static readonly Regex InvalidChars =
-			new Regex ( @"[^a-z0-9\-]" , RegexOptions . Compiled ) ;
+		public static readonly Regex InvalidChars = new Regex ( @"[^a-z0-9\-]" , RegexOptions . Compiled ) ;
 
-		public static readonly Regex MultipleHyphens =
-			new Regex ( @"-{2,}" , RegexOptions . Compiled ) ;
+		public static readonly Regex MultipleHyphens = new Regex ( @"-{2,}" , RegexOptions . Compiled ) ;
 
 		private static string ToUrlSlug ( string value )
 		{
@@ -46,7 +43,9 @@ namespace DreamRecorder . ToolBox . General
 
 			return new string (
 								normalizedInput . Where (
-														c => CharUnicodeInfo . GetUnicodeCategory ( c ) != UnicodeCategory . NonSpacingMark ) .
+														c
+															=> CharUnicodeInfo . GetUnicodeCategory ( c )
+																!= UnicodeCategory . NonSpacingMark ) .
 												ToArray ( ) ) . Normalize ( NormalizationForm . FormC ) ;
 		}
 
@@ -59,10 +58,11 @@ namespace DreamRecorder . ToolBox . General
 			return typeConverter . ConvertFromString ( value ) ;
 		}
 
-		public static T ParseTo <T> ( this string value )
-			=> ( T ) value . ParseTo ( typeof ( T ) ) ;
+		public static T ParseTo <T> ( this string value ) => ( T ) value . ParseTo ( typeof ( T ) ) ;
 
-		public static string [ ] SplitByCamelCase ( [NotNull] string value )
+		public static string [ ] SplitByCamelCase (
+			[NotNull]
+			string value )
 		{
 			if ( value == null )
 			{
@@ -83,8 +83,8 @@ namespace DreamRecorder . ToolBox . General
 			StringComparison comparisonType = StringComparison . Ordinal )
 		{
 			while ( ! string . IsNullOrEmpty ( source )
-				&& ! string . IsNullOrEmpty ( suffixToRemove )
-				&& source . EndsWith ( suffixToRemove , comparisonType ) )
+					&& ! string . IsNullOrEmpty ( suffixToRemove )
+					&& source . EndsWith ( suffixToRemove , comparisonType ) )
 			{
 				source = source . Substring ( 0 , source . Length - suffixToRemove . Length ) ;
 			}
@@ -98,12 +98,10 @@ namespace DreamRecorder . ToolBox . General
 			StringComparison comparisonType = StringComparison . Ordinal )
 		{
 			while ( ! string . IsNullOrEmpty ( source )
-				&& ! string . IsNullOrEmpty ( prefixToRemove )
-				&& source . StartsWith ( prefixToRemove , comparisonType ) )
+					&& ! string . IsNullOrEmpty ( prefixToRemove )
+					&& source . StartsWith ( prefixToRemove , comparisonType ) )
 			{
-				source = source . Substring (
-											prefixToRemove . Length ,
-											source . Length - prefixToRemove . Length ) ;
+				source = source . Substring ( prefixToRemove . Length , source . Length - prefixToRemove . Length ) ;
 			}
 
 			return source ;

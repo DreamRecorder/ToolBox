@@ -12,8 +12,7 @@ namespace DreamRecorder . ToolBox . General
 	public static class Constants
 	{
 
-		public static DateTime GoStartTime { get ; } =
-			new DateTime ( 2006 , 01 , 02 , 15 , 04 , 05 ) ;
+		public static DateTime GoStartTime { get ; } = new DateTime ( 2006 , 01 , 02 , 15 , 04 , 05 ) ;
 
 		public const decimal AcgToCny = 9876547210.33M ;
 

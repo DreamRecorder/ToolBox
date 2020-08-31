@@ -19,7 +19,10 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			Length       = 0 ;
 		}
 
-		private Ipv4Prefix ( [NotNull] Memory <byte> address , byte length )
+		private Ipv4Prefix (
+			[NotNull]
+			Memory <byte> address ,
+			byte length )
 		{
 			if ( address . Length != 4 )
 			{
@@ -30,7 +33,9 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			Length       = length ;
 		}
 
-		public Ipv4Prefix ( [NotNull] string addressString )
+		public Ipv4Prefix (
+			[NotNull]
+			string addressString )
 		{
 			if ( addressString == null )
 			{
@@ -75,7 +80,9 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 		public bool Contains ( Ipv4Address address ) => throw new NotImplementedException ( ) ;
 
-		public static explicit operator Ipv4Prefix ( [NotNull] string address )
+		public static explicit operator Ipv4Prefix (
+			[NotNull]
+			string address )
 		{
 			if ( address == null )
 			{

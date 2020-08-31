@@ -21,18 +21,17 @@ namespace DreamRecorder . ToolBox . General
 			Dictionary <string , string> emojis = typeof ( Emojis ) .
 												GetFields (
 															BindingFlags . Static
-														| BindingFlags . Public
-														| BindingFlags . DeclaredOnly ) .
+															| BindingFlags . Public
+															| BindingFlags . DeclaredOnly ) .
 												ToDictionary (
 															fieldInfo => fieldInfo . Name ,
-															fieldInfo => ( string ) fieldInfo .
-																GetValue ( null ) ) ;
+															fieldInfo => ( string ) fieldInfo . GetValue ( null ) ) ;
 
 			EmojisList = new ReadOnlyDictionary <string , string> ( emojis ) ;
 		}
 
 		/*
-         using System;
+        using System;
 		using System.Collections.Generic;
 		using System.IO;
 		using System.Linq;
@@ -54,7 +53,7 @@ namespace DreamRecorder . ToolBox . General
 		
 		            string currentLine = reader.ReadToEnd();
 		
-		            MatchCollection result = Regex.Matches(currentLine, @"^(?:[\w\d\s]+;[^#]+# )([^\s]+)(.+)$", RegexOptions.Multiline);
+		            MatchCollection result = Regex.Matches(currentLine, @"^(?:[\w\d\s]+;[^#]+# )([^\s]+)(?: E[^\n+].[^\n+]\s+)(.+)$", RegexOptions.Multiline);
 		
 		            Dictionary<string, string> resultDict = new Dictionary<string, string>();
 		
@@ -130,8 +129,6 @@ namespace DreamRecorder . ToolBox . General
 		public const string SmilingFaceWithSmilingEyes = "😊" ;
 
 		public const string SmilingFaceWithHalo = "😇" ;
-
-		public const string SmilingFaceWithHearts = "🥰" ;
 
 		public const string SmilingFaceWithHeartEyes = "😍" ;
 
@@ -211,19 +208,11 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string SneezingFace = "🤧" ;
 
-		public const string HotFace = "🥵" ;
-
-		public const string ColdFace = "🥶" ;
-
-		public const string WoozyFace = "🥴" ;
-
 		public const string DizzyFace = "😵" ;
 
 		public const string ExplodingHead = "🤯" ;
 
 		public const string CowboyHatFace = "🤠" ;
-
-		public const string PartyingFace = "🥳" ;
 
 		public const string SmilingFaceWithSunglasses = "😎" ;
 
@@ -248,8 +237,6 @@ namespace DreamRecorder . ToolBox . General
 		public const string AstonishedFace = "😲" ;
 
 		public const string FlushedFace = "😳" ;
-
-		public const string PleadingFace = "🥺" ;
 
 		public const string FrowningFaceWithOpenMouth = "😦" ;
 
@@ -278,8 +265,6 @@ namespace DreamRecorder . ToolBox . General
 		public const string WearyFace = "😩" ;
 
 		public const string TiredFace = "😫" ;
-
-		public const string YawningFace = "🥱" ;
 
 		public const string FaceWithSteamFromNose = "😤" ;
 
@@ -379,11 +364,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string PurpleHeart = "💜" ;
 
-		public const string BrownHeart = "🤎" ;
-
 		public const string BlackHeart = "🖤" ;
-
-		public const string WhiteHeart = "🤍" ;
 
 		public const string HundredPoints = "💯" ;
 
@@ -498,18 +479,6 @@ namespace DreamRecorder . ToolBox . General
 		public const string OkHandMediumDarkSkinTone = "👌🏾" ;
 
 		public const string OkHandDarkSkinTone = "👌🏿" ;
-
-		public const string PinchingHand = "🤏" ;
-
-		public const string PinchingHandLightSkinTone = "🤏🏻" ;
-
-		public const string PinchingHandMediumLightSkinTone = "🤏🏼" ;
-
-		public const string PinchingHandMediumSkinTone = "🤏🏽" ;
-
-		public const string PinchingHandMediumDarkSkinTone = "🤏🏾" ;
-
-		public const string PinchingHandDarkSkinTone = "🤏🏿" ;
 
 		public const string VictoryHand = "✌️" ;
 
@@ -831,34 +800,6 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string FlexedBicepsDarkSkinTone = "💪🏿" ;
 
-		public const string MechanicalArm = "🦾" ;
-
-		public const string MechanicalLeg = "🦿" ;
-
-		public const string Leg = "🦵" ;
-
-		public const string LegLightSkinTone = "🦵🏻" ;
-
-		public const string LegMediumLightSkinTone = "🦵🏼" ;
-
-		public const string LegMediumSkinTone = "🦵🏽" ;
-
-		public const string LegMediumDarkSkinTone = "🦵🏾" ;
-
-		public const string LegDarkSkinTone = "🦵🏿" ;
-
-		public const string Foot = "🦶" ;
-
-		public const string FootLightSkinTone = "🦶🏻" ;
-
-		public const string FootMediumLightSkinTone = "🦶🏼" ;
-
-		public const string FootMediumSkinTone = "🦶🏽" ;
-
-		public const string FootMediumDarkSkinTone = "🦶🏾" ;
-
-		public const string FootDarkSkinTone = "🦶🏿" ;
-
 		public const string Ear = "👂" ;
 
 		public const string EarLightSkinTone = "👂🏻" ;
@@ -870,18 +811,6 @@ namespace DreamRecorder . ToolBox . General
 		public const string EarMediumDarkSkinTone = "👂🏾" ;
 
 		public const string EarDarkSkinTone = "👂🏿" ;
-
-		public const string EarWithHearingAid = "🦻" ;
-
-		public const string EarWithHearingAidLightSkinTone = "🦻🏻" ;
-
-		public const string EarWithHearingAidMediumLightSkinTone = "🦻🏼" ;
-
-		public const string EarWithHearingAidMediumSkinTone = "🦻🏽" ;
-
-		public const string EarWithHearingAidMediumDarkSkinTone = "🦻🏾" ;
-
-		public const string EarWithHearingAidDarkSkinTone = "🦻🏿" ;
 
 		public const string Nose = "👃" ;
 
@@ -896,10 +825,6 @@ namespace DreamRecorder . ToolBox . General
 		public const string NoseDarkSkinTone = "👃🏿" ;
 
 		public const string Brain = "🧠" ;
-
-		public const string Tooth = "🦷" ;
-
-		public const string Bone = "🦴" ;
 
 		public const string Eyes = "👀" ;
 
@@ -1007,78 +932,6 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string ManDarkSkinToneBeard = "🧔🏿" ;
 
-		public const string ManBlondHair = "👱‍♂️" ;
-
-		public const string ManBlondHair2 = "👱‍♂" ;
-
-		public const string ManLightSkinToneBlondHair = "👱🏻‍♂️" ;
-
-		public const string ManLightSkinToneBlondHair2 = "👱🏻‍♂" ;
-
-		public const string ManMediumLightSkinToneBlondHair = "👱🏼‍♂️" ;
-
-		public const string ManMediumLightSkinToneBlondHair2 = "👱🏼‍♂" ;
-
-		public const string ManMediumSkinToneBlondHair = "👱🏽‍♂️" ;
-
-		public const string ManMediumSkinToneBlondHair2 = "👱🏽‍♂" ;
-
-		public const string ManMediumDarkSkinToneBlondHair = "👱🏾‍♂️" ;
-
-		public const string ManMediumDarkSkinToneBlondHair2 = "👱🏾‍♂" ;
-
-		public const string ManDarkSkinToneBlondHair = "👱🏿‍♂️" ;
-
-		public const string ManDarkSkinToneBlondHair2 = "👱🏿‍♂" ;
-
-		public const string ManRedHair = "👨‍🦰" ;
-
-		public const string ManLightSkinToneRedHair = "👨🏻‍🦰" ;
-
-		public const string ManMediumLightSkinToneRedHair = "👨🏼‍🦰" ;
-
-		public const string ManMediumSkinToneRedHair = "👨🏽‍🦰" ;
-
-		public const string ManMediumDarkSkinToneRedHair = "👨🏾‍🦰" ;
-
-		public const string ManDarkSkinToneRedHair = "👨🏿‍🦰" ;
-
-		public const string ManCurlyHair = "👨‍🦱" ;
-
-		public const string ManLightSkinToneCurlyHair = "👨🏻‍🦱" ;
-
-		public const string ManMediumLightSkinToneCurlyHair = "👨🏼‍🦱" ;
-
-		public const string ManMediumSkinToneCurlyHair = "👨🏽‍🦱" ;
-
-		public const string ManMediumDarkSkinToneCurlyHair = "👨🏾‍🦱" ;
-
-		public const string ManDarkSkinToneCurlyHair = "👨🏿‍🦱" ;
-
-		public const string ManWhiteHair = "👨‍🦳" ;
-
-		public const string ManLightSkinToneWhiteHair = "👨🏻‍🦳" ;
-
-		public const string ManMediumLightSkinToneWhiteHair = "👨🏼‍🦳" ;
-
-		public const string ManMediumSkinToneWhiteHair = "👨🏽‍🦳" ;
-
-		public const string ManMediumDarkSkinToneWhiteHair = "👨🏾‍🦳" ;
-
-		public const string ManDarkSkinToneWhiteHair = "👨🏿‍🦳" ;
-
-		public const string ManBald = "👨‍🦲" ;
-
-		public const string ManLightSkinToneBald = "👨🏻‍🦲" ;
-
-		public const string ManMediumLightSkinToneBald = "👨🏼‍🦲" ;
-
-		public const string ManMediumSkinToneBald = "👨🏽‍🦲" ;
-
-		public const string ManMediumDarkSkinToneBald = "👨🏾‍🦲" ;
-
-		public const string ManDarkSkinToneBald = "👨🏿‍🦲" ;
-
 		public const string Woman = "👩" ;
 
 		public const string WomanLightSkinTone = "👩🏻" ;
@@ -1115,53 +968,29 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string WomanDarkSkinToneBlondHair2 = "👱🏿‍♀" ;
 
-		public const string WomanRedHair = "👩‍🦰" ;
+		public const string ManBlondHair = "👱‍♂️" ;
 
-		public const string WomanLightSkinToneRedHair = "👩🏻‍🦰" ;
+		public const string ManBlondHair2 = "👱‍♂" ;
 
-		public const string WomanMediumLightSkinToneRedHair = "👩🏼‍🦰" ;
+		public const string ManLightSkinToneBlondHair = "👱🏻‍♂️" ;
 
-		public const string WomanMediumSkinToneRedHair = "👩🏽‍🦰" ;
+		public const string ManLightSkinToneBlondHair2 = "👱🏻‍♂" ;
 
-		public const string WomanMediumDarkSkinToneRedHair = "👩🏾‍🦰" ;
+		public const string ManMediumLightSkinToneBlondHair = "👱🏼‍♂️" ;
 
-		public const string WomanDarkSkinToneRedHair = "👩🏿‍🦰" ;
+		public const string ManMediumLightSkinToneBlondHair2 = "👱🏼‍♂" ;
 
-		public const string WomanCurlyHair = "👩‍🦱" ;
+		public const string ManMediumSkinToneBlondHair = "👱🏽‍♂️" ;
 
-		public const string WomanLightSkinToneCurlyHair = "👩🏻‍🦱" ;
+		public const string ManMediumSkinToneBlondHair2 = "👱🏽‍♂" ;
 
-		public const string WomanMediumLightSkinToneCurlyHair = "👩🏼‍🦱" ;
+		public const string ManMediumDarkSkinToneBlondHair = "👱🏾‍♂️" ;
 
-		public const string WomanMediumSkinToneCurlyHair = "👩🏽‍🦱" ;
+		public const string ManMediumDarkSkinToneBlondHair2 = "👱🏾‍♂" ;
 
-		public const string WomanMediumDarkSkinToneCurlyHair = "👩🏾‍🦱" ;
+		public const string ManDarkSkinToneBlondHair = "👱🏿‍♂️" ;
 
-		public const string WomanDarkSkinToneCurlyHair = "👩🏿‍🦱" ;
-
-		public const string WomanWhiteHair = "👩‍🦳" ;
-
-		public const string WomanLightSkinToneWhiteHair = "👩🏻‍🦳" ;
-
-		public const string WomanMediumLightSkinToneWhiteHair = "👩🏼‍🦳" ;
-
-		public const string WomanMediumSkinToneWhiteHair = "👩🏽‍🦳" ;
-
-		public const string WomanMediumDarkSkinToneWhiteHair = "👩🏾‍🦳" ;
-
-		public const string WomanDarkSkinToneWhiteHair = "👩🏿‍🦳" ;
-
-		public const string WomanBald = "👩‍🦲" ;
-
-		public const string WomanLightSkinToneBald = "👩🏻‍🦲" ;
-
-		public const string WomanMediumLightSkinToneBald = "👩🏼‍🦲" ;
-
-		public const string WomanMediumSkinToneBald = "👩🏽‍🦲" ;
-
-		public const string WomanMediumDarkSkinToneBald = "👩🏾‍🦲" ;
-
-		public const string WomanDarkSkinToneBald = "👩🏿‍🦲" ;
+		public const string ManDarkSkinToneBlondHair2 = "👱🏿‍♂" ;
 
 		public const string OlderPerson = "🧓" ;
 
@@ -1558,66 +1387,6 @@ namespace DreamRecorder . ToolBox . General
 		public const string WomanRaisingHandDarkSkinTone = "🙋🏿‍♀️" ;
 
 		public const string WomanRaisingHandDarkSkinTone2 = "🙋🏿‍♀" ;
-
-		public const string DeafPerson = "🧏" ;
-
-		public const string DeafPersonLightSkinTone = "🧏🏻" ;
-
-		public const string DeafPersonMediumLightSkinTone = "🧏🏼" ;
-
-		public const string DeafPersonMediumSkinTone = "🧏🏽" ;
-
-		public const string DeafPersonMediumDarkSkinTone = "🧏🏾" ;
-
-		public const string DeafPersonDarkSkinTone = "🧏🏿" ;
-
-		public const string DeafMan = "🧏‍♂️" ;
-
-		public const string DeafMan2 = "🧏‍♂" ;
-
-		public const string DeafManLightSkinTone = "🧏🏻‍♂️" ;
-
-		public const string DeafManLightSkinTone2 = "🧏🏻‍♂" ;
-
-		public const string DeafManMediumLightSkinTone = "🧏🏼‍♂️" ;
-
-		public const string DeafManMediumLightSkinTone2 = "🧏🏼‍♂" ;
-
-		public const string DeafManMediumSkinTone = "🧏🏽‍♂️" ;
-
-		public const string DeafManMediumSkinTone2 = "🧏🏽‍♂" ;
-
-		public const string DeafManMediumDarkSkinTone = "🧏🏾‍♂️" ;
-
-		public const string DeafManMediumDarkSkinTone2 = "🧏🏾‍♂" ;
-
-		public const string DeafManDarkSkinTone = "🧏🏿‍♂️" ;
-
-		public const string DeafManDarkSkinTone2 = "🧏🏿‍♂" ;
-
-		public const string DeafWoman = "🧏‍♀️" ;
-
-		public const string DeafWoman2 = "🧏‍♀" ;
-
-		public const string DeafWomanLightSkinTone = "🧏🏻‍♀️" ;
-
-		public const string DeafWomanLightSkinTone2 = "🧏🏻‍♀" ;
-
-		public const string DeafWomanMediumLightSkinTone = "🧏🏼‍♀️" ;
-
-		public const string DeafWomanMediumLightSkinTone2 = "🧏🏼‍♀" ;
-
-		public const string DeafWomanMediumSkinTone = "🧏🏽‍♀️" ;
-
-		public const string DeafWomanMediumSkinTone2 = "🧏🏽‍♀" ;
-
-		public const string DeafWomanMediumDarkSkinTone = "🧏🏾‍♀️" ;
-
-		public const string DeafWomanMediumDarkSkinTone2 = "🧏🏾‍♀" ;
-
-		public const string DeafWomanDarkSkinTone = "🧏🏿‍♀️" ;
-
-		public const string DeafWomanDarkSkinTone2 = "🧏🏿‍♀" ;
 
 		public const string PersonBowing = "🙇" ;
 
@@ -2589,17 +2358,17 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string WomanWearingTurbanDarkSkinTone2 = "👳🏿‍♀" ;
 
-		public const string ManWithChineseCap = "👲" ;
+		public const string PersonWithSkullcap = "👲" ;
 
-		public const string ManWithChineseCapLightSkinTone = "👲🏻" ;
+		public const string PersonWithSkullcapLightSkinTone = "👲🏻" ;
 
-		public const string ManWithChineseCapMediumLightSkinTone = "👲🏼" ;
+		public const string PersonWithSkullcapMediumLightSkinTone = "👲🏼" ;
 
-		public const string ManWithChineseCapMediumSkinTone = "👲🏽" ;
+		public const string PersonWithSkullcapMediumSkinTone = "👲🏽" ;
 
-		public const string ManWithChineseCapMediumDarkSkinTone = "👲🏾" ;
+		public const string PersonWithSkullcapMediumDarkSkinTone = "👲🏾" ;
 
-		public const string ManWithChineseCapDarkSkinTone = "👲🏿" ;
+		public const string PersonWithSkullcapDarkSkinTone = "👲🏿" ;
 
 		public const string WomanWithHeadscarf = "🧕" ;
 
@@ -2613,29 +2382,29 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string WomanWithHeadscarfDarkSkinTone = "🧕🏿" ;
 
-		public const string ManInTuxedo = "🤵" ;
+		public const string PersonInTuxedo = "🤵" ;
 
-		public const string ManInTuxedoLightSkinTone = "🤵🏻" ;
+		public const string PersonInTuxedoLightSkinTone = "🤵🏻" ;
 
-		public const string ManInTuxedoMediumLightSkinTone = "🤵🏼" ;
+		public const string PersonInTuxedoMediumLightSkinTone = "🤵🏼" ;
 
-		public const string ManInTuxedoMediumSkinTone = "🤵🏽" ;
+		public const string PersonInTuxedoMediumSkinTone = "🤵🏽" ;
 
-		public const string ManInTuxedoMediumDarkSkinTone = "🤵🏾" ;
+		public const string PersonInTuxedoMediumDarkSkinTone = "🤵🏾" ;
 
-		public const string ManInTuxedoDarkSkinTone = "🤵🏿" ;
+		public const string PersonInTuxedoDarkSkinTone = "🤵🏿" ;
 
-		public const string BrideWithVeil = "👰" ;
+		public const string PersonWithVeil = "👰" ;
 
-		public const string BrideWithVeilLightSkinTone = "👰🏻" ;
+		public const string PersonWithVeilLightSkinTone = "👰🏻" ;
 
-		public const string BrideWithVeilMediumLightSkinTone = "👰🏼" ;
+		public const string PersonWithVeilMediumLightSkinTone = "👰🏼" ;
 
-		public const string BrideWithVeilMediumSkinTone = "👰🏽" ;
+		public const string PersonWithVeilMediumSkinTone = "👰🏽" ;
 
-		public const string BrideWithVeilMediumDarkSkinTone = "👰🏾" ;
+		public const string PersonWithVeilMediumDarkSkinTone = "👰🏾" ;
 
-		public const string BrideWithVeilDarkSkinTone = "👰🏿" ;
+		public const string PersonWithVeilDarkSkinTone = "👰🏿" ;
 
 		public const string PregnantWoman = "🤰" ;
 
@@ -2696,126 +2465,6 @@ namespace DreamRecorder . ToolBox . General
 		public const string MrsClausMediumDarkSkinTone = "🤶🏾" ;
 
 		public const string MrsClausDarkSkinTone = "🤶🏿" ;
-
-		public const string Superhero = "🦸" ;
-
-		public const string SuperheroLightSkinTone = "🦸🏻" ;
-
-		public const string SuperheroMediumLightSkinTone = "🦸🏼" ;
-
-		public const string SuperheroMediumSkinTone = "🦸🏽" ;
-
-		public const string SuperheroMediumDarkSkinTone = "🦸🏾" ;
-
-		public const string SuperheroDarkSkinTone = "🦸🏿" ;
-
-		public const string ManSuperhero = "🦸‍♂️" ;
-
-		public const string ManSuperhero2 = "🦸‍♂" ;
-
-		public const string ManSuperheroLightSkinTone = "🦸🏻‍♂️" ;
-
-		public const string ManSuperheroLightSkinTone2 = "🦸🏻‍♂" ;
-
-		public const string ManSuperheroMediumLightSkinTone = "🦸🏼‍♂️" ;
-
-		public const string ManSuperheroMediumLightSkinTone2 = "🦸🏼‍♂" ;
-
-		public const string ManSuperheroMediumSkinTone = "🦸🏽‍♂️" ;
-
-		public const string ManSuperheroMediumSkinTone2 = "🦸🏽‍♂" ;
-
-		public const string ManSuperheroMediumDarkSkinTone = "🦸🏾‍♂️" ;
-
-		public const string ManSuperheroMediumDarkSkinTone2 = "🦸🏾‍♂" ;
-
-		public const string ManSuperheroDarkSkinTone = "🦸🏿‍♂️" ;
-
-		public const string ManSuperheroDarkSkinTone2 = "🦸🏿‍♂" ;
-
-		public const string WomanSuperhero = "🦸‍♀️" ;
-
-		public const string WomanSuperhero2 = "🦸‍♀" ;
-
-		public const string WomanSuperheroLightSkinTone = "🦸🏻‍♀️" ;
-
-		public const string WomanSuperheroLightSkinTone2 = "🦸🏻‍♀" ;
-
-		public const string WomanSuperheroMediumLightSkinTone = "🦸🏼‍♀️" ;
-
-		public const string WomanSuperheroMediumLightSkinTone2 = "🦸🏼‍♀" ;
-
-		public const string WomanSuperheroMediumSkinTone = "🦸🏽‍♀️" ;
-
-		public const string WomanSuperheroMediumSkinTone2 = "🦸🏽‍♀" ;
-
-		public const string WomanSuperheroMediumDarkSkinTone = "🦸🏾‍♀️" ;
-
-		public const string WomanSuperheroMediumDarkSkinTone2 = "🦸🏾‍♀" ;
-
-		public const string WomanSuperheroDarkSkinTone = "🦸🏿‍♀️" ;
-
-		public const string WomanSuperheroDarkSkinTone2 = "🦸🏿‍♀" ;
-
-		public const string Supervillain = "🦹" ;
-
-		public const string SupervillainLightSkinTone = "🦹🏻" ;
-
-		public const string SupervillainMediumLightSkinTone = "🦹🏼" ;
-
-		public const string SupervillainMediumSkinTone = "🦹🏽" ;
-
-		public const string SupervillainMediumDarkSkinTone = "🦹🏾" ;
-
-		public const string SupervillainDarkSkinTone = "🦹🏿" ;
-
-		public const string ManSupervillain = "🦹‍♂️" ;
-
-		public const string ManSupervillain2 = "🦹‍♂" ;
-
-		public const string ManSupervillainLightSkinTone = "🦹🏻‍♂️" ;
-
-		public const string ManSupervillainLightSkinTone2 = "🦹🏻‍♂" ;
-
-		public const string ManSupervillainMediumLightSkinTone = "🦹🏼‍♂️" ;
-
-		public const string ManSupervillainMediumLightSkinTone2 = "🦹🏼‍♂" ;
-
-		public const string ManSupervillainMediumSkinTone = "🦹🏽‍♂️" ;
-
-		public const string ManSupervillainMediumSkinTone2 = "🦹🏽‍♂" ;
-
-		public const string ManSupervillainMediumDarkSkinTone = "🦹🏾‍♂️" ;
-
-		public const string ManSupervillainMediumDarkSkinTone2 = "🦹🏾‍♂" ;
-
-		public const string ManSupervillainDarkSkinTone = "🦹🏿‍♂️" ;
-
-		public const string ManSupervillainDarkSkinTone2 = "🦹🏿‍♂" ;
-
-		public const string WomanSupervillain = "🦹‍♀️" ;
-
-		public const string WomanSupervillain2 = "🦹‍♀" ;
-
-		public const string WomanSupervillainLightSkinTone = "🦹🏻‍♀️" ;
-
-		public const string WomanSupervillainLightSkinTone2 = "🦹🏻‍♀" ;
-
-		public const string WomanSupervillainMediumLightSkinTone = "🦹🏼‍♀️" ;
-
-		public const string WomanSupervillainMediumLightSkinTone2 = "🦹🏼‍♀" ;
-
-		public const string WomanSupervillainMediumSkinTone = "🦹🏽‍♀️" ;
-
-		public const string WomanSupervillainMediumSkinTone2 = "🦹🏽‍♀" ;
-
-		public const string WomanSupervillainMediumDarkSkinTone = "🦹🏾‍♀️" ;
-
-		public const string WomanSupervillainMediumDarkSkinTone2 = "🦹🏾‍♀" ;
-
-		public const string WomanSupervillainDarkSkinTone = "🦹🏿‍♀️" ;
-
-		public const string WomanSupervillainDarkSkinTone2 = "🦹🏿‍♀" ;
 
 		public const string Mage = "🧙" ;
 
@@ -3317,198 +2966,6 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string WomanWalkingDarkSkinTone2 = "🚶🏿‍♀" ;
 
-		public const string PersonStanding = "🧍" ;
-
-		public const string PersonStandingLightSkinTone = "🧍🏻" ;
-
-		public const string PersonStandingMediumLightSkinTone = "🧍🏼" ;
-
-		public const string PersonStandingMediumSkinTone = "🧍🏽" ;
-
-		public const string PersonStandingMediumDarkSkinTone = "🧍🏾" ;
-
-		public const string PersonStandingDarkSkinTone = "🧍🏿" ;
-
-		public const string ManStanding = "🧍‍♂️" ;
-
-		public const string ManStanding2 = "🧍‍♂" ;
-
-		public const string ManStandingLightSkinTone = "🧍🏻‍♂️" ;
-
-		public const string ManStandingLightSkinTone2 = "🧍🏻‍♂" ;
-
-		public const string ManStandingMediumLightSkinTone = "🧍🏼‍♂️" ;
-
-		public const string ManStandingMediumLightSkinTone2 = "🧍🏼‍♂" ;
-
-		public const string ManStandingMediumSkinTone = "🧍🏽‍♂️" ;
-
-		public const string ManStandingMediumSkinTone2 = "🧍🏽‍♂" ;
-
-		public const string ManStandingMediumDarkSkinTone = "🧍🏾‍♂️" ;
-
-		public const string ManStandingMediumDarkSkinTone2 = "🧍🏾‍♂" ;
-
-		public const string ManStandingDarkSkinTone = "🧍🏿‍♂️" ;
-
-		public const string ManStandingDarkSkinTone2 = "🧍🏿‍♂" ;
-
-		public const string WomanStanding = "🧍‍♀️" ;
-
-		public const string WomanStanding2 = "🧍‍♀" ;
-
-		public const string WomanStandingLightSkinTone = "🧍🏻‍♀️" ;
-
-		public const string WomanStandingLightSkinTone2 = "🧍🏻‍♀" ;
-
-		public const string WomanStandingMediumLightSkinTone = "🧍🏼‍♀️" ;
-
-		public const string WomanStandingMediumLightSkinTone2 = "🧍🏼‍♀" ;
-
-		public const string WomanStandingMediumSkinTone = "🧍🏽‍♀️" ;
-
-		public const string WomanStandingMediumSkinTone2 = "🧍🏽‍♀" ;
-
-		public const string WomanStandingMediumDarkSkinTone = "🧍🏾‍♀️" ;
-
-		public const string WomanStandingMediumDarkSkinTone2 = "🧍🏾‍♀" ;
-
-		public const string WomanStandingDarkSkinTone = "🧍🏿‍♀️" ;
-
-		public const string WomanStandingDarkSkinTone2 = "🧍🏿‍♀" ;
-
-		public const string PersonKneeling = "🧎" ;
-
-		public const string PersonKneelingLightSkinTone = "🧎🏻" ;
-
-		public const string PersonKneelingMediumLightSkinTone = "🧎🏼" ;
-
-		public const string PersonKneelingMediumSkinTone = "🧎🏽" ;
-
-		public const string PersonKneelingMediumDarkSkinTone = "🧎🏾" ;
-
-		public const string PersonKneelingDarkSkinTone = "🧎🏿" ;
-
-		public const string ManKneeling = "🧎‍♂️" ;
-
-		public const string ManKneeling2 = "🧎‍♂" ;
-
-		public const string ManKneelingLightSkinTone = "🧎🏻‍♂️" ;
-
-		public const string ManKneelingLightSkinTone2 = "🧎🏻‍♂" ;
-
-		public const string ManKneelingMediumLightSkinTone = "🧎🏼‍♂️" ;
-
-		public const string ManKneelingMediumLightSkinTone2 = "🧎🏼‍♂" ;
-
-		public const string ManKneelingMediumSkinTone = "🧎🏽‍♂️" ;
-
-		public const string ManKneelingMediumSkinTone2 = "🧎🏽‍♂" ;
-
-		public const string ManKneelingMediumDarkSkinTone = "🧎🏾‍♂️" ;
-
-		public const string ManKneelingMediumDarkSkinTone2 = "🧎🏾‍♂" ;
-
-		public const string ManKneelingDarkSkinTone = "🧎🏿‍♂️" ;
-
-		public const string ManKneelingDarkSkinTone2 = "🧎🏿‍♂" ;
-
-		public const string WomanKneeling = "🧎‍♀️" ;
-
-		public const string WomanKneeling2 = "🧎‍♀" ;
-
-		public const string WomanKneelingLightSkinTone = "🧎🏻‍♀️" ;
-
-		public const string WomanKneelingLightSkinTone2 = "🧎🏻‍♀" ;
-
-		public const string WomanKneelingMediumLightSkinTone = "🧎🏼‍♀️" ;
-
-		public const string WomanKneelingMediumLightSkinTone2 = "🧎🏼‍♀" ;
-
-		public const string WomanKneelingMediumSkinTone = "🧎🏽‍♀️" ;
-
-		public const string WomanKneelingMediumSkinTone2 = "🧎🏽‍♀" ;
-
-		public const string WomanKneelingMediumDarkSkinTone = "🧎🏾‍♀️" ;
-
-		public const string WomanKneelingMediumDarkSkinTone2 = "🧎🏾‍♀" ;
-
-		public const string WomanKneelingDarkSkinTone = "🧎🏿‍♀️" ;
-
-		public const string WomanKneelingDarkSkinTone2 = "🧎🏿‍♀" ;
-
-		public const string ManWithProbingCane = "👨‍🦯" ;
-
-		public const string ManWithProbingCaneLightSkinTone = "👨🏻‍🦯" ;
-
-		public const string ManWithProbingCaneMediumLightSkinTone = "👨🏼‍🦯" ;
-
-		public const string ManWithProbingCaneMediumSkinTone = "👨🏽‍🦯" ;
-
-		public const string ManWithProbingCaneMediumDarkSkinTone = "👨🏾‍🦯" ;
-
-		public const string ManWithProbingCaneDarkSkinTone = "👨🏿‍🦯" ;
-
-		public const string WomanWithProbingCane = "👩‍🦯" ;
-
-		public const string WomanWithProbingCaneLightSkinTone = "👩🏻‍🦯" ;
-
-		public const string WomanWithProbingCaneMediumLightSkinTone = "👩🏼‍🦯" ;
-
-		public const string WomanWithProbingCaneMediumSkinTone = "👩🏽‍🦯" ;
-
-		public const string WomanWithProbingCaneMediumDarkSkinTone = "👩🏾‍🦯" ;
-
-		public const string WomanWithProbingCaneDarkSkinTone = "👩🏿‍🦯" ;
-
-		public const string ManInMotorizedWheelchair = "👨‍🦼" ;
-
-		public const string ManInMotorizedWheelchairLightSkinTone = "👨🏻‍🦼" ;
-
-		public const string ManInMotorizedWheelchairMediumLightSkinTone = "👨🏼‍🦼" ;
-
-		public const string ManInMotorizedWheelchairMediumSkinTone = "👨🏽‍🦼" ;
-
-		public const string ManInMotorizedWheelchairMediumDarkSkinTone = "👨🏾‍🦼" ;
-
-		public const string ManInMotorizedWheelchairDarkSkinTone = "👨🏿‍🦼" ;
-
-		public const string WomanInMotorizedWheelchair = "👩‍🦼" ;
-
-		public const string WomanInMotorizedWheelchairLightSkinTone = "👩🏻‍🦼" ;
-
-		public const string WomanInMotorizedWheelchairMediumLightSkinTone = "👩🏼‍🦼" ;
-
-		public const string WomanInMotorizedWheelchairMediumSkinTone = "👩🏽‍🦼" ;
-
-		public const string WomanInMotorizedWheelchairMediumDarkSkinTone = "👩🏾‍🦼" ;
-
-		public const string WomanInMotorizedWheelchairDarkSkinTone = "👩🏿‍🦼" ;
-
-		public const string ManInManualWheelchair = "👨‍🦽" ;
-
-		public const string ManInManualWheelchairLightSkinTone = "👨🏻‍🦽" ;
-
-		public const string ManInManualWheelchairMediumLightSkinTone = "👨🏼‍🦽" ;
-
-		public const string ManInManualWheelchairMediumSkinTone = "👨🏽‍🦽" ;
-
-		public const string ManInManualWheelchairMediumDarkSkinTone = "👨🏾‍🦽" ;
-
-		public const string ManInManualWheelchairDarkSkinTone = "👨🏿‍🦽" ;
-
-		public const string WomanInManualWheelchair = "👩‍🦽" ;
-
-		public const string WomanInManualWheelchairLightSkinTone = "👩🏻‍🦽" ;
-
-		public const string WomanInManualWheelchairMediumLightSkinTone = "👩🏼‍🦽" ;
-
-		public const string WomanInManualWheelchairMediumSkinTone = "👩🏽‍🦽" ;
-
-		public const string WomanInManualWheelchairMediumDarkSkinTone = "👩🏾‍🦽" ;
-
-		public const string WomanInManualWheelchairDarkSkinTone = "👩🏿‍🦽" ;
-
 		public const string PersonRunning = "🏃" ;
 
 		public const string PersonRunningLightSkinTone = "🏃🏻" ;
@@ -3593,19 +3050,19 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string ManDancingDarkSkinTone = "🕺🏿" ;
 
-		public const string ManInSuitLevitating = "🕴️" ;
+		public const string PersonInSuitLevitating = "🕴️" ;
 
-		public const string ManInSuitLevitating2 = "🕴" ;
+		public const string PersonInSuitLevitating2 = "🕴" ;
 
-		public const string ManInSuitLevitatingLightSkinTone = "🕴🏻" ;
+		public const string PersonInSuitLevitatingLightSkinTone = "🕴🏻" ;
 
-		public const string ManInSuitLevitatingMediumLightSkinTone = "🕴🏼" ;
+		public const string PersonInSuitLevitatingMediumLightSkinTone = "🕴🏼" ;
 
-		public const string ManInSuitLevitatingMediumSkinTone = "🕴🏽" ;
+		public const string PersonInSuitLevitatingMediumSkinTone = "🕴🏽" ;
 
-		public const string ManInSuitLevitatingMediumDarkSkinTone = "🕴🏾" ;
+		public const string PersonInSuitLevitatingMediumDarkSkinTone = "🕴🏾" ;
 
-		public const string ManInSuitLevitatingDarkSkinTone = "🕴🏿" ;
+		public const string PersonInSuitLevitatingDarkSkinTone = "🕴🏿" ;
 
 		public const string PeopleWithBunnyEars = "👯" ;
 
@@ -4611,167 +4068,11 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string PersonInBedDarkSkinTone = "🛌🏿" ;
 
-		public const string PeopleHoldingHands = "🧑‍🤝‍🧑" ;
-
-		public const string PeopleHoldingHandsLightSkinTone = "🧑🏻‍🤝‍🧑🏻" ;
-
-		public const string PeopleHoldingHandsMediumLightSkinToneLightSkinTone = "🧑🏼‍🤝‍🧑🏻" ;
-
-		public const string PeopleHoldingHandsMediumLightSkinTone = "🧑🏼‍🤝‍🧑🏼" ;
-
-		public const string PeopleHoldingHandsMediumSkinToneLightSkinTone = "🧑🏽‍🤝‍🧑🏻" ;
-
-		public const string PeopleHoldingHandsMediumSkinToneMediumLightSkinTone = "🧑🏽‍🤝‍🧑🏼" ;
-
-		public const string PeopleHoldingHandsMediumSkinTone = "🧑🏽‍🤝‍🧑🏽" ;
-
-		public const string PeopleHoldingHandsMediumDarkSkinToneLightSkinTone = "🧑🏾‍🤝‍🧑🏻" ;
-
-		public const string PeopleHoldingHandsMediumDarkSkinToneMediumLightSkinTone =
-			"🧑🏾‍🤝‍🧑🏼" ;
-
-		public const string PeopleHoldingHandsMediumDarkSkinToneMediumSkinTone = "🧑🏾‍🤝‍🧑🏽" ;
-
-		public const string PeopleHoldingHandsMediumDarkSkinTone = "🧑🏾‍🤝‍🧑🏾" ;
-
-		public const string PeopleHoldingHandsDarkSkinToneLightSkinTone = "🧑🏿‍🤝‍🧑🏻" ;
-
-		public const string PeopleHoldingHandsDarkSkinToneMediumLightSkinTone = "🧑🏿‍🤝‍🧑🏼" ;
-
-		public const string PeopleHoldingHandsDarkSkinToneMediumSkinTone = "🧑🏿‍🤝‍🧑🏽" ;
-
-		public const string PeopleHoldingHandsDarkSkinToneMediumDarkSkinTone = "🧑🏿‍🤝‍🧑🏾" ;
-
-		public const string PeopleHoldingHandsDarkSkinTone = "🧑🏿‍🤝‍🧑🏿" ;
-
 		public const string WomenHoldingHands = "👭" ;
-
-		public const string WomenHoldingHandsLightSkinTone = "👭🏻" ;
-
-		public const string WomenHoldingHandsMediumLightSkinToneLightSkinTone = "👩🏼‍🤝‍👩🏻" ;
-
-		public const string WomenHoldingHandsMediumLightSkinTone = "👭🏼" ;
-
-		public const string WomenHoldingHandsMediumSkinToneLightSkinTone = "👩🏽‍🤝‍👩🏻" ;
-
-		public const string WomenHoldingHandsMediumSkinToneMediumLightSkinTone = "👩🏽‍🤝‍👩🏼" ;
-
-		public const string WomenHoldingHandsMediumSkinTone = "👭🏽" ;
-
-		public const string WomenHoldingHandsMediumDarkSkinToneLightSkinTone = "👩🏾‍🤝‍👩🏻" ;
-
-		public const string WomenHoldingHandsMediumDarkSkinToneMediumLightSkinTone =
-			"👩🏾‍🤝‍👩🏼" ;
-
-		public const string WomenHoldingHandsMediumDarkSkinToneMediumSkinTone = "👩🏾‍🤝‍👩🏽" ;
-
-		public const string WomenHoldingHandsMediumDarkSkinTone = "👭🏾" ;
-
-		public const string WomenHoldingHandsDarkSkinToneLightSkinTone = "👩🏿‍🤝‍👩🏻" ;
-
-		public const string WomenHoldingHandsDarkSkinToneMediumLightSkinTone = "👩🏿‍🤝‍👩🏼" ;
-
-		public const string WomenHoldingHandsDarkSkinToneMediumSkinTone = "👩🏿‍🤝‍👩🏽" ;
-
-		public const string WomenHoldingHandsDarkSkinToneMediumDarkSkinTone = "👩🏿‍🤝‍👩🏾" ;
-
-		public const string WomenHoldingHandsDarkSkinTone = "👭🏿" ;
 
 		public const string WomanAndManHoldingHands = "👫" ;
 
-		public const string WomanAndManHoldingHandsLightSkinTone = "👫🏻" ;
-
-		public const string WomanAndManHoldingHandsLightSkinToneMediumLightSkinTone =
-			"👩🏻‍🤝‍👨🏼" ;
-
-		public const string WomanAndManHoldingHandsLightSkinToneMediumSkinTone = "👩🏻‍🤝‍👨🏽" ;
-
-		public const string WomanAndManHoldingHandsLightSkinToneMediumDarkSkinTone =
-			"👩🏻‍🤝‍👨🏾" ;
-
-		public const string WomanAndManHoldingHandsLightSkinToneDarkSkinTone = "👩🏻‍🤝‍👨🏿" ;
-
-		public const string WomanAndManHoldingHandsMediumLightSkinToneLightSkinTone =
-			"👩🏼‍🤝‍👨🏻" ;
-
-		public const string WomanAndManHoldingHandsMediumLightSkinTone = "👫🏼" ;
-
-		public const string WomanAndManHoldingHandsMediumLightSkinToneMediumSkinTone =
-			"👩🏼‍🤝‍👨🏽" ;
-
-		public const string WomanAndManHoldingHandsMediumLightSkinToneMediumDarkSkinTone =
-			"👩🏼‍🤝‍👨🏾" ;
-
-		public const string WomanAndManHoldingHandsMediumLightSkinToneDarkSkinTone =
-			"👩🏼‍🤝‍👨🏿" ;
-
-		public const string WomanAndManHoldingHandsMediumSkinToneLightSkinTone = "👩🏽‍🤝‍👨🏻" ;
-
-		public const string WomanAndManHoldingHandsMediumSkinToneMediumLightSkinTone =
-			"👩🏽‍🤝‍👨🏼" ;
-
-		public const string WomanAndManHoldingHandsMediumSkinTone = "👫🏽" ;
-
-		public const string WomanAndManHoldingHandsMediumSkinToneMediumDarkSkinTone =
-			"👩🏽‍🤝‍👨🏾" ;
-
-		public const string WomanAndManHoldingHandsMediumSkinToneDarkSkinTone = "👩🏽‍🤝‍👨🏿" ;
-
-		public const string WomanAndManHoldingHandsMediumDarkSkinToneLightSkinTone =
-			"👩🏾‍🤝‍👨🏻" ;
-
-		public const string WomanAndManHoldingHandsMediumDarkSkinToneMediumLightSkinTone =
-			"👩🏾‍🤝‍👨🏼" ;
-
-		public const string WomanAndManHoldingHandsMediumDarkSkinToneMediumSkinTone =
-			"👩🏾‍🤝‍👨🏽" ;
-
-		public const string WomanAndManHoldingHandsMediumDarkSkinTone = "👫🏾" ;
-
-		public const string WomanAndManHoldingHandsMediumDarkSkinToneDarkSkinTone = "👩🏾‍🤝‍👨🏿" ;
-
-		public const string WomanAndManHoldingHandsDarkSkinToneLightSkinTone = "👩🏿‍🤝‍👨🏻" ;
-
-		public const string WomanAndManHoldingHandsDarkSkinToneMediumLightSkinTone =
-			"👩🏿‍🤝‍👨🏼" ;
-
-		public const string WomanAndManHoldingHandsDarkSkinToneMediumSkinTone = "👩🏿‍🤝‍👨🏽" ;
-
-		public const string WomanAndManHoldingHandsDarkSkinToneMediumDarkSkinTone = "👩🏿‍🤝‍👨🏾" ;
-
-		public const string WomanAndManHoldingHandsDarkSkinTone = "👫🏿" ;
-
 		public const string MenHoldingHands = "👬" ;
-
-		public const string MenHoldingHandsLightSkinTone = "👬🏻" ;
-
-		public const string MenHoldingHandsMediumLightSkinToneLightSkinTone = "👨🏼‍🤝‍👨🏻" ;
-
-		public const string MenHoldingHandsMediumLightSkinTone = "👬🏼" ;
-
-		public const string MenHoldingHandsMediumSkinToneLightSkinTone = "👨🏽‍🤝‍👨🏻" ;
-
-		public const string MenHoldingHandsMediumSkinToneMediumLightSkinTone = "👨🏽‍🤝‍👨🏼" ;
-
-		public const string MenHoldingHandsMediumSkinTone = "👬🏽" ;
-
-		public const string MenHoldingHandsMediumDarkSkinToneLightSkinTone = "👨🏾‍🤝‍👨🏻" ;
-
-		public const string MenHoldingHandsMediumDarkSkinToneMediumLightSkinTone = "👨🏾‍🤝‍👨🏼" ;
-
-		public const string MenHoldingHandsMediumDarkSkinToneMediumSkinTone = "👨🏾‍🤝‍👨🏽" ;
-
-		public const string MenHoldingHandsMediumDarkSkinTone = "👬🏾" ;
-
-		public const string MenHoldingHandsDarkSkinToneLightSkinTone = "👨🏿‍🤝‍👨🏻" ;
-
-		public const string MenHoldingHandsDarkSkinToneMediumLightSkinTone = "👨🏿‍🤝‍👨🏼" ;
-
-		public const string MenHoldingHandsDarkSkinToneMediumSkinTone = "👨🏿‍🤝‍👨🏽" ;
-
-		public const string MenHoldingHandsDarkSkinToneMediumDarkSkinTone = "👨🏿‍🤝‍👨🏾" ;
-
-		public const string MenHoldingHandsDarkSkinTone = "👬🏿" ;
 
 		public const string Kiss = "💏" ;
 
@@ -4873,37 +4174,21 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string DarkSkinTone = "🏿" ;
 
-		public const string RedHair = "🦰" ;
-
-		public const string CurlyHair = "🦱" ;
-
-		public const string WhiteHair = "🦳" ;
-
-		public const string Bald = "🦲" ;
-
 		public const string MonkeyFace = "🐵" ;
 
 		public const string Monkey = "🐒" ;
 
 		public const string Gorilla = "🦍" ;
 
-		public const string Orangutan = "🦧" ;
-
 		public const string DogFace = "🐶" ;
 
 		public const string Dog = "🐕" ;
-
-		public const string GuideDog = "🦮" ;
-
-		public const string ServiceDog = "🐕‍🦺" ;
 
 		public const string Poodle = "🐩" ;
 
 		public const string Wolf = "🐺" ;
 
 		public const string Fox = "🦊" ;
-
-		public const string Raccoon = "🦝" ;
 
 		public const string CatFace = "🐱" ;
 
@@ -4953,15 +4238,11 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string TwoHumpCamel = "🐫" ;
 
-		public const string Llama = "🦙" ;
-
 		public const string Giraffe = "🦒" ;
 
 		public const string Elephant = "🐘" ;
 
 		public const string Rhinoceros = "🦏" ;
-
-		public const string Hippopotamus = "🦛" ;
 
 		public const string MouseFace = "🐭" ;
 
@@ -4989,16 +4270,6 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string Panda = "🐼" ;
 
-		public const string Sloth = "🦥" ;
-
-		public const string Otter = "🦦" ;
-
-		public const string Skunk = "🦨" ;
-
-		public const string Kangaroo = "🦘" ;
-
-		public const string Badger = "🦡" ;
-
 		public const string PawPrints = "🐾" ;
 
 		public const string Turkey = "🦃" ;
@@ -5025,15 +4296,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string Duck = "🦆" ;
 
-		public const string Swan = "🦢" ;
-
 		public const string Owl = "🦉" ;
-
-		public const string Flamingo = "🦩" ;
-
-		public const string Peacock = "🦚" ;
-
-		public const string Parrot = "🦜" ;
 
 		public const string Frog = "🐸" ;
 
@@ -5094,10 +4357,6 @@ namespace DreamRecorder . ToolBox . General
 		public const string SpiderWeb2 = "🕸" ;
 
 		public const string Scorpion = "🦂" ;
-
-		public const string Mosquito = "🦟" ;
-
-		public const string Microbe = "🦠" ;
 
 		public const string Bouquet = "💐" ;
 
@@ -5161,8 +4420,6 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string Pineapple = "🍍" ;
 
-		public const string Mango = "🥭" ;
-
 		public const string RedApple = "🍎" ;
 
 		public const string GreenApple = "🍏" ;
@@ -5197,13 +4454,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string Cucumber = "🥒" ;
 
-		public const string LeafyGreen = "🥬" ;
-
 		public const string Broccoli = "🥦" ;
-
-		public const string Garlic = "🧄" ;
-
-		public const string Onion = "🧅" ;
 
 		public const string Mushroom = "🍄" ;
 
@@ -5219,11 +4470,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string Pretzel = "🥨" ;
 
-		public const string Bagel = "🥯" ;
-
 		public const string Pancakes = "🥞" ;
-
-		public const string Waffle = "🧇" ;
 
 		public const string CheeseWedge = "🧀" ;
 
@@ -5251,8 +4498,6 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string StuffedFlatbread = "🥙" ;
 
-		public const string Falafel = "🧆" ;
-
 		public const string Egg = "🥚" ;
 
 		public const string Cooking = "🍳" ;
@@ -5266,10 +4511,6 @@ namespace DreamRecorder . ToolBox . General
 		public const string GreenSalad = "🥗" ;
 
 		public const string Popcorn = "🍿" ;
-
-		public const string Butter = "🧈" ;
-
-		public const string Salt = "🧂" ;
 
 		public const string CannedFood = "🥫" ;
 
@@ -5297,8 +4538,6 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string FishCakeWithSwirl = "🍥" ;
 
-		public const string MoonCake = "🥮" ;
-
 		public const string Dango = "🍡" ;
 
 		public const string Dumpling = "🥟" ;
@@ -5309,13 +4548,9 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string Crab = "🦀" ;
 
-		public const string Lobster = "🦞" ;
-
 		public const string Shrimp = "🦐" ;
 
 		public const string Squid = "🦑" ;
-
-		public const string Oyster = "🦪" ;
 
 		public const string SoftIceCream = "🍦" ;
 
@@ -5330,8 +4565,6 @@ namespace DreamRecorder . ToolBox . General
 		public const string BirthdayCake = "🎂" ;
 
 		public const string Shortcake = "🍰" ;
-
-		public const string Cupcake = "🧁" ;
 
 		public const string Pie = "🥧" ;
 
@@ -5373,12 +4606,6 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string CupWithStraw = "🥤" ;
 
-		public const string BeverageBox = "🧃" ;
-
-		public const string Mate = "🧉" ;
-
-		public const string IceCube = "🧊" ;
-
 		public const string Chopsticks = "🥢" ;
 
 		public const string ForkAndKnifeWithPlate = "🍽️" ;
@@ -5406,8 +4633,6 @@ namespace DreamRecorder . ToolBox . General
 		public const string WorldMap2 = "🗺" ;
 
 		public const string MapOfJapan = "🗾" ;
-
-		public const string Compass = "🧭" ;
 
 		public const string SnowCappedMountain = "🏔️" ;
 
@@ -5452,8 +4677,6 @@ namespace DreamRecorder . ToolBox . General
 		public const string BuildingConstruction = "🏗️" ;
 
 		public const string BuildingConstruction2 = "🏗" ;
-
-		public const string Brick = "🧱" ;
 
 		public const string Houses = "🏘️" ;
 
@@ -5502,8 +4725,6 @@ namespace DreamRecorder . ToolBox . General
 		public const string Church = "⛪" ;
 
 		public const string Mosque = "🕌" ;
-
-		public const string HinduTemple = "🛕" ;
 
 		public const string Synagogue = "🕍" ;
 
@@ -5615,17 +4836,9 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string MotorScooter = "🛵" ;
 
-		public const string ManualWheelchair = "🦽" ;
-
-		public const string MotorizedWheelchair = "🦼" ;
-
-		public const string AutoRickshaw = "🛺" ;
-
 		public const string Bicycle = "🚲" ;
 
 		public const string KickScooter = "🛴" ;
-
-		public const string Skateboard = "🛹" ;
 
 		public const string BusStop = "🚏" ;
 
@@ -5687,8 +4900,6 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string AirplaneArrival = "🛬" ;
 
-		public const string Parachute = "🪂" ;
-
 		public const string Seat = "💺" ;
 
 		public const string Helicopter = "🚁" ;
@@ -5710,8 +4921,6 @@ namespace DreamRecorder . ToolBox . General
 		public const string BellhopBell = "🛎️" ;
 
 		public const string BellhopBell2 = "🛎" ;
-
-		public const string Luggage = "🧳" ;
 
 		public const string HourglassDone = "⌛" ;
 
@@ -5817,8 +5026,6 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string SunWithFace = "🌞" ;
 
-		public const string RingedPlanet = "🪐" ;
-
 		public const string Star = "⭐" ;
 
 		public const string GlowingStar = "🌟" ;
@@ -5919,8 +5126,6 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string Sparkler = "🎇" ;
 
-		public const string Firecracker = "🧨" ;
-
 		public const string Sparkles = "✨" ;
 
 		public const string Balloon = "🎈" ;
@@ -5940,8 +5145,6 @@ namespace DreamRecorder . ToolBox . General
 		public const string WindChime = "🎐" ;
 
 		public const string MoonViewingCeremony = "🎑" ;
-
-		public const string RedEnvelope = "🧧" ;
 
 		public const string Ribbon = "🎀" ;
 
@@ -5975,8 +5178,6 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string Baseball = "⚾" ;
 
-		public const string Softball = "🥎" ;
-
 		public const string Basketball = "🏀" ;
 
 		public const string Volleyball = "🏐" ;
@@ -5987,8 +5188,6 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string Tennis = "🎾" ;
 
-		public const string FlyingDisc = "🥏" ;
-
 		public const string Bowling = "🎳" ;
 
 		public const string CricketGame = "🏏" ;
@@ -5996,8 +5195,6 @@ namespace DreamRecorder . ToolBox . General
 		public const string FieldHockey = "🏑" ;
 
 		public const string IceHockey = "🏒" ;
-
-		public const string Lacrosse = "🥍" ;
 
 		public const string PingPong = "🏓" ;
 
@@ -6017,8 +5214,6 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string FishingPole = "🎣" ;
 
-		public const string DivingMask = "🤿" ;
-
 		public const string RunningShirt = "🎽" ;
 
 		public const string Skis = "🎿" ;
@@ -6029,15 +5224,9 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string DirectHit = "🎯" ;
 
-		public const string YoYo = "🪀" ;
-
-		public const string Kite = "🪁" ;
-
 		public const string Pool8Ball = "🎱" ;
 
 		public const string CrystalBall = "🔮" ;
-
-		public const string NazarAmulet = "🧿" ;
 
 		public const string VideoGame = "🎮" ;
 
@@ -6048,10 +5237,6 @@ namespace DreamRecorder . ToolBox . General
 		public const string SlotMachine = "🎰" ;
 
 		public const string GameDie = "🎲" ;
-
-		public const string PuzzlePiece = "🧩" ;
-
-		public const string TeddyBear = "🧸" ;
 
 		public const string SpadeSuit = "♠️" ;
 
@@ -6069,10 +5254,6 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string ClubSuit2 = "♣" ;
 
-		public const string ChessPawn = "♟️" ;
-
-		public const string ChessPawn2 = "♟" ;
-
 		public const string Joker = "🃏" ;
 
 		public const string MahjongRedDragon = "🀄" ;
@@ -6087,21 +5268,11 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string ArtistPalette = "🎨" ;
 
-		public const string Thread = "🧵" ;
-
-		public const string Yarn = "🧶" ;
-
 		public const string Glasses = "👓" ;
 
 		public const string Sunglasses = "🕶️" ;
 
 		public const string Sunglasses2 = "🕶" ;
-
-		public const string Goggles = "🥽" ;
-
-		public const string LabCoat = "🥼" ;
-
-		public const string SafetyVest = "🦺" ;
 
 		public const string Necktie = "👔" ;
 
@@ -6120,14 +5291,6 @@ namespace DreamRecorder . ToolBox . General
 		public const string Dress = "👗" ;
 
 		public const string Kimono = "👘" ;
-
-		public const string Sari = "🥻" ;
-
-		public const string OnePieceSwimsuit = "🩱" ;
-
-		public const string SwimBrief = "🩲" ;
-
-		public const string Shorts = "🩳" ;
 
 		public const string Bikini = "👙" ;
 
@@ -6149,15 +5312,9 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string RunningShoe = "👟" ;
 
-		public const string HikingBoot = "🥾" ;
-
-		public const string FlatShoe = "🥿" ;
-
 		public const string HighHeeledShoe = "👠" ;
 
 		public const string WomansSandal = "👡" ;
-
-		public const string BalletShoes = "🩰" ;
 
 		public const string WomansBoot = "👢" ;
 
@@ -6235,8 +5392,6 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string Violin = "🎻" ;
 
-		public const string Banjo = "🪕" ;
-
 		public const string Drum = "🥁" ;
 
 		public const string MobilePhone = "📱" ;
@@ -6257,7 +5412,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string ElectricPlug = "🔌" ;
 
-		public const string LaptopComputer = "💻" ;
+		public const string Laptop = "💻" ;
 
 		public const string DesktopComputer = "🖥️" ;
 
@@ -6286,8 +5441,6 @@ namespace DreamRecorder . ToolBox . General
 		public const string OpticalDisk = "💿" ;
 
 		public const string Dvd = "📀" ;
-
-		public const string Abacus = "🧮" ;
 
 		public const string MovieCamera = "🎥" ;
 
@@ -6324,8 +5477,6 @@ namespace DreamRecorder . ToolBox . General
 		public const string Flashlight = "🔦" ;
 
 		public const string RedPaperLantern = "🏮" ;
-
-		public const string DiyaLamp = "🪔" ;
 
 		public const string NotebookWithDecorativeCover = "📔" ;
 
@@ -6379,13 +5530,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string CreditCard = "💳" ;
 
-		public const string Receipt = "🧾" ;
-
 		public const string ChartIncreasingWithYen = "💹" ;
-
-		public const string CurrencyExchange = "💱" ;
-
-		public const string HeavyDollarSign = "💲" ;
 
 		public const string Envelope = "✉️" ;
 
@@ -6521,8 +5666,6 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string Hammer = "🔨" ;
 
-		public const string Axe = "🪓" ;
-
 		public const string Pick = "⛏️" ;
 
 		public const string Pick2 = "⛏" ;
@@ -6567,27 +5710,15 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string BalanceScale2 = "⚖" ;
 
-		public const string ProbingCane = "🦯" ;
-
 		public const string Link = "🔗" ;
 
 		public const string Chains = "⛓️" ;
 
 		public const string Chains2 = "⛓" ;
 
-		public const string Toolbox = "🧰" ;
-
-		public const string Magnet = "🧲" ;
-
 		public const string Alembic = "⚗️" ;
 
 		public const string Alembic2 = "⚗" ;
-
-		public const string TestTube = "🧪" ;
-
-		public const string PetriDish = "🧫" ;
-
-		public const string Dna = "🧬" ;
 
 		public const string Microscope = "🔬" ;
 
@@ -6597,13 +5728,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string Syringe = "💉" ;
 
-		public const string DropOfBlood = "🩸" ;
-
 		public const string Pill = "💊" ;
-
-		public const string AdhesiveBandage = "🩹" ;
-
-		public const string Stethoscope = "🩺" ;
 
 		public const string Door = "🚪" ;
 
@@ -6615,31 +5740,11 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string CouchAndLamp2 = "🛋" ;
 
-		public const string Chair = "🪑" ;
-
 		public const string Toilet = "🚽" ;
 
 		public const string Shower = "🚿" ;
 
 		public const string Bathtub = "🛁" ;
-
-		public const string Razor = "🪒" ;
-
-		public const string LotionBottle = "🧴" ;
-
-		public const string SafetyPin = "🧷" ;
-
-		public const string Broom = "🧹" ;
-
-		public const string Basket = "🧺" ;
-
-		public const string RollOfPaper = "🧻" ;
-
-		public const string Soap = "🧼" ;
-
-		public const string Sponge = "🧽" ;
-
-		public const string FireExtinguisher = "🧯" ;
 
 		public const string ShoppingCart = "🛒" ;
 
@@ -6925,13 +6030,43 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string MaleSign2 = "♂" ;
 
+		public const string Multiply = "✖️" ;
+
+		public const string Multiply2 = "✖" ;
+
+		public const string Plus = "➕" ;
+
+		public const string Minus = "➖" ;
+
+		public const string Divide = "➗" ;
+
+		public const string DoubleExclamationMark = "‼️" ;
+
+		public const string DoubleExclamationMark2 = "‼" ;
+
+		public const string ExclamationQuestionMark = "⁉️" ;
+
+		public const string ExclamationQuestionMark2 = "⁉" ;
+
+		public const string QuestionMark = "❓" ;
+
+		public const string WhiteQuestionMark = "❔" ;
+
+		public const string WhiteExclamationMark = "❕" ;
+
+		public const string ExclamationMark = "❗" ;
+
+		public const string WavyDash = "〰️" ;
+
+		public const string WavyDash2 = "〰" ;
+
+		public const string CurrencyExchange = "💱" ;
+
+		public const string HeavyDollarSign = "💲" ;
+
 		public const string MedicalSymbol = "⚕️" ;
 
 		public const string MedicalSymbol2 = "⚕" ;
-
-		public const string Infinity = "♾️" ;
-
-		public const string Infinity2 = "♾" ;
 
 		public const string RecyclingSymbol = "♻️" ;
 
@@ -6959,19 +6094,9 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string CheckMark2 = "✔" ;
 
-		public const string MultiplicationSign = "✖️" ;
-
-		public const string MultiplicationSign2 = "✖" ;
-
 		public const string CrossMark = "❌" ;
 
 		public const string CrossMarkButton = "❎" ;
-
-		public const string PlusSign = "➕" ;
-
-		public const string MinusSign = "➖" ;
-
-		public const string DivisionSign = "➗" ;
 
 		public const string CurlyLoop = "➰" ;
 
@@ -6992,26 +6117,6 @@ namespace DreamRecorder . ToolBox . General
 		public const string Sparkle = "❇️" ;
 
 		public const string Sparkle2 = "❇" ;
-
-		public const string DoubleExclamationMark = "‼️" ;
-
-		public const string DoubleExclamationMark2 = "‼" ;
-
-		public const string ExclamationQuestionMark = "⁉️" ;
-
-		public const string ExclamationQuestionMark2 = "⁉" ;
-
-		public const string QuestionMark = "❓" ;
-
-		public const string WhiteQuestionMark = "❔" ;
-
-		public const string WhiteExclamationMark = "❕" ;
-
-		public const string ExclamationMark = "❗" ;
-
-		public const string WavyDash = "〰️" ;
-
-		public const string WavyDash2 = "〰" ;
 
 		public const string Copyright = "©️" ;
 
@@ -7175,35 +6280,11 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string RedCircle = "🔴" ;
 
-		public const string OrangeCircle = "🟠" ;
-
-		public const string YellowCircle = "🟡" ;
-
-		public const string GreenCircle = "🟢" ;
-
 		public const string BlueCircle = "🔵" ;
-
-		public const string PurpleCircle = "🟣" ;
-
-		public const string BrownCircle = "🟤" ;
 
 		public const string BlackCircle = "⚫" ;
 
 		public const string WhiteCircle = "⚪" ;
-
-		public const string RedSquare = "🟥" ;
-
-		public const string OrangeSquare = "🟧" ;
-
-		public const string YellowSquare = "🟨" ;
-
-		public const string GreenSquare = "🟩" ;
-
-		public const string BlueSquare = "🟦" ;
-
-		public const string PurpleSquare = "🟪" ;
-
-		public const string BrownSquare = "🟫" ;
 
 		public const string BlackLargeSquare = "⬛" ;
 
@@ -7264,10 +6345,6 @@ namespace DreamRecorder . ToolBox . General
 		public const string RainbowFlag = "🏳️‍🌈" ;
 
 		public const string RainbowFlag2 = "🏳‍🌈" ;
-
-		public const string PirateFlag = "🏴‍☠️" ;
-
-		public const string PirateFlag2 = "🏴‍☠" ;
 
 		public const string FlagAscensionIsland = "🇦🇨" ;
 
@@ -7567,7 +6644,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string FlagMarshallIslands = "🇲🇭" ;
 
-		public const string FlagMacedonia = "🇲🇰" ;
+		public const string FlagNorthMacedonia = "🇲🇰" ;
 
 		public const string FlagMali = "🇲🇱" ;
 

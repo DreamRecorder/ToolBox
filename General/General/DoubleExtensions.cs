@@ -19,8 +19,7 @@ namespace DreamRecorder . ToolBox . General
 		public const double Epsilon = 2.2204460492503131e-016 ;
 
 		[MethodImpl ( MethodImplOptions . AggressiveInlining )]
-		public static bool IsAboutZero ( this double value )
-			=> value < Epsilon && - value > Epsilon ;
+		public static bool IsAboutZero ( this double value ) => value < Epsilon && - value > Epsilon ;
 
 		[MethodImpl ( MethodImplOptions . AggressiveInlining )]
 		public static bool DefinitelyGreaterThan ( double a , double b )

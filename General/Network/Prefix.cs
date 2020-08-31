@@ -51,12 +51,12 @@ namespace DreamRecorder . ToolBox . Network
 				return true ;
 			}
 
-			return Equals ( AddressBytes , other . AddressBytes )
-				&& Length == other . Length
-				&& Type   == other . Type ;
+			return Equals ( AddressBytes , other . AddressBytes ) && Length == other . Length && Type == other . Type ;
 		}
 
-		public virtual bool Contains ( [NotNull] Address address )
+		public virtual bool Contains (
+			[NotNull]
+			Address address )
 		{
 			if ( address == null )
 			{

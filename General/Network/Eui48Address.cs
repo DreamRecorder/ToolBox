@@ -26,7 +26,9 @@ namespace DreamRecorder . ToolBox . Network
 			AddressBytes = address ;
 		}
 
-		public Eui48Address ( [NotNull] string address ) : this ( )
+		public Eui48Address (
+			[NotNull]
+			string address ) : this ( )
 		{
 			if ( address == null )
 			{
@@ -61,13 +63,13 @@ namespace DreamRecorder . ToolBox . Network
 			{
 				int value = t ;
 
-				if ( value >= 0x30
-				&& value   <= 0x39 )
+				if ( value   >= 0x30
+					&& value <= 0x39 )
 				{
 					value -= 0x30 ;
 				}
-				else if ( value >= 0x41
-					&& value    <= 0x46 )
+				else if ( value  >= 0x41
+						&& value <= 0x46 )
 				{
 					value -= 0x37 ;
 				}
@@ -140,7 +142,9 @@ namespace DreamRecorder . ToolBox . Network
 			return addressString . ToString ( ) ;
 		}
 
-		public static explicit operator Eui48Address ( [NotNull] string address )
+		public static explicit operator Eui48Address (
+			[NotNull]
+			string address )
 		{
 			if ( address == null )
 			{

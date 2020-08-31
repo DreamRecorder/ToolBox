@@ -13,7 +13,9 @@ namespace DreamRecorder . ToolBox . General
 
 		bool IsRunning { get ; }
 
-		void Dispatch ( [NotNull] ITask task ) ;
+		void Dispatch (
+			[NotNull]
+			ITask task ) ;
 
 		void Start ( ) ;
 

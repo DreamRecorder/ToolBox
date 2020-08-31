@@ -41,7 +41,9 @@ namespace DreamRecorder . ToolBox . General
 
 		public static byte CalculateCrc8 ( this byte [ ] data ) => ComputeChecksum ( data ) ;
 
-		public static byte ComputeChecksum ( [NotNull] params byte [ ] data )
+		public static byte ComputeChecksum (
+			[NotNull]
+			params byte [ ] data )
 		{
 			if ( data == null )
 			{
