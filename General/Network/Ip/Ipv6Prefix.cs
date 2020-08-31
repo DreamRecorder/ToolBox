@@ -2,6 +2,7 @@
 using System . Collections ;
 using System . Collections . Generic ;
 using System . Linq ;
+using System . Text ;
 
 using JetBrains . Annotations ;
 
@@ -85,6 +86,27 @@ namespace DreamRecorder . ToolBox . Network . Ip
 		}
 
 		public override object Clone ( ) => new Ipv6Prefix ( AddressBytes , Length ) ;
+
+		public override string ToString ( )
+		{
+			StringBuilder builder = new StringBuilder ( ) ;
+
+			for ( int i = 0 ; i < AddressBytes . Length ; i += 2 )
+			{
+				int segment = ( ushort ) ( AddressBytes . Span [ i ] << 8 ) | AddressBytes . Span [ i + 1 ] ;
+				builder . AppendFormat ( "{0:X}" , segment ) ;
+
+				if ( i + 2 != AddressBytes . Length )
+				{
+					builder . Append ( ':' ) ;
+				}
+			}
+
+			builder . Append ( '/' ) ;
+			builder . Append ( Length ) ;
+
+			return builder . ToString ( ) ;
+		}
 
 	}
 

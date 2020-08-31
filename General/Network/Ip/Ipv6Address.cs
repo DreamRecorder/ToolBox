@@ -118,20 +118,20 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 		public override string ToString ( )
 		{
-			StringBuilder str = new StringBuilder ( ) ;
+			StringBuilder builder = new StringBuilder ( ) ;
 
 			for ( int i = 0 ; i < AddressBytes . Length ; i += 2 )
 			{
 				int segment = ( ushort ) ( AddressBytes . Span [ i ] << 8 ) | AddressBytes . Span [ i + 1 ] ;
-				str . AppendFormat ( "{0:X}" , segment ) ;
+				builder . AppendFormat ( "{0:X}" , segment ) ;
 
 				if ( i + 2 != AddressBytes . Length )
 				{
-					str . Append ( ':' ) ;
+					builder . Append ( ':' ) ;
 				}
 			}
 
-			return str . ToString ( ) ;
+			return builder . ToString ( ) ;
 		}
 
 	}

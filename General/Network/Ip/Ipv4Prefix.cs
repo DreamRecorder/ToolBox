@@ -78,7 +78,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			}
 		}
 
-		public bool Contains ( Ipv4Address address ) => throw new NotImplementedException ( ) ;
+		public bool Contains ( Ipv4Address address ) => base . Contains ( address ) ;
 
 		public static explicit operator Ipv4Prefix (
 			[NotNull]
@@ -93,6 +93,9 @@ namespace DreamRecorder . ToolBox . Network . Ip
 		}
 
 		public override object Clone ( ) => new Ipv4Prefix ( AddressBytes , Length ) ;
+
+		public override string ToString ( )
+			=> $"{AddressBytes . Span [ 0 ]}.{AddressBytes . Span [ 1 ]}.{AddressBytes . Span [ 2 ]}.{AddressBytes . Span [ 3 ]}/{Length}" ;
 
 	}
 
