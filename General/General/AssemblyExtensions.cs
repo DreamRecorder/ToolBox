@@ -1,14 +1,12 @@
 ﻿using System ;
 using System . Collections ;
 using System . Collections . Generic ;
-using System . Diagnostics ;
 using System . IO ;
 using System . Linq ;
 using System . Reflection ;
 using System . Runtime . InteropServices ;
 using System . Text ;
 using System . Text . RegularExpressions ;
-using System . Threading . Tasks ;
 
 using JetBrains . Annotations ;
 
@@ -72,41 +70,23 @@ namespace DreamRecorder . ToolBox . General
 			return null ;
 		}
 
-		public static Task Prepare ( this Assembly assembly )
+		public static void Prepare ( this Assembly assembly )
 		{
 			PrepareAttribute attribute = assembly . GetCustomAttribute <PrepareAttribute> ( ) ;
 
 			if ( attribute != null )
 			{
-				List <Task> tasks = new List <Task> ( ) ;
-
 				foreach ( TypeInfo type in assembly . DefinedTypes )
 				{
 					foreach ( MethodInfo method in type . DeclaredMethods )
 					{
 						if ( method . GetCustomAttributes ( typeof ( PrepareAttribute ) ) . Any ( ) )
 						{
-							tasks . Add (
-										Task . Run (
-													( ) =>
-													{
-														try
-														{
-															method . Invoke ( null , new object [ ] { } ) ;
-														}
-														catch ( Exception e )
-														{
-															Debug . WriteLine ( e ) ;
-														}
-													} ) ) ;
+							method . Invoke ( null , new object [ ] { } ) ;
 						}
 					}
 				}
-
-				return Task . WhenAll ( tasks ) ;
 			}
-
-			return Task . CompletedTask ;
 		}
 
 		public static string GetDisplayName (

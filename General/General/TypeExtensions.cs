@@ -4,7 +4,6 @@ using System . Collections . Generic ;
 using System . IO ;
 using System . Linq ;
 using System . Reflection ;
-using System . Threading . Tasks ;
 
 using JetBrains . Annotations ;
 
@@ -77,9 +76,9 @@ namespace DreamRecorder . ToolBox . General
 
 		#region PrepareAssembly
 
-		public static Task PrepareAssembly <T> ( ) => PrepareAssembly ( typeof ( T ) ) ;
+		public static void PrepareAssembly <T> ( ) => PrepareAssembly ( typeof ( T ) ) ;
 
-		public static Task PrepareAssembly (
+		public static void PrepareAssembly (
 			[NotNull]
 			this Type type )
 		{
@@ -88,7 +87,7 @@ namespace DreamRecorder . ToolBox . General
 				throw new ArgumentNullException ( nameof ( type ) ) ;
 			}
 
-			return type . Assembly . Prepare ( ) ;
+			type . Assembly . Prepare ( ) ;
 		}
 
 		#endregion
