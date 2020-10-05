@@ -46,20 +46,23 @@ namespace DreamRecorder . ToolBox . AspNet . General
 			return Task . CompletedTask ;
 		}
 
-		public static void EnableHeaderComplexModelBinder (
-			[NotNull]
-			MvcOptions options ,
+		public static Action <MvcOptions> EnableHeaderComplexModelBinder (
 			[CanBeNull]
 			Action <MvcOptions> next = null )
 		{
-			if ( options == null )
+			void AddModelBinder ( MvcOptions options )
 			{
-				throw new ArgumentNullException ( nameof ( options ) ) ;
+				if ( options == null )
+				{
+					throw new ArgumentNullException ( nameof ( options ) ) ;
+				}
+
+				options . ModelBinderProviders . Insert ( 0 , new HeaderComplexModelBinderProvider ( ) ) ;
+
+				next ? . Invoke ( options ) ;
 			}
 
-			options . ModelBinderProviders . Insert ( 0 , new HeaderComplexModelBinderProvider ( ) ) ;
-
-			next ? . Invoke ( options ) ;
+			return AddModelBinder ;
 		}
 
 	}
