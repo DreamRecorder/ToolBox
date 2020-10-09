@@ -4,6 +4,7 @@ using System . Collections . Generic ;
 using System . Diagnostics ;
 using System . IO ;
 using System . Linq ;
+using System . Text ;
 using System . Threading ;
 
 using DreamRecorder . ToolBox . General ;
@@ -223,6 +224,14 @@ namespace DreamRecorder . ToolBox . CommandLine
 			return false ;
 		}
 
+		public void ShowVersion ( )
+		{
+			StringBuilder builder = new StringBuilder ( ) ;
+			AssemblyExtensions . GetAssemblyInfo <T> ( builder ) ;
+
+			Logger . LogInformation ( builder . ToString ( ) ) ;
+		}
+
 		public virtual void BeforePrepare ( ) { }
 
 		public virtual void AfterPrepare ( ) { }
@@ -303,6 +312,8 @@ namespace DreamRecorder . ToolBox . CommandLine
 					ShowLogo ( ) ;
 					ShowCopyright ( ) ;
 				}
+
+				ShowVersion ( ) ;
 
 				#region Check License
 

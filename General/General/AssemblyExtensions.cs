@@ -26,6 +26,33 @@ namespace DreamRecorder . ToolBox . General
 		public static string GetAssemblyFullName ( this Type type )
 			=> type . GetTypeInfo ( ) . Assembly . GetName ( ) . FullName . Replace ( ", " , CommaWithNewline ) ;
 
+		public static void GetAssemblyInfo (
+			[NotNull]
+			this Assembly assembly ,
+			[NotNull]
+			StringBuilder builder )
+		{
+			if ( assembly == null )
+			{
+				throw new ArgumentNullException ( nameof ( assembly ) ) ;
+			}
+
+			if ( builder == null )
+			{
+				throw new ArgumentNullException ( nameof ( builder ) ) ;
+			}
+
+			builder . AppendLine ( assembly . GetName ( ) . Name ) ;
+
+			builder . AppendLine ( assembly . GetName ( ) . Version . ToString ( ) ) ;
+
+			builder . AppendLine (
+								assembly . GetCustomAttribute <AssemblyInformationalVersionAttribute> ( ) ? .
+											InformationalVersion ) ;
+
+			builder . AppendLine ( assembly . GetCustomAttribute <AssemblyCopyrightAttribute> ( ) ? . Copyright ) ;
+		}
+
 		public static void GetAssemblyInfo <T> (
 			[NotNull]
 			StringBuilder builder )
@@ -35,21 +62,7 @@ namespace DreamRecorder . ToolBox . General
 				throw new ArgumentNullException ( nameof ( builder ) ) ;
 			}
 
-			builder . AppendLine ( typeof ( T ) . Assembly . GetName ( ) . Name ) ;
-
-			builder . AppendLine ( typeof ( T ) . Assembly . GetName ( ) . Version . ToString ( ) ) ;
-
-
-			builder . AppendLine (
-								typeof ( T ) . Assembly .
-												GetCustomAttribute <AssemblyInformationalVersionAttribute> ( ) ? .
-												InformationalVersion ) ;
-
-			builder . AppendLine (
-								typeof ( T ) . Assembly . GetCustomAttribute <AssemblyCopyrightAttribute> ( ) ? .
-												Copyright ) ;
-
-			builder . AppendLine ( ) ;
+			GetAssemblyInfo ( typeof ( T ) . Assembly , builder ) ;
 		}
 
 		public static string GetResourceFile <T> ( this Assembly assembly , string fileName )
@@ -57,12 +70,8 @@ namespace DreamRecorder . ToolBox . General
 			Stream stream = assembly . GetManifestResourceStream ( typeof ( T ) , fileName ) ;
 			if ( stream != null )
 			{
-				string license ;
-
-				using ( StreamReader reader = new StreamReader ( stream ) )
-				{
-					license = reader . ReadToEnd ( ) ;
-				}
+				using StreamReader reader  = new StreamReader ( stream ) ;
+				string             license = reader . ReadToEnd ( ) ;
 
 				return license ;
 			}
