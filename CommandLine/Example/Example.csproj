@@ -10,6 +10,12 @@
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<Authors>Wencey Wang</Authors>
+		<Company>Dream Recorder</Company>
+		<Description>Tools for other Dreamry project.</Description>
+		<RepositoryType>TFS</RepositoryType>
+		<RepositoryUrl>https://vsts.dreamry.org/DefaultCollection/ToolBox</RepositoryUrl>
+		<PackageProjectUrl>https://vsts.dreamry.org/DefaultCollection/ToolBox</PackageProjectUrl>
 		<AssemblyName>DreamRecorder.ToolBox.CommandLine.Example</AssemblyName>
 		<RootNamespace>DreamRecorder.ToolBox.CommandLine.Example</RootNamespace>
 		<PackageId>DreamRecorder.ToolBox.CommandLine.Example</PackageId>
