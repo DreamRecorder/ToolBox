@@ -1,6 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk" >
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup Label="Globals" >
+	<PropertyGroup Label="Globals">
 		<SccProjectName>SAK</SccProjectName>
 		<SccProvider>SAK</SccProvider>
 		<SccAuxPath>SAK</SccAuxPath>
@@ -34,7 +34,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
-		<PackageReference Include="System.Text.Json" Version="4.7.2" />
+		<PackageReference Include="System.Text.Json" Version="5.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -42,7 +42,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="..\..\DreamryLogo.png" >
+		<None Include="..\..\DreamryLogo.png">
 			<Pack>True</Pack>
 			<PackagePath></PackagePath>
 		</None>
