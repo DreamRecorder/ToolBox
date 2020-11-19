@@ -53,7 +53,7 @@ namespace DreamRecorder . ToolBox . General
 			return value . ParseTo <T> ( ) ;
 		}
 
-		public static T ReadUnnecessaryValue <T> ( this XElement element , string name , T defaultValue )
+		public static T ReadUnnecessaryValue <T> ( this XElement element , string name , T defaultValue=default )
 		{
 			if ( element == null )
 			{
