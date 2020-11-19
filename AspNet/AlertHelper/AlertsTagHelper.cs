@@ -5,6 +5,7 @@ using System . IO ;
 using System . Linq ;
 using System . Runtime . Serialization . Formatters . Binary ;
 using System . Text ;
+using System . Xml . Serialization ;
 
 using Microsoft . AspNetCore . Mvc . Rendering ;
 using Microsoft . AspNetCore . Mvc . ViewFeatures ;
@@ -21,13 +22,13 @@ namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 
 		public List <Alert> GetAlerts ( )
 		{
-			BinaryFormatter formatter = new BinaryFormatter ( ) ;
-			List <Alert>    alerts ;
+			XmlSerializer formatter = new XmlSerializer(typeof(AlertGroup));
+			List <Alert>  alerts ;
 
 			if ( ViewContext . HttpContext . Session . TryGetValue ( Constants . Alerts , out byte [ ] buffer ) )
 			{
 				MemoryStream stream = new MemoryStream ( buffer ) ;
-				alerts = formatter . Deserialize ( stream ) as List <Alert> ?? new List <Alert> ( ) ;
+				alerts = (formatter.Deserialize(stream) as AlertGroup)?.Alerts ?? new List<Alert>();
 			}
 			else
 			{

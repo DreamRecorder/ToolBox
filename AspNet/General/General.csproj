@@ -8,7 +8,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<TargetFramework>netstandard2.1</TargetFramework>
+		<TargetFramework>net5.0</TargetFramework>
 		<AssemblyName>DreamRecorder.ToolBox.AspNet.General</AssemblyName>
 		<RootNamespace>DreamRecorder.ToolBox.AspNet.General</RootNamespace>
 		<PackageId>DreamRecorder.ToolBox.AspNet.General</PackageId>

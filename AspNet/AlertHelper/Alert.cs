@@ -6,6 +6,13 @@ using System . Linq ;
 namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 {
 
+	public class AlertGroup
+	{
+
+		public List<Alert> Alerts { get ; set ; }
+
+	}
+
 	[Serializable]
 	public struct Alert : IEquatable <Alert>
 	{

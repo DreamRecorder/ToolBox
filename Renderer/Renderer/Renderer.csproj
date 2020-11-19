@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>DreamRecorder.ToolBox.Renderer</AssemblyName>
     <RootNamespace>DreamRecorder.ToolBox.Renderer</RootNamespace>
     <PackageId>DreamRecorder.ToolBox.Renderer</PackageId>

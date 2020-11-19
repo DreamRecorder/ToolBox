@@ -31,8 +31,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RequestHelper", "AspNet\Req
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Uwp", "Uwp", "{B6CF0279-804F-4373-B262-8987E5724E24}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "General", "Uwp\General\General.csproj", "{B806EC9A-0569-4505-8ED7-385141167351}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "General", "AspNet\General\General.csproj", "{84C875D6-44F1-4BCB-8253-B8BF7D0761E5}"
 EndProject
 Global
@@ -249,26 +247,6 @@ Global
 		{93A5369C-01A5-4AE8-BFA1-1869F61D8CF5}.Release|x64.Build.0 = Release|Any CPU
 		{93A5369C-01A5-4AE8-BFA1-1869F61D8CF5}.Release|x86.ActiveCfg = Release|Any CPU
 		{93A5369C-01A5-4AE8-BFA1-1869F61D8CF5}.Release|x86.Build.0 = Release|Any CPU
-		{B806EC9A-0569-4505-8ED7-385141167351}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B806EC9A-0569-4505-8ED7-385141167351}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B806EC9A-0569-4505-8ED7-385141167351}.Debug|ARM.ActiveCfg = Debug|ARM
-		{B806EC9A-0569-4505-8ED7-385141167351}.Debug|ARM.Build.0 = Debug|ARM
-		{B806EC9A-0569-4505-8ED7-385141167351}.Debug|ARM64.ActiveCfg = Debug|ARM64
-		{B806EC9A-0569-4505-8ED7-385141167351}.Debug|ARM64.Build.0 = Debug|ARM64
-		{B806EC9A-0569-4505-8ED7-385141167351}.Debug|x64.ActiveCfg = Debug|x64
-		{B806EC9A-0569-4505-8ED7-385141167351}.Debug|x64.Build.0 = Debug|x64
-		{B806EC9A-0569-4505-8ED7-385141167351}.Debug|x86.ActiveCfg = Debug|x86
-		{B806EC9A-0569-4505-8ED7-385141167351}.Debug|x86.Build.0 = Debug|x86
-		{B806EC9A-0569-4505-8ED7-385141167351}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B806EC9A-0569-4505-8ED7-385141167351}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B806EC9A-0569-4505-8ED7-385141167351}.Release|ARM.ActiveCfg = Release|ARM
-		{B806EC9A-0569-4505-8ED7-385141167351}.Release|ARM.Build.0 = Release|ARM
-		{B806EC9A-0569-4505-8ED7-385141167351}.Release|ARM64.ActiveCfg = Release|ARM64
-		{B806EC9A-0569-4505-8ED7-385141167351}.Release|ARM64.Build.0 = Release|ARM64
-		{B806EC9A-0569-4505-8ED7-385141167351}.Release|x64.ActiveCfg = Release|x64
-		{B806EC9A-0569-4505-8ED7-385141167351}.Release|x64.Build.0 = Release|x64
-		{B806EC9A-0569-4505-8ED7-385141167351}.Release|x86.ActiveCfg = Release|x86
-		{B806EC9A-0569-4505-8ED7-385141167351}.Release|x86.Build.0 = Release|x86
 		{84C875D6-44F1-4BCB-8253-B8BF7D0761E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{84C875D6-44F1-4BCB-8253-B8BF7D0761E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84C875D6-44F1-4BCB-8253-B8BF7D0761E5}.Debug|ARM.ActiveCfg = Debug|Any CPU
@@ -304,14 +282,13 @@ Global
 		{8DCDDF0B-EA35-4B03-A0E5-0F9E3354436E} = {2D5F594D-8C6A-4F7E-AADB-8944E8935FB0}
 		{81034245-174A-4A04-81D7-5998E1F9294A} = {6ECFB2DA-3E6D-42A2-AE16-BC0D5B3DF2EE}
 		{93A5369C-01A5-4AE8-BFA1-1869F61D8CF5} = {6ECFB2DA-3E6D-42A2-AE16-BC0D5B3DF2EE}
-		{B806EC9A-0569-4505-8ED7-385141167351} = {B6CF0279-804F-4373-B262-8987E5724E24}
 		{84C875D6-44F1-4BCB-8253-B8BF7D0761E5} = {6ECFB2DA-3E6D-42A2-AE16-BC0D5B3DF2EE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {14DAB56C-F500-45EE-8A65-CFA2C12B509D}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 13
+		SccNumberOfProjects = 12
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://vsts.dreamry.org/defaultcollection
 		SccLocalPath0 = .
@@ -355,13 +332,9 @@ Global
 		SccProjectTopLevelParentUniqueName10 = ToolBox.sln
 		SccProjectName10 = AspNet/RequestHelper
 		SccLocalPath10 = AspNet\\RequestHelper
-		SccProjectUniqueName11 = Uwp\\General\\General.csproj
+		SccProjectUniqueName11 = AspNet\\General\\General.csproj
 		SccProjectTopLevelParentUniqueName11 = ToolBox.sln
-		SccProjectName11 = Uwp/General
-		SccLocalPath11 = Uwp\\General
-		SccProjectUniqueName12 = AspNet\\General\\General.csproj
-		SccProjectTopLevelParentUniqueName12 = ToolBox.sln
-		SccProjectName12 = AspNet/General
-		SccLocalPath12 = AspNet\\General
+		SccProjectName11 = AspNet/General
+		SccLocalPath11 = AspNet\\General
 	EndGlobalSection
 EndGlobal

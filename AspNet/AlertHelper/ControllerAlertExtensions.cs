@@ -4,6 +4,7 @@ using System . Collections . Generic ;
 using System . IO ;
 using System . Linq ;
 using System . Runtime . Serialization . Formatters . Binary ;
+using System . Xml . Serialization ;
 
 using JetBrains . Annotations ;
 
@@ -21,9 +22,9 @@ namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 			this Controller controller ,
 			List <Alert> alerts )
 		{
-			BinaryFormatter formatter = new BinaryFormatter ( ) ;
-			MemoryStream    stream    = new MemoryStream ( ) ;
-			formatter . Serialize ( stream , alerts ) ;
+			XmlSerializer formatter = new XmlSerializer(typeof(AlertGroup)) ;
+			MemoryStream  stream    = new MemoryStream ( ) ;
+			formatter . Serialize ( stream , new AlertGroup(){Alerts=alerts} ) ;
 
 			controller . HttpContext . Session . Set ( Constants . Alerts , stream . GetBuffer ( ) ) ;
 		}
@@ -32,13 +33,13 @@ namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 			[NotNull]
 			this Controller controller )
 		{
-			BinaryFormatter formatter = new BinaryFormatter ( ) ;
-			List <Alert>    alerts ;
+			XmlSerializer formatter = new XmlSerializer(typeof(AlertGroup)); 
+			List <Alert>  alerts ;
 
 			if ( controller . HttpContext . Session . TryGetValue ( Constants . Alerts , out byte [ ] buffer ) )
 			{
 				MemoryStream stream = new MemoryStream ( buffer ) ;
-				alerts = formatter . Deserialize ( stream ) as List <Alert> ?? new List <Alert> ( ) ;
+				alerts = (formatter . Deserialize ( stream ) as AlertGroup )?.Alerts?? new List <Alert> ( ) ;
 			}
 			else
 			{
