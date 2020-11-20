@@ -152,9 +152,9 @@ namespace DreamRecorder . ToolBox . General
 
 				if ( match . Success )
 				{
-					return ( match . Captures [ 0 ] . Value , match . Captures [ 1 ] . Value ,
+					return ( match . Groups [ 1 ] . Value , match . Groups [ 2 ] . Value ,
 								new DateTimeOffset (
-													DateTime . Parse ( match . Captures [ 2 ] . Value ) ,
+													DateTime . Parse ( match . Groups [ 3 ] . Value ) ,
 													TimeSpan . Zero ) ) ;
 				}
 			}
