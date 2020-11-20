@@ -63,10 +63,9 @@ namespace DreamRecorder . ToolBox . General
 					Assembly assembly = Assembly . LoadFile ( file . FullName ) ;
 					Logger . LogInformation ( "Loaded plugin {0}." , assembly . GetDisplayName ( ) ) ;
 
-					StringBuilder builder = new StringBuilder();
-					assembly.GetAssemblyInfo(builder);
-					Logger.LogInformation(builder.ToString());
-
+					StringBuilder builder = new StringBuilder ( ) ;
+					assembly . GetAssemblyInfo ( builder ) ;
+					Logger . LogInformation ( builder . ToString ( ) ) ;
 				}
 				catch ( Exception e )
 				{

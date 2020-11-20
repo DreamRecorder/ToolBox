@@ -3,9 +3,7 @@ using System . Collections ;
 using System . Collections . Generic ;
 using System . Linq ;
 
-using DreamRecorder . ToolBox . CommandLine ;
-
-namespace Example
+namespace DreamRecorder . ToolBox . CommandLine . Example
 {
 
 	public class ProgramSetting : SettingBase <ProgramSetting , ProgramSettingCatalog>

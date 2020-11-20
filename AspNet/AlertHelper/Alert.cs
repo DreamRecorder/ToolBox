@@ -6,47 +6,30 @@ using System . Linq ;
 namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 {
 
-	public class AlertGroup
-	{
-
-		public List<Alert> Alerts { get ; set ; }
-
-	}
-
 	[Serializable]
 	public struct Alert : IEquatable <Alert>
 	{
 
 		public BootstrapVariation Variation { get ; }
 
-		public string Message { get ; }
+		public bool Dismissible { get ; }
 
-		public Alert ( BootstrapVariation variation , string message )
+		public string Content { get ; }
+
+		public Alert ( BootstrapVariation variation , string content , bool dismissible = false )
 		{
-			Variation = variation ;
-			Message   = message ;
+			Variation   = variation ;
+			Content     = content ;
+			Dismissible = dismissible ;
 		}
+
 
 		public bool Equals ( Alert other )
-			=> Variation == other . Variation && string . Equals ( Message , other . Message ) ;
+			=> Variation == other . Variation && Dismissible == other . Dismissible && Content == other . Content ;
 
-		public override bool Equals ( object obj )
-		{
-			if ( obj is null )
-			{
-				return false ;
-			}
+		public override bool Equals ( object obj ) => obj is Alert other && Equals ( other ) ;
 
-			return obj is Alert other && Equals ( other ) ;
-		}
-
-		public override int GetHashCode ( )
-		{
-			unchecked
-			{
-				return ( ( int ) Variation * 397 ) ^ ( Message != null ? Message . GetHashCode ( ) : 0 ) ;
-			}
-		}
+		public override int GetHashCode ( ) => HashCode . Combine ( ( int ) Variation , Dismissible , Content ) ;
 
 		public static bool operator == ( Alert left , Alert right ) => left . Equals ( right ) ;
 

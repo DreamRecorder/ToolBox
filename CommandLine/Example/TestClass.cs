@@ -5,7 +5,7 @@ using System . Linq ;
 
 using DreamRecorder . ToolBox . General ;
 
-namespace Example
+namespace DreamRecorder . ToolBox . CommandLine . Example
 {
 
 	public class TestClass

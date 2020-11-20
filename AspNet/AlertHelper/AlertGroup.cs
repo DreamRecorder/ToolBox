@@ -3,13 +3,13 @@ using System . Collections ;
 using System . Collections . Generic ;
 using System . Linq ;
 
-namespace DreamRecorder . ToolBox . CommandLine . Example
+namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 {
 
-	public enum ProgramSettingCatalog
+	public class AlertGroup
 	{
 
-		General = 0
+		public List <Alert> Alerts { get ; set ; }
 
 	}
 

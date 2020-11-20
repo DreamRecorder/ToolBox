@@ -1,19 +1,16 @@
 ﻿using System ;
 using System . Collections ;
 using System . Collections . Generic ;
+using System . Diagnostics . CodeAnalysis ;
 using System . IO ;
 using System . Linq ;
-using System . Runtime . Serialization . Formatters . Binary ;
 using System . Xml . Serialization ;
-
-using JetBrains . Annotations ;
 
 using Microsoft . AspNetCore . Mvc ;
 
 namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 {
 
-	[PublicAPI]
 	public static class ControllerAlertExtensions
 	{
 
@@ -22,9 +19,9 @@ namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 			this Controller controller ,
 			List <Alert> alerts )
 		{
-			XmlSerializer formatter = new XmlSerializer(typeof(AlertGroup)) ;
+			XmlSerializer formatter = new XmlSerializer ( typeof ( AlertGroup ) ) ;
 			MemoryStream  stream    = new MemoryStream ( ) ;
-			formatter . Serialize ( stream , new AlertGroup(){Alerts=alerts} ) ;
+			formatter . Serialize ( stream , new AlertGroup { Alerts = alerts } ) ;
 
 			controller . HttpContext . Session . Set ( Constants . Alerts , stream . GetBuffer ( ) ) ;
 		}
@@ -33,13 +30,13 @@ namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 			[NotNull]
 			this Controller controller )
 		{
-			XmlSerializer formatter = new XmlSerializer(typeof(AlertGroup)); 
+			XmlSerializer formatter = new XmlSerializer ( typeof ( AlertGroup ) ) ;
 			List <Alert>  alerts ;
 
 			if ( controller . HttpContext . Session . TryGetValue ( Constants . Alerts , out byte [ ] buffer ) )
 			{
 				MemoryStream stream = new MemoryStream ( buffer ) ;
-				alerts = (formatter . Deserialize ( stream ) as AlertGroup )?.Alerts?? new List <Alert> ( ) ;
+				alerts = ( formatter . Deserialize ( stream ) as AlertGroup ) ? . Alerts ?? new List <Alert> ( ) ;
 			}
 			else
 			{

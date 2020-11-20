@@ -5,14 +5,13 @@ using System . Collections . ObjectModel ;
 using System . Linq ;
 using System . Threading ;
 
-using DreamRecorder . ToolBox . CommandLine ;
 using DreamRecorder . ToolBox . General ;
 
 using Microsoft . Extensions . DependencyInjection ;
 using Microsoft . Extensions . Logging ;
 using Microsoft . Extensions . Logging . Console ;
 
-namespace Example
+namespace DreamRecorder . ToolBox . CommandLine . Example
 {
 
 	public class Program : ProgramBase <Program , ProgramExitCode , ProgramSetting , ProgramSettingCatalog>

@@ -10,41 +10,41 @@ namespace DreamRecorder . ToolBox . General
 	public static class AppDomainExtensions
 	{
 
-		private static volatile bool Loaded = false ;
+		private static volatile bool Loaded ;
 
 		public static void PrepareCurrentDomain ( )
 		{
-			if ( !Loaded )
+			if ( ! Loaded )
 			{
 				lock ( StaticServiceProvider . ServiceCollection )
 				{
-					if (!Loaded)
+					if ( ! Loaded )
 					{
-						Loaded = true;
+						Loaded = true ;
 					}
 					else
 					{
-						return;
+						return ;
 					}
 				}
 
-				AppDomain.CurrentDomain.AssemblyLoad += CurrentDomain_AssemblyLoad;
+				AppDomain . CurrentDomain . AssemblyLoad += CurrentDomain_AssemblyLoad ;
 
-				Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+				Assembly [ ] assemblies = AppDomain . CurrentDomain . GetAssemblies ( ) ;
 
-				int assembliesCount = assemblies.Length;
+				int assembliesCount = assemblies . Length ;
 
-				for (int i = 0; i < assembliesCount; i++)
+				for ( int i = 0 ; i < assembliesCount ; i++ )
 				{
-					Assembly assembly = assemblies[i];
+					Assembly assembly = assemblies [ i ] ;
 
-					lock (StaticServiceProvider.ServiceCollection)
+					lock ( StaticServiceProvider . ServiceCollection )
 					{
-						assembly.Prepare();
+						assembly . Prepare ( ) ;
 					}
 				}
 
-				StaticServiceProvider.Update();
+				StaticServiceProvider . Update ( ) ;
 			}
 		}
 
