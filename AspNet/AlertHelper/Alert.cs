@@ -2,19 +2,17 @@
 using System . Collections ;
 using System . Collections . Generic ;
 using System . Linq ;
+using System.Runtime.Serialization;
 
 namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 {
-
-	[Serializable]
-	public struct Alert : IEquatable <Alert>
+	public class Alert : IEquatable <Alert>
 	{
+		public BootstrapVariation Variation { get ; set ; }
 
-		public BootstrapVariation Variation { get ; }
+		public bool Dismissible { get ; set; }
 
-		public bool Dismissible { get ; }
-
-		public string Content { get ; }
+		public string Content { get ; set; }
 
 		public Alert ( BootstrapVariation variation , string content , bool dismissible = false )
 		{
@@ -23,6 +21,8 @@ namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 			Dismissible = dismissible ;
 		}
 
+		public Alert ( ) {
+		}
 
 		public bool Equals ( Alert other )
 			=> Variation == other . Variation && Dismissible == other . Dismissible && Content == other . Content ;
