@@ -46,20 +46,7 @@ namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 
 			foreach ( Alert alert in alerts )
 			{
-				if ( alert . Dismissible )
-				{
-					const string dismissible = " alert-dismissible fade show" ;
-					const string button = @"
-                <button type=""button"" class=""close"" data-dismiss=""alert"" aria-label=""Close"">
-                <span aria-hidden=""true"">&times;</span>
-                </button>" ;
-
-					htmlString . AppendLine (
-											$"<div class=\"alert alert-{alert . Variation . ToString ( ) . ToLower ( )}{dismissible}\" role=\"alert\">\n{alert . Content}{button}\n</div>" ) ;
-				}
-
-				htmlString . AppendLine (
-										$"<div class=\"alert alert-{alert . Variation . ToString ( ) . ToLower ( )}\" role=\"alert\">{alert . Content}</div>" ) ;
+				htmlString . AppendLine ( alert . ToHtmlString ( ) ) ;
 			}
 
 			output . TagName = @"div" ;
