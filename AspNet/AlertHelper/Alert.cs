@@ -46,7 +46,7 @@ namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 			}
 
 			return
-				$"<div class=\"alert alert-{Variation . ToString ( ) . ToLower ( )}{dismissible}\" role=\"alert\">\n{Content}{button}\n</div>"
+				$"<div class=\"alert alert-{Variation . ToString ( ) . ToLower ( )}{dismissible}\" role=\"alert\">\n{Content}{button}\n</div>" ;
 		}
 
 		public override bool Equals ( object obj ) => obj is Alert other && Equals ( other ) ;
