@@ -148,6 +148,21 @@ namespace DreamRecorder . ToolBox . CommandLine
 			Console . WriteLine ( ) ;
 		}
 
+		public virtual void RequestExit ( TExitCode programExitCode = default )
+		{
+			if ( CanExit )
+			{
+				Exit ( programExitCode ) ;
+			}
+			else
+			{
+				if ( ! HandleInput )
+				{
+					Console . WriteLine ( "Cannot exit at this time." ) ;
+				}
+			}
+		}
+
 		public abstract void OnExit ( TExitCode code ) ;
 
 		/// <summary>
@@ -160,8 +175,11 @@ namespace DreamRecorder . ToolBox . CommandLine
 			using ( StreamWriter writer = new StreamWriter ( licenseFile ) )
 			{
 				writer . WriteLine ( License ) ;
-				writer . WriteLine ( ) ;
-				writer . WriteLine ( AcceptLicenseGuide ) ;
+				if ( CheckLicense )
+				{
+					writer . WriteLine ( ) ;
+					writer . WriteLine ( AcceptLicenseGuide ) ;
+				}
 			}
 		}
 
@@ -464,14 +482,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 					{
 						if ( ConsoleReader . ReadLine ( 1000 / 60 ) ? . Trim ( ) ? . ToLower ( ) == "exit" )
 						{
-							if ( CanExit )
-							{
-								Exit ( ) ;
-							}
-							else
-							{
-								Console . WriteLine ( "Cannot exit at this time." ) ;
-							}
+							RequestExit ( ) ;
 						}
 					}
 				}
@@ -507,7 +518,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 		{
 			e . Cancel = true ;
 
-			Exit ( ProgramExitCode <TExitCode> . SignalInterrupt ) ;
+			RequestExit ( ProgramExitCode <TExitCode> . SignalInterrupt ) ;
 		}
 
 
