@@ -335,6 +335,8 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 				#region Check License
 
+				BeforeCheckLicense ( ) ;
+
 				if ( CheckLicense )
 				{
 					if ( IsDebug )
@@ -374,76 +376,21 @@ namespace DreamRecorder . ToolBox . CommandLine
 					}
 				}
 
+				AfterCheckLicense ( ) ;
+
 				#endregion
 
 				#region Load Setting
 
-				BeforeLoadSetting ( ) ;
-
-				if ( LoadSetting )
-				{
-					Logger . LogInformation ( "Loading setting file." ) ;
-
-					if ( File . Exists ( SettingFilePathOverride ?? FileNameConst . SettingFilePath ) )
-					{
-						Logger . LogInformation ( "Setting file exists, Reading." ) ;
-
-						try
-						{
-							using ( FileStream stream =
-								File . OpenRead ( SettingFilePathOverride ?? FileNameConst . SettingFilePath ) )
-							{
-								Setting = SettingBase <TSetting , TSettingCategory> . Load ( stream ) ;
-							}
-
-							Logger . LogInformation ( "Setting file loaded." ) ;
-						}
-						catch ( Exception )
-						{
-							Logger . LogInformation ( "Setting file error, will use default value." ) ;
-							Setting = SettingBase <TSetting , TSettingCategory> . GenerateNew ( ) ;
-						}
-					}
-					else
-					{
-						Logger . LogInformation ( "Setting file doesn't exists, generating new." ) ;
-						Setting = SettingBase <TSetting , TSettingCategory> . GenerateNew ( ) ;
-						SaveSettingFile ( ) ;
-					}
-
-					StaticServiceProvider . ServiceCollection . AddSingleton <ISettingProvider> ( Setting ) ;
-				}
-
-				AfterLoadSetting ( ) ;
+				LoadSettings ( ) ;
 
 				#endregion
 
 				#region Load Plugin
 
-				if ( LoadPlugin )
-				{
-					string pluginDirectoryPath = FileNameConst . PluginsFolderPath ;
-
-					Logger . LogInformation ( "Finding plugin directory: {0}" , pluginDirectoryPath ) ;
-
-					if ( Directory . Exists ( pluginDirectoryPath ) )
-					{
-						Logger . LogInformation ( "Found plugin directory." ) ;
-
-						PluginHelper . LoadPlugin ( pluginDirectoryPath , PluginSearchPattern ) ;
-					}
-					else
-					{
-						Logger . LogWarning ( "Cannot found plugin directory." ) ;
-
-						Directory . CreateDirectory ( pluginDirectoryPath ) ;
-
-						Logger . LogInformation ( "Plugin directory created." ) ;
-					}
-				}
+				LoadPlugins ( ) ;
 
 				#endregion
-
 
 				#region StartUp
 
@@ -514,6 +461,76 @@ namespace DreamRecorder . ToolBox . CommandLine
 			}
 		}
 
+		protected void LoadPlugins ( )
+		{
+			BeforeLoadPlugin ( ) ;
+
+			if ( LoadPlugin )
+			{
+				string pluginDirectoryPath = FileNameConst . PluginsFolderPath ;
+
+				Logger . LogInformation ( "Finding plugin directory: {0}" , pluginDirectoryPath ) ;
+
+				if ( Directory . Exists ( pluginDirectoryPath ) )
+				{
+					Logger . LogInformation ( "Found plugin directory." ) ;
+
+					PluginHelper . LoadPlugin ( pluginDirectoryPath , PluginSearchPattern ) ;
+				}
+				else
+				{
+					Logger . LogWarning ( "Cannot found plugin directory." ) ;
+
+					Directory . CreateDirectory ( pluginDirectoryPath ) ;
+
+					Logger . LogInformation ( "Plugin directory created." ) ;
+				}
+			}
+
+			AfterLoadPlugin ( ) ;
+		}
+
+		protected void LoadSettings ( )
+		{
+			BeforeLoadSetting ( ) ;
+
+			if ( LoadSetting )
+			{
+				Logger . LogInformation ( "Loading setting file." ) ;
+
+				if ( File . Exists ( SettingFilePathOverride ?? FileNameConst . SettingFilePath ) )
+				{
+					Logger . LogInformation ( "Setting file exists, Reading." ) ;
+
+					try
+					{
+						using ( FileStream stream =
+							File . OpenRead ( SettingFilePathOverride ?? FileNameConst . SettingFilePath ) )
+						{
+							Setting = SettingBase <TSetting , TSettingCategory> . Load ( stream ) ;
+						}
+
+						Logger . LogInformation ( "Setting file loaded." ) ;
+					}
+					catch ( Exception )
+					{
+						Logger . LogInformation ( "Setting file error, will use default value." ) ;
+						Setting = SettingBase <TSetting , TSettingCategory> . GenerateNew ( ) ;
+					}
+				}
+				else
+				{
+					Logger . LogInformation ( "Setting file doesn't exists, generating new." ) ;
+					Setting = SettingBase <TSetting , TSettingCategory> . GenerateNew ( ) ;
+					SaveSettingFile ( ) ;
+				}
+
+				StaticServiceProvider . ServiceCollection . AddSingleton <ISettingProvider> ( Setting ) ;
+			}
+
+			AfterLoadSetting ( ) ;
+		}
+
 		private void Console_CancelKeyPress ( object sender , ConsoleCancelEventArgs e )
 		{
 			e . Cancel = true ;
@@ -521,6 +538,14 @@ namespace DreamRecorder . ToolBox . CommandLine
 			RequestExit ( ProgramExitCode <TExitCode> . SignalInterrupt ) ;
 		}
 
+
+		protected virtual void BeforeCheckLicense ( ) { }
+
+		protected virtual void AfterLoadPlugin ( ) { }
+
+		protected virtual void BeforeLoadPlugin ( ) { }
+
+		protected virtual void AfterCheckLicense ( ) { }
 
 		protected virtual void BeforeLoadSetting ( ) { }
 

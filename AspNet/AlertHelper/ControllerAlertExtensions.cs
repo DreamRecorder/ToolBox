@@ -5,12 +5,13 @@ using System . IO ;
 using System . Linq ;
 using System . Xml . Serialization ;
 
-using JetBrains.Annotations;
+using JetBrains . Annotations ;
 
 using Microsoft . AspNetCore . Mvc ;
 
 namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 {
+
 	[PublicAPI]
 	public static class ControllerAlertExtensions
 	{
