@@ -421,10 +421,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 				#endregion
 
-				if ( ! HandleInput )
-				{
-					Console . CancelKeyPress += Console_CancelKeyPress ;
-				}
+				Console . CancelKeyPress += Console_CancelKeyPress ;
 
 				try
 				{
@@ -545,13 +542,19 @@ namespace DreamRecorder . ToolBox . CommandLine
 			AfterLoadSetting ( ) ;
 		}
 
+		protected virtual bool ConsoleCancelKeyPress ( )
+		{
+			RequestExit ( ProgramExitCode <TExitCode> . SignalInterrupt ) ;
+
+			return true ;
+		}
+
 		private void Console_CancelKeyPress ( object sender , ConsoleCancelEventArgs e )
 		{
 			e . Cancel = true ;
 
-			RequestExit ( ProgramExitCode <TExitCode> . SignalInterrupt ) ;
+			e . Cancel = ConsoleCancelKeyPress ( ) ;
 		}
-
 
 		protected virtual void BeforeCheckLicense ( ) { }
 
