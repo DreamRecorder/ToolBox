@@ -61,7 +61,17 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 		public abstract bool AutoSaveSetting { get ; }
 
-		public virtual string SettingFilePathOverride => null ;
+		public string SettingFilePath => SettingFilePathOverride ?? FileNameConst . SettingFilePath ;
+
+		public string LicenseFilePath => LicenseFilePathOverride ?? FileNameConst . LicenseFilePath ;
+
+		public string PluginDirectoryPath => PluginDirectoryPathOverride ?? FileNameConst . PluginDirectoryPath ;
+
+		protected virtual string SettingFilePathOverride => null ;
+
+		protected virtual string LicenseFilePathOverride => null ;
+
+		protected virtual string PluginDirectoryPathOverride => null ;
 
 		public virtual string AcceptLicenseDeclare => "I accept this License." ;
 
@@ -78,6 +88,8 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 		public virtual string PluginSearchPattern => "*.dll" ;
 
+		public virtual bool WriteLicenseFile => true ;
+
 		/// <summary>
 		///     This override should create a foreground thread before return or program will exit directly
 		/// </summary>
@@ -91,7 +103,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 		public void SaveSettingFile ( )
 		{
 			string       config      = Setting ? . Save ( ) ;
-			FileStream   settingFile = File . OpenWrite ( SettingFilePathOverride ?? FileNameConst . SettingFilePath ) ;
+			FileStream   settingFile = File . OpenWrite ( SettingFilePath ) ;
 			StreamWriter writer      = new StreamWriter ( settingFile ) ;
 			writer . Write ( config ) ;
 			writer . Dispose ( ) ;
@@ -170,7 +182,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 		public virtual void GenerateLicenseFile ( )
 		{
 			Logger . LogInformation ( "Generating License File." ) ;
-			FileStream licenseFile = File . Open ( FileNameConst . LicenseFilePath , FileMode . Create ) ;
+			FileStream licenseFile = File . Open ( LicenseFilePath , FileMode . Create ) ;
 
 			using ( StreamWriter writer = new StreamWriter ( licenseFile ) )
 			{
@@ -185,7 +197,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 		public virtual bool CheckLicenseFile ( )
 		{
-			if ( ! File . Exists ( FileNameConst . LicenseFilePath ) )
+			if ( ! File . Exists ( LicenseFilePath ) )
 			{
 				Logger . LogInformation ( "License file not found." ) ;
 				GenerateLicenseFile ( ) ;
@@ -193,7 +205,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 				return false ;
 			}
 
-			FileStream licenseFile = File . OpenRead ( FileNameConst . LicenseFilePath ) ;
+			FileStream licenseFile = File . OpenRead ( LicenseFilePath ) ;
 			string     licenseFileContent ;
 
 			using ( StreamReader reader = new StreamReader ( licenseFile ) )
@@ -351,8 +363,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 							if ( ! CheckLicenseFile ( ) )
 							{
 								Logger . LogInformation ( "License check failed." ) ;
-								Logger . LogCritical (
-													$"You should READ and ACCEPT {FileNameConst . LicenseFilePath} first." ) ;
+								Logger . LogCritical ( $"You should READ and ACCEPT {LicenseFilePath} first." ) ;
 
 								Exit ( ProgramExitCode <TExitCode> . LicenseNotAccepted ) ;
 								return ProgramExitCode <TExitCode> . LicenseNotAccepted ;
@@ -368,11 +379,14 @@ namespace DreamRecorder . ToolBox . CommandLine
 				}
 				else
 				{
-					if ( ! File . Exists ( FileNameConst . LicenseFilePath ) )
+					if ( WriteLicenseFile )
 					{
-						Logger . LogInformation (
-												$"You can found license of this program at \"{FileNameConst . LicenseFilePath}\"." ) ;
-						GenerateLicenseFile ( ) ;
+						if ( ! File . Exists ( LicenseFilePath ) )
+						{
+							Logger . LogInformation (
+													$"You can found license of this program at \"{LicenseFilePath}\"." ) ;
+							GenerateLicenseFile ( ) ;
+						}
 					}
 				}
 
@@ -407,7 +421,10 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 				#endregion
 
-				Console . CancelKeyPress += Console_CancelKeyPress ;
+				if ( ! HandleInput )
+				{
+					Console . CancelKeyPress += Console_CancelKeyPress ;
+				}
 
 				try
 				{
@@ -467,21 +484,19 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 			if ( LoadPlugin )
 			{
-				string pluginDirectoryPath = FileNameConst . PluginsFolderPath ;
+				Logger . LogInformation ( "Finding plugin directory: {0}" , PluginDirectoryPath ) ;
 
-				Logger . LogInformation ( "Finding plugin directory: {0}" , pluginDirectoryPath ) ;
-
-				if ( Directory . Exists ( pluginDirectoryPath ) )
+				if ( Directory . Exists ( PluginDirectoryPath ) )
 				{
 					Logger . LogInformation ( "Found plugin directory." ) ;
 
-					PluginHelper . LoadPlugin ( pluginDirectoryPath , PluginSearchPattern ) ;
+					PluginHelper . LoadPlugin ( PluginDirectoryPath , PluginSearchPattern ) ;
 				}
 				else
 				{
 					Logger . LogWarning ( "Cannot found plugin directory." ) ;
 
-					Directory . CreateDirectory ( pluginDirectoryPath ) ;
+					Directory . CreateDirectory ( PluginDirectoryPath ) ;
 
 					Logger . LogInformation ( "Plugin directory created." ) ;
 				}
@@ -498,14 +513,13 @@ namespace DreamRecorder . ToolBox . CommandLine
 			{
 				Logger . LogInformation ( "Loading setting file." ) ;
 
-				if ( File . Exists ( SettingFilePathOverride ?? FileNameConst . SettingFilePath ) )
+				if ( File . Exists ( SettingFilePath ) )
 				{
 					Logger . LogInformation ( "Setting file exists, Reading." ) ;
 
 					try
 					{
-						using ( FileStream stream =
-							File . OpenRead ( SettingFilePathOverride ?? FileNameConst . SettingFilePath ) )
+						using ( FileStream stream = File . OpenRead ( SettingFilePath ) )
 						{
 							Setting = SettingBase <TSetting , TSettingCategory> . Load ( stream ) ;
 						}
