@@ -26,6 +26,22 @@ namespace DreamRecorder . ToolBox . General
 		public static string GetAssemblyFullName ( this Type type )
 			=> type . GetTypeInfo ( ) . Assembly . GetName ( ) . FullName . Replace ( ", " , CommaWithNewline ) ;
 
+		public static string GetAssemblyInfo (
+			[NotNull]
+			this Assembly assembly )
+		{
+			if ( assembly == null )
+			{
+				throw new ArgumentNullException ( nameof ( assembly ) ) ;
+			}
+
+			StringBuilder builder = new StringBuilder ( ) ;
+
+			GetAssemblyInfo ( assembly , builder ) ;
+
+			return builder . ToString ( ) ;
+		}
+
 		public static void GetAssemblyInfo (
 			[NotNull]
 			this Assembly assembly ,
