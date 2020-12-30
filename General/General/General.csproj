@@ -2,49 +2,30 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2020.3.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
-  </ItemGroup>
+		<PackageReference Include="JetBrains.Annotations" Version="2020.3.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Include="..\..\DreamryLogo.png">
-      <Pack>True</Pack>
-      <PackagePath />
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="..\..\DreamryLogo.png">
+			<Pack>True</Pack>
+			<PackagePath />
+		</None>
+	</ItemGroup>
 
-  <PropertyGroup Label="Globals">
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccProjectName>SAK</SccProjectName>
-    <SccProvider>SAK</SccProvider>
-  </PropertyGroup>
+	<PropertyGroup Label="Globals">
+		<SccAuxPath>SAK</SccAuxPath>
+		<SccLocalPath>SAK</SccLocalPath>
+		<SccProjectName>SAK</SccProjectName>
+		<SccProvider>SAK</SccProvider>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <AssemblyName>DreamRecorder.ToolBox.General</AssemblyName>
-    <Authors>Wencey Wang</Authors>
-    <Company>Dream Recorder</Company>
-    <Copyright>Dream Recorder (c) $([System.DateTime]::UtcNow.Year)</Copyright>
-    <Description>Tools for other Dreamry project.</Description>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
-    <IncludeSymbols>true</IncludeSymbols>
-    <InformationalVersion>Code version "$(SourceVersion)" build by "$([System.Environment]::GetEnvironmentVariable("UserDomain"))\$([System.Environment]::GetEnvironmentVariable("UserName"))" at "$([System.DateTime]::UtcNow.ToString())"</InformationalVersion>
-    <LangVersion>latest</LangVersion>
-    <PackageIcon>DreamryLogo.png</PackageIcon>
-    <PackageIconUrl>https://nekomimirouter.com/assets/logo/dreamrylogowithouttext.svg</PackageIconUrl>
-    <PackageId>DreamRecorder.ToolBox</PackageId>
-    <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
-    <PackageProjectUrl>https://vsts.dreamry.org/DefaultCollection/ToolBox</PackageProjectUrl>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <RepositoryType>TFS</RepositoryType>
-    <RepositoryUrl>https://vsts.dreamry.org/DefaultCollection/ToolBox</RepositoryUrl>
-    <RootNamespace>DreamRecorder.ToolBox.General</RootNamespace>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <TargetFramework>net5.0</TargetFramework>
-    <Version>1.1.5.$([MSBuild]::ValueOrDefault('$(SourceVersion)', '0'))</Version>
-  </PropertyGroup>
+	<PropertyGroup>
+		<AssemblyName>DreamRecorder.ToolBox.General</AssemblyName>
+		<Description>Tools for other Dreamry project.</Description>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<RootNamespace>DreamRecorder.ToolBox.General</RootNamespace>
+	</PropertyGroup>
 
 </Project>

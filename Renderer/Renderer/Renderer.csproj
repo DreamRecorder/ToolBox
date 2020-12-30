@@ -1,50 +1,33 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup Label="Globals">
-    <SccProjectName>SAK</SccProjectName>
-    <SccProvider>SAK</SccProvider>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccLocalPath>SAK</SccLocalPath>
-  </PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
+	</ItemGroup>
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <AssemblyName>DreamRecorder.ToolBox.Renderer</AssemblyName>
-    <RootNamespace>DreamRecorder.ToolBox.Renderer</RootNamespace>
-    <PackageId>DreamRecorder.ToolBox.Renderer</PackageId>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <Authors>Wencey Wang</Authors>
-    <Company>Dream Recorder</Company>
-    <Description>Tools for other Dreamry project.</Description>
-    <RepositoryType>TFS</RepositoryType>
-    <RepositoryUrl>https://vsts.dreamry.org/DefaultCollection/ToolBox</RepositoryUrl>
-    <PackageProjectUrl>https://vsts.dreamry.org/DefaultCollection/ToolBox</PackageProjectUrl>
-    <Copyright>Dream Recorder (c) $([System.DateTime]::UtcNow.Year)</Copyright>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.1.5.$([MSBuild]::ValueOrDefault('$(SourceVersion)', '0'))</Version>
-    <InformationalVersion>Code version "$(SourceVersion)" build by "$([System.Environment]::GetEnvironmentVariable("UserDomain"))\$([System.Environment]::GetEnvironmentVariable("UserName"))" at "$([System.DateTime]::UtcNow.ToString())"</InformationalVersion>
-    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
-    <LangVersion>latest</LangVersion>    
-    <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
-    <PackageIconUrl>https://webresources.dreamry.org/DreamryLogo.svg</PackageIconUrl>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <PackageIcon>DreamryLogo.png</PackageIcon>
-  </PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\General\General\General.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="..\..\DreamryLogo.png">
+			<Pack>True</Pack>
+			<PackagePath />
+		</None>
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\General\General\General.csproj" />
-  </ItemGroup>
-    
-  <ItemGroup>
-    <None Include="..\..\DreamryLogo.png">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-  </ItemGroup>
+	<PropertyGroup Label="Globals">
+		<SccAuxPath>SAK</SccAuxPath>
+		<SccLocalPath>SAK</SccLocalPath>
+		<SccProjectName>SAK</SccProjectName>
+		<SccProvider>SAK</SccProvider>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<AssemblyName>DreamRecorder.ToolBox.Renderer</AssemblyName>
+		<Description>Tools for other Dreamry project.</Description>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<RootNamespace>DreamRecorder.ToolBox.Renderer</RootNamespace>
+	</PropertyGroup>
 
 </Project>

@@ -1,21 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup Label="Globals">
-    <SccProjectName>SAK</SccProjectName>
-    <SccProvider>SAK</SccProvider>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccLocalPath>SAK</SccLocalPath>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <IsPackable>false</IsPackable>
-    <AssemblyName>DreamRecorder.ToolBox.UnitTest</AssemblyName>
-    <RootNamespace>DreamRecorder.ToolBox.UnitTest</RootNamespace>
-    <LangVersion>latest</LangVersion>
-  </PropertyGroup>
-
-  <ItemGroup>
+	<ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />
     <PackageReference Include="MSTest.TestFramework" Version="2.1.2" />
@@ -33,5 +19,18 @@
     <ProjectReference Include="..\General\General.csproj" />
     <ProjectReference Include="..\Network\Network.csproj" />
   </ItemGroup>
+
+  <PropertyGroup Label="Globals">
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <AssemblyName>DreamRecorder.ToolBox.UnitTest</AssemblyName>
+    <IsPackable>false</IsPackable>
+    <RootNamespace>DreamRecorder.ToolBox.UnitTest</RootNamespace>
+  </PropertyGroup>
 
 </Project>
