@@ -62,9 +62,15 @@ namespace DreamRecorder . ToolBox . General
 
 			builder . AppendLine ( assembly . GetName ( ) . Version . ToString ( ) ) ;
 
-			builder . AppendLine (
-								assembly . GetCustomAttribute <AssemblyInformationalVersionAttribute> ( ) ? .
-											InformationalVersion ) ;
+			(string SourceCodeVersion , string Builder , DateTimeOffset ? BuildTime) ? informationalVersion =
+				assembly . GetInformationalVersion ( ) ;
+
+			if ( informationalVersion != null )
+			{
+				builder . AppendLine ( $"Code version {informationalVersion ? . SourceCodeVersion}" ) ;
+				builder . AppendLine (
+									$"Built by {informationalVersion ? . Builder} at {informationalVersion ? . BuildTime}" ) ;
+			}
 
 			builder . AppendLine ( assembly . GetCustomAttribute <AssemblyCopyrightAttribute> ( ) ? . Copyright ) ;
 		}
