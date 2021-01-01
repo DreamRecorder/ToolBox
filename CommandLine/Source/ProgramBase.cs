@@ -19,7 +19,17 @@ namespace DreamRecorder . ToolBox . CommandLine
 {
 
 	[PublicAPI]
-	public abstract class ProgramBase <T , TExitCode , TSetting , TSettingCategory>
+	public abstract class ProgramBase
+	{
+
+		public static ProgramBase Current { get ; protected set ; }
+
+		public static T GetCurrent <T> ( ) where T : ProgramBase => ( T ) Current ;
+
+	}
+
+	[PublicAPI]
+	public abstract class ProgramBase <T , TExitCode , TSetting , TSettingCategory> : ProgramBase
 		where T : ProgramBase <T , TExitCode , TSetting , TSettingCategory>
 		where TExitCode : ProgramExitCode <TExitCode> , new ( )
 		where TSetting : SettingBase <TSetting , TSettingCategory> , new ( )

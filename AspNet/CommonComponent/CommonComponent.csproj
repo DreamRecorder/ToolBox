@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\CommandLine\Source\CommandLine.csproj" />
+	</ItemGroup>
+
+	<PropertyGroup Label="Globals">
+		<SccAuxPath>SAK</SccAuxPath>
+		<SccLocalPath>SAK</SccLocalPath>
+		<SccProjectName>SAK</SccProjectName>
+		<SccProvider>SAK</SccProvider>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+		<AssemblyName>DreamRecorder.ToolBox.AspNet.CommonComponent</AssemblyName>
+		<Description>Tools for other Dreamry project.</Description>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<RootNamespace>DreamRecorder.ToolBox.AspNet.CommonComponent</RootNamespace>
+	</PropertyGroup>
+
+</Project>

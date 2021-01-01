@@ -33,6 +33,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Uwp", "Uwp", "{B6CF0279-804
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "General", "AspNet\General\General.csproj", "{84C875D6-44F1-4BCB-8253-B8BF7D0761E5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonComponent", "AspNet\CommonComponent\CommonComponent.csproj", "{CAE62F7C-D98F-4B50-8D39-83B81DE74011}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -267,6 +269,26 @@ Global
 		{84C875D6-44F1-4BCB-8253-B8BF7D0761E5}.Release|x64.Build.0 = Release|Any CPU
 		{84C875D6-44F1-4BCB-8253-B8BF7D0761E5}.Release|x86.ActiveCfg = Release|Any CPU
 		{84C875D6-44F1-4BCB-8253-B8BF7D0761E5}.Release|x86.Build.0 = Release|Any CPU
+		{CAE62F7C-D98F-4B50-8D39-83B81DE74011}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAE62F7C-D98F-4B50-8D39-83B81DE74011}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAE62F7C-D98F-4B50-8D39-83B81DE74011}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{CAE62F7C-D98F-4B50-8D39-83B81DE74011}.Debug|ARM.Build.0 = Debug|Any CPU
+		{CAE62F7C-D98F-4B50-8D39-83B81DE74011}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{CAE62F7C-D98F-4B50-8D39-83B81DE74011}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{CAE62F7C-D98F-4B50-8D39-83B81DE74011}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CAE62F7C-D98F-4B50-8D39-83B81DE74011}.Debug|x64.Build.0 = Debug|Any CPU
+		{CAE62F7C-D98F-4B50-8D39-83B81DE74011}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CAE62F7C-D98F-4B50-8D39-83B81DE74011}.Debug|x86.Build.0 = Debug|Any CPU
+		{CAE62F7C-D98F-4B50-8D39-83B81DE74011}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAE62F7C-D98F-4B50-8D39-83B81DE74011}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAE62F7C-D98F-4B50-8D39-83B81DE74011}.Release|ARM.ActiveCfg = Release|Any CPU
+		{CAE62F7C-D98F-4B50-8D39-83B81DE74011}.Release|ARM.Build.0 = Release|Any CPU
+		{CAE62F7C-D98F-4B50-8D39-83B81DE74011}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{CAE62F7C-D98F-4B50-8D39-83B81DE74011}.Release|ARM64.Build.0 = Release|Any CPU
+		{CAE62F7C-D98F-4B50-8D39-83B81DE74011}.Release|x64.ActiveCfg = Release|Any CPU
+		{CAE62F7C-D98F-4B50-8D39-83B81DE74011}.Release|x64.Build.0 = Release|Any CPU
+		{CAE62F7C-D98F-4B50-8D39-83B81DE74011}.Release|x86.ActiveCfg = Release|Any CPU
+		{CAE62F7C-D98F-4B50-8D39-83B81DE74011}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -283,12 +305,13 @@ Global
 		{81034245-174A-4A04-81D7-5998E1F9294A} = {6ECFB2DA-3E6D-42A2-AE16-BC0D5B3DF2EE}
 		{93A5369C-01A5-4AE8-BFA1-1869F61D8CF5} = {6ECFB2DA-3E6D-42A2-AE16-BC0D5B3DF2EE}
 		{84C875D6-44F1-4BCB-8253-B8BF7D0761E5} = {6ECFB2DA-3E6D-42A2-AE16-BC0D5B3DF2EE}
+		{CAE62F7C-D98F-4B50-8D39-83B81DE74011} = {6ECFB2DA-3E6D-42A2-AE16-BC0D5B3DF2EE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {14DAB56C-F500-45EE-8A65-CFA2C12B509D}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 12
+		SccNumberOfProjects = 13
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://vsts.dreamry.org/defaultcollection
 		SccLocalPath0 = .
@@ -336,5 +359,9 @@ Global
 		SccProjectTopLevelParentUniqueName11 = ToolBox.sln
 		SccProjectName11 = AspNet/General
 		SccLocalPath11 = AspNet\\General
+		SccProjectUniqueName12 = AspNet\\CommonComponent\\CommonComponent.csproj
+		SccProjectTopLevelParentUniqueName12 = ToolBox.sln
+		SccProjectName12 = AspNet/CommonComponent
+		SccLocalPath12 = AspNet\\CommonComponent
 	EndGlobalSection
 EndGlobal
