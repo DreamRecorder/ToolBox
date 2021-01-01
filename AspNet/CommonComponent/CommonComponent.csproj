@@ -9,6 +9,13 @@
 		<ProjectReference Include="..\..\CommandLine\Source\CommandLine.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<None Include="..\..\DreamryLogo.png" >
+			<Pack>True</Pack>
+			<PackagePath />
+		</None>
+	</ItemGroup>
+
 	<PropertyGroup Label="Globals">
 		<SccAuxPath>SAK</SccAuxPath>
 		<SccLocalPath>SAK</SccLocalPath>
