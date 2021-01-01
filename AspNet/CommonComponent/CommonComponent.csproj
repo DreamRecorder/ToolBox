@@ -10,7 +10,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="..\..\DreamryLogo.png" >
+		<None Include="..\..\DreamryLogo.png">
 			<Pack>True</Pack>
 			<PackagePath />
 		</None>
