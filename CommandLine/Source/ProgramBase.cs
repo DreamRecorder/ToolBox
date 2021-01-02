@@ -24,8 +24,6 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 		public static ProgramBase Current { get ; protected set ; }
 
-		public static T GetCurrent <T> ( ) where T : ProgramBase => ( T ) Current ;
-
 	}
 
 	[PublicAPI]
@@ -44,7 +42,11 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 		protected ILogger Logger { get ; private set ; }
 
-		public static T Current { get ; private set ; }
+		public new static T Current
+		{
+			get => ( T ) ProgramBase . Current ;
+			private set => ProgramBase . Current = value ;
+		}
 
 		public virtual bool IsRunning { get => _isRunning ; private set => _isRunning = value ; }
 

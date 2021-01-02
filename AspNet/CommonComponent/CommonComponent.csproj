@@ -28,8 +28,8 @@
 		<AssemblyName>DreamRecorder.ToolBox.AspNet.CommonComponent</AssemblyName>
 		<Description>Tools for other Dreamry project.</Description>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<RootNamespace>DreamRecorder.ToolBox.AspNet.CommonComponent</RootNamespace>
 		<IncludeRazorContentInPack>true</IncludeRazorContentInPack>
+		<RootNamespace>DreamRecorder.ToolBox.AspNet.CommonComponent</RootNamespace>
 	</PropertyGroup>
 
 </Project>
