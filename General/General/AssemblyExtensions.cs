@@ -175,9 +175,7 @@ namespace DreamRecorder . ToolBox . General
 				if ( match . Success )
 				{
 					return ( match . Groups [ 1 ] . Value , match . Groups [ 2 ] . Value ,
-								new DateTimeOffset (
-													DateTime . Parse ( match . Groups [ 3 ] . Value ) ,
-													TimeSpan . Zero ) ) ;
+								DateTimeOffset . Parse ( match . Groups [ 3 ] . Value ) ) ;
 				}
 			}
 
