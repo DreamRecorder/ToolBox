@@ -121,9 +121,17 @@ namespace DreamRecorder . ToolBox . CommandLine
 			writer . Dispose ( ) ;
 		}
 
-		public virtual bool OnStartupExceptions ( Exception e ) => false ;
+		public virtual bool OnStartupExceptions ( Exception e )
+		{
+			Logger . LogCritical ( e , "Application failed to start." ) ;
+			return false ;
+		}
 
-		public virtual bool OnUnhandledExceptions ( Exception e ) => false ;
+		public virtual bool OnUnhandledExceptions ( Exception e )
+		{
+			Logger . LogCritical ( e , "Exception is unhandled." ) ;
+			return false ;
+		}
 
 		public void Exit ( TExitCode exitCode = null )
 		{
