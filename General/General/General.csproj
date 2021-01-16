@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
-<Project Sdk="Microsoft.NET.Sdk" >
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<ItemGroup>
 		<PackageReference Include="JetBrains.Annotations" Version="2020.3.0" />
@@ -9,13 +9,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="..\..\DreamryLogo.png" >
+		<None Include="..\..\DreamryLogo.png">
 			<Pack>True</Pack>
 			<PackagePath />
 		</None>
 	</ItemGroup>
 
-	<PropertyGroup Label="Globals" >
+	<PropertyGroup Label="Globals">
 		<SccAuxPath>SAK</SccAuxPath>
 		<SccLocalPath>SAK</SccLocalPath>
 		<SccProjectName>SAK</SccProjectName>
@@ -26,6 +26,7 @@
 		<AssemblyName>DreamRecorder.ToolBox.General</AssemblyName>
 		<Description>Tools for other Dreamry project.</Description>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageId>DreamRecorder.ToolBox</PackageId>
 		<RootNamespace>DreamRecorder.ToolBox.General</RootNamespace>
 	</PropertyGroup>
 
