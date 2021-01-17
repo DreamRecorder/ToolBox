@@ -7,7 +7,7 @@ using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-using JetBrains . Annotations ;
+using JetBrains.Annotations;
 
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
@@ -29,6 +29,7 @@ namespace DreamRecorder.ToolBox.AspNet.RequestHelper
 
 		Task<string> GetFileUrl(string packageName, string fileName);
 
+		Task ClearCache ( ) ;
 
 	}
 
@@ -36,57 +37,65 @@ namespace DreamRecorder.ToolBox.AspNet.RequestHelper
 	{
 		private WebClient CurrentClient { get; } = new WebClient();
 
-		public static ConcurrentDictionary <string , string> PackageVersions { get ; set ; }
+		public static ConcurrentDictionary<string, string> PackageVersions { get; set; }
+
 
 		public async Task<string> GetPackageVersion(
 			[NotNull]
 			string packageName)
 		{
-			if ( packageName == null )
+			if (packageName == null)
 			{
-				throw new ArgumentNullException ( nameof ( packageName ) ) ;
+				throw new ArgumentNullException(nameof(packageName));
 			}
 
-			if ( PackageVersions.TryGetValue(packageName,out string version) )
+			if (PackageVersions.TryGetValue(packageName, out string version))
 			{
-				return version ;
+				return version;
 			}
 			else
 			{
 				dynamic apiQuery = JsonConvert.DeserializeObject(await CurrentClient.DownloadStringTaskAsync($"https://api.cdnjs.com/libraries/{packageName}?fields=version"));
 
-				version = apiQuery . version ;
+				version = apiQuery.version;
 
-				if ( string.IsNullOrWhiteSpace(version) )
+				if (string.IsNullOrWhiteSpace(version))
 				{
-					throw new Exception();
+					throw new Exception("Parse API error");
 				}
 
-				PackageVersions . TryAdd ( packageName , version ) ;
+				PackageVersions.TryAdd(packageName, version);
 
 				return version;
 			}
-			
+
 		}
 
-		public Task <string> GetFileUrl (
+		public async Task<string> GetFileUrl(
 			[NotNull]
-			string packageName ,
+			string packageName,
 			[NotNull]
-			string fileName )
+			string fileName)
 		{
-			if ( packageName == null )
+			if (packageName == null)
 			{
-				throw new ArgumentNullException ( nameof ( packageName ) ) ;
+				throw new ArgumentNullException(nameof(packageName));
 			}
 
-			if ( fileName == null )
+			if (fileName == null)
 			{
-				throw new ArgumentNullException ( nameof ( fileName ) ) ;
+				throw new ArgumentNullException(nameof(fileName));
 			}
 
+			while ((await GetPackageVersion(packageName)) is string version)
+			{
+				return $"https://cdnjs.cloudflare.com/ajax/libs/{packageName}/{version}/{fileName}";
+			}
 
+			throw new Exception();
 		}
+
+		public async Task ClearCache ( ) => PackageVersions . Clear ( ) ;
 
 	}
 
