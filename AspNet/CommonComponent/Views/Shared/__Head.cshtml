@@ -1,0 +1,13 @@
+﻿@using DreamRecorder.ToolBox.General;
+@using DreamRecorder.ToolBox.AspNet.General;
+@using DreamRecorder.ToolBox.CommandLine;
+
+@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>@ViewData["Title"] - @(ProgramBase.Current.GetType().Assembly.GetWebTitle())</title>
+	<partial name="_Headers" />
+	<partial name="_StyleSheets" />
+</head>

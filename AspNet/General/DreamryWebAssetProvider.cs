@@ -1,10 +1,10 @@
 ﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
-using System . Threading . Tasks ;
+using System.Collections ;
+using System.Collections.Generic ;
+using System.Linq ;
+using System.Threading.Tasks ;
 
-namespace DreamRecorder . ToolBox . AspNet . RequestHelper
+namespace DreamRecorder . ToolBox . AspNet . General
 {
 
 	public class DreamryWebAssetProvider : IWebAssetProvider

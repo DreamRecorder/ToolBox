@@ -1,12 +1,12 @@
 ﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
-using System . Threading . Tasks ;
+using System.Collections ;
+using System.Collections.Generic ;
+using System.Linq ;
+using System.Threading.Tasks ;
 
-using Microsoft . AspNetCore . Razor . TagHelpers ;
+using Microsoft.AspNetCore.Razor.TagHelpers ;
 
-namespace DreamRecorder . ToolBox . AspNet . RequestHelper
+namespace DreamRecorder . ToolBox . AspNet . General
 {
 
 	[HtmlTargetElement ( Stylesheet )]
@@ -14,7 +14,7 @@ namespace DreamRecorder . ToolBox . AspNet . RequestHelper
 	public class ExternalAssetTagHelper : TagHelper
 	{
 
-		public IWebAssetProvider WebAssetProvider { get ; set ; }
+		public IWebAssetProvider WebAssetProvider { get ; }
 
 		public string PackageName { get ; set ; }
 

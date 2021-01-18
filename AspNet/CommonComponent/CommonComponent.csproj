@@ -7,6 +7,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\CommandLine\Source\CommandLine.csproj" />
+		<ProjectReference Include="..\General\General.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

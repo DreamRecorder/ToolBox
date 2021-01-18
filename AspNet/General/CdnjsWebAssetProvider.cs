@@ -1,17 +1,46 @@
 ﻿using System ;
-using System . Collections ;
-using System . Collections . Concurrent ;
-using System . Collections . Generic ;
-using System . Linq ;
-using System . Net ;
-using System . Threading . Tasks ;
+using System.Collections ;
+using System.Collections.Concurrent ;
+using System.Collections.Generic ;
+using System.Linq ;
+using System.Net ;
+using System . Reflection ;
+using System.Threading.Tasks ;
 
-using JetBrains . Annotations ;
+using JetBrains.Annotations ;
 
-using Newtonsoft . Json ;
+using Newtonsoft.Json ;
 
-namespace DreamRecorder . ToolBox . AspNet . RequestHelper
+namespace DreamRecorder . ToolBox . AspNet . General
 {
+	[AttributeUsage( AttributeTargets.Assembly)]
+	public sealed class WebTitleAttribute : Attribute
+	{
+
+		public string Name { get; }
+
+		public WebTitleAttribute(string name) => Name = name;
+
+	}
+
+	[PublicAPI]
+	public static class AssemblyExtensions
+	{
+
+		public static string GetWebTitle(
+			[NotNull]
+			this Assembly assembly)
+		{
+			if (assembly == null)
+			{
+				throw new ArgumentNullException(nameof(assembly));
+			}
+
+			WebTitleAttribute attribute = assembly.GetCustomAttribute<WebTitleAttribute>();
+
+			return attribute?.Name ?? assembly.GetName().Name;
+		}
+	}
 
 	public class CdnjsWebAssetProvider : IWebAssetProvider
 	{
