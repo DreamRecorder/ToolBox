@@ -13,11 +13,14 @@ namespace DreamRecorder . ToolBox . AspNet . RequestHelper
 	[HtmlTargetElement ( Script )]
 	public class ExternalAssetTagHelper : TagHelper
 	{
+
 		public IWebAssetProvider WebAssetProvider { get ; set ; }
 
 		public string PackageName { get ; set ; }
 
 		public string FileName { get ; set ; }
+
+		public ExternalAssetTagHelper ( IWebAssetProvider webAssetProvider ) => WebAssetProvider = webAssetProvider ;
 
 		public const string Stylesheet = "stylesheet" ;
 
@@ -39,13 +42,13 @@ namespace DreamRecorder . ToolBox . AspNet . RequestHelper
 				{
 					output . TagName = "link" ;
 					output . TagMode = TagMode . SelfClosing ;
-					output . Attributes . SetAttribute ( "rel" ,  "stylesheet" ) ;
+					output . Attributes . SetAttribute ( "rel" ,  Stylesheet ) ;
 					output . Attributes . SetAttribute ( "href" , uri ) ;
 					break ;
 				}
 				case Script :
 				{
-					output . TagName = "script" ;
+					output . TagName = Script ;
 					output . TagMode = TagMode . StartTagAndEndTag ;
 					output . Attributes . SetAttribute ( "src" , uri ) ;
 					break ;
