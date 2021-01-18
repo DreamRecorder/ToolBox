@@ -13,7 +13,6 @@ namespace DreamRecorder . ToolBox . AspNet . RequestHelper
 	[HtmlTargetElement ( Script )]
 	public class ExternalAssetTagHelper : TagHelper
 	{
-
 		public IWebAssetProvider WebAssetProvider { get ; set ; }
 
 		public string PackageName { get ; set ; }
@@ -26,6 +25,12 @@ namespace DreamRecorder . ToolBox . AspNet . RequestHelper
 
 		public override async Task ProcessAsync ( TagHelperContext context , TagHelperOutput output )
 		{
+			if ( PackageName == null
+				|| FileName  == null )
+			{
+				return ;
+			}
+
 			string uri = await WebAssetProvider . GetFileUrl ( PackageName , FileName ) ;
 
 			switch ( context . TagName )
@@ -41,6 +46,7 @@ namespace DreamRecorder . ToolBox . AspNet . RequestHelper
 				case Script :
 				{
 					output . TagName = "script" ;
+					output . TagMode = TagMode . StartTagAndEndTag ;
 					output . Attributes . SetAttribute ( "src" , uri ) ;
 					break ;
 				}
