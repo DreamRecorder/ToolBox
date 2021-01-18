@@ -18,7 +18,8 @@ namespace DreamRecorder . ToolBox . AspNet . RequestHelper
 
 		private WebClient CurrentClient { get ; } = new WebClient ( ) ;
 
-		public static ConcurrentDictionary <string , string> PackageVersions { get ; set ; }
+		public static ConcurrentDictionary <string , string> PackageVersions { get ; set ; } =
+			new ConcurrentDictionary <string , string> ( ) ;
 
 
 		public async Task <string> GetPackageVersion (

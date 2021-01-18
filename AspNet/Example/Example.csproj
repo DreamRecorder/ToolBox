@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup Label="Globals">
+		<SccProjectName>SAK</SccProjectName>
+		<SccProvider>SAK</SccProvider>
+		<SccAuxPath>SAK</SccAuxPath>
+		<SccLocalPath>SAK</SccLocalPath>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<AssemblyName>DreamRecorder.ToolBox.AspNet.Example</AssemblyName>
+		<Description>Tools for other Dreamry project.</Description>
+		<RootNamespace>DreamRecorder.ToolBox.AspNet.Example</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\CommandLine\Source\CommandLine.csproj" />
+	  <ProjectReference Include="..\CommonComponent\CommonComponent.csproj" />
+	  <ProjectReference Include="..\RequestHelper\RequestHelper.csproj" />
+	</ItemGroup>
+
+</Project>

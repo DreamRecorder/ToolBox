@@ -1,29 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk">
+
+<Project Sdk="Microsoft.NET.Sdk" >
 
 	<ItemGroup>
-    <ProjectReference Include="..\General\General.csproj" />
-  </ItemGroup>
+		<ProjectReference Include="..\General\General.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Include="..\..\DreamryLogo.png">
-      <Pack>True</Pack>
-      <PackagePath />
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="..\..\DreamryLogo.png" >
+			<Pack>True</Pack>
+			<PackagePath />
+		</None>
+	</ItemGroup>
 
-  <PropertyGroup Label="Globals">
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccProjectName>SAK</SccProjectName>
-    <SccProvider>SAK</SccProvider>
-  </PropertyGroup>
+	<PropertyGroup Label="Globals" >
+		<SccAuxPath>SAK</SccAuxPath>
+		<SccLocalPath>SAK</SccLocalPath>
+		<SccProjectName>SAK</SccProjectName>
+		<SccProvider>SAK</SccProvider>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <AssemblyName>DreamRecorder.ToolBox.AspNet.RequestHelper</AssemblyName>
-	<Description>Tools for other Dreamry project.</Description>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-	<RootNamespace>DreamRecorder.ToolBox.AspNet.RequestHelper</RootNamespace>
-</PropertyGroup>
+	<PropertyGroup>
+		<AssemblyName>DreamRecorder.ToolBox.AspNet.RequestHelper</AssemblyName>
+		<Description>Tools for other Dreamry project.</Description>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<RootNamespace>DreamRecorder.ToolBox.AspNet.RequestHelper</RootNamespace>
+	</PropertyGroup>
 
 </Project>

@@ -7,14 +7,15 @@ using System . Threading . Tasks ;
 namespace DreamRecorder . ToolBox . AspNet . RequestHelper
 {
 
-	public class DreamryWebAssetProvider:IWebAssetProvider
+	public class DreamryWebAssetProvider : IWebAssetProvider
 	{
 
-		public async Task <string> GetPackageVersion ( string packageName ) => string.Empty ;
+		public async Task <string> GetPackageVersion ( string packageName ) => string . Empty ;
 
-		public async Task <string> GetFileUrl ( string packageName , string fileName ) => $"https://webresources.dreamry.org/lib/{packageName}/{fileName}";
+		public async Task <string> GetFileUrl ( string packageName , string fileName )
+			=> $"https://webresources.dreamry.org/lib/{packageName}/{fileName}" ;
 
-		public async Task ClearCache ( ) {  }
+		public async Task ClearCache ( ) { }
 
 	}
 
