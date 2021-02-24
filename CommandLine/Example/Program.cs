@@ -56,6 +56,10 @@ namespace DreamRecorder . ToolBox . CommandLine . Example
 
 		public override void Start ( string [ ] args )
 		{
+			PerformanceCounterProvider provider = new PerformanceCounterProvider ( ) ;
+
+			provider . GetPerformanceCounter ( "a" ) ;
+
 			(string SourceCodeVersion , string Builder , DateTimeOffset ? BuildTime) ? a =
 				typeof ( ProgramBase <Program , ProgramExitCode , ProgramSetting , ProgramSettingCatalog> ) . Assembly .
 					GetInformationalVersion ( ) ;
@@ -96,7 +100,7 @@ namespace DreamRecorder . ToolBox . CommandLine . Example
 
 		public override void ShowCopyright ( ) { Console . WriteLine ( "Copyright" ) ; }
 
-		public override void OnExit ( ProgramExitCode code ) { Dispatcher . Stop ( ) ; }
+		public override void OnExit ( ProgramExitCode code ) { Dispatcher ?. Stop ( ) ; }
 
 	}
 
