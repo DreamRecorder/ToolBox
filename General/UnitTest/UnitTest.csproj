@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
-<Project Sdk="Microsoft.NET.Sdk" >
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
-		<PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />
-		<PackageReference Include="MSTest.TestFramework" Version="2.1.2" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
+		<PackageReference Include="MSTest.TestAdapter" Version="2.2.3" />
+		<PackageReference Include="MSTest.TestFramework" Version="2.2.3" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -21,7 +21,7 @@
 		<ProjectReference Include="..\Network\Network.csproj" />
 	</ItemGroup>
 
-	<PropertyGroup Label="Globals" >
+	<PropertyGroup Label="Globals">
 		<SccAuxPath>SAK</SccAuxPath>
 		<SccLocalPath>SAK</SccLocalPath>
 		<SccProjectName>SAK</SccProjectName>

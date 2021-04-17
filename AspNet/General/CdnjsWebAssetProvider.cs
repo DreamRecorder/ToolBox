@@ -1,45 +1,50 @@
 ﻿using System ;
-using System.Collections ;
-using System.Collections.Concurrent ;
-using System.Collections.Generic ;
-using System.Linq ;
-using System.Net ;
+using System . Collections ;
+using System . Collections . Concurrent ;
+using System . Collections . Generic ;
+using System . Linq ;
+using System . Net ;
 using System . Reflection ;
-using System.Threading.Tasks ;
+using System . Threading . Tasks ;
 
-using JetBrains.Annotations ;
+using DreamRecorder . ToolBox . General ;
 
-using Newtonsoft.Json ;
+using JetBrains . Annotations ;
+
+using Newtonsoft . Json ;
 
 namespace DreamRecorder . ToolBox . AspNet . General
 {
-	[AttributeUsage( AttributeTargets.Assembly)]
+
+	[AttributeUsage ( AttributeTargets . Assembly )]
 	public sealed class WebTitleAttribute : Attribute
 	{
 
-		public string Name { get; }
+		public string Name { get ; }
 
-		public WebTitleAttribute(string name) => Name = name;
+		public WebTitleAttribute ( string name ) => Name = name ;
 
 	}
+
 
 	[PublicAPI]
 	public static class AssemblyExtensions
 	{
 
-		public static string GetWebTitle(
+		public static string GetWebTitle (
 			[NotNull]
-			this Assembly assembly)
+			this Assembly assembly )
 		{
-			if (assembly == null)
+			if ( assembly == null )
 			{
-				throw new ArgumentNullException(nameof(assembly));
+				throw new ArgumentNullException ( nameof ( assembly ) ) ;
 			}
 
-			WebTitleAttribute attribute = assembly.GetCustomAttribute<WebTitleAttribute>();
+			WebTitleAttribute attribute = assembly . GetCustomAttribute <WebTitleAttribute> ( ) ;
 
-			return attribute?.Name ?? assembly.GetName().Name;
+			return attribute ? . Name ?? assembly . GetDisplayName ( ) ;
 		}
+
 	}
 
 	public class CdnjsWebAssetProvider : IWebAssetProvider

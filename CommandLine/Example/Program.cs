@@ -100,7 +100,7 @@ namespace DreamRecorder . ToolBox . CommandLine . Example
 
 		public override void ShowCopyright ( ) { Console . WriteLine ( "Copyright" ) ; }
 
-		public override void OnExit ( ProgramExitCode code ) { Dispatcher ?. Stop ( ) ; }
+		public override void OnExit ( ProgramExitCode code ) { Dispatcher ? . Stop ( ) ; }
 
 	}
 

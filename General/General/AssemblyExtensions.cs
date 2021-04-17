@@ -13,6 +13,31 @@ using JetBrains . Annotations ;
 namespace DreamRecorder . ToolBox . General
 {
 
+	[AttributeUsage ( AttributeTargets . Assembly )]
+	public sealed class ApplicationDisplayNameAttribute : Attribute
+	{
+
+		public string Name { get ; }
+
+		public ApplicationDisplayNameAttribute ( string name ) => Name = name ;
+
+	}
+
+	[PublicAPI]
+	public static class ProgramExtensions
+	{
+
+		public static string GetProgramName ( )
+		{
+			return Assembly . GetEntryAssembly ( ) ? . GetProgramName ( )
+					?? AppDomain . CurrentDomain . GetAssemblies ( ) .
+									Select ( ass => ass . GetProgramName ( ) ) .
+									FirstOrDefault ( name => name != null )
+					?? Assembly . GetEntryAssembly ( ) ? . GetDisplayName ( ) ;
+		}
+
+	}
+
 	[PublicAPI]
 	public static class AssemblyExtensions
 	{
@@ -60,7 +85,11 @@ namespace DreamRecorder . ToolBox . General
 
 			builder . AppendLine ( assembly . GetName ( ) . Name ) ;
 
-			builder . AppendLine ( assembly . GetName ( ) . Version . ToString ( ) ) ;
+			Version version = assembly . GetName ( ) . Version ;
+			if ( version is not null )
+			{
+				builder . AppendLine ( version . ToString ( ) ) ;
+			}
 
 			(string SourceCodeVersion , string Builder , DateTimeOffset ? BuildTime) ? informationalVersion =
 				assembly . GetInformationalVersion ( ) ;
@@ -132,6 +161,22 @@ namespace DreamRecorder . ToolBox . General
 			AssemblyDisplayNameAttribute attribute = assembly . GetCustomAttribute <AssemblyDisplayNameAttribute> ( ) ;
 
 			return attribute ? . Name ?? assembly . GetName ( ) . Name ;
+		}
+
+		[CanBeNull]
+		public static string GetProgramName (
+			[NotNull]
+			this Assembly assembly )
+		{
+			if ( assembly == null )
+			{
+				throw new ArgumentNullException ( nameof ( assembly ) ) ;
+			}
+
+			ApplicationDisplayNameAttribute attribute =
+				assembly . GetCustomAttribute <ApplicationDisplayNameAttribute> ( ) ;
+
+			return attribute ? . Name ;
 		}
 
 		public static Guid ? GetGuid (

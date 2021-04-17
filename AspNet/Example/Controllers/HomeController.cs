@@ -1,39 +1,32 @@
 ﻿using System ;
-using System.Collections ;
-using System.Collections.Generic ;
-using System.Diagnostics ;
-using System.Linq ;
+using System . Collections ;
+using System . Collections . Generic ;
+using System . Diagnostics ;
+using System . Linq ;
 
 using DreamRecorder . ToolBox . AspNet . Example . Models ;
 
-using Microsoft.AspNetCore.Mvc ;
-using Microsoft.Extensions.Logging ;
+using Microsoft . AspNetCore . Mvc ;
+using Microsoft . Extensions . Logging ;
 
-namespace DreamRecorder . ToolBox . AspNet . Example .Controllers
+namespace DreamRecorder . ToolBox . AspNet . Example . Controllers
 {
+
 	public class HomeController : Controller
 	{
-		private readonly ILogger<HomeController> _logger;
 
-		public HomeController(ILogger<HomeController> logger)
-		{
-			_logger = logger;
-		}
+		private readonly ILogger <HomeController> _logger ;
 
-		public IActionResult Index()
-		{
-			return View();
-		}
+		public HomeController ( ILogger <HomeController> logger ) => _logger = logger ;
 
-		public IActionResult Privacy()
-		{
-			return View();
-		}
+		public IActionResult Index ( ) => View ( ) ;
 
-		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-		public IActionResult Error()
-		{
-			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-		}
+		public IActionResult Privacy ( ) => View ( ) ;
+
+		[ResponseCache ( Duration = 0 , Location = ResponseCacheLocation . None , NoStore = true )]
+		public IActionResult Error ( )
+			=> View ( new ErrorViewModel { RequestId = Activity . Current ? . Id ?? HttpContext . TraceIdentifier } ) ;
+
 	}
+
 }
