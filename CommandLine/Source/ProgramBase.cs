@@ -102,6 +102,8 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 		public virtual bool WriteLicenseFile => true ;
 
+		public virtual bool ThrowOnUnexpectedArg => false ;
+
 		/// <summary>
 		///     This override should create a foreground thread before return or program will exit directly
 		/// </summary>
@@ -294,7 +296,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 		{
 			Current = ( T ) this ;
 
-			CommandLineApplication = new CommandLineApplication ( ) ;
+			CommandLineApplication = new CommandLineApplication ( ThrowOnUnexpectedArg ) ;
 
 			CommandLineApplication . HelpOption ( "-?|-h|--help|-help" ) ;
 
