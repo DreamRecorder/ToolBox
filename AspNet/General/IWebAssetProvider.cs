@@ -12,7 +12,7 @@ namespace DreamRecorder . ToolBox . AspNet . General
 
 		Task <string> GetPackageVersion ( string packageName ) ;
 
-		Task <string> GetFileUrl ( string packageName , string fileName ) ;
+		Task <string> GetFileUrl ( string packageName , string fileName ,string version) ;
 
 		Task ClearCache ( ) ;
 

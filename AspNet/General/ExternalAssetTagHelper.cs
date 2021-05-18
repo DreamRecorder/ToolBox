@@ -20,6 +20,8 @@ namespace DreamRecorder . ToolBox . AspNet . General
 
 		public string FileName { get ; set ; }
 
+		public string Version{ get; set; }
+
 		public ExternalAssetTagHelper ( IWebAssetProvider webAssetProvider ) => WebAssetProvider = webAssetProvider ;
 
 		public const string Stylesheet = "stylesheet" ;
@@ -34,7 +36,7 @@ namespace DreamRecorder . ToolBox . AspNet . General
 				return ;
 			}
 
-			string uri = await WebAssetProvider . GetFileUrl ( PackageName , FileName ) ;
+			string uri = await WebAssetProvider . GetFileUrl ( PackageName , FileName,Version ) ;
 
 			switch ( context . TagName )
 			{

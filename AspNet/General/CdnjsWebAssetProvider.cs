@@ -4,10 +4,7 @@ using System . Collections . Concurrent ;
 using System . Collections . Generic ;
 using System . Linq ;
 using System . Net ;
-using System . Reflection ;
 using System . Threading . Tasks ;
-
-using DreamRecorder . ToolBox . General ;
 
 using JetBrains . Annotations ;
 
@@ -15,37 +12,6 @@ using Newtonsoft . Json ;
 
 namespace DreamRecorder . ToolBox . AspNet . General
 {
-
-	[AttributeUsage ( AttributeTargets . Assembly )]
-	public sealed class WebTitleAttribute : Attribute
-	{
-
-		public string Name { get ; }
-
-		public WebTitleAttribute ( string name ) => Name = name ;
-
-	}
-
-
-	[PublicAPI]
-	public static class AssemblyExtensions
-	{
-
-		public static string GetWebTitle (
-			[NotNull]
-			this Assembly assembly )
-		{
-			if ( assembly == null )
-			{
-				throw new ArgumentNullException ( nameof ( assembly ) ) ;
-			}
-
-			WebTitleAttribute attribute = assembly . GetCustomAttribute <WebTitleAttribute> ( ) ;
-
-			return attribute ? . Name ?? assembly . GetDisplayName ( ) ;
-		}
-
-	}
 
 	public class CdnjsWebAssetProvider : IWebAssetProvider
 	{
@@ -92,7 +58,7 @@ namespace DreamRecorder . ToolBox . AspNet . General
 			[NotNull]
 			string packageName ,
 			[NotNull]
-			string fileName )
+			string fileName ,string version)
 		{
 			if ( packageName == null )
 			{
@@ -104,7 +70,9 @@ namespace DreamRecorder . ToolBox . AspNet . General
 				throw new ArgumentNullException ( nameof ( fileName ) ) ;
 			}
 
-			while ( ( await GetPackageVersion ( packageName ) ) is string version )
+			version ??= ( await GetPackageVersion ( packageName ) ) ;
+
+			if (version is not null )
 			{
 				return $"https://cdnjs.cloudflare.com/ajax/libs/{packageName}/{version}/{fileName}" ;
 			}

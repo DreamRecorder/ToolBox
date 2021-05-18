@@ -4,8 +4,8 @@
 @addTagHelper *,DreamRecorder.Sayings.TagHelperProvider
 
 <div class="container">
-	<hr/>
-	<saying/>
+	<hr />
+	<saying />
 	<div class="d-flex justify-content-between align-items-end">
 		<div>
 			<footer>
@@ -13,9 +13,13 @@
 			</footer>
 		</div>
 		<div>
-			<footer>
+			<footer class="text-right">
+				<small class="text-muted">@( DateTime . UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fffffffK"))</small>
+				<br/>
+				<small class="text-muted">@(Context . Request . HttpContext . Connection . RemoteIpAddress):@(Context . Request . HttpContext . Connection . RemotePort)</small>
+				<br/>
 				<small class="text-muted">@( Context . User . Identity ? . Name )</small>
-			</footer>
+				</footer>
 		</div>
 	</div>
 </div>

@@ -13,31 +13,6 @@ using JetBrains . Annotations ;
 namespace DreamRecorder . ToolBox . General
 {
 
-	[AttributeUsage ( AttributeTargets . Assembly )]
-	public sealed class ApplicationDisplayNameAttribute : Attribute
-	{
-
-		public string Name { get ; }
-
-		public ApplicationDisplayNameAttribute ( string name ) => Name = name ;
-
-	}
-
-	[PublicAPI]
-	public static class ProgramExtensions
-	{
-
-		public static string GetProgramName ( )
-		{
-			return Assembly . GetEntryAssembly ( ) ? . GetProgramName ( )
-					?? AppDomain . CurrentDomain . GetAssemblies ( ) .
-									Select ( ass => ass . GetProgramName ( ) ) .
-									FirstOrDefault ( name => name != null )
-					?? Assembly . GetEntryAssembly ( ) ? . GetDisplayName ( ) ;
-		}
-
-	}
-
 	[PublicAPI]
 	public static class AssemblyExtensions
 	{

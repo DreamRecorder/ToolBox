@@ -11,21 +11,6 @@ using JetBrains . Annotations ;
 namespace DreamRecorder . ToolBox . Network
 {
 
-	public interface IPrefix <TAddress> where TAddress : IAddress
-	{
-
-		bool Contains ( TAddress address ) ;
-
-	}
-
-	public interface IAddress
-	{
-
-		Memory <byte> AddressBytes { get ; }
-
-	}
-
-
 	[PublicAPI]
 	public abstract class Prefix : ICloneable , IEquatable <Prefix> , IPrefix <Address>
 	{
