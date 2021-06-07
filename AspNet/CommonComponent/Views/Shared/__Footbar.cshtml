@@ -14,13 +14,11 @@
 		</div>
 		<div>
 			<footer class="text-end">
-				<p>
-					<small class="text-muted">@( DateTime . UtcNow . ToString ( "yyyy-MM-dd HH:mm:ss.fffffffK" ))</small>
-					<br/>
-					<small class="text-muted">@(Context . Request . HttpContext . Connection . RemoteIpAddress):@(Context . Request . HttpContext . Connection . RemotePort)</small>
-					<br/>
-					<small class="text-muted">@( Context . User . Identity ? . Name )</small>
-				</p>
+				<small class="text-muted">@( DateTime . UtcNow . ToString ( "yyyy-MM-dd HH:mm:ss.fffffffK" ))</small>
+				<br />
+				<small class="text-muted">@(Context . Request . HttpContext . Connection . RemoteIpAddress):@(Context . Request . HttpContext . Connection . RemotePort)</small>
+				<br />
+				<small class="text-muted">@( Context . User . Identity ? . Name )</small>
 			</footer>
 		</div>
 	</div>
