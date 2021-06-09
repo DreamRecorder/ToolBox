@@ -10,6 +10,9 @@ using JetBrains . Annotations ;
 namespace DreamRecorder . ToolBox . General
 {
 
+	/// <summary>
+	/// Known Emojis, Update to 14.0
+	/// </summary>
 	[PublicAPI]
 	public static class Emojis
 	{
@@ -208,7 +211,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string SneezingFace = "🤧" ;
 
-		public const string DizzyFace = "😵" ;
+		public const string KnockedOutFace = "😵" ;
 
 		public const string ExplodingHead = "🤯" ;
 
@@ -738,6 +741,16 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string Handshake = "🤝" ;
 
+		public const string HandshakeLightSkinTone = "🤝🏻" ;
+
+		public const string HandshakeMediumLightSkinTone = "🤝🏼" ;
+
+		public const string HandshakeMediumSkinTone = "🤝🏽" ;
+
+		public const string HandshakeMediumDarkSkinTone = "🤝🏾" ;
+
+		public const string HandshakeDarkSkinTone = "🤝🏿" ;
+
 		public const string FoldedHands = "🙏" ;
 
 		public const string FoldedHandsLightSkinTone = "🙏🏻" ;
@@ -920,17 +933,17 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string ManDarkSkinTone = "👨🏿" ;
 
-		public const string ManBeard = "🧔" ;
+		public const string PersonBeard = "🧔" ;
 
-		public const string ManLightSkinToneBeard = "🧔🏻" ;
+		public const string PersonLightSkinToneBeard = "🧔🏻" ;
 
-		public const string ManMediumLightSkinToneBeard = "🧔🏼" ;
+		public const string PersonMediumLightSkinToneBeard = "🧔🏼" ;
 
-		public const string ManMediumSkinToneBeard = "🧔🏽" ;
+		public const string PersonMediumSkinToneBeard = "🧔🏽" ;
 
-		public const string ManMediumDarkSkinToneBeard = "🧔🏾" ;
+		public const string PersonMediumDarkSkinToneBeard = "🧔🏾" ;
 
-		public const string ManDarkSkinToneBeard = "🧔🏿" ;
+		public const string PersonDarkSkinToneBeard = "🧔🏿" ;
 
 		public const string Woman = "👩" ;
 
@@ -5222,7 +5235,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string CurlingStone = "🥌" ;
 
-		public const string DirectHit = "🎯" ;
+		public const string Bullseye = "🎯" ;
 
 		public const string Pool8Ball = "🎱" ;
 
@@ -5686,7 +5699,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string CrossedSwords2 = "⚔" ;
 
-		public const string Pistol = "🔫" ;
+		public const string WaterPistol = "🔫" ;
 
 		public const string BowAndArrow = "🏹" ;
 
@@ -6048,13 +6061,13 @@ namespace DreamRecorder . ToolBox . General
 
 		public const string ExclamationQuestionMark2 = "⁉" ;
 
-		public const string QuestionMark = "❓" ;
+		public const string RedQuestionMark = "❓" ;
 
 		public const string WhiteQuestionMark = "❔" ;
 
 		public const string WhiteExclamationMark = "❕" ;
 
-		public const string ExclamationMark = "❗" ;
+		public const string RedExclamationMark = "❗" ;
 
 		public const string WavyDash = "〰️" ;
 
