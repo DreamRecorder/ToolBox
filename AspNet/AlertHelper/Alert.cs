@@ -3,6 +3,8 @@ using System . Collections ;
 using System . Collections . Generic ;
 using System . Linq ;
 
+using DreamRecorder . ToolBox . AspNet . General ;
+
 namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 {
 
@@ -32,7 +34,9 @@ namespace DreamRecorder . ToolBox . AspNet . AlertHelper
                 </button>" ;
 
 		public bool Equals ( Alert other )
-			=> Variation == other . Variation && Dismissible == other . Dismissible && Content == other . Content ;
+			=> Variation   == other . Variation
+			&& Dismissible == other . Dismissible
+			&& Content     == other . Content ;
 
 		public virtual string ToHtmlString ( )
 		{
@@ -51,7 +55,8 @@ namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 
 		public override bool Equals ( object obj ) => obj is Alert other && Equals ( other ) ;
 
-		public override int GetHashCode ( ) => HashCode . Combine ( ( int ) Variation , Dismissible , Content ) ;
+		public override int GetHashCode ( )
+			=> HashCode . Combine ( ( int ) Variation , Dismissible , Content ) ;
 
 		public static bool operator == ( Alert left , Alert right ) => left . Equals ( right ) ;
 
