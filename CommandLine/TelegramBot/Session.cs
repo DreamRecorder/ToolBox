@@ -30,7 +30,8 @@ namespace DreamRecorder . ToolBox . TelegramBot
 
 		public TimeSpan TimeToLive { get ; set ; }
 
-		public Dictionary <string , object> Properties { get ; set ; } = new Dictionary <string , object> ( ) ;
+		public Dictionary <string , object> Properties { get ; set ; } =
+			new Dictionary <string , object> ( ) ;
 
 		public ITelegramBotClient BotClient { get ; set ; }
 
@@ -49,9 +50,11 @@ namespace DreamRecorder . ToolBox . TelegramBot
 											PrivateChatId ,
 											text ,
 											parseMode ,
+											default ,
 											disableWebPagePreview ,
 											disableNotification ,
 											message ? . MessageId ?? default ,
+											true ,
 											replyMarkup ,
 											cancellationToken ) .
 						Wait ( cancellationToken ) ;

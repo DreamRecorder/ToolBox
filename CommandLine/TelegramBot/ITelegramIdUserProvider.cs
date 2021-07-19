@@ -9,7 +9,7 @@ namespace DreamRecorder . ToolBox . TelegramBot
 	public interface ITelegramIdUserProvider <TUser> where TUser : IUser
 	{
 
-		TUser GetUser ( int telegramId ) ;
+		TUser GetUser ( long telegramId ) ;
 
 	}
 

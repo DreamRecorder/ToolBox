@@ -30,7 +30,7 @@ namespace DreamRecorder . ToolBox . TelegramBot
 
 		bool CheckUser ( Guid user ) ;
 
-		TUser BindUser ( int telegramUserId , TUser user ) ;
+		TUser BindUser ( long telegramUserId , TUser user ) ;
 
 		TUser CreateUser ( ) ;
 

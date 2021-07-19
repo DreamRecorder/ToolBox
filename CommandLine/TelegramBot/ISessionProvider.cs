@@ -11,7 +11,7 @@ namespace DreamRecorder . ToolBox . TelegramBot
 
 		Session <TUser> GetSession ( TUser user ) ;
 
-		Session <TUser> GetSession ( int telegramId ) ;
+		Session <TUser> GetSession ( long telegramId ) ;
 
 	}
 
