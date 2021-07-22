@@ -56,7 +56,7 @@ namespace DreamRecorder . ToolBox . General
 		}
 
 		/// <summary>
-		///     从列表中重复地随机挑选一些项。
+		///     Choose item randomly from a list, item may be chosen multiple times.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="list"></param>
@@ -96,7 +96,7 @@ namespace DreamRecorder . ToolBox . General
 		}
 
 		/// <summary>
-		///     从列表中不重复地随机挑选一些项。
+		///     Choose item randomly from a list, item may only be chosen one time.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="list"></param>

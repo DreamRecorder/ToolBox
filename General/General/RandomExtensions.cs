@@ -12,6 +12,11 @@ namespace DreamRecorder . ToolBox . General
 	public static class RandomExtensions
 	{
 
+		public static T NextEnum <T> (
+			[NotNull]
+			this IRandom random ) where T : struct , Enum
+			=> Enum . GetValues <T> ( ) . RandomItem ( random ) ;
+
 		/// <summary>
 		///     Generates normally distributed numbers. Each operation makes two Gaussian for the price of one, and apparently
 		///     they can be cached or something for better performance, but who cares.
@@ -39,7 +44,8 @@ namespace DreamRecorder . ToolBox . General
 			double u1 = random . NextDouble ( ) ;
 			double u2 = random . NextDouble ( ) ;
 
-			double randStdNormal = Math . Sqrt ( - 2.0 * Math . Log ( u1 ) ) * Math . Sin ( 2.0 * Math . PI * u2 ) ;
+			double randStdNormal = Math . Sqrt ( - 2.0 * Math . Log ( u1 ) )
+								* Math . Sin ( 2.0     * Math . PI * u2 ) ;
 
 			double randNormal = mu + sigma * randStdNormal ;
 
@@ -224,7 +230,8 @@ namespace DreamRecorder . ToolBox . General
 				throw new ArgumentException ( ) ;
 			}
 
-			return minValue + Convert . ToDecimal ( random . NextDouble ( ) ) * ( maxValue - minValue ) ;
+			return minValue
+				+ Convert . ToDecimal ( random . NextDouble ( ) ) * ( maxValue - minValue ) ;
 		}
 
 	}
