@@ -7,42 +7,42 @@
 <div class="container">
 	<hr />
 	<saying />
-	<div class="d-flex justify-content-between align-items-end">
-		<div>
-			<footer>
-				<small style="white-space: pre-line" class="text-muted">@( ProgramBase . Current . GetType ( ) . Assembly . GetAssemblyInfo ( ) )</small>
-			</footer>
-		</div>
-		<div>
-			<footer class="text-end">
-				<small class="text-muted">@( DateTime . UtcNow . ToString ( "yyyy-MM-dd HH:mm:ss.fffffffK" ))</small>
-				<br />
+    <div class="row justify-content-between">
+        <div class="col-md-auto order-md-last">
+            <footer class="text-end">
+                <small class="text-muted">@( DateTime . UtcNow . ToString ( "yyyy-MM-dd HH:mm:ss.fffffffK" ))</small>
+                <br />
 
-				@if (Context.Request.Headers.TryGetValue("X-Forwarded-For", out StringValues forwardedFor))
-				{
-					string[] hosts = forwardedFor.ToString().Split(",", StringSplitOptions.TrimEntries);
-					foreach (string host in hosts)
-					{
-						<small class="text-muted">@(host) -></small>
-						<br />
-					}
-				}
+                @if (Context.Request.Headers.TryGetValue("X-Forwarded-For", out StringValues forwardedFor))
+                {
+                    string[] hosts = forwardedFor.ToString().Split(",", StringSplitOptions.TrimEntries);
+                    foreach (string host in hosts)
+                    {
+                        <small class="text-muted">@(host) -></small>
+                        <br />
+                    }
+                }
 
-				<small class="text-muted">@(Context . Request . HttpContext . Connection . RemoteIpAddress):@(Context . Request . HttpContext . Connection . RemotePort)</small>
-				<br />
+                <small class="text-muted">@(Context . Request . HttpContext . Connection . RemoteIpAddress):@(Context . Request . HttpContext . Connection . RemotePort)</small>
+                <br />
 
-				@if (Context.Request.Headers.TryGetValue("CF-RAY", out StringValues cfRay))
-				{
-					<small class="text-muted">@(cfRay.ToString())</small>
-					<br />
-				}
+                @if (Context.Request.Headers.TryGetValue("CF-RAY", out StringValues cfRay))
+                {
+                    <small class="text-muted">@(cfRay.ToString())</small>
+                    <br />
+                }
 				
-				@if (Context.User.Identity?.Name is string name)
-				{
-					<small class="text-muted">@( name )</small>
-				}
+                @if (Context.User.Identity?.Name is string name)
+                {
+                    <small class="text-muted">@( name )</small>
+                }
 
-			</footer>
-		</div>
-	</div>
+            </footer>
+        </div>
+        <div class="col-md-auto">
+            <footer>
+                <small style="white-space: pre-line" class="text-muted">@( ProgramBase . Current . GetType ( ) . Assembly . GetAssemblyInfo ( ) )</small>
+            </footer>
+        </div>
+    </div>
 </div>
