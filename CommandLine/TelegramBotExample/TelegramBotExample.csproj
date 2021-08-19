@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup Label="Globals">
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>DreamRecorder.ToolBox.CommandLine.Example.Telegram</AssemblyName>
+    <RootNamespace>DreamRecorder.ToolBox.CommandLine.Example.Telegram</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TelegramBot\TelegramBot.csproj" />
+  </ItemGroup>
+
+</Project>

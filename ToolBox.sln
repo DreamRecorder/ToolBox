@@ -37,6 +37,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonComponent", "AspNet\C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example", "AspNet\Example\Example.csproj", "{D435FC06-C33C-448D-BED2-18160A56DE11}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelegramBotExample", "CommandLine\TelegramBotExample\TelegramBotExample.csproj", "{0055954F-A10B-4C0D-9C84-764B4E3FB428}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -311,6 +313,26 @@ Global
 		{D435FC06-C33C-448D-BED2-18160A56DE11}.Release|x64.Build.0 = Release|Any CPU
 		{D435FC06-C33C-448D-BED2-18160A56DE11}.Release|x86.ActiveCfg = Release|Any CPU
 		{D435FC06-C33C-448D-BED2-18160A56DE11}.Release|x86.Build.0 = Release|Any CPU
+		{0055954F-A10B-4C0D-9C84-764B4E3FB428}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0055954F-A10B-4C0D-9C84-764B4E3FB428}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0055954F-A10B-4C0D-9C84-764B4E3FB428}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{0055954F-A10B-4C0D-9C84-764B4E3FB428}.Debug|ARM.Build.0 = Debug|Any CPU
+		{0055954F-A10B-4C0D-9C84-764B4E3FB428}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{0055954F-A10B-4C0D-9C84-764B4E3FB428}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{0055954F-A10B-4C0D-9C84-764B4E3FB428}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0055954F-A10B-4C0D-9C84-764B4E3FB428}.Debug|x64.Build.0 = Debug|Any CPU
+		{0055954F-A10B-4C0D-9C84-764B4E3FB428}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0055954F-A10B-4C0D-9C84-764B4E3FB428}.Debug|x86.Build.0 = Debug|Any CPU
+		{0055954F-A10B-4C0D-9C84-764B4E3FB428}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0055954F-A10B-4C0D-9C84-764B4E3FB428}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0055954F-A10B-4C0D-9C84-764B4E3FB428}.Release|ARM.ActiveCfg = Release|Any CPU
+		{0055954F-A10B-4C0D-9C84-764B4E3FB428}.Release|ARM.Build.0 = Release|Any CPU
+		{0055954F-A10B-4C0D-9C84-764B4E3FB428}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{0055954F-A10B-4C0D-9C84-764B4E3FB428}.Release|ARM64.Build.0 = Release|Any CPU
+		{0055954F-A10B-4C0D-9C84-764B4E3FB428}.Release|x64.ActiveCfg = Release|Any CPU
+		{0055954F-A10B-4C0D-9C84-764B4E3FB428}.Release|x64.Build.0 = Release|Any CPU
+		{0055954F-A10B-4C0D-9C84-764B4E3FB428}.Release|x86.ActiveCfg = Release|Any CPU
+		{0055954F-A10B-4C0D-9C84-764B4E3FB428}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -329,12 +351,13 @@ Global
 		{84C875D6-44F1-4BCB-8253-B8BF7D0761E5} = {6ECFB2DA-3E6D-42A2-AE16-BC0D5B3DF2EE}
 		{CAE62F7C-D98F-4B50-8D39-83B81DE74011} = {6ECFB2DA-3E6D-42A2-AE16-BC0D5B3DF2EE}
 		{D435FC06-C33C-448D-BED2-18160A56DE11} = {6ECFB2DA-3E6D-42A2-AE16-BC0D5B3DF2EE}
+		{0055954F-A10B-4C0D-9C84-764B4E3FB428} = {6749562D-3004-4C05-BF9A-6FC70D2629F8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {14DAB56C-F500-45EE-8A65-CFA2C12B509D}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 14
+		SccNumberOfProjects = 15
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://vsts.dreamry.org/defaultcollection
 		SccLocalPath0 = .
@@ -390,5 +413,9 @@ Global
 		SccProjectTopLevelParentUniqueName13 = ToolBox.sln
 		SccProjectName13 = AspNet/Example
 		SccLocalPath13 = AspNet\\Example
+		SccProjectUniqueName14 = CommandLine\\TelegramBotExample\\TelegramBotExample.csproj
+		SccProjectTopLevelParentUniqueName14 = ToolBox.sln
+		SccProjectName14 = CommandLine/TelegramBotExample
+		SccLocalPath14 = CommandLine\\TelegramBotExample
 	EndGlobalSection
 EndGlobal

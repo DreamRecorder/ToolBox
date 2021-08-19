@@ -5,6 +5,11 @@ using System . Linq ;
 using System . Net ;
 
 using DreamRecorder . ToolBox . CommandLine ;
+using DreamRecorder . ToolBox . General ;
+
+using Microsoft . Extensions . DependencyInjection ;
+
+using Telegram . Bot ;
 
 namespace DreamRecorder . ToolBox . TelegramBot
 {
@@ -19,10 +24,11 @@ namespace DreamRecorder . ToolBox . TelegramBot
 		where TUser : IUser
 	{
 
-		public WebProxy webProxy { get ; set ; }
-
+		public WebProxy WebProxy { get ; set ; }
 
 		public TelegramBot <TUser> Bot { get ; set ; }
+
+		public override void Start ( string [ ] args ) { Bot . Start ( args ) . Wait ( ) ; }
 
 	}
 
