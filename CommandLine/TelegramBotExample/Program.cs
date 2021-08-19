@@ -41,6 +41,8 @@ namespace DreamRecorder . ToolBox . CommandLine . Example . Telegram
 			throw new NotImplementedException ( ) ;
 		}
 
+		public static void Main(string[] args) { new Program().RunMain(args); }
+
 	}
 
 }
