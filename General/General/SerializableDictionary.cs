@@ -35,11 +35,11 @@ namespace DreamRecorder . ToolBox . General
 				reader . ReadStartElement ( "item" ) ;
 
 				reader . ReadStartElement ( "key" ) ;
-				TKey key = ( TKey ) keySerializer . Deserialize ( reader ) ;
+				TKey key = ( TKey )keySerializer . Deserialize ( reader ) ;
 				reader . ReadEndElement ( ) ;
 
 				reader . ReadStartElement ( "value" ) ;
-				TValue value = ( TValue ) valueSerializer . Deserialize ( reader ) ;
+				TValue value = ( TValue )valueSerializer . Deserialize ( reader ) ;
 				reader . ReadEndElement ( ) ;
 
 				Add ( key , value ) ;

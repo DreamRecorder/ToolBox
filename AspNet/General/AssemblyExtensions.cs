@@ -1,7 +1,7 @@
 ﻿using System ;
-using System.Collections ;
-using System.Collections.Generic ;
-using System.Linq ;
+using System . Collections ;
+using System . Collections . Generic ;
+using System . Linq ;
 using System . Reflection ;
 
 using DreamRecorder . ToolBox . General ;
@@ -15,9 +15,7 @@ namespace DreamRecorder . ToolBox . AspNet . General
 	public static class AssemblyExtensions
 	{
 
-		public static string GetWebTitle (
-			[NotNull]
-			this Assembly assembly )
+		public static string GetWebTitle ( [NotNull] this Assembly assembly )
 		{
 			if ( assembly == null )
 			{

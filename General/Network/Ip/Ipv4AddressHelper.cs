@@ -402,10 +402,10 @@ namespace DreamRecorder . ToolBox . Network . Ip
 				// end includes ports, so changedEnd may be different from end
 				Debug . Assert ( result != Invalid , "Failed to parse after already validated: " + name ) ;
 
-				numbers [ 0 ] = ( byte ) ( result >> 24 ) ;
-				numbers [ 1 ] = ( byte ) ( result >> 16 ) ;
-				numbers [ 2 ] = ( byte ) ( result >> 8 ) ;
-				numbers [ 3 ] = ( byte ) result ;
+				numbers [ 0 ] = ( byte )( result >> 24 ) ;
+				numbers [ 1 ] = ( byte )( result >> 16 ) ;
+				numbers [ 2 ] = ( byte )( result >> 8 ) ;
+				numbers [ 3 ] = ( byte )result ;
 			}
 
 			return numbers [ 0 ] == 127 ;
@@ -425,7 +425,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 				for ( ; start < end && ( ch = name [ start ] ) != '.' && ch != ':' ; ++start )
 				{
-					b = ( byte ) ( b * 10 + ( byte ) ( ch - '0' ) ) ;
+					b = ( byte )( b * 10 + ( byte )( ch - '0' ) ) ;
 				}
 
 				numbers [ i ] = b ;

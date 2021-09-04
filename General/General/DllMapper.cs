@@ -18,9 +18,8 @@ namespace DreamRecorder . ToolBox . General
 			new Dictionary <Assembly , Dictionary <string , string>> ( ) ;
 
 		public static void Register (
-			[JetBrains . Annotations . NotNull]
-			this Assembly assembly ,
-			XDocument config = null )
+			[JetBrains . Annotations . NotNull] this Assembly assembly ,
+			XDocument                                         config = null )
 		{
 			if ( assembly == null )
 			{
@@ -47,10 +46,9 @@ namespace DreamRecorder . ToolBox . General
 
 		// Parse the assembly.xml file, and map the old name to the new name of a library.
 		private static bool MapLibraryName (
-			Assembly assembly ,
-			string   originalLibName ,
-			[MaybeNullWhen ( false )]
-			out string mappedLibName )
+			Assembly                             assembly ,
+			string                               originalLibName ,
+			[MaybeNullWhen ( false )] out string mappedLibName )
 		{
 			while ( true )
 			{
@@ -74,9 +72,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public static bool CheckOS ( string os ) => os == null || OperatingSystem . IsOSPlatform ( os ) ;
 
-		public static bool CheckWordSize (
-			[NotNull]
-			string wordSize )
+		public static bool CheckWordSize ( [NotNull] string wordSize )
 		{
 			if ( wordSize == null )
 			{

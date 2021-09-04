@@ -28,9 +28,7 @@ namespace DreamRecorder . ToolBox . General
 			Sort ( ) ;
 		}
 
-		public LinearInterpolationLookupTable (
-			[NotNull]
-			IEnumerable <PointF> init )
+		public LinearInterpolationLookupTable ( [NotNull] IEnumerable <PointF> init )
 		{
 			if ( init == null )
 			{
@@ -41,9 +39,7 @@ namespace DreamRecorder . ToolBox . General
 			Points     = new ReadOnlyCollection <PointF> ( PointsList ) ;
 		}
 
-		public LinearInterpolationLookupTable (
-			[NotNull]
-			XElement element )
+		public LinearInterpolationLookupTable ( [NotNull] XElement element )
 		{
 			if ( element == null )
 			{

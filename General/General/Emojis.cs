@@ -11,7 +11,7 @@ namespace DreamRecorder . ToolBox . General
 {
 
 	/// <summary>
-	/// Known Emojis, Update to 14.0
+	///     Known Emojis, Update to 14.0
 	/// </summary>
 	[PublicAPI]
 	public static class Emojis
@@ -28,7 +28,7 @@ namespace DreamRecorder . ToolBox . General
 															| BindingFlags . DeclaredOnly ) .
 												ToDictionary (
 															fieldInfo => fieldInfo . Name ,
-															fieldInfo => ( string ) fieldInfo . GetValue ( null ) ) ;
+															fieldInfo => ( string )fieldInfo . GetValue ( null ) ) ;
 
 			EmojisList = new ReadOnlyDictionary <string , string> ( emojis ) ;
 		}

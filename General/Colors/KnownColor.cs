@@ -25,7 +25,7 @@ namespace DreamRecorder . ToolBox . Colors
 																| BindingFlags . DeclaredOnly ) .
 													ToDictionary (
 																fieldInfo => fieldInfo . Name ,
-																fieldInfo => ( HdrColor ) fieldInfo .
+																fieldInfo => ( HdrColor )fieldInfo .
 																	GetValue ( null ) ) ;
 
 			Colors = new ReadOnlyDictionary <string , HdrColor> ( colors ) ;

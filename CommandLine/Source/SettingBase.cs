@@ -27,10 +27,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 		// By design
 		public static Regex LineValuePattern = new Regex ( "^(?:\\s*)([^=#]+)=(.+)" , RegexOptions . Compiled ) ;
 
-		public TResult GetValue <TResult> (
-			[NotNull]
-			string name ,
-			TResult defaultValue = default )
+		public TResult GetValue <TResult> ( [NotNull] string name , TResult defaultValue = default )
 		{
 			if ( name == null )
 			{
@@ -49,7 +46,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 				return defaultValue ;
 			}
 
-			return ( TResult ) property . GetValue ( this ) ;
+			return ( TResult )property . GetValue ( this ) ;
 		}
 
 		public string Save ( )
@@ -65,7 +62,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 			foreach ( PropertyInfo property in typeof ( T ) . GetProperties ( ) )
 			{
 				SettingItemAttribute attribute =
-					( SettingItemAttribute ) property . GetCustomAttribute ( typeof ( SettingItemAttribute ) ) ;
+					( SettingItemAttribute )property . GetCustomAttribute ( typeof ( SettingItemAttribute ) ) ;
 
 				if ( ! ( attribute is null ) )
 				{
@@ -82,7 +79,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 			for ( int i = 0 ; i < stringBuilders . Length ; i++ )
 			{
 				builder . AppendLine (
-									$"##{( TSettingCategory ) Enum . ToObject ( typeof ( TSettingCategory ) , i )}" ) ;
+									$"##{( TSettingCategory )Enum . ToObject ( typeof ( TSettingCategory ) , i )}" ) ;
 				builder . AppendLine ( ) ;
 				builder . AppendLine ( stringBuilders [ i ] . ToString ( ) ) ;
 				builder . AppendLine ( ) ;
@@ -98,7 +95,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 			foreach ( PropertyInfo property in typeof ( T ) . GetProperties ( ) )
 			{
 				SettingItemAttribute attribute =
-					( SettingItemAttribute ) property . GetCustomAttribute ( typeof ( SettingItemAttribute ) ) ;
+					( SettingItemAttribute )property . GetCustomAttribute ( typeof ( SettingItemAttribute ) ) ;
 
 				if ( ! ( attribute is null ) )
 				{
@@ -109,9 +106,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 			return setting ;
 		}
 
-		public static T Load (
-			[NotNull]
-			string source )
+		public static T Load ( [NotNull] string source )
 		{
 			if ( source == null )
 			{
@@ -121,7 +116,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 			T settings = new T ( ) ;
 
 			foreach ( string line in source . Split (
-													new [ ] { Environment . NewLine } ,
+													new [ ] { Environment . NewLine , } ,
 													StringSplitOptions . RemoveEmptyEntries ) )
 			{
 				ParseLine ( settings , line ) ;
@@ -130,9 +125,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 			return settings ;
 		}
 
-		public static T Load (
-			[NotNull]
-			Stream stream )
+		public static T Load ( [NotNull] Stream stream )
 		{
 			if ( stream == null )
 			{

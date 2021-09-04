@@ -17,11 +17,7 @@ namespace DreamRecorder . ToolBox . General
 	public class PluginHelper
 	{
 
-		public static void LoadPlugin (
-			[NotNull]
-			string pluginDirectoryPath ,
-			[NotNull]
-			string searchPattern )
+		public static void LoadPlugin ( [NotNull] string pluginDirectoryPath , [NotNull] string searchPattern )
 		{
 			if ( string . IsNullOrWhiteSpace ( pluginDirectoryPath ) )
 			{

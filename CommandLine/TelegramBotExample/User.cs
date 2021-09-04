@@ -17,10 +17,7 @@ namespace DreamRecorder . ToolBox . CommandLine . Example . Telegram
 
 		public T GetProperty <T> ( string name ) => throw new NotImplementedException ( ) ;
 
-		public void SetProperty <T> ( string name , T value )
-		{
-			throw new NotImplementedException ( ) ;
-		}
+		public void SetProperty <T> ( string name , T value ) { throw new NotImplementedException ( ) ; }
 
 	}
 

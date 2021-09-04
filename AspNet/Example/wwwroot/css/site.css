@@ -21,9 +21,7 @@
 	line-height: 1.4;
 }
 
-.action-btn {
-	padding: 0.25rem;
-}
+.action-btn { padding: 0.25rem; }
 
 @font-face {
 	font-family: Eras;
@@ -32,27 +30,19 @@
 	src: local("Eras ITC"), local("Eras Medium ITC"), url('https://webresources.dreamry.org/ERASMD.TTF') format('truetype');
 }
 
-.navbar-brand {
-	font-family: Eras
-}
+.navbar-brand { font-family: Eras }
 
 /* Make .svg files in the carousel display properly in older browsers */
 
-.carousel-inner .item img[src$=".svg"] {
-	width: 100%;
-}
+.carousel-inner .item img[src$=".svg"] { width: 100%; }
 
 /* QR code generator */
 
-#qrCode {
-	margin: 15px;
-}
+#qrCode { margin: 15px; }
 
 /* Hide/rearrange for smaller screens */
 
 @media screen and (max-width: 767px) {
 	/* Hide captions */
-	.carousel-caption {
-		display: none;
-	}
+	.carousel-caption { display: none; }
 }

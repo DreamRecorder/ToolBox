@@ -83,8 +83,8 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 							for ( int i = 0 ; i < NumberOfLabels ; i++ )
 							{
-								addressBytes [ j++ ] = ( byte ) ( ( address [ i ] >> 8 ) & 0xFF ) ;
-								addressBytes [ j++ ] = ( byte ) ( address [ i ]          & 0xFF ) ;
+								addressBytes [ j++ ] = ( byte )( ( address [ i ] >> 8 ) & 0xFF ) ;
+								addressBytes [ j++ ] = ( byte )( address [ i ]          & 0xFF ) ;
 							}
 
 							AddressBytes = addressBytes ;
@@ -102,9 +102,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 		private const int NumberOfLabels = 8 ;
 
-		public static explicit operator Ipv6Address (
-			[NotNull]
-			string address )
+		public static explicit operator Ipv6Address ( [NotNull] string address )
 		{
 			if ( address == null )
 			{
@@ -122,7 +120,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 			for ( int i = 0 ; i < AddressBytes . Length ; i += 2 )
 			{
-				int segment = ( ushort ) ( AddressBytes . Span [ i ] << 8 ) | AddressBytes . Span [ i + 1 ] ;
+				int segment = ( ushort )( AddressBytes . Span [ i ] << 8 ) | AddressBytes . Span [ i + 1 ] ;
 				builder . AppendFormat ( "{0:X}" , segment ) ;
 
 				if ( i + 2 != AddressBytes . Length )

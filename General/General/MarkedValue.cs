@@ -48,7 +48,7 @@ namespace DreamRecorder . ToolBox . General
 				return true ;
 			}
 
-			return obj . GetType ( ) == GetType ( ) && Equals ( ( MarkedValue <TValue , TMark> ) obj ) ;
+			return obj . GetType ( ) == GetType ( ) && Equals ( ( MarkedValue <TValue , TMark> )obj ) ;
 		}
 
 		public override int GetHashCode ( ) => EqualityComparer <TValue> . Default . GetHashCode ( Value ) ;

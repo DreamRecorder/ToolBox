@@ -29,8 +29,8 @@ namespace DreamRecorder . ToolBox . AspNet . General
 						metadata . Attributes . Attributes . FirstOrDefault (
 																			a
 																				=> a . GetType ( )
-																					== typeof ( FromHeaderAttribute
-																					) ) ;
+																					== typeof (
+																						FromHeaderAttribute ) ) ;
 
 					if ( headerAttribute != null )
 					{

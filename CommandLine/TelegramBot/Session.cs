@@ -30,21 +30,18 @@ namespace DreamRecorder . ToolBox . TelegramBot
 
 		public TimeSpan TimeToLive { get ; set ; }
 
-		public Dictionary <string , object> Properties { get ; set ; } =
-			new Dictionary <string , object> ( ) ;
+		public Dictionary <string , object> Properties { get ; set ; } = new Dictionary <string , object> ( ) ;
 
 		public ITelegramBotClient BotClient { get ; set ; }
 
 		public void ReplyText (
-			[CanBeNull]
-			Message message ,
-			[NotNull]
-			string text ,
-			ParseMode         parseMode             = ParseMode . Default ,
-			bool              disableWebPagePreview = false ,
-			bool              disableNotification   = false ,
-			IReplyMarkup      replyMarkup           = null ,
-			CancellationToken cancellationToken     = default )
+			[CanBeNull] Message message ,
+			[NotNull]   string  text ,
+			ParseMode           parseMode             = ParseMode . Default ,
+			bool                disableWebPagePreview = false ,
+			bool                disableNotification   = false ,
+			IReplyMarkup        replyMarkup           = null ,
+			CancellationToken   cancellationToken     = default )
 		{
 			BotClient . SendTextMessageAsync (
 											PrivateChatId ,

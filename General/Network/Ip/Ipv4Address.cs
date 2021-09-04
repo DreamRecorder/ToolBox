@@ -18,10 +18,10 @@ namespace DreamRecorder . ToolBox . Network . Ip
 		public Ipv4Address ( long address ) : this ( )
 		{
 			byte [ ] addressBytes = new byte[ 4 ] ;
-			addressBytes [ 0 ] = ( byte ) address ;
-			addressBytes [ 1 ] = ( byte ) ( address >> 8 ) ;
-			addressBytes [ 2 ] = ( byte ) ( address >> 16 ) ;
-			addressBytes [ 3 ] = ( byte ) ( address >> 24 ) ;
+			addressBytes [ 0 ] = ( byte )address ;
+			addressBytes [ 1 ] = ( byte )( address >> 8 ) ;
+			addressBytes [ 2 ] = ( byte )( address >> 16 ) ;
+			addressBytes [ 3 ] = ( byte )( address >> 24 ) ;
 			AddressBytes       = addressBytes ;
 		}
 
@@ -59,10 +59,10 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 				byte [ ] addressBytes = new byte[ 4 ] ;
 
-				addressBytes [ 0 ] = ( byte ) result ;
-				addressBytes [ 1 ] = ( byte ) ( result >> 8 ) ;
-				addressBytes [ 2 ] = ( byte ) ( result >> 16 ) ;
-				addressBytes [ 3 ] = ( byte ) ( result >> 24 ) ;
+				addressBytes [ 0 ] = ( byte )result ;
+				addressBytes [ 1 ] = ( byte )( result >> 8 ) ;
+				addressBytes [ 2 ] = ( byte )( result >> 16 ) ;
+				addressBytes [ 3 ] = ( byte )( result >> 24 ) ;
 
 				AddressBytes = addressBytes ;
 			}
@@ -72,9 +72,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			}
 		}
 
-		public static explicit operator Ipv4Address (
-			[NotNull]
-			string address )
+		public static explicit operator Ipv4Address ( [NotNull] string address )
 		{
 			if ( address == null )
 			{

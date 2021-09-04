@@ -12,9 +12,7 @@ namespace DreamRecorder . ToolBox . General
 	public static class RandomExtensions
 	{
 
-		public static T NextEnum <T> (
-			[NotNull]
-			this IRandom random ) where T : struct , Enum
+		public static T NextEnum <T> ( [NotNull] this IRandom random ) where T : struct , Enum
 			=> Enum . GetValues <T> ( ) . RandomItem ( random ) ;
 
 		/// <summary>
@@ -25,11 +23,7 @@ namespace DreamRecorder . ToolBox . General
 		/// <param name="mu">Mean of the distribution</param>
 		/// <param name="sigma">Standard deviation</param>
 		/// <returns></returns>
-		public static double NextGaussian (
-			[NotNull]
-			this IRandom random ,
-			double mu    = 0 ,
-			double sigma = 1 )
+		public static double NextGaussian ( [NotNull] this IRandom random , double mu = 0 , double sigma = 1 )
 		{
 			if ( random == null )
 			{
@@ -44,8 +38,7 @@ namespace DreamRecorder . ToolBox . General
 			double u1 = random . NextDouble ( ) ;
 			double u2 = random . NextDouble ( ) ;
 
-			double randStdNormal = Math . Sqrt ( - 2.0 * Math . Log ( u1 ) )
-								* Math . Sin ( 2.0     * Math . PI * u2 ) ;
+			double randStdNormal = Math . Sqrt ( - 2.0 * Math . Log ( u1 ) ) * Math . Sin ( 2.0 * Math . PI * u2 ) ;
 
 			double randNormal = mu + sigma * randStdNormal ;
 
@@ -62,11 +55,7 @@ namespace DreamRecorder . ToolBox . General
 		/// <param name="maxValue">Maximum number possible.</param>
 		/// <param name="count">How many numbers to return.</param>
 		/// <returns></returns>
-		public static List <int> Permutation (
-			[NotNull]
-			this IRandom random ,
-			int maxValue ,
-			int count )
+		public static List <int> Permutation ( [NotNull] this IRandom random , int maxValue , int count )
 		{
 			if ( random == null )
 			{
@@ -118,12 +107,7 @@ namespace DreamRecorder . ToolBox . General
 		/// <param name="b">Maximum</param>
 		/// <param name="c">Mode (most frequent value)</param>
 		/// <returns></returns>
-		public static double NextTriangular (
-			[NotNull]
-			this IRandom random ,
-			double a ,
-			double b ,
-			double c )
+		public static double NextTriangular ( [NotNull] this IRandom random , double a , double b , double c )
 		{
 			if ( random == null )
 			{
@@ -152,9 +136,7 @@ namespace DreamRecorder . ToolBox . General
 		///     .
 		/// </summary>
 		/// <returns></returns>
-		public static bool NextBoolean (
-			[NotNull]
-			this Random random )
+		public static bool NextBoolean ( [NotNull] this Random random )
 		{
 			if ( random == null )
 			{
@@ -169,11 +151,7 @@ namespace DreamRecorder . ToolBox . General
 		/// </summary>
 		/// <param name="random"></param>
 		/// <param name="list"></param>
-		public static void Shuffle <T> (
-			[NotNull]
-			this IRandom random ,
-			[NotNull]
-			IList <T> list )
+		public static void Shuffle <T> ( [NotNull] this IRandom random , [NotNull] IList <T> list )
 		{
 			if ( random == null )
 			{
@@ -195,11 +173,7 @@ namespace DreamRecorder . ToolBox . General
 			}
 		}
 
-		public static double NextDoubleBetween (
-			[NotNull]
-			this IRandom random ,
-			double minValue ,
-			double maxValue )
+		public static double NextDoubleBetween ( [NotNull] this IRandom random , double minValue , double maxValue )
 		{
 			if ( random == null )
 			{
@@ -214,11 +188,7 @@ namespace DreamRecorder . ToolBox . General
 			return minValue + random . NextDouble ( ) * ( maxValue - minValue ) ;
 		}
 
-		public static decimal NextDecimalBetween (
-			[NotNull]
-			this IRandom random ,
-			decimal minValue ,
-			decimal maxValue )
+		public static decimal NextDecimalBetween ( [NotNull] this IRandom random , decimal minValue , decimal maxValue )
 		{
 			if ( random == null )
 			{
@@ -230,8 +200,7 @@ namespace DreamRecorder . ToolBox . General
 				throw new ArgumentException ( ) ;
 			}
 
-			return minValue
-				+ Convert . ToDecimal ( random . NextDouble ( ) ) * ( maxValue - minValue ) ;
+			return minValue + Convert . ToDecimal ( random . NextDouble ( ) ) * ( maxValue - minValue ) ;
 		}
 
 	}

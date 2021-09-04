@@ -22,9 +22,7 @@ namespace DreamRecorder . ToolBox . AspNet . General
 			new ConcurrentDictionary <string , string> ( ) ;
 
 
-		public async Task <string> GetPackageVersion (
-			[NotNull]
-			string packageName )
+		public async Task <string> GetPackageVersion ( [NotNull] string packageName )
 		{
 			if ( packageName == null )
 			{
@@ -55,10 +53,9 @@ namespace DreamRecorder . ToolBox . AspNet . General
 		}
 
 		public async Task <string> GetFileUrl (
-			[NotNull]
-			string packageName ,
-			[NotNull]
-			string fileName ,string version)
+			[NotNull] string packageName ,
+			[NotNull] string fileName ,
+			string           version )
 		{
 			if ( packageName == null )
 			{
@@ -72,7 +69,7 @@ namespace DreamRecorder . ToolBox . AspNet . General
 
 			version ??= ( await GetPackageVersion ( packageName ) ) ;
 
-			if (version is not null )
+			if ( version is not null )
 			{
 				return $"https://cdnjs.cloudflare.com/ajax/libs/{packageName}/{version}/{fileName}" ;
 			}

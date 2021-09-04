@@ -19,14 +19,6 @@ namespace DreamRecorder . ToolBox . CommandLine
 {
 
 	[PublicAPI]
-	public abstract class ProgramBase
-	{
-
-		public static ProgramBase Current { get ; protected set ; }
-
-	}
-
-	[PublicAPI]
 	public abstract class ProgramBase <T , TExitCode , TSetting , TSettingCategory> : ProgramBase
 		where T : ProgramBase <T , TExitCode , TSetting , TSettingCategory>
 		where TExitCode : ProgramExitCode <TExitCode> , new ( )
@@ -40,11 +32,9 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 		public bool IsExiting { get => _isExiting ; set => _isExiting = value ; }
 
-		protected ILogger Logger { get ; private set ; }
-
 		public new static T Current
 		{
-			get => ( T ) ProgramBase . Current ;
+			get => ( T )ProgramBase . Current ;
 			private set => ProgramBase . Current = value ;
 		}
 
@@ -53,10 +43,6 @@ namespace DreamRecorder . ToolBox . CommandLine
 		public bool IsVerbose { get ; set ; }
 
 		public virtual bool WaitForExit { get ; }
-
-		public abstract string License { get ; }
-
-		public bool IsDebug { get ; private set ; }
 
 		public TSetting Setting { get ; set ; }
 
@@ -123,13 +109,13 @@ namespace DreamRecorder . ToolBox . CommandLine
 			writer . Dispose ( ) ;
 		}
 
-		public virtual bool OnStartupExceptions ( Exception e )
+		public override bool OnStartupExceptions ( Exception e )
 		{
 			Logger . LogCritical ( e , "Application failed to start." ) ;
 			return false ;
 		}
 
-		public virtual bool OnUnhandledExceptions ( Exception e )
+		public override bool OnUnhandledExceptions ( Exception e )
 		{
 			Logger . LogCritical ( e , "Exception is unhandled." ) ;
 			return false ;
@@ -292,9 +278,9 @@ namespace DreamRecorder . ToolBox . CommandLine
 		///     Call this after Create StaticLoggerFactory
 		/// </summary>
 		/// <param name="args"></param>
-		public virtual void RunMain ( string [ ] args )
+		public override void RunMain ( string [ ] args )
 		{
-			Current = ( T ) this ;
+			Current = ( T )this ;
 
 			CommandLineApplication = new CommandLineApplication ( ThrowOnUnexpectedArg ) ;
 
@@ -382,16 +368,26 @@ namespace DreamRecorder . ToolBox . CommandLine
 					{
 						if ( ! acceptLicenseOption . HasValue ( ) )
 						{
-							if ( ! CheckLicenseFile ( ) )
+							if ( WriteLicenseFile )
 							{
-								Logger . LogInformation ( "License check failed." ) ;
-								Logger . LogCritical ( $"You should READ and ACCEPT {LicenseFilePath} first." ) ;
+								if ( ! CheckLicenseFile ( ) )
+								{
+									Logger . LogInformation ( "License check failed." ) ;
+									Logger . LogCritical ( $"You should READ and ACCEPT {LicenseFilePath} first." ) ;
 
-								Exit ( ProgramExitCode <TExitCode> . LicenseNotAccepted ) ;
-								return ProgramExitCode <TExitCode> . LicenseNotAccepted ;
+									Exit ( ProgramExitCode <TExitCode> . LicenseNotAccepted ) ;
+									return ProgramExitCode <TExitCode> . LicenseNotAccepted ;
+								}
+								else
+								{
+									Logger . LogInformation ( "License file check passed." ) ;
+								}
 							}
-
-							Logger . LogInformation ( "License file check passed." ) ;
+							else
+							{
+								Logger . LogCritical ( License ) ;
+								Logger . LogCritical ( "You can use -acceptLicense to accept license" ) ;
+							}
 						}
 						else
 						{

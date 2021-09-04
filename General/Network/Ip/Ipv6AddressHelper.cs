@@ -31,9 +31,9 @@ namespace DreamRecorder . ToolBox . Network . Ip
 				ushort * numbers = stackalloc ushort [ NumberOfLabels ] ;
 
 				// optimized zeroing of 8 shorts = 2 longs
-				( ( long * ) numbers ) [ 0 ] = 0L ;
-				( ( long * ) numbers ) [ 1 ] = 0L ;
-				isLoopback                   = Parse ( str , numbers , start , ref scopeId ) ;
+				( ( long * )numbers ) [ 0 ] = 0L ;
+				( ( long * )numbers ) [ 1 ] = 0L ;
+				isLoopback                  = Parse ( str , numbers , start , ref scopeId ) ;
 
 				return '[' + CreateCanonicalName ( numbers ) + ']' ;
 			}
@@ -513,7 +513,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 					{
 						if ( numberIsValid )
 						{
-							numbers [ index++ ] = ( ushort ) number ;
+							numbers [ index++ ] = ( ushort )number ;
 							numberIsValid       = false ;
 						}
 
@@ -536,7 +536,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 					case ':' :
 
 					{
-						numbers [ index++ ] = ( ushort ) number ;
+						numbers [ index++ ] = ( ushort )number ;
 						number              = 0 ;
 						++i ;
 
@@ -589,8 +589,8 @@ namespace DreamRecorder . ToolBox . Network . Ip
 								}
 
 								number              = Ipv4AddressHelper . ParseHostNumber ( address , i , j ) ;
-								numbers [ index++ ] = ( ushort ) ( number >> 16 ) ;
-								numbers [ index++ ] = ( ushort ) number ;
+								numbers [ index++ ] = ( ushort )( number >> 16 ) ;
+								numbers [ index++ ] = ( ushort )number ;
 								i                   = j ;
 
 								//
@@ -613,7 +613,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 					{
 						if ( numberIsValid )
 						{
-							numbers [ index++ ] = ( ushort ) number ;
+							numbers [ index++ ] = ( ushort )number ;
 							numberIsValid       = false ;
 						}
 
@@ -647,7 +647,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 			if ( numberIsValid )
 			{
-				numbers [ index++ ] = ( ushort ) number ;
+				numbers [ index++ ] = ( ushort )number ;
 			}
 
 			//

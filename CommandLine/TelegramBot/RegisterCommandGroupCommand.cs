@@ -95,8 +95,8 @@ namespace DreamRecorder . ToolBox . TelegramBot
 														{
 															Text = $"Do register {permissionGroup . DisplayName}" ,
 															CallbackData =
-																$"{nameof ( CreateUserCommand <TUser> )} {permissionGroup . Guid}"
-														}
+																$"{nameof ( CreateUserCommand <TUser> )} {permissionGroup . Guid}" ,
+														} ,
 													} ) ) ;
 							}
 						}

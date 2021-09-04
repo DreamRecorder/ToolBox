@@ -11,9 +11,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 	public abstract class IpPrefix : Prefix
 	{
 
-		public static explicit operator IpPrefix (
-			[NotNull]
-			string address )
+		public static explicit operator IpPrefix ( [NotNull] string address )
 		{
 			if ( address == null )
 			{

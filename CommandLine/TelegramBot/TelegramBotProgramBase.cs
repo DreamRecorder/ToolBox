@@ -5,11 +5,6 @@ using System . Linq ;
 using System . Net ;
 
 using DreamRecorder . ToolBox . CommandLine ;
-using DreamRecorder . ToolBox . General ;
-
-using Microsoft . Extensions . DependencyInjection ;
-
-using Telegram . Bot ;
 
 namespace DreamRecorder . ToolBox . TelegramBot
 {

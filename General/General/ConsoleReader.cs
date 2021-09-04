@@ -24,7 +24,7 @@ namespace DreamRecorder . ToolBox . General
 		{
 			GetInput    = new AutoResetEvent ( false ) ;
 			GotInput    = new AutoResetEvent ( false ) ;
-			InputThread = new Thread ( Reader ) { IsBackground = true } ;
+			InputThread = new Thread ( Reader ) { IsBackground = true , } ;
 		}
 
 		public static void Start ( ) { InputThread . Start ( ) ; }

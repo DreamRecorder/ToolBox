@@ -69,7 +69,7 @@ namespace DreamRecorder . ToolBox . Renderer
 			Vector2 result = CalculateProject ( point ) ;
 			double  resize = ScreenWidth / HalfFovTan ;
 
-			return new Vector2 ( ( float ) ( result . X * resize ) , ( float ) ( result . Y * resize ) ) ;
+			return new Vector2 ( ( float )( result . X * resize ) , ( float )( result . Y * resize ) ) ;
 		}
 
 		protected abstract Vector2 CalculateProject ( Vector3 relativePoint ) ;

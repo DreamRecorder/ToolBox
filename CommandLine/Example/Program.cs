@@ -56,10 +56,6 @@ namespace DreamRecorder . ToolBox . CommandLine . Example
 
 		public override void Start ( string [ ] args )
 		{
-			PerformanceCounterProvider provider = new PerformanceCounterProvider ( ) ;
-
-			provider . GetPerformanceCounter ( "a" ) ;
-
 			(string SourceCodeVersion , string Builder , DateTimeOffset ? BuildTime) ? a =
 				typeof ( ProgramBase <Program , ProgramExitCode , ProgramSetting , ProgramSettingCatalog> ) . Assembly .
 					GetInformationalVersion ( ) ;

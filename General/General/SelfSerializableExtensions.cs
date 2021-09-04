@@ -19,9 +19,7 @@ namespace DreamRecorder . ToolBox . General
 	public static class SelfSerializableExtensions
 	{
 
-		public static string ToXmlString (
-			[NotNull]
-			this ISelfSerializable item )
+		public static string ToXmlString ( [NotNull] this ISelfSerializable item )
 		{
 			if ( item == null )
 			{
@@ -75,10 +73,7 @@ namespace DreamRecorder . ToolBox . General
 			return value . ParseTo <T> ( ) ;
 		}
 
-		public static string Serialize <T> (
-			[NotNull]
-			this T obj ,
-			Type [ ] types = null )
+		public static string Serialize <T> ( [NotNull] this T obj , Type [ ] types = null )
 		{
 			if ( obj == null )
 			{
@@ -87,7 +82,7 @@ namespace DreamRecorder . ToolBox . General
 
 			if ( typeof ( ISelfSerializable ) . IsAssignableFrom ( typeof ( T ) ) )
 			{
-				return ( ( ISelfSerializable ) obj ) . ToXElement ( ) . ToString ( ) ;
+				return ( ( ISelfSerializable )obj ) . ToXElement ( ) . ToString ( ) ;
 			}
 			else
 			{
@@ -99,7 +94,7 @@ namespace DreamRecorder . ToolBox . General
 																{
 																	Async              = false ,
 																	Encoding           = Encoding . UTF8 ,
-																	OmitXmlDeclaration = true
+																	OmitXmlDeclaration = true ,
 																} ) ;
 
 				if ( typeof ( T ) . GetCustomAttribute <DataContractAttribute> ( )   != null
@@ -120,7 +115,8 @@ namespace DreamRecorder . ToolBox . General
 					xmlSerializer . Serialize (
 												xmlWriter ,
 												obj ,
-												new XmlSerializerNamespaces ( new [ ] { XmlQualifiedName . Empty } ) ) ;
+												new XmlSerializerNamespaces (
+																			new [ ] { XmlQualifiedName . Empty , } ) ) ;
 				}
 
 				xmlWriter . Flush ( ) ;
@@ -129,10 +125,7 @@ namespace DreamRecorder . ToolBox . General
 			}
 		}
 
-		public static T Deserialize <T> (
-			[NotNull]
-			this string element ,
-			Type [ ] types = null )
+		public static T Deserialize <T> ( [NotNull] this string element , Type [ ] types = null )
 		{
 			if ( element == null )
 			{
@@ -141,7 +134,7 @@ namespace DreamRecorder . ToolBox . General
 
 			if ( typeof ( ISelfSerializable ) . IsAssignableFrom ( typeof ( T ) ) )
 			{
-				return ( T ) Activator . CreateInstance ( typeof ( T ) , XElement . Parse ( element ) ) ;
+				return ( T )Activator . CreateInstance ( typeof ( T ) , XElement . Parse ( element ) ) ;
 			}
 			else
 			{
@@ -150,7 +143,7 @@ namespace DreamRecorder . ToolBox . General
 				{
 					DataContractSerializer dataContractSerializer =
 						new DataContractSerializer ( typeof ( T ) , types ?? typeof ( T ) . Assembly . GetTypes ( ) ) ;
-					return ( T ) dataContractSerializer . ReadObject (
+					return ( T )dataContractSerializer . ReadObject (
 																	new MemoryStream (
 																	Encoding . UTF8 . GetBytes ( element ) ) ) ;
 				}
@@ -161,7 +154,7 @@ namespace DreamRecorder . ToolBox . General
 																	types
 																	?? typeof ( T ) . Assembly .
 																		GetExportedTypes ( ) ) ;
-					return ( T ) xmlSerializer . Deserialize (
+					return ( T )xmlSerializer . Deserialize (
 															new MemoryStream (
 																			Encoding . UTF8 . GetBytes ( element ) ) ) ;
 				}

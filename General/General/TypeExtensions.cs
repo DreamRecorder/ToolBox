@@ -78,9 +78,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public static void PrepareAssembly <T> ( ) => PrepareAssembly ( typeof ( T ) ) ;
 
-		public static void PrepareAssembly (
-			[NotNull]
-			this Type type )
+		public static void PrepareAssembly ( [NotNull] this Type type )
 		{
 			if ( type == null )
 			{
@@ -96,11 +94,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public static string GetResourceFile <T> ( string fileName ) => GetResourceFile ( typeof ( T ) , fileName ) ;
 
-		public static string GetResourceFile (
-			[NotNull]
-			this Type type ,
-			[NotNull]
-			string fileName )
+		public static string GetResourceFile ( [NotNull] this Type type , [NotNull] string fileName )
 		{
 			if ( type == null )
 			{
@@ -134,9 +128,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public static List <PropertyInfo> GetSortedProperties <T> ( ) => typeof ( T ) . GetSortedProperties ( ) ;
 
-		public static List <PropertyInfo> GetSortedProperties (
-			[NotNull]
-			this Type type )
+		public static List <PropertyInfo> GetSortedProperties ( [NotNull] this Type type )
 		{
 			if ( type == null )
 			{
@@ -170,9 +162,7 @@ namespace DreamRecorder . ToolBox . General
 			=> typeof ( T ) . GetSortedPropertiesWithAttribute <TAttribute> ( ) ;
 
 		public static List <(PropertyInfo PropertyInfo , TAttribute Attribute)> GetSortedPropertiesWithAttribute
-			<TAttribute> (
-				[NotNull]
-				this Type type ) where TAttribute : Attribute
+			<TAttribute> ( [NotNull] this Type type ) where TAttribute : Attribute
 		{
 			if ( type == null )
 			{
@@ -193,9 +183,7 @@ namespace DreamRecorder . ToolBox . General
 			=> typeof ( T ) . GetSortedPropertiesWithNullableAttribute <TAttribute> ( ) ;
 
 		public static List <(PropertyInfo , TAttribute Attribute)> GetSortedPropertiesWithNullableAttribute
-			<TAttribute> (
-				[NotNull]
-				this Type type ) where TAttribute : Attribute
+			<TAttribute> ( [NotNull] this Type type ) where TAttribute : Attribute
 		{
 			if ( type == null )
 			{

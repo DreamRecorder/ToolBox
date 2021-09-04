@@ -15,7 +15,7 @@ namespace DreamRecorder . ToolBox . General
 
 		Running ,
 
-		Finished
+		Finished ,
 
 	}
 

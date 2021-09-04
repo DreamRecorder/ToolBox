@@ -26,9 +26,7 @@ namespace DreamRecorder . ToolBox . General
 		public static string GetAssemblyFullName ( this Type type )
 			=> type . GetTypeInfo ( ) . Assembly . GetName ( ) . FullName . Replace ( ", " , CommaWithNewline ) ;
 
-		public static string GetAssemblyInfo (
-			[NotNull]
-			this Assembly assembly )
+		public static string GetAssemblyInfo ( [NotNull] this Assembly assembly )
 		{
 			if ( assembly == null )
 			{
@@ -42,11 +40,7 @@ namespace DreamRecorder . ToolBox . General
 			return builder . ToString ( ) ;
 		}
 
-		public static void GetAssemblyInfo (
-			[NotNull]
-			this Assembly assembly ,
-			[NotNull]
-			StringBuilder builder )
+		public static void GetAssemblyInfo ( [NotNull] this Assembly assembly , [NotNull] StringBuilder builder )
 		{
 			if ( assembly == null )
 			{
@@ -72,15 +66,14 @@ namespace DreamRecorder . ToolBox . General
 			if ( informationalVersion != null )
 			{
 				builder . AppendLine ( $"Code version {informationalVersion ? . SourceCodeVersion}" ) ;
-				builder . AppendLine ( $"Built by {informationalVersion ? . Builder} at\u00A0{informationalVersion ? . BuildTime.ToString().Replace(' ', '\u00A0')}" ) ;
+				builder . AppendLine (
+									$"Built by {informationalVersion ? . Builder} at\u00A0{informationalVersion ? . BuildTime . ToString ( ) . Replace ( ' ' , '\u00A0' )}" ) ;
 			}
 
 			builder . AppendLine ( assembly . GetCustomAttribute <AssemblyCopyrightAttribute> ( ) ? . Copyright ) ;
 		}
 
-		public static void GetAssemblyInfo <T> (
-			[NotNull]
-			StringBuilder builder )
+		public static void GetAssemblyInfo <T> ( [NotNull] StringBuilder builder )
 		{
 			if ( builder == null )
 			{
@@ -123,9 +116,7 @@ namespace DreamRecorder . ToolBox . General
 			}
 		}
 
-		public static string GetDisplayName (
-			[NotNull]
-			this Assembly assembly )
+		public static string GetDisplayName ( [NotNull] this Assembly assembly )
 		{
 			if ( assembly == null )
 			{
@@ -138,9 +129,7 @@ namespace DreamRecorder . ToolBox . General
 		}
 
 		[CanBeNull]
-		public static string GetProgramName (
-			[NotNull]
-			this Assembly assembly )
+		public static string GetProgramName ( [NotNull] this Assembly assembly )
 		{
 			if ( assembly == null )
 			{
@@ -153,9 +142,7 @@ namespace DreamRecorder . ToolBox . General
 			return attribute ? . Name ;
 		}
 
-		public static Guid ? GetGuid (
-			[NotNull]
-			this Assembly assembly )
+		public static Guid ? GetGuid ( [NotNull] this Assembly assembly )
 		{
 			if ( assembly == null )
 			{
@@ -174,9 +161,7 @@ namespace DreamRecorder . ToolBox . General
 		}
 
 		public static (string SourceCodeVersion , string Builder , DateTimeOffset ? BuildTime) ?
-			GetInformationalVersion (
-				[NotNull]
-				this Assembly assembly )
+			GetInformationalVersion ( [NotNull] this Assembly assembly )
 		{
 			if ( assembly == null )
 			{
@@ -201,9 +186,7 @@ namespace DreamRecorder . ToolBox . General
 			return default ;
 		}
 
-		public static string GetSourceCodeVersion (
-			[NotNull]
-			this Assembly assembly )
+		public static string GetSourceCodeVersion ( [NotNull] this Assembly assembly )
 		{
 			if ( assembly == null )
 			{
@@ -213,9 +196,7 @@ namespace DreamRecorder . ToolBox . General
 			return assembly . GetInformationalVersion ( ) ? . SourceCodeVersion ;
 		}
 
-		public static string GetBuilder (
-			[NotNull]
-			this Assembly assembly )
+		public static string GetBuilder ( [NotNull] this Assembly assembly )
 		{
 			if ( assembly == null )
 			{
@@ -225,9 +206,7 @@ namespace DreamRecorder . ToolBox . General
 			return assembly . GetInformationalVersion ( ) ? . Builder ;
 		}
 
-		public static DateTimeOffset ? GetBuildTime (
-			[NotNull]
-			this Assembly assembly )
+		public static DateTimeOffset ? GetBuildTime ( [NotNull] this Assembly assembly )
 		{
 			if ( assembly == null )
 			{

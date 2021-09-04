@@ -11,8 +11,7 @@ namespace DreamRecorder . ToolBox . CommandLine . Example . Telegram
 {
 
 	public class Program
-		: TelegramBotProgramBase <Program , User , ProgramExitCode , ProgramSetting ,
-			ProgramSettingCatalog>
+		: TelegramBotProgramBase <Program , User , ProgramExitCode , ProgramSetting , ProgramSettingCatalog>
 	{
 
 		public override string License { get ; }
@@ -27,21 +26,15 @@ namespace DreamRecorder . ToolBox . CommandLine . Example . Telegram
 
 		public override void Start ( string [ ] args ) { throw new NotImplementedException ( ) ; }
 
-		public override void ConfigureLogger ( ILoggingBuilder builder )
-		{
-			throw new NotImplementedException ( ) ;
-		}
+		public override void ConfigureLogger ( ILoggingBuilder builder ) { throw new NotImplementedException ( ) ; }
 
 		public override void ShowLogo ( ) { throw new NotImplementedException ( ) ; }
 
 		public override void ShowCopyright ( ) { throw new NotImplementedException ( ) ; }
 
-		public override void OnExit ( ProgramExitCode code )
-		{
-			throw new NotImplementedException ( ) ;
-		}
+		public override void OnExit ( ProgramExitCode code ) { throw new NotImplementedException ( ) ; }
 
-		public static void Main(string[] args) { new Program().RunMain(args); }
+		public static void Main ( string [ ] args ) { new Program ( ) . RunMain ( args ) ; }
 
 	}
 

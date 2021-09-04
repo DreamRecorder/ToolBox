@@ -29,9 +29,7 @@ namespace DreamRecorder . ToolBox . Colors
 			return result ;
 		}
 
-		public static explicit operator HdrColor (
-			[NotNull]
-			byte [ ] color )
+		public static explicit operator HdrColor ( [NotNull] byte [ ] color )
 		{
 			if ( color == null )
 			{

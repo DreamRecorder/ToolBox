@@ -37,9 +37,7 @@ namespace DreamRecorder . ToolBox . General
 		/// </summary>
 		/// <param name="bytes"></param>
 		/// <returns></returns>
-		public static bool [ ] ToBooleanArray (
-			[NotNull]
-			this byte [ ] bytes )
+		public static bool [ ] ToBooleanArray ( [NotNull] this byte [ ] bytes )
 		{
 			if ( bytes == null )
 			{
@@ -87,9 +85,7 @@ namespace DreamRecorder . ToolBox . General
 		/// </summary>
 		/// <param name="source"></param>
 		/// <returns></returns>
-		public static byte ToByte (
-			[NotNull]
-			this bool [ ] source )
+		public static byte ToByte ( [NotNull] this bool [ ] source )
 		{
 			if ( source == null )
 			{
@@ -105,9 +101,9 @@ namespace DreamRecorder . ToolBox . General
 
 			for ( int i = 7 ; i >= 0 ; i-- )
 			{
-				byte value = source [ i ] ? ( byte ) 1 : ( byte ) 0 ;
+				byte value = source [ i ] ? ( byte )1 : ( byte )0 ;
 
-				result = ( byte ) ( result | ( value << i ) ) ;
+				result = ( byte )( result | ( value << i ) ) ;
 			}
 
 			return result ;
@@ -137,9 +133,9 @@ namespace DreamRecorder . ToolBox . General
 			{
 				for ( int i = 0 ; i < 8 ; i++ )
 				{
-					byte value = source [ i + 8 * j ] ? ( byte ) 1 : ( byte ) 0 ;
+					byte value = source [ i + 8 * j ] ? ( byte )1 : ( byte )0 ;
 
-					result [ j ] = ( byte ) ( result [ j ] | ( value << i ) ) ;
+					result [ j ] = ( byte )( result [ j ] | ( value << i ) ) ;
 				}
 			}
 
@@ -160,7 +156,7 @@ namespace DreamRecorder . ToolBox . General
 			{
 				Marshal . Copy ( bytes , 0 , buffer , size ) ;
 
-				return ( T ) Marshal . PtrToStructure ( buffer , typeof ( T ) ) ;
+				return ( T )Marshal . PtrToStructure ( buffer , typeof ( T ) ) ;
 			}
 			finally
 			{

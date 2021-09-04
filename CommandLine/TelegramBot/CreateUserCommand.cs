@@ -32,8 +32,8 @@ namespace DreamRecorder . ToolBox . TelegramBot
 			{
 				new InlineKeyboardButton
 				{
-					Text = "Do create New User and Bind it" , CallbackData = $"{nameof ( CreateUserCommand <TUser> )}"
-				}
+					Text = "Do create New User and Bind it" , CallbackData = $"{nameof ( CreateUserCommand <TUser> )}" ,
+				} ,
 			} ;
 
 		public override string HelpInformation
@@ -63,11 +63,7 @@ namespace DreamRecorder . ToolBox . TelegramBot
 			return true ;
 		}
 
-		private void CreateUser (
-			User requester ,
-			[CanBeNull]
-			Message message ,
-			Session <TUser> session )
+		private void CreateUser ( User requester , [CanBeNull] Message message , Session <TUser> session )
 		{
 			TUser user = ServiceProvider . CreateUser ( ) ;
 

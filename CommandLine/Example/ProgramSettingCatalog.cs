@@ -9,7 +9,7 @@ namespace DreamRecorder . ToolBox . CommandLine . Example
 	public enum ProgramSettingCatalog
 	{
 
-		General = 0
+		General = 0 ,
 
 	}
 

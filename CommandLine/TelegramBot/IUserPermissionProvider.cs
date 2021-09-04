@@ -11,11 +11,7 @@ namespace DreamRecorder . ToolBox . TelegramBot
 	public interface IUserPermissionProvider <TUser> where TUser : IUser
 	{
 
-		bool IsAllowedToInvoke (
-			[CanBeNull]
-			TUser user ,
-			[CanBeNull]
-			CommandPermissionGroup commandPermissionGroup ) ;
+		bool IsAllowedToInvoke ( [CanBeNull] TUser user , [CanBeNull] CommandPermissionGroup commandPermissionGroup ) ;
 
 	}
 

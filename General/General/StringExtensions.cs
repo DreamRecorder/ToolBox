@@ -58,11 +58,9 @@ namespace DreamRecorder . ToolBox . General
 			return typeConverter . ConvertFromString ( value ) ;
 		}
 
-		public static T ParseTo <T> ( this string value ) => ( T ) value . ParseTo ( typeof ( T ) ) ;
+		public static T ParseTo <T> ( this string value ) => ( T )value . ParseTo ( typeof ( T ) ) ;
 
-		public static string [ ] SplitByCamelCase (
-			[NotNull]
-			string value )
+		public static string [ ] SplitByCamelCase ( [NotNull] string value )
 		{
 			if ( value == null )
 			{

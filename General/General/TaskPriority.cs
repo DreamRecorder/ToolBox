@@ -17,7 +17,7 @@ namespace DreamRecorder . ToolBox . General
 
 		Low ,
 
-		Background
+		Background ,
 
 	}
 

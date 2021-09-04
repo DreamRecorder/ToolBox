@@ -56,7 +56,7 @@ namespace DreamRecorder . ToolBox . Network
 				return false ;
 			}
 
-			return Equals ( ( Address ) obj ) ;
+			return Equals ( ( Address )obj ) ;
 		}
 
 		public override int GetHashCode ( ) => AddressBytes . GetHashCode ( ) ;

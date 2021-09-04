@@ -28,25 +28,17 @@ namespace DreamRecorder . ToolBox . TelegramBot
 		CommandPermissionGroup PermissionGroup { get ; }
 
 		bool Process (
-			[NotNull]
-			Message message ,
-			[NotNull] [ItemNotNull]
-			string [ ] args ,
-			[NotNull]
-			Session <TUser> session ,
-			bool isExactlyMatched ,
-			[CanBeNull]
-			object tag ) ;
+			[NotNull]               Message         message ,
+			[NotNull] [ItemNotNull] string [ ]      args ,
+			[NotNull]               Session <TUser> session ,
+			bool                                    isExactlyMatched ,
+			[CanBeNull] object                      tag ) ;
 
 		void Process (
-			[NotNull]
-			CallbackQuery callbackQuery ,
-			[NotNull] [ItemNotNull]
-			string [ ] args ,
-			[NotNull]
-			Session <TUser> session ,
-			[CanBeNull]
-			object tag ) ;
+			[NotNull]               CallbackQuery   callbackQuery ,
+			[NotNull] [ItemNotNull] string [ ]      args ,
+			[NotNull]               Session <TUser> session ,
+			[CanBeNull]             object          tag ) ;
 
 		bool CanBeRouteTarget ( Session <TUser> session ) ;
 

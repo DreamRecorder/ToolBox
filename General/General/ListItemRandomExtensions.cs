@@ -12,10 +12,7 @@ namespace DreamRecorder . ToolBox . General
 	public static class ListItemRandomExtensions
 	{
 
-		public static T RandomItem <T> (
-			[NotNull]
-			this IList <T> list ,
-			IRandom random = null )
+		public static T RandomItem <T> ( [NotNull] this IList <T> list , IRandom random = null )
 		{
 			if ( list == null )
 			{
@@ -27,15 +24,12 @@ namespace DreamRecorder . ToolBox . General
 				throw new InvalidOperationException ( "Sequence contains no elements" ) ;
 			}
 
-			random ??= ( IRandom ) new Random ( ) ;
+			random ??= ( IRandom )new Random ( ) ;
 
 			return list [ random . Next ( list . Count ) ] ;
 		}
 
-		public static T RandomItem <T> (
-			[NotNull]
-			this IRandom random ,
-			IList <T> list )
+		public static T RandomItem <T> ( [NotNull] this IRandom random , IList <T> list )
 		{
 			if ( random == null )
 			{
@@ -63,11 +57,7 @@ namespace DreamRecorder . ToolBox . General
 		/// <param name="count"></param>
 		/// <param name="random"></param>
 		/// <returns></returns>
-		public static List <T> RandomChoose <T> (
-			[NotNull]
-			this IList <T> list ,
-			int     count ,
-			IRandom random = null )
+		public static List <T> RandomChoose <T> ( [NotNull] this IList <T> list , int count , IRandom random = null )
 		{
 			if ( list == null )
 			{
@@ -85,7 +75,7 @@ namespace DreamRecorder . ToolBox . General
 			}
 
 			List <T> result = new List <T> ( count ) ;
-			random ??= ( IRandom ) new Random ( ) ;
+			random ??= ( IRandom )new Random ( ) ;
 
 			for ( int i = 0 ; i < count ; i++ )
 			{
@@ -104,10 +94,9 @@ namespace DreamRecorder . ToolBox . General
 		/// <param name="random"></param>
 		/// <returns></returns>
 		public static List <T> RandomUniqueChoose <T> (
-			[NotNull]
-			this IList <T> list ,
-			int     count ,
-			IRandom random = null )
+			[NotNull] this IList <T> list ,
+			int                      count ,
+			IRandom                  random = null )
 		{
 			if ( list == null )
 			{
@@ -129,22 +118,19 @@ namespace DreamRecorder . ToolBox . General
 				throw new ArgumentOutOfRangeException ( nameof ( count ) ) ;
 			}
 
-			random ??= ( IRandom ) new Random ( ) ;
+			random ??= ( IRandom )new Random ( ) ;
 
 			return random . Permutation ( list . Count - 1 , count ) . Select ( index => list [ index ] ) . ToList ( ) ;
 		}
 
-		public static IList <T> Shuffle <T> (
-			[NotNull]
-			this IList <T> list ,
-			IRandom random = null )
+		public static IList <T> Shuffle <T> ( [NotNull] this IList <T> list , IRandom random = null )
 		{
 			if ( list == null )
 			{
 				throw new ArgumentNullException ( nameof ( list ) ) ;
 			}
 
-			random ??= ( IRandom ) new Random ( ) ;
+			random ??= ( IRandom )new Random ( ) ;
 			int n = list . Count ;
 			while ( n > 1 )
 			{

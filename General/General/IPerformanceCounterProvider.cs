@@ -1,20 +1,19 @@
 ﻿using System ;
-using System.Collections ;
-using System.Collections.Generic ;
-using System . Diagnostics ;
-using System.Linq ;
+using System . Collections ;
+using System . Collections . Generic ;
+using System . Linq ;
 
 namespace DreamRecorder . ToolBox . General
 {
 
-	public interface IPerformanceCounterProvider
-	{
+	//public interface IPerformanceCounterProvider
+	//{
 
-		PerformanceCounter GetPerformanceCounter (
-			string categoryName = null ,
-			string counterName  = null ,
-			string instanceName = null ) ;
+	//	T GetPerformanceCounter <T> (
+	//		string categoryName = null ,
+	//		string counterName  = null ,
+	//		string instanceName = null ) where T : EventCounter , new ( ) ;
 
-	}
+	//}
 
 }

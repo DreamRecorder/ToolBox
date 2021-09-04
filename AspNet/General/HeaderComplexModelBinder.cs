@@ -46,9 +46,7 @@ namespace DreamRecorder . ToolBox . AspNet . General
 			return Task . CompletedTask ;
 		}
 
-		public static Action <MvcOptions> EnableHeaderComplexModelBinder (
-			[CanBeNull]
-			Action <MvcOptions> next = null )
+		public static Action <MvcOptions> EnableHeaderComplexModelBinder ( [CanBeNull] Action <MvcOptions> next = null )
 		{
 			void AddModelBinder ( MvcOptions options )
 			{

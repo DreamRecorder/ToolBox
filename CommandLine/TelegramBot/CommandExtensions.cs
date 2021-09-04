@@ -11,9 +11,7 @@ namespace DreamRecorder . ToolBox . TelegramBot
 	public static class CommandExtensions
 	{
 
-		public static string GetCommandName (
-			[NotNull]
-			this string argument )
+		public static string GetCommandName ( [NotNull] this string argument )
 		{
 			if ( string . IsNullOrWhiteSpace ( argument ) )
 			{

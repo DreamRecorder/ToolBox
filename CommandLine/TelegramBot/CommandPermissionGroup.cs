@@ -51,7 +51,7 @@ namespace DreamRecorder . ToolBox . TelegramBot
 				return false ;
 			}
 
-			return Equals ( ( CommandPermissionGroup ) obj ) ;
+			return Equals ( ( CommandPermissionGroup )obj ) ;
 		}
 
 		public override int GetHashCode ( ) => Guid . GetHashCode ( ) ;

@@ -37,7 +37,7 @@ namespace DreamRecorder . ToolBox . General
 				}
 
 
-				TaskQueues [ ( int ) task . Priority ] . Enqueue ( task ) ;
+				TaskQueues [ ( int )task . Priority ] . Enqueue ( task ) ;
 			}
 		}
 
@@ -114,7 +114,7 @@ namespace DreamRecorder . ToolBox . General
 
 						if ( task . Status != TaskStatus . Finished )
 						{
-							TaskQueues [ ( int ) task . Priority ] . Enqueue ( task ) ;
+							TaskQueues [ ( int )task . Priority ] . Enqueue ( task ) ;
 						}
 					}
 				}

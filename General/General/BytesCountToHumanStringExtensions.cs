@@ -11,7 +11,7 @@ namespace DreamRecorder . ToolBox . General
 
 		private static readonly string [ ] Suffixes =
 		{
-			"B" , "KiB" , "MiB" , "GiB" , "TiB" , "PiB" , "EiB" , "ZiB" , "YiB"
+			"B" , "KiB" , "MiB" , "GiB" , "TiB" , "PiB" , "EiB" , "ZiB" , "YiB" ,
 		} ;
 
 		public static string BytesCountToHumanString ( this long bytesCount )

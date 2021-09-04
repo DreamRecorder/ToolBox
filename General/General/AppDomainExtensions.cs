@@ -10,17 +10,17 @@ namespace DreamRecorder . ToolBox . General
 	public static class AppDomainExtensions
 	{
 
-		private static volatile bool Loaded ;
+		private static volatile bool _loaded ;
 
 		public static void PrepareCurrentDomain ( )
 		{
-			if ( ! Loaded )
+			if ( ! _loaded )
 			{
 				lock ( StaticServiceProvider . ServiceCollection )
 				{
-					if ( ! Loaded )
+					if ( ! _loaded )
 					{
-						Loaded = true ;
+						_loaded = true ;
 					}
 					else
 					{

@@ -42,7 +42,7 @@ namespace DreamRecorder . ToolBox . TelegramBot
 																			{
 																				Text = "Grant permission" ,
 																				CallbackData =
-																					$"RegisterCommandGroup {command . PermissionGroup . Guid}"
+																					$"RegisterCommandGroup {command . PermissionGroup . Guid}" ,
 																			} ) ) ;
 			}
 		}
@@ -66,7 +66,7 @@ namespace DreamRecorder . ToolBox . TelegramBot
 															{
 																Text = "Grant permission" ,
 																CallbackData =
-																	$"RegisterCommandGroup {command . PermissionGroup . Guid}"
+																	$"RegisterCommandGroup {command . PermissionGroup . Guid}" ,
 															} ) ) .
 						Wait ( ) ;
 			}
