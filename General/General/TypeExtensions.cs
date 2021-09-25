@@ -92,9 +92,37 @@ namespace DreamRecorder . ToolBox . General
 
 		#region GetResourceFile
 
-		public static string GetResourceFile <T> ( string fileName ) => GetResourceFile ( typeof ( T ) , fileName ) ;
+		public static string GetResourceFileString <T> ( string fileName )
+			=> GetResourceFileString ( typeof ( T ) , fileName ) ;
 
-		public static string GetResourceFile ( [NotNull] this Type type , [NotNull] string fileName )
+		public static string GetResourceFileString ( [NotNull] this Type type , [NotNull] string fileName )
+		{
+			if ( type == null )
+			{
+				throw new ArgumentNullException ( nameof ( type ) ) ;
+			}
+
+			if ( fileName == null )
+			{
+				throw new ArgumentNullException ( nameof ( fileName ) ) ;
+			}
+
+			Stream stream = type . GetResourceFileStream ( fileName ) ;
+			if ( stream != null )
+			{
+				using StreamReader reader  = new StreamReader ( stream ) ;
+				string             content = reader . ReadToEnd ( ) ;
+
+				return content ;
+			}
+
+			return null ;
+		}
+
+		public static Stream GetResourceFileStream <T> ( string fileName )
+			=> GetResourceFileStream ( typeof ( T ) , fileName ) ;
+
+		public static Stream GetResourceFileStream ( [NotNull] this Type type , [NotNull] string fileName )
 		{
 			if ( type == null )
 			{
@@ -107,19 +135,7 @@ namespace DreamRecorder . ToolBox . General
 			}
 
 			Stream stream = type . Assembly . GetManifestResourceStream ( type , fileName ) ;
-			if ( stream != null )
-			{
-				string license ;
-
-				using ( StreamReader reader = new StreamReader ( stream ) )
-				{
-					license = reader . ReadToEnd ( ) ;
-				}
-
-				return license ;
-			}
-
-			return null ;
+			return stream ;
 		}
 
 		#endregion
