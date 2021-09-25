@@ -83,15 +83,21 @@ namespace DreamRecorder . ToolBox . General
 			GetAssemblyInfo ( typeof ( T ) . Assembly , builder ) ;
 		}
 
-		public static string GetResourceFile <T> ( this Assembly assembly , string fileName )
+		public static Stream GetResourceFileStream<T>(this Assembly assembly, string fileName)
+		{
+			Stream stream = assembly.GetManifestResourceStream(typeof(T), fileName);
+			return stream;
+		}
+
+		public static string GetResourceFileString <T> ( this Assembly assembly , string fileName )
 		{
 			Stream stream = assembly . GetManifestResourceStream ( typeof ( T ) , fileName ) ;
 			if ( stream != null )
 			{
 				using StreamReader reader  = new StreamReader ( stream ) ;
-				string             license = reader . ReadToEnd ( ) ;
+				string             content = reader . ReadToEnd ( ) ;
 
-				return license ;
+				return content ;
 			}
 
 			return null ;
