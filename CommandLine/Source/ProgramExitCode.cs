@@ -25,6 +25,8 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 		public static T InvalidSetting = ( ProgramExitCode <T> )3 ;
 
+		public static T InvalidArgument = ( ProgramExitCode <T> )4 ;
+
 
 		public static implicit operator int ( ProgramExitCode <T> item ) => item . Code ;
 

@@ -282,7 +282,11 @@ namespace DreamRecorder . ToolBox . CommandLine
 		{
 			Current = ( T )this ;
 
+			Logger = LoggerFactory . Create ( ( builder ) => builder . AddConsole ( ) ) . CreateLogger <T> ( ) ;
+
 			CommandLineApplication = new CommandLineApplication ( ThrowOnUnexpectedArg ) ;
+
+			CommandLineApplication . Name = ProgramExtensions . GetProgramName ( ) ;
 
 			CommandLineApplication . HelpOption ( "-?|-h|--help|-help" ) ;
 
@@ -306,6 +310,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 																			"Verbose Log" ,
 																			CommandOptionType . NoValue ) ;
 
+
 			RegisterArgument ( CommandLineApplication ) ;
 
 			int Execution ( )
@@ -313,8 +318,9 @@ namespace DreamRecorder . ToolBox . CommandLine
 				IsDebug = debugOption . HasValue ( ) || Debugger . IsAttached ;
 
 #if DEBUG
-				IsDebug = true ;
+				Logger . LogCritical ( "DEBUG BUILD, TEST ONLY" ) ;
 
+				IsDebug = true ;
 #endif
 
 				IsVerbose = verboseOption . HasValue ( ) ;
@@ -334,7 +340,10 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 				#endregion
 
-				Logger . LogInformation ( "Start with argument: {0}" , string . Join ( " " , args ) ) ;
+				Logger . LogInformation (
+										"Start in {1} with argument: {0}" ,
+										string . Join ( " " , args ) ,
+										Environment . CurrentDirectory ) ;
 
 				#region Check Debug
 
@@ -482,7 +491,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 			try
 			{
-				CommandLineApplication . Execute ( args ) ;
+				Environment . ExitCode = CommandLineApplication . Execute ( args ) ;
 			}
 			catch ( Exception e )
 			{

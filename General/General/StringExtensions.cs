@@ -3,6 +3,7 @@ using System . Collections ;
 using System . Collections . Generic ;
 using System . ComponentModel ;
 using System . Globalization ;
+using System . IO ;
 using System . Linq ;
 using System . Text ;
 using System . Text . RegularExpressions ;
@@ -47,6 +48,12 @@ namespace DreamRecorder . ToolBox . General
 															=> CharUnicodeInfo . GetUnicodeCategory ( c )
 																!= UnicodeCategory . NonSpacingMark ) .
 												ToArray ( ) ) . Normalize ( NormalizationForm . FormC ) ;
+		}
+
+		public static bool CanBeFileName ( this string fileName )
+		{
+			int indexOfInvalidChar = fileName . IndexOfAny ( Path . GetInvalidFileNameChars ( ) ) ;
+			return indexOfInvalidChar == - 1 ;
 		}
 
 		public static string ToSlug ( this string name ) => ToUrlSlug ( name ) ;
