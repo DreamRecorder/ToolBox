@@ -341,9 +341,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 				#endregion
 
 				Logger . LogInformation (
-										"Start in {1} with argument: {0}" ,
-										string . Join ( " " , args ) ,
-										Environment . CurrentDirectory ) ;
+										$"Start in {Environment . CurrentDirectory} with argument: {string . Join ( " " , args )}" ) ;
 
 				#region Check Debug
 
@@ -492,6 +490,11 @@ namespace DreamRecorder . ToolBox . CommandLine
 			try
 			{
 				Environment . ExitCode = CommandLineApplication . Execute ( args ) ;
+			}
+			catch ( CommandParsingException e )
+			{
+				Logger . LogCritical ( e , " The argument provided is invalid." ) ;
+				Exit ( ProgramExitCode <TExitCode> . InvalidArgument ) ;
 			}
 			catch ( Exception e )
 			{
