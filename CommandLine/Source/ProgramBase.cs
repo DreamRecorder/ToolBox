@@ -15,6 +15,8 @@ using Microsoft . Extensions . CommandLineUtils ;
 using Microsoft . Extensions . DependencyInjection ;
 using Microsoft . Extensions . Logging ;
 
+using WenceyWang . FIGlet ;
+
 namespace DreamRecorder . ToolBox . CommandLine
 {
 
@@ -156,7 +158,12 @@ namespace DreamRecorder . ToolBox . CommandLine
 			}
 		}
 
-		public abstract void ShowLogo ( ) ;
+		public virtual void ShowLogo ( ) 
+		{
+			StringBuilder logo = new StringBuilder();
+			logo.AppendLine(new AsciiArt(typeof(T).Assembly.GetProgramName(), width: CharacterWidth.Smush).ToString());
+			Console.WriteLine(logo.ToString());
+		}
 
 		public abstract void ShowCopyright ( ) ;
 

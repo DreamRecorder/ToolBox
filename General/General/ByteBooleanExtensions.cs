@@ -147,7 +147,7 @@ namespace DreamRecorder . ToolBox . General
 		/// <typeparam name="T"></typeparam>
 		/// <param name="bytes"></param>
 		/// <returns></returns>
-		public static T BytesToStruct <T> ( this byte [ ] bytes )
+		public static T CastToStruct <T> ( this byte [ ] bytes ) where T : struct
 		{
 			int    size   = Marshal . SizeOf ( typeof ( T ) ) ;
 			IntPtr buffer = Marshal . AllocHGlobal ( size ) ;
@@ -156,7 +156,7 @@ namespace DreamRecorder . ToolBox . General
 			{
 				Marshal . Copy ( bytes , 0 , buffer , size ) ;
 
-				return ( T )Marshal . PtrToStructure ( buffer , typeof ( T ) ) ;
+				return Marshal . PtrToStructure<T> ( buffer ) ;
 			}
 			finally
 			{
@@ -169,7 +169,7 @@ namespace DreamRecorder . ToolBox . General
 		/// <typeparam name="T"></typeparam>
 		/// <param name="value"></param>
 		/// <returns></returns>
-		public static byte [ ] StructToBytes <T> ( this T value ) where T : struct
+		public static byte [ ] CastToBytes <T> ( this T value ) where T : struct
 		{
 			int size = Marshal . SizeOf ( typeof ( T ) ) ;
 
