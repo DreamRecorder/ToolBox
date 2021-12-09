@@ -5,6 +5,7 @@ using System . Linq ;
 
 using DreamRecorder . ToolBox . General ;
 
+using Telegram . Bot ;
 using Telegram . Bot . Types ;
 using Telegram . Bot . Types . Enums ;
 using Telegram . Bot . Types . ReplyMarkups ;
@@ -38,12 +39,9 @@ namespace DreamRecorder . ToolBox . TelegramBot
 									$"Command `{command ? . PermissionGroup ? . DisplayName}{command . DisplayName}` do not have permission to read your personal info." ,
 									ParseMode . Markdown ,
 									replyMarkup : new InlineKeyboardMarkup (
-																			new InlineKeyboardButton
-																			{
-																				Text = "Grant permission" ,
-																				CallbackData =
-																					$"RegisterCommandGroup {command . PermissionGroup . Guid}" ,
-																			} ) ) ;
+																			InlineKeyboardButton . WithCallbackData (
+																			"Grant permission" ,
+																			$"RegisterCommandGroup {command . PermissionGroup . Guid}" ) ) ) ;
 			}
 		}
 
@@ -62,12 +60,9 @@ namespace DreamRecorder . ToolBox . TelegramBot
 															ParseMode . Markdown ,
 															replyToMessageId : message . MessageId ,
 															replyMarkup : new InlineKeyboardMarkup (
-															new InlineKeyboardButton
-															{
-																Text = "Grant permission" ,
-																CallbackData =
-																	$"RegisterCommandGroup {command . PermissionGroup . Guid}" ,
-															} ) ) .
+															InlineKeyboardButton . WithCallbackData (
+															"Grant permission" ,
+															$"RegisterCommandGroup {command . PermissionGroup . Guid}" ) ) ) .
 						Wait ( ) ;
 			}
 

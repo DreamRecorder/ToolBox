@@ -10,6 +10,7 @@ using JetBrains . Annotations ;
 
 using Microsoft . Extensions . DependencyInjection ;
 
+using Telegram . Bot ;
 using Telegram . Bot . Types ;
 using Telegram . Bot . Types . Enums ;
 using Telegram . Bot . Types . ReplyMarkups ;
@@ -30,10 +31,9 @@ namespace DreamRecorder . ToolBox . TelegramBot
 		public static List <InlineKeyboardButton> CreateUserKeyboard { get ; } =
 			new List <InlineKeyboardButton>
 			{
-				new InlineKeyboardButton
-				{
-					Text = "Do create New User and Bind it" , CallbackData = $"{nameof ( CreateUserCommand <TUser> )}" ,
-				} ,
+				InlineKeyboardButton . WithCallbackData (
+														"Do create New User and Bind it" ,
+														$"{nameof ( CreateUserCommand <TUser> )}" ) ,
 			} ;
 
 		public override string HelpInformation

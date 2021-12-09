@@ -37,7 +37,7 @@ namespace DreamRecorder . ToolBox . TelegramBot
 		public void ReplyText (
 			[CanBeNull] Message message ,
 			[NotNull]   string  text ,
-			ParseMode           parseMode             = ParseMode . Default ,
+			ParseMode           parseMode             = ParseMode . MarkdownV2 ,
 			bool                disableWebPagePreview = false ,
 			bool                disableNotification   = false ,
 			IReplyMarkup        replyMarkup           = null ,

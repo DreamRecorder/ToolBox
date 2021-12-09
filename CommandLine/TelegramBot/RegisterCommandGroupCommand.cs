@@ -7,6 +7,7 @@ using DreamRecorder . ToolBox . General ;
 
 using Microsoft . Extensions . DependencyInjection ;
 
+using Telegram . Bot ;
 using Telegram . Bot . Types ;
 using Telegram . Bot . Types . Enums ;
 using Telegram . Bot . Types . ReplyMarkups ;
@@ -91,12 +92,9 @@ namespace DreamRecorder . ToolBox . TelegramBot
 													replyMarkup : new InlineKeyboardMarkup (
 													new List <InlineKeyboardButton>
 													{
-														new InlineKeyboardButton
-														{
-															Text = $"Do register {permissionGroup . DisplayName}" ,
-															CallbackData =
-																$"{nameof ( CreateUserCommand <TUser> )} {permissionGroup . Guid}" ,
-														} ,
+														InlineKeyboardButton . WithCallbackData (
+														$"Do register {permissionGroup . DisplayName}" ,
+														$"{nameof ( CreateUserCommand <TUser> )} {permissionGroup . Guid}" ) ,
 													} ) ) ;
 							}
 						}

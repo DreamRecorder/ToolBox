@@ -18,7 +18,7 @@
 		<RepositoryType>TFS</RepositoryType>
 		<RepositoryUrl>https://vsts.dreamry.org/DefaultCollection/ToolBox</RepositoryUrl>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<Version>1.1.6.$([MSBuild]::ValueOrDefault('$(BuildNumber)', '0'))</Version>
 	</PropertyGroup>
 </Project>
