@@ -1,13 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28516.95
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.31903.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "General", "General", "{2D5F594D-8C6A-4F7E-AADB-8944E8935FB0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommandLine", "CommandLine", "{6749562D-3004-4C05-BF9A-6FC70D2629F8}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTest", "General\UnitTest\UnitTest.csproj", "{8FB56F9C-6197-49FC-9F80-EDC91AA977F6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandLine", "CommandLine\Source\CommandLine.csproj", "{E1BFEB40-FEFD-4BA8-85B0-6F91F13E9C44}"
 EndProject
@@ -37,7 +35,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonComponent", "AspNet\C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example", "AspNet\Example\Example.csproj", "{D435FC06-C33C-448D-BED2-18160A56DE11}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelegramBotExample", "CommandLine\TelegramBotExample\TelegramBotExample.csproj", "{0055954F-A10B-4C0D-9C84-764B4E3FB428}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TelegramBotExample", "CommandLine\TelegramBotExample\TelegramBotExample.csproj", "{0055954F-A10B-4C0D-9C84-764B4E3FB428}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTest", "UnitTest\UnitTest.csproj", "{FD35B2E1-B51C-41AB-9860-7271C9F3062E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,26 +53,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8FB56F9C-6197-49FC-9F80-EDC91AA977F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8FB56F9C-6197-49FC-9F80-EDC91AA977F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8FB56F9C-6197-49FC-9F80-EDC91AA977F6}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{8FB56F9C-6197-49FC-9F80-EDC91AA977F6}.Debug|ARM.Build.0 = Debug|Any CPU
-		{8FB56F9C-6197-49FC-9F80-EDC91AA977F6}.Debug|ARM64.ActiveCfg = Debug|Any CPU
-		{8FB56F9C-6197-49FC-9F80-EDC91AA977F6}.Debug|ARM64.Build.0 = Debug|Any CPU
-		{8FB56F9C-6197-49FC-9F80-EDC91AA977F6}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{8FB56F9C-6197-49FC-9F80-EDC91AA977F6}.Debug|x64.Build.0 = Debug|Any CPU
-		{8FB56F9C-6197-49FC-9F80-EDC91AA977F6}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{8FB56F9C-6197-49FC-9F80-EDC91AA977F6}.Debug|x86.Build.0 = Debug|Any CPU
-		{8FB56F9C-6197-49FC-9F80-EDC91AA977F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8FB56F9C-6197-49FC-9F80-EDC91AA977F6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8FB56F9C-6197-49FC-9F80-EDC91AA977F6}.Release|ARM.ActiveCfg = Release|Any CPU
-		{8FB56F9C-6197-49FC-9F80-EDC91AA977F6}.Release|ARM.Build.0 = Release|Any CPU
-		{8FB56F9C-6197-49FC-9F80-EDC91AA977F6}.Release|ARM64.ActiveCfg = Release|Any CPU
-		{8FB56F9C-6197-49FC-9F80-EDC91AA977F6}.Release|ARM64.Build.0 = Release|Any CPU
-		{8FB56F9C-6197-49FC-9F80-EDC91AA977F6}.Release|x64.ActiveCfg = Release|Any CPU
-		{8FB56F9C-6197-49FC-9F80-EDC91AA977F6}.Release|x64.Build.0 = Release|Any CPU
-		{8FB56F9C-6197-49FC-9F80-EDC91AA977F6}.Release|x86.ActiveCfg = Release|Any CPU
-		{8FB56F9C-6197-49FC-9F80-EDC91AA977F6}.Release|x86.Build.0 = Release|Any CPU
 		{E1BFEB40-FEFD-4BA8-85B0-6F91F13E9C44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E1BFEB40-FEFD-4BA8-85B0-6F91F13E9C44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1BFEB40-FEFD-4BA8-85B0-6F91F13E9C44}.Debug|ARM.ActiveCfg = Debug|Any CPU
@@ -333,12 +313,31 @@ Global
 		{0055954F-A10B-4C0D-9C84-764B4E3FB428}.Release|x64.Build.0 = Release|Any CPU
 		{0055954F-A10B-4C0D-9C84-764B4E3FB428}.Release|x86.ActiveCfg = Release|Any CPU
 		{0055954F-A10B-4C0D-9C84-764B4E3FB428}.Release|x86.Build.0 = Release|Any CPU
+		{FD35B2E1-B51C-41AB-9860-7271C9F3062E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD35B2E1-B51C-41AB-9860-7271C9F3062E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD35B2E1-B51C-41AB-9860-7271C9F3062E}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{FD35B2E1-B51C-41AB-9860-7271C9F3062E}.Debug|ARM.Build.0 = Debug|Any CPU
+		{FD35B2E1-B51C-41AB-9860-7271C9F3062E}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{FD35B2E1-B51C-41AB-9860-7271C9F3062E}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{FD35B2E1-B51C-41AB-9860-7271C9F3062E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FD35B2E1-B51C-41AB-9860-7271C9F3062E}.Debug|x64.Build.0 = Debug|Any CPU
+		{FD35B2E1-B51C-41AB-9860-7271C9F3062E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FD35B2E1-B51C-41AB-9860-7271C9F3062E}.Debug|x86.Build.0 = Debug|Any CPU
+		{FD35B2E1-B51C-41AB-9860-7271C9F3062E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD35B2E1-B51C-41AB-9860-7271C9F3062E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD35B2E1-B51C-41AB-9860-7271C9F3062E}.Release|ARM.ActiveCfg = Release|Any CPU
+		{FD35B2E1-B51C-41AB-9860-7271C9F3062E}.Release|ARM.Build.0 = Release|Any CPU
+		{FD35B2E1-B51C-41AB-9860-7271C9F3062E}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{FD35B2E1-B51C-41AB-9860-7271C9F3062E}.Release|ARM64.Build.0 = Release|Any CPU
+		{FD35B2E1-B51C-41AB-9860-7271C9F3062E}.Release|x64.ActiveCfg = Release|Any CPU
+		{FD35B2E1-B51C-41AB-9860-7271C9F3062E}.Release|x64.Build.0 = Release|Any CPU
+		{FD35B2E1-B51C-41AB-9860-7271C9F3062E}.Release|x86.ActiveCfg = Release|Any CPU
+		{FD35B2E1-B51C-41AB-9860-7271C9F3062E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{8FB56F9C-6197-49FC-9F80-EDC91AA977F6} = {2D5F594D-8C6A-4F7E-AADB-8944E8935FB0}
 		{E1BFEB40-FEFD-4BA8-85B0-6F91F13E9C44} = {6749562D-3004-4C05-BF9A-6FC70D2629F8}
 		{CEA71CFA-8AA7-404E-B5D8-E1DF22B1F563} = {6749562D-3004-4C05-BF9A-6FC70D2629F8}
 		{9B521F65-00F8-402A-8005-BC8F0DDEC1EB} = {2D5F594D-8C6A-4F7E-AADB-8944E8935FB0}
@@ -361,61 +360,60 @@ Global
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://vsts.dreamry.org/defaultcollection
 		SccLocalPath0 = .
-		SccProjectUniqueName1 = General\\UnitTest\\UnitTest.csproj
+		SccProjectUniqueName1 = CommandLine\\Source\\CommandLine.csproj
 		SccProjectTopLevelParentUniqueName1 = ToolBox.sln
-		SccProjectName1 = General/UnitTest
-		SccLocalPath1 = General\\UnitTest
-		SccProjectUniqueName2 = CommandLine\\Source\\CommandLine.csproj
+		SccProjectName1 = CommandLine/Source
+		SccLocalPath1 = CommandLine\\Source
+		SccProjectUniqueName2 = CommandLine\\Example\\Example.csproj
 		SccProjectTopLevelParentUniqueName2 = ToolBox.sln
-		SccProjectName2 = CommandLine/Source
-		SccLocalPath2 = CommandLine\\Source
-		SccProjectUniqueName3 = CommandLine\\Example\\Example.csproj
+		SccProjectName2 = CommandLine/Example
+		SccLocalPath2 = CommandLine\\Example
+		SccProjectUniqueName3 = General\\Colors\\Colors.csproj
 		SccProjectTopLevelParentUniqueName3 = ToolBox.sln
-		SccProjectName3 = CommandLine/Example
-		SccLocalPath3 = CommandLine\\Example
-		SccProjectUniqueName4 = General\\Colors\\Colors.csproj
+		SccProjectName3 = General/Colors
+		SccLocalPath3 = General\\Colors
+		SccProjectUniqueName4 = General\\General\\General.csproj
 		SccProjectTopLevelParentUniqueName4 = ToolBox.sln
-		SccProjectName4 = General/Colors
-		SccLocalPath4 = General\\Colors
-		SccProjectUniqueName5 = General\\General\\General.csproj
+		SccProjectName4 = General/General
+		SccLocalPath4 = General\\General
+		SccProjectUniqueName5 = General\\Network\\Network.csproj
 		SccProjectTopLevelParentUniqueName5 = ToolBox.sln
-		SccProjectName5 = General/General
-		SccLocalPath5 = General\\General
-		SccProjectUniqueName6 = General\\Network\\Network.csproj
+		SccProjectName5 = General/Network
+		SccLocalPath5 = General\\Network
+		SccProjectUniqueName6 = CommandLine\\TelegramBot\\TelegramBot.csproj
 		SccProjectTopLevelParentUniqueName6 = ToolBox.sln
-		SccProjectName6 = General/Network
-		SccLocalPath6 = General\\Network
-		SccProjectUniqueName7 = CommandLine\\TelegramBot\\TelegramBot.csproj
+		SccProjectName6 = CommandLine/TelegramBot
+		SccLocalPath6 = CommandLine\\TelegramBot
+		SccProjectUniqueName7 = Renderer\\Renderer\\Renderer.csproj
 		SccProjectTopLevelParentUniqueName7 = ToolBox.sln
-		SccProjectName7 = CommandLine/TelegramBot
-		SccLocalPath7 = CommandLine\\TelegramBot
-		SccProjectUniqueName8 = Renderer\\Renderer\\Renderer.csproj
+		SccProjectName7 = Renderer/Renderer
+		SccLocalPath7 = Renderer\\Renderer
+		SccProjectUniqueName8 = AspNet\\AlertHelper\\AlertHelper.csproj
 		SccProjectTopLevelParentUniqueName8 = ToolBox.sln
-		SccProjectName8 = Renderer/Renderer
-		SccLocalPath8 = Renderer\\Renderer
-		SccProjectUniqueName9 = AspNet\\AlertHelper\\AlertHelper.csproj
+		SccProjectName8 = AspNet/AlertHelper
+		SccLocalPath8 = AspNet\\AlertHelper
+		SccProjectUniqueName9 = AspNet\\RequestHelper\\RequestHelper.csproj
 		SccProjectTopLevelParentUniqueName9 = ToolBox.sln
-		SccProjectName9 = AspNet/AlertHelper
-		SccLocalPath9 = AspNet\\AlertHelper
-		SccProjectUniqueName10 = AspNet\\RequestHelper\\RequestHelper.csproj
+		SccProjectName9 = AspNet/RequestHelper
+		SccLocalPath9 = AspNet\\RequestHelper
+		SccProjectUniqueName10 = AspNet\\General\\General.csproj
 		SccProjectTopLevelParentUniqueName10 = ToolBox.sln
-		SccProjectName10 = AspNet/RequestHelper
-		SccLocalPath10 = AspNet\\RequestHelper
-		SccProjectUniqueName11 = AspNet\\General\\General.csproj
+		SccProjectName10 = AspNet/General
+		SccLocalPath10 = AspNet\\General
+		SccProjectUniqueName11 = AspNet\\CommonComponent\\CommonComponent.csproj
 		SccProjectTopLevelParentUniqueName11 = ToolBox.sln
-		SccProjectName11 = AspNet/General
-		SccLocalPath11 = AspNet\\General
-		SccProjectUniqueName12 = AspNet\\CommonComponent\\CommonComponent.csproj
+		SccProjectName11 = AspNet/CommonComponent
+		SccLocalPath11 = AspNet\\CommonComponent
+		SccProjectUniqueName12 = AspNet\\Example\\Example.csproj
 		SccProjectTopLevelParentUniqueName12 = ToolBox.sln
-		SccProjectName12 = AspNet/CommonComponent
-		SccLocalPath12 = AspNet\\CommonComponent
-		SccProjectUniqueName13 = AspNet\\Example\\Example.csproj
+		SccProjectName12 = AspNet/Example
+		SccLocalPath12 = AspNet\\Example
+		SccProjectUniqueName13 = CommandLine\\TelegramBotExample\\TelegramBotExample.csproj
 		SccProjectTopLevelParentUniqueName13 = ToolBox.sln
-		SccProjectName13 = AspNet/Example
-		SccLocalPath13 = AspNet\\Example
-		SccProjectUniqueName14 = CommandLine\\TelegramBotExample\\TelegramBotExample.csproj
-		SccProjectTopLevelParentUniqueName14 = ToolBox.sln
-		SccProjectName14 = CommandLine/TelegramBotExample
-		SccLocalPath14 = CommandLine\\TelegramBotExample
+		SccProjectName13 = CommandLine/TelegramBotExample
+		SccLocalPath13 = CommandLine\\TelegramBotExample
+		SccProjectUniqueName14 = UnitTest\\UnitTest.csproj
+		SccProjectName14 = UnitTest
+		SccLocalPath14 = UnitTest
 	EndGlobalSection
 EndGlobal

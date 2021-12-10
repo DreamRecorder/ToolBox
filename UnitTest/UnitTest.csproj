@@ -9,16 +9,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\AspNet\AlertHelper\AlertHelper.csproj" />
-		<ProjectReference Include="..\..\AspNet\General\General.csproj" />
-		<ProjectReference Include="..\..\AspNet\RequestHelper\RequestHelper.csproj" />
-		<ProjectReference Include="..\..\CommandLine\Example\Example.csproj" />
-		<ProjectReference Include="..\..\CommandLine\Source\CommandLine.csproj" />
-		<ProjectReference Include="..\..\CommandLine\TelegramBot\TelegramBot.csproj" />
-		<ProjectReference Include="..\..\Renderer\Renderer\Renderer.csproj" />
-		<ProjectReference Include="..\Colors\Colors.csproj" />
-		<ProjectReference Include="..\General\General.csproj" />
-		<ProjectReference Include="..\Network\Network.csproj" />
+		<ProjectReference Include="..\AspNet\AlertHelper\AlertHelper.csproj" />
+		<ProjectReference Include="..\AspNet\General\General.csproj" />
+		<ProjectReference Include="..\AspNet\RequestHelper\RequestHelper.csproj" />
+		<ProjectReference Include="..\CommandLine\Example\Example.csproj" />
+		<ProjectReference Include="..\CommandLine\Source\CommandLine.csproj" />
+		<ProjectReference Include="..\CommandLine\TelegramBot\TelegramBot.csproj" />
+		<ProjectReference Include="..\Renderer\Renderer\Renderer.csproj" />
+		<ProjectReference Include="..\General\Colors\Colors.csproj" />
+		<ProjectReference Include="..\General\General\General.csproj" />
+		<ProjectReference Include="..\General\Network\Network.csproj" />
 	</ItemGroup>
 
 	<PropertyGroup Label="Globals">

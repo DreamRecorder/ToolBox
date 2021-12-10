@@ -4,6 +4,7 @@ using System . Collections . Concurrent ;
 using System . Collections . Generic ;
 using System . Linq ;
 using System . Net ;
+using System . Net . Http ;
 using System . Threading . Tasks ;
 
 using JetBrains . Annotations ;
@@ -16,7 +17,7 @@ namespace DreamRecorder . ToolBox . AspNet . General
 	public class CdnjsWebAssetProvider : IWebAssetProvider
 	{
 
-		private WebClient CurrentClient { get ; } = new WebClient ( ) ;
+		private HttpClient CurrentClient { get ; } = new HttpClient ( ) ;
 
 		public static ConcurrentDictionary <string , string> PackageVersions { get ; set ; } =
 			new ConcurrentDictionary <string , string> ( ) ;
@@ -36,7 +37,7 @@ namespace DreamRecorder . ToolBox . AspNet . General
 			else
 			{
 				dynamic apiQuery = JsonConvert . DeserializeObject (
-																	await CurrentClient . DownloadStringTaskAsync (
+																	await CurrentClient . GetStringAsync (
 																	$"https://api.cdnjs.com/libraries/{packageName}?fields=version" ) ) ;
 
 				version = apiQuery . version ;
