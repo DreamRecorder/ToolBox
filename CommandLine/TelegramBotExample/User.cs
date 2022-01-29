@@ -11,7 +11,7 @@ namespace DreamRecorder . ToolBox . CommandLine . Example . Telegram
 	public class User : IUser
 	{
 
-		public bool Equals ( IUser ? other ) => throw new NotImplementedException ( ) ;
+		public bool Equals ( IUser other ) => throw new NotImplementedException ( ) ;
 
 		public Guid Guid { get ; }
 

@@ -48,7 +48,18 @@ namespace DreamRecorder . ToolBox . General
 			}
 		}
 
-		private static void CurrentDomain_AssemblyLoad ( object sender , AssemblyLoadEventArgs args )
+		public static List <Type> FindType ( Predicate <Type> predicate )
+		{
+			return AppDomain . CurrentDomain . GetAssemblies ( ) .
+								SelectMany ( assembly => assembly . GetTypes ( ) ) .
+								Distinct ( ) .
+								Where ( predicate . Invoke ) .
+								ToList ( ) ;
+		}
+
+		private static void CurrentDomain_AssemblyLoad (
+			object                sender ,
+			AssemblyLoadEventArgs args )
 		{
 			lock ( StaticServiceProvider . ServiceCollection )
 			{
