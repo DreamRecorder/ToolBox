@@ -32,15 +32,11 @@ namespace DreamRecorder . ToolBox . General
 
 				Assembly [ ] assemblies = AppDomain . CurrentDomain . GetAssemblies ( ) ;
 
-				int assembliesCount = assemblies . Length ;
-
-				for ( int i = 0 ; i < assembliesCount ; i++ )
+				foreach ( Assembly assembly in assemblies )
 				{
-					Assembly assembly = assemblies [ i ] ;
-
-					lock ( StaticServiceProvider . ServiceCollection )
+					lock (StaticServiceProvider.ServiceCollection)
 					{
-						assembly . Prepare ( ) ;
+						assembly.Prepare();
 					}
 				}
 
