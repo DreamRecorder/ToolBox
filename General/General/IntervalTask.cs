@@ -35,7 +35,7 @@ namespace DreamRecorder . ToolBox . General
 		{
 			Interval  = interval ;
 			Action    = action ;
-			StartFrom = startFrom ?? DateTimeOffset . Now ;
+			StartFrom = startFrom ?? DateTimeOffset . UtcNow ;
 			Timeout   = timeout   ?? TimeSpan . FromMinutes ( 10 ) ;
 			Priority  = priority ;
 
@@ -56,7 +56,7 @@ namespace DreamRecorder . ToolBox . General
 				}
 				else
 				{
-					if ( DateTimeOffset . Now < NextRun )
+					if ( DateTimeOffset . UtcNow < NextRun )
 					{
 						return TaskStatus . Waiting ;
 					}
@@ -74,7 +74,7 @@ namespace DreamRecorder . ToolBox . General
 			{
 				IsRunning = true ;
 
-				if ( DateTimeOffset . Now >= NextRun )
+				if ( DateTimeOffset . UtcNow >= NextRun )
 				{
 					LastRun = DateTime . Now ;
 
@@ -104,7 +104,7 @@ namespace DreamRecorder . ToolBox . General
 				NextRun = StartFrom ;
 			}
 
-			while ( NextRun < DateTimeOffset . Now )
+			while ( NextRun < DateTimeOffset . UtcNow )
 			{
 				NextRun += Interval ;
 			}

@@ -167,9 +167,7 @@ namespace DreamRecorder . ToolBox . General
 			{
 				int j = random . Next ( 0 , i + 1 ) ;
 
-				T temp = list [ j ] ;
-				list [ j ] = list [ i ] ;
-				list [ i ] = temp ;
+				( list [ j ] , list [ i ] ) = ( list [ i ] , list [ j ] ) ;
 			}
 		}
 

@@ -12,23 +12,23 @@ namespace DreamRecorder . ToolBox . General
 	public sealed class ScheduledTask : ITask
 	{
 
-		public Func <DateTimeOffset> Action { get ; set ; }
+		public Func <DateTimeOffset ?> Action { get ; set ; }
 
-		public DateTimeOffset LastRun { get ; private set ; }
+		public DateTimeOffset ? LastRun { get ; private set ; } = null ;
 
-		public DateTimeOffset ? NextRun { get ; private set ; } = DateTimeOffset . Now ;
+		public DateTimeOffset ? NextRun { get ; private set ; } = DateTimeOffset . UtcNow ;
 
 		public int RunCount { get ; set ; }
 
 		private bool IsRunning { get ; set ; }
 
 		public ScheduledTask (
-			Func <DateTimeOffset> action ,
-			TimeSpan ?            timeout  = null ,
-			TaskPriority          priority = TaskPriority . Normal )
+			Func <DateTimeOffset ?> action ,
+			TimeSpan ?              timeout  = null ,
+			TaskPriority            priority = TaskPriority . Normal )
 		{
 			Action   = action ;
-			Timeout  = timeout ?? TimeSpan . FromMinutes ( 10 ) ;
+			Timeout  = timeout ?? TimeSpan . MaxValue ;
 			Priority = priority ;
 		}
 
@@ -54,7 +54,7 @@ namespace DreamRecorder . ToolBox . General
 					}
 					else
 					{
-						if ( DateTimeOffset . Now < NextRun )
+						if ( DateTimeOffset . UtcNow < NextRun )
 						{
 							return TaskStatus . Waiting ;
 						}
@@ -75,7 +75,7 @@ namespace DreamRecorder . ToolBox . General
 
 				if ( NextRun != null )
 				{
-					if ( DateTimeOffset . Now >= NextRun )
+					if ( DateTimeOffset . UtcNow >= NextRun )
 					{
 						LastRun = DateTime . Now ;
 
@@ -85,7 +85,9 @@ namespace DreamRecorder . ToolBox . General
 						}
 						catch ( Exception e )
 						{
-							Logger ? . LogError ( e , $"{nameof ( ScheduledTask )} thrown unhandled exception." ) ;
+							Logger ? . LogError (
+												e ,
+												$"{nameof ( ScheduledTask )} thrown unhandled exception." ) ;
 						}
 
 						RunCount++ ;
