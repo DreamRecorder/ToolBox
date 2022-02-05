@@ -136,14 +136,14 @@ namespace DreamRecorder . ToolBox . General
 		///     .
 		/// </summary>
 		/// <returns></returns>
-		public static bool NextBoolean ( [NotNull] this Random random )
+		public static bool NextBoolean ( [NotNull] this IRandom random )
 		{
 			if ( random == null )
 			{
 				throw new ArgumentNullException ( nameof ( random ) ) ;
 			}
 
-			return random . Next ( 2 ) > 0 ;
+			return (random . Next() &1) ==1;
 		}
 
 		/// <summary>

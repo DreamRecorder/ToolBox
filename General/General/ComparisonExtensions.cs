@@ -12,6 +12,38 @@ namespace DreamRecorder . ToolBox . General
 	public static class ComparisonExtensions
 	{
 
+		public static Comparison<T> IgnoreSmallDifference<T>(T proportion) where T : INumber<T>
+		{
+			return ((x, y) =>
+					{
+						if (T.Abs(x - y) < T.Max(x,y)*proportion)
+						{
+							return 0;
+						}
+						else
+						{
+							return Comparer<T>.Default.Compare(x, y);
+
+						}
+					});
+		}
+
+		public static Comparison <T> IgnoreSmallDifferenceByAbsoluteValue<T> (T absoluteValue) where T : INumber<T>
+		{
+			return ( ( x , y ) =>
+					{
+						if ( T . Abs ( x - y ) < absoluteValue )
+						{
+							return 0 ;
+						}
+						else
+						{
+							return Comparer <T> . Default . Compare ( x , y ) ;
+
+						}
+					} ) ;
+		}
+
 		public static Comparison <TSource> Select
 			<TSource , TResult> ( Func <TSource , TResult> selector , Comparison <TResult> comparison = null )
 		{

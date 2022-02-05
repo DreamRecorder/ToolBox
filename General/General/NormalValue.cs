@@ -10,7 +10,7 @@ namespace DreamRecorder . ToolBox . General
 	/// <summary>
 	///     表示可能性和变换.
 	/// </summary>
-	public struct NormalValue : IEquatable <NormalValue>
+	public readonly struct NormalValue : IEquatable <NormalValue>
 	{
 
 		public int Value { get ; }
@@ -21,7 +21,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public override int GetHashCode ( ) => Value . GetHashCode ( ) ;
 
-		public static NormalValue MaxValue { get ; } = 10000 ;
+		public static NormalValue MaxValue { get ; } = short.MaxValue ;
 
 		public static NormalValue MinValue { get ; } = 0 ;
 
@@ -58,7 +58,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public int ToInt32 ( ) => this ;
 
-		public NormalValue ( int value ) => Value = Math . Min ( Math . Max ( value , 0 ) , 10000 ) ;
+		public NormalValue ( int value ) => Value = Math . Min ( Math . Max ( value , MinValue) , MaxValue) ;
 
 		public static implicit operator NormalValue ( int value ) => new NormalValue ( value ) ;
 

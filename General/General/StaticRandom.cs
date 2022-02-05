@@ -7,63 +7,64 @@ using JetBrains . Annotations ;
 
 using Microsoft . Extensions . DependencyInjection ;
 
+using Pcg ;
+
 namespace DreamRecorder . ToolBox . General
 {
 
 	[PublicAPI]
-	public class StaticRandom : Random , IRandom
+	public class StaticRandom :  IRandom
 	{
 
-		public static StaticRandom Current { get ; set ; }
+		public static StaticRandom Current { get ; }=new StaticRandom();
 
-		public StaticRandom ( ) { }
+		private StaticRandom ( ) { }
 
-		public StaticRandom ( int seed ) : base ( seed ) { }
+		private PcgRandom Random{ get; }=new PcgRandom ();
 
-		public override int Next ( )
+		public int Next ( )
 		{
-			lock ( this )
+			lock (Random)
 			{
-				return base . Next ( ) ;
+				return Random. Next ( ) ;
 			}
 		}
 
-		public override int Next ( int maxValue )
+		public int Next ( int maxValue )
 		{
-			lock ( this )
+			lock (Random)
 			{
-				return base . Next ( maxValue ) ;
+				return Random. Next ( maxValue ) ;
 			}
 		}
 
-		public override int Next ( int minValue , int maxValue )
+		public int Next ( int minValue , int maxValue )
 		{
-			lock ( this )
+			lock (Random)
 			{
-				return base . Next ( minValue , maxValue ) ;
+				return Random. Next ( minValue , maxValue ) ;
 			}
 		}
 
-		public override void NextBytes ( byte [ ] buffer )
+		public void NextBytes ( byte [ ] buffer )
 		{
-			lock ( this )
+			lock (Random)
 			{
-				base . NextBytes ( buffer ) ;
+				Random. NextBytes ( buffer ) ;
 			}
 		}
 
-		public override double NextDouble ( )
+		public double NextDouble ( )
 		{
-			lock ( this )
+			lock (Random)
 			{
-				return base . NextDouble ( ) ;
+				return Random. NextDouble ( ) ;
 			}
 		}
 
 		[Prepare]
 		public static void StartUp ( )
 		{
-			Current = new StaticRandom ( ) ;
 			StaticServiceProvider . ServiceCollection . AddSingleton <IRandom> ( Current ) ;
 		}
 

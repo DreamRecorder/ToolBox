@@ -9,23 +9,23 @@ namespace DreamRecorder . ToolBox . General
 	public sealed class SystemRandomWrapper : IRandom
 	{
 
-		private readonly Random _item ;
+		private readonly Random _target ;
 
-		public SystemRandomWrapper ( Random item ) => _item = item ;
+		public SystemRandomWrapper ( Random target ) => _target = target ;
 
-		public int Next ( ) => _item . Next ( ) ;
+		public int Next ( ) => _target . Next ( ) ;
 
-		public int Next ( int maxValue ) => _item . Next ( maxValue ) ;
+		public int Next ( int maxValue ) => _target . Next ( maxValue ) ;
 
-		public int Next ( int minValue , int maxValue ) => _item . Next ( minValue , maxValue ) ;
+		public int Next ( int minValue , int maxValue ) => _target . Next ( minValue , maxValue ) ;
 
-		public void NextBytes ( byte [ ] buffer ) { _item . NextBytes ( buffer ) ; }
+		public void NextBytes ( byte [ ] buffer ) { _target . NextBytes ( buffer ) ; }
 
-		public double NextDouble ( ) => _item . NextDouble ( ) ;
+		public double NextDouble ( ) => _target . NextDouble ( ) ;
 
-		public static implicit operator Random ( SystemRandomWrapper wrapper ) => wrapper . _item ;
+		public static implicit operator Random ( SystemRandomWrapper wrapper ) => wrapper . _target ;
 
-		public static implicit operator SystemRandomWrapper ( Random item ) => new SystemRandomWrapper ( item ) ;
+		public static implicit operator SystemRandomWrapper ( Random target ) => new SystemRandomWrapper ( target ) ;
 
 	}
 
