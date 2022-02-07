@@ -63,6 +63,27 @@ namespace DreamRecorder . ToolBox . General
 								ToList ( ) ;
 		}
 
+		public static List <(PropertyInfo info , TAttribute attribute)> FindProperty
+			<TAttribute> ( Predicate <(PropertyInfo info , TAttribute attribute)> predicate )
+			where TAttribute : Attribute
+		{
+			return AppDomain . CurrentDomain . GetAssemblies ( ) .
+								SelectMany ( assembly => assembly . GetTypes ( ) ) .
+								SelectMany (
+											type
+												=> type . GetProperties ( ) .
+														Select (
+																( prop )
+																	=> ( prop ,
+																				prop .
+																					GetCustomAttribute
+																						<TAttribute> ( ) ) ) .
+														Where ( prop => prop . Item2 != null ) ) .
+								Distinct ( ) .
+								Where ( predicate . Invoke ) .
+								ToList ( ) ;
+		}
+
 		private static void CurrentDomain_AssemblyLoad (
 			object                sender ,
 			AssemblyLoadEventArgs args )
