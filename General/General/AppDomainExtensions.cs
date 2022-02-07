@@ -34,9 +34,9 @@ namespace DreamRecorder . ToolBox . General
 
 				foreach ( Assembly assembly in assemblies )
 				{
-					lock (StaticServiceProvider.ServiceCollection)
+					lock ( StaticServiceProvider . ServiceCollection )
 					{
-						assembly.Prepare();
+						assembly . Prepare ( ) ;
 					}
 				}
 
@@ -48,6 +48,16 @@ namespace DreamRecorder . ToolBox . General
 		{
 			return AppDomain . CurrentDomain . GetAssemblies ( ) .
 								SelectMany ( assembly => assembly . GetTypes ( ) ) .
+								Distinct ( ) .
+								Where ( predicate . Invoke ) .
+								ToList ( ) ;
+		}
+
+		public static List <PropertyInfo> FindProperty ( Predicate <PropertyInfo> predicate )
+		{
+			return AppDomain . CurrentDomain . GetAssemblies ( ) .
+								SelectMany ( assembly => assembly . GetTypes ( ) ) .
+								SelectMany ( type => type . GetProperties ( ) ) .
 								Distinct ( ) .
 								Where ( predicate . Invoke ) .
 								ToList ( ) ;
