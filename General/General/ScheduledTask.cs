@@ -16,7 +16,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public DateTimeOffset ? LastRun { get ; private set ; } = null ;
 
-		public DateTimeOffset ? NextRun { get ; private set ; } = DateTimeOffset . UtcNow ;
+		public DateTimeOffset ? NextRun { get ; set ; }
 
 		public int RunCount { get ; set ; }
 
@@ -24,15 +24,17 @@ namespace DreamRecorder . ToolBox . General
 
 		public ScheduledTask (
 			Func <DateTimeOffset ?> action ,
-			TimeSpan ?              timeout  = null ,
+			DateTimeOffset ?        nextRun  = default ,
+			TimeSpan ?              timeout  = default ,
 			TaskPriority            priority = TaskPriority . Normal )
 		{
 			Action   = action ;
+			NextRun  = nextRun ?? DateTimeOffset . UtcNow ;
 			Timeout  = timeout ?? TimeSpan . MaxValue ;
 			Priority = priority ;
 		}
 
-		public ScheduledTask ( ) { }
+		public ScheduledTask ( ) { NextRun = DateTimeOffset . UtcNow ; }
 
 		public TimeSpan Timeout { get ; set ; }
 

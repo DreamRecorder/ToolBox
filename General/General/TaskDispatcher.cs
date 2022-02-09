@@ -17,7 +17,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public ConcurrentQueue <ITask> [ ] TaskQueues { get ; }
 
-		public LinkedList <(Task RunningTask , ITask Task)> RunningTasks { get ; } =
+		private LinkedList <(Task RunningTask , ITask Task)> RunningTasks { get ; } =
 			new LinkedList <(Task RunningTask , ITask Task)> ( ) ;
 
 		private Thread RunningThread { get ; set ; }
