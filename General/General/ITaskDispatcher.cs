@@ -8,16 +8,11 @@ using JetBrains . Annotations ;
 namespace DreamRecorder . ToolBox . General
 {
 
-	public interface ITaskDispatcher
+	public interface ITaskDispatcher:IStartStop
 	{
-
-		bool IsRunning { get ; }
 
 		void Dispatch ( [NotNull] ITask task ) ;
 
-		void Start ( ) ;
-
-		void Stop ( ) ;
 
 	}
 

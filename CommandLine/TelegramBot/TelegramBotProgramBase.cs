@@ -23,7 +23,7 @@ namespace DreamRecorder . ToolBox . TelegramBot
 
 		public TelegramBot <TUser> Bot { get ; set ; }
 
-		public override void Start ( string [ ] args ) { Bot . Start ( args ) . Wait ( ) ; }
+		public override void Start ( string [ ] args ) { Bot . Start ( ) ; }
 
 	}
 
