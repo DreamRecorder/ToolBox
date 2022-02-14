@@ -29,16 +29,7 @@ namespace DreamRecorder . ToolBox . General
 				throw new ArgumentNullException ( nameof ( task ) ) ;
 			}
 
-			lock ( this )
-			{
-				if ( ! IsRunning )
-				{
-					throw new InvalidOperationException ( ) ;
-				}
-
-
-				TaskQueues [ ( int )task . Priority ] . Enqueue ( task ) ;
-			}
+			TaskQueues [ ( int )task . Priority ] . Enqueue ( task ) ;
 		}
 
 		public bool IsRunning { get ; private set ; }
