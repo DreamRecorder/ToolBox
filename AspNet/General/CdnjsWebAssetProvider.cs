@@ -7,15 +7,27 @@ using System . Net ;
 using System . Net . Http ;
 using System . Threading . Tasks ;
 
+using DreamRecorder . ToolBox . General ;
+
 using JetBrains . Annotations ;
 
 using Newtonsoft . Json ;
+
+using Semver ;
 
 namespace DreamRecorder . ToolBox . AspNet . General
 {
 
 	public class CdnjsWebAssetProvider : IWebAssetProvider
 	{
+
+		public class CdnjsVersions
+		{
+
+			public string [ ] versions { get ; set ; }
+
+		}
+
 
 		private HttpClient CurrentClient { get ; } = new HttpClient ( ) ;
 
@@ -36,11 +48,12 @@ namespace DreamRecorder . ToolBox . AspNet . General
 			}
 			else
 			{
-				dynamic apiQuery = JsonConvert . DeserializeObject (
-																	await CurrentClient . GetStringAsync (
-																	$"https://api.cdnjs.com/libraries/{packageName}?fields=version" ) ) ;
-
-				version = apiQuery . version ;
+				CdnjsVersions apiQuery = JsonConvert . DeserializeObject <CdnjsVersions> (
+				await CurrentClient . GetStringAsync (
+													$"https://api.cdnjs.com/libraries/{packageName}?fields=versions" ) ) ;
+				version = apiQuery . versions . Max (
+													( ComparisonExtensions . Select <string , SemVersion> (
+														str => SemVersion . Parse ( str ) ) ) . ToComparer ( ) ) ;
 
 				if ( string . IsNullOrWhiteSpace ( version ) )
 				{

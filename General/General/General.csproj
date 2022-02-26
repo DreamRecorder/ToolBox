@@ -3,12 +3,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<ItemGroup>
-		<PackageReference Include="JetBrains.Annotations" Version="2021.3.0" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
+		<PackageReference Include="JetBrains.Annotations" Version="2022.1.0-eap3" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0-preview.1.22076.8" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0-preview.1.22076.8" />
 		<PackageReference Include="PcgRandom" Version="1.1.0" />
-		<PackageReference Include="System.Diagnostics.PerformanceCounter" Version="6.0.0" />
-		<PackageReference Include="System.Runtime.Experimental" Version="6.0.2-mauipre.1.22054.8" />
+		<PackageReference Include="semver" Version="2.0.6" />
+		<PackageReference Include="System.Diagnostics.PerformanceCounter" Version="7.0.0-preview.1.22076.8" />
+		<PackageReference Include="System.Runtime.Experimental" Version="7.0.0-preview.1.22076.8" />
 	</ItemGroup>
 
 	<ItemGroup>

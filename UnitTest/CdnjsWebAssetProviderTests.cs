@@ -1,26 +1,30 @@
 ﻿using System ;
-using System.Collections ;
-using System.Collections.Generic ;
-using System.Linq ;
+using System . Collections ;
+using System . Collections . Generic ;
+using System . Linq ;
 using System . Threading . Tasks ;
 
 using DreamRecorder . ToolBox . AspNet . General ;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting ;
+using Microsoft . VisualStudio . TestTools . UnitTesting ;
 
-namespace DreamRecorder . ToolBox .UnitTest
+namespace DreamRecorder . ToolBox . UnitTest
 {
-	[TestClass()]
+
+	[TestClass ( )]
 	public class CdnjsWebAssetProviderTests
 	{
-		[TestMethod()]
-		public async Task GetFileUrlTest()
+
+		[TestMethod ( )]
+		public async Task GetFileUrlTest ( )
 		{
 			CdnjsWebAssetProvider assetProvider = new CdnjsWebAssetProvider ( ) ;
 
-			string url=await assetProvider . GetFileUrl ( "font-awesome" , "css/all.min.css" , null ) ;
+			string url = await assetProvider . GetFileUrl ( "bootstrap" , "js/bootstrap.min.js" , null ) ;
 
-			Assert.IsNotNull ( url ) ;
+			Assert . IsNotNull ( url ) ;
 		}
+
 	}
+
 }

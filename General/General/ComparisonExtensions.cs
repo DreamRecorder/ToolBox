@@ -12,23 +12,23 @@ namespace DreamRecorder . ToolBox . General
 	public static class ComparisonExtensions
 	{
 
-		public static Comparison<T> IgnoreSmallDifference<T>(T proportion) where T : INumber<T>
+		public static Comparison <T> IgnoreSmallDifference <T> ( this T proportion ) where T : INumber <T>
 		{
-			return ((x, y) =>
+			return ( ( x , y ) =>
 					{
-						if (T.Abs(x - y) < T.Max(x,y)*proportion)
+						if ( T . Abs ( x - y ) < T . Max ( x , y ) * proportion )
 						{
-							return 0;
+							return 0 ;
 						}
 						else
 						{
-							return Comparer<T>.Default.Compare(x, y);
-
+							return Comparer <T> . Default . Compare ( x , y ) ;
 						}
-					});
+					} ) ;
 		}
 
-		public static Comparison <T> IgnoreSmallDifferenceByAbsoluteValue<T> (T absoluteValue) where T : INumber<T>
+		public static Comparison <T> IgnoreSmallDifferenceByAbsoluteValue <T> ( this T absoluteValue )
+			where T : INumber <T>
 		{
 			return ( ( x , y ) =>
 					{
@@ -39,7 +39,6 @@ namespace DreamRecorder . ToolBox . General
 						else
 						{
 							return Comparer <T> . Default . Compare ( x , y ) ;
-
 						}
 					} ) ;
 		}
@@ -67,6 +66,9 @@ namespace DreamRecorder . ToolBox . General
 						return result ;
 					} ;
 		}
+
+		public static Comparer <T> ToComparer <T> ( this Comparison <T> comparison )
+			=> Comparer <T> . Create ( comparison ) ;
 
 	}
 

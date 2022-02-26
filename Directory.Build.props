@@ -8,7 +8,6 @@
 		<Copyright>Dream Recorder (c) $([System.DateTime]::UtcNow.Year)</Copyright>
 		<Description>Tools for other Dreamry project.</Description>
 		<IncludeSymbols>true</IncludeSymbols>
-		<LangVersion>latest</LangVersion>
 		<PackageIcon>DreamryLogo.png</PackageIcon>
 		<PackageIconUrl>https://webresources.dreamry.org/DreamryLogo.svg</PackageIconUrl>
 		<PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
@@ -18,7 +17,6 @@
 		<RepositoryType>TFS</RepositoryType>
 		<RepositoryUrl>https://vsts.dreamry.org/DefaultCollection/ToolBox</RepositoryUrl>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-		<TargetFramework>net6.0</TargetFramework>
 		<Version>1.1.6.$([MSBuild]::ValueOrDefault('$(BuildNumber)', '0'))</Version>
 	</PropertyGroup>
 </Project>
