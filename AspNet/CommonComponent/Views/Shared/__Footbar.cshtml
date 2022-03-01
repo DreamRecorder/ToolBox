@@ -1,6 +1,7 @@
 ﻿@using DreamRecorder.ToolBox.General;
 @using DreamRecorder.ToolBox.CommandLine;
 @using Microsoft.Extensions.Primitives;
+@using System.Net.Sockets;
 
 @addTagHelper *,DreamRecorder.Sayings.TagHelperProvider
 
@@ -22,8 +23,16 @@
                         <br />
                     }
                 }
+                
+                @if ( Context.Request.HttpContext.Connection.RemoteIpAddress?.AddressFamily == AddressFamily.InterNetwork )
+                {
+                    <small class="text-muted">@(Context . Request . HttpContext . Connection . RemoteIpAddress):@(Context . Request . HttpContext . Connection . RemotePort)</small>
+                }
+                else
+                {
+                    <small class="text-muted">[@(Context . Request . HttpContext . Connection . RemoteIpAddress)]:@(Context . Request . HttpContext . Connection . RemotePort)</small>
+                }
 
-                <small class="text-muted">@(Context . Request . HttpContext . Connection . RemoteIpAddress):@(Context . Request . HttpContext . Connection . RemotePort)</small>
                 <br />
 
                 @if (Context.Request.Headers.TryGetValue("CF-RAY", out StringValues cfRay))
