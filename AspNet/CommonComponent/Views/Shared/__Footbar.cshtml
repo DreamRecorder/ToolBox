@@ -1,14 +1,25 @@
 ﻿@using DreamRecorder.ToolBox.General;
 @using DreamRecorder.ToolBox.CommandLine;
+@using DreamRecorder.ToolBox.AspNet.CommonComponent;
 @using Microsoft.Extensions.Primitives;
 @using System.Net.Sockets;
 
-@addTagHelper *,DreamRecorder.Sayings.TagHelperProvider
+@addTagHelper *, DreamRecorder.Sayings.TagHelperProvider
+@addTagHelper *, DreamRecorder.ToolBox.AspNet.CommonComponent
 
 <div class="container">
-	<hr />
-	<saying />
+    <hr />
+
+    <saying />
+
+    <div class="row">
+        <div class="col-md-auto">
+            <commonfooter />
+        </div>
+    </div>
+
     <div class="row justify-content-between">
+
         <div class="col-md-auto order-md-last">
             <footer class="text-end">
                 <small class="text-muted">@( DateTime . UtcNow . ToString ( "yyyy-MM-dd HH:mm:ss.fffffffK" ))</small>
@@ -23,8 +34,8 @@
                         <br />
                     }
                 }
-                
-                @if ( Context.Request.HttpContext.Connection.RemoteIpAddress?.AddressFamily == AddressFamily.InterNetwork )
+
+                @if (Context.Request.HttpContext.Connection.RemoteIpAddress?.AddressFamily == AddressFamily.InterNetwork)
                 {
                     <small class="text-muted">@(Context . Request . HttpContext . Connection . RemoteIpAddress):@(Context . Request . HttpContext . Connection . RemotePort)</small>
                 }
@@ -37,10 +48,10 @@
 
                 @if (Context.Request.Headers.TryGetValue("CF-RAY", out StringValues cfRay))
                 {
-                    <small class="text-muted">@(cfRay.ToString())</small>
+                    <small class="text-muted">@(cfRay . ToString ( ))</small>
                     <br />
                 }
-				
+
                 @if (Context.User.Identity?.Name is string name)
                 {
                     <small class="text-muted">@( name )</small>

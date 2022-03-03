@@ -15,9 +15,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\CommandLine\Source\CommandLine.csproj" />
-	  <ProjectReference Include="..\CommonComponent\CommonComponent.csproj" />
-	  <ProjectReference Include="..\RequestHelper\RequestHelper.csproj" />
+		<ProjectReference Include="..\..\CommandLine\Source\CommandLine.csproj" />
+		<ProjectReference Include="..\AlertHelper\AlertHelper.csproj" />
+		<ProjectReference Include="..\CommonComponent\CommonComponent.csproj" />
+		<ProjectReference Include="..\RequestHelper\RequestHelper.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -24,7 +24,11 @@ namespace DreamRecorder . ToolBox . AspNet . Example
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices ( IServiceCollection services )
 		{
+			services . AddSession ( ) ;
+
 			services . AddControllersWithViews ( ) ;
+
+			services . AddHttpClient ( ) ;
 
 			services . AddSingleton <IWebAssetProvider , CdnjsWebAssetProvider> ( ) ;
 		}
@@ -46,6 +50,8 @@ namespace DreamRecorder . ToolBox . AspNet . Example
 
 			app . UseHttpsRedirection ( ) ;
 			app . UseStaticFiles ( ) ;
+
+			app . UseSession ( ) ;
 
 			app . UseRouting ( ) ;
 
