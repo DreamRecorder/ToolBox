@@ -3,7 +3,6 @@ using System . Collections ;
 using System . Collections . Concurrent ;
 using System . Collections . Generic ;
 using System . Linq ;
-using System . Net ;
 using System . Net . Http ;
 using System . Threading . Tasks ;
 
@@ -20,14 +19,6 @@ namespace DreamRecorder . ToolBox . AspNet . General
 
 	public class CdnjsWebAssetProvider : IWebAssetProvider
 	{
-
-		public class CdnjsVersions
-		{
-
-			public string [ ] versions { get ; set ; }
-
-		}
-
 
 		private HttpClient CurrentClient { get ; } = new HttpClient ( ) ;
 
@@ -92,6 +83,13 @@ namespace DreamRecorder . ToolBox . AspNet . General
 		}
 
 		public async Task ClearCache ( ) => PackageVersions . Clear ( ) ;
+
+		public class CdnjsVersions
+		{
+
+			public string [ ] versions { get ; set ; }
+
+		}
 
 	}
 

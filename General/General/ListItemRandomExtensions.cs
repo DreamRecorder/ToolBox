@@ -24,7 +24,7 @@ namespace DreamRecorder . ToolBox . General
 				throw new InvalidOperationException ( "Sequence contains no elements" ) ;
 			}
 
-			random ??= StaticRandom.Current ;
+			random ??= StaticRandom . Current ;
 
 			return list [ random . Next ( list . Count ) ] ;
 		}
@@ -75,7 +75,7 @@ namespace DreamRecorder . ToolBox . General
 			}
 
 			List <T> result = new List <T> ( count ) ;
-			random ??= StaticRandom.Current;
+			random ??= StaticRandom . Current ;
 
 			for ( int i = 0 ; i < count ; i++ )
 			{
@@ -118,7 +118,7 @@ namespace DreamRecorder . ToolBox . General
 				throw new ArgumentOutOfRangeException ( nameof ( count ) ) ;
 			}
 
-			random ??= StaticRandom.Current;
+			random ??= StaticRandom . Current ;
 
 			return random . Permutation ( list . Count - 1 , count ) . Select ( index => list [ index ] ) . ToList ( ) ;
 		}
@@ -130,12 +130,12 @@ namespace DreamRecorder . ToolBox . General
 				throw new ArgumentNullException ( nameof ( list ) ) ;
 			}
 
-			random ??= StaticRandom.Current;
+			random ??= StaticRandom . Current ;
 			int n = list . Count ;
 			while ( n > 1 )
 			{
 				n-- ;
-				int k     = random . Next ( n + 1 ) ;
+				int k = random . Next ( n + 1 ) ;
 				( list [ k ] , list [ n ] ) = ( list [ n ] , list [ k ] ) ;
 			}
 

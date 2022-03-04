@@ -8,9 +8,9 @@ namespace DreamRecorder . ToolBox . General ;
 public interface IStatefulStartStop : IStartStop
 {
 
-	bool IStartStop. IsRunning =>IsRunningStatus;
+	bool IsRunningStatus { get ; protected set ; }
 
-	bool IsRunningStatus { get; protected set; }
+	bool IStartStop . IsRunning => IsRunningStatus ;
 
 	void IStartStop . Start ( )
 	{
@@ -21,27 +21,27 @@ public interface IStatefulStartStop : IStartStop
 				return ;
 			}
 
-			StartOverride ();
-			IsRunningStatus = true;
+			StartOverride ( ) ;
+			IsRunningStatus = true ;
 		}
 	}
 
-	void StartOverride ( ) ;
-
-	void IStartStop. Stop()
+	void IStartStop . Stop ( )
 	{
-		lock (this)
+		lock ( this )
 		{
 			if ( ! IsRunning )
 			{
 				return ;
 			}
 
-			StopOverride();
-			IsRunningStatus = false;
+			StopOverride ( ) ;
+			IsRunningStatus = false ;
 		}
 	}
 
-	void StopOverride();
+	void StartOverride ( ) ;
+
+	void StopOverride ( ) ;
 
 }

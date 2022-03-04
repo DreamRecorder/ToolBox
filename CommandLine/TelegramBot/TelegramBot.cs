@@ -42,10 +42,9 @@ namespace DreamRecorder . ToolBox . TelegramBot
 
 		public ITaskDispatcher TaskDispatcher { get ; set ; }
 
-		private CancellationTokenSource ReceivingCancellationSource { get ; } =
-			new CancellationTokenSource ( ) ;
+		private CancellationTokenSource ReceivingCancellationSource { get ; } = new CancellationTokenSource ( ) ;
 
-		public bool IsRunning { get ; private set ; } = false ;
+		public bool IsRunning { get ; private set ; }
 
 		public void Start ( )
 		{
@@ -78,10 +77,24 @@ namespace DreamRecorder . ToolBox . TelegramBot
 				BotClient . StartReceiving (
 											HandleUpdateAsync ,
 											HandleErrorAsync ,
-											cancellationToken :
-											ReceivingCancellationSource . Token ) ;
+											cancellationToken : ReceivingCancellationSource . Token ) ;
 
 				IsRunning = true ;
+			}
+		}
+
+		public void Stop ( )
+		{
+			lock ( this )
+			{
+				if ( ! IsRunning )
+				{
+					return ;
+				}
+
+				ReceivingCancellationSource . Cancel ( ) ;
+				TaskDispatcher . Stop ( ) ;
+				IsRunning = false ;
 			}
 		}
 
@@ -123,7 +136,7 @@ namespace DreamRecorder . ToolBox . TelegramBot
 					{
 						if ( message . Chat . Type == ChatType . Private )
 						{
-							currentSession = SessionProvider . GetSession ( message . From . Id ) ;
+							currentSession                 = SessionProvider . GetSession ( message . From . Id ) ;
 							currentSession . PrivateChatId = message . Chat . Id ;
 						}
 						else
@@ -146,8 +159,7 @@ namespace DreamRecorder . ToolBox . TelegramBot
 					string [ ]       args             = default ;
 					bool             isExactlyMatched = false ;
 
-					string text = message . Text ? . Normalize ( NormalizationForm . FormKD ) ? .
-											Trim ( ) ;
+					string text = message . Text ? . Normalize ( NormalizationForm . FormKD ) ? . Trim ( ) ;
 
 					if ( routeTarget is null )
 					{
@@ -166,15 +178,11 @@ namespace DreamRecorder . ToolBox . TelegramBot
 							{
 								string commandName = args . First ( ) . GetCommandName ( ) ;
 
-								routeTarget =
-									CommandProvider . GetCommand ( commandName , currentSession ) ;
+								routeTarget = CommandProvider . GetCommand ( commandName , currentSession ) ;
 
 								if ( routeTarget is null )
 								{
-									routeTarget =
-										CommandProvider . GetCommandFuzzy (
-										commandName ,
-										currentSession ) ;
+									routeTarget = CommandProvider . GetCommandFuzzy ( commandName , currentSession ) ;
 									isExactlyMatched = false ;
 								}
 								else
@@ -201,17 +209,14 @@ namespace DreamRecorder . ToolBox . TelegramBot
 					}
 					else
 					{
-						args = text ? . Split ( ' ' , StringSplitOptions . RemoveEmptyEntries )
-							?? new string [ ] { } ;
+						args = text ? . Split ( ' ' , StringSplitOptions . RemoveEmptyEntries ) ?? new string [ ] { } ;
 
 						isExactlyMatched = true ;
 					}
 
 					if ( ! ( routeTarget is null ) )
 					{
-						if ( ! PermissionProvider . IsAllowedToInvoke (
-							user ,
-							routeTarget . PermissionGroup ) )
+						if ( ! PermissionProvider . IsAllowedToInvoke ( user , routeTarget . PermissionGroup ) )
 						{
 							tag         = routeTarget ;
 							routeTarget = PermissionDeniedCommand <TUser> . Current ;
@@ -219,14 +224,14 @@ namespace DreamRecorder . ToolBox . TelegramBot
 
 						TaskDispatcher . Dispatch (
 													new OnetimeTask (
-													( )
-														=> routeTarget . Process (
-														message ,
-														args ?? new string [ ] { } ,
-														currentSession ,
-														isExactlyMatched ,
-														tag ) ,
-													routeTarget . Timeout ) ) ;
+																	( )
+																		=> routeTarget . Process (
+																		message ,
+																		args ?? new string [ ] { } ,
+																		currentSession ,
+																		isExactlyMatched ,
+																		tag ) ,
+																	routeTarget . Timeout ) ) ;
 					}
 				}
 
@@ -243,12 +248,8 @@ namespace DreamRecorder . ToolBox . TelegramBot
 						return ;
 					}
 
-					requestData = requestData . Normalize ( NormalizationForm . FormKD ) .
-												Trim ( ) ;
-					string [ ] args = requestData . Split (
-															' ' ,
-															StringSplitOptions .
-																RemoveEmptyEntries ) ;
+					requestData = requestData . Normalize ( NormalizationForm . FormKD ) . Trim ( ) ;
+					string [ ] args = requestData . Split ( ' ' , StringSplitOptions . RemoveEmptyEntries ) ;
 
 					TUser           user = UserProvider . GetUser ( callbackQuery . From . Id ) ;
 					Session <TUser> currentSession ;
@@ -258,9 +259,7 @@ namespace DreamRecorder . ToolBox . TelegramBot
 					{
 						if ( callbackQuery . Message . Chat . Type == ChatType . Private )
 						{
-							currentSession =
-								SessionProvider . GetSession (
-															callbackQuery . Message . From . Id ) ;
+							currentSession = SessionProvider . GetSession ( callbackQuery . Message . From . Id ) ;
 							currentSession . PrivateChatId = callbackQuery . Message . Chat . Id ;
 						}
 						else
@@ -280,23 +279,19 @@ namespace DreamRecorder . ToolBox . TelegramBot
 					currentSession . BotClient = BotClient ;
 
 					ICommand <TUser> routeTarget = currentSession . RouteBind
-												?? CommandProvider . GetCommand (
-													args . First ( ) .
-															TrimEndPattern ( "Command" ) ,
+													?? CommandProvider . GetCommand (
+													args . First ( ) . TrimEndPattern ( "Command" ) ,
 													currentSession ) ;
 
 					if ( routeTarget is null )
 					{
-						Logger . LogWarning (
-											$"CallbackQuery {callbackQuery} can not be routed." ) ;
+						Logger . LogWarning ( $"CallbackQuery {callbackQuery} can not be routed." ) ;
 
 						//Wrong Callback?
 					}
 					else
 					{
-						if ( ! PermissionProvider . IsAllowedToInvoke (
-							user ,
-							routeTarget . PermissionGroup ) )
+						if ( ! PermissionProvider . IsAllowedToInvoke ( user , routeTarget . PermissionGroup ) )
 						{
 							tag         = routeTarget ;
 							routeTarget = PermissionDeniedCommand <TUser> . Current ;
@@ -304,34 +299,19 @@ namespace DreamRecorder . ToolBox . TelegramBot
 
 						TaskDispatcher . Dispatch (
 													new OnetimeTask (
-													( )
-														=> routeTarget . Process (
-														callbackQuery ,
-														args ,
-														currentSession ,
-														tag ) ,
-													routeTarget . Timeout ) ) ;
+																	( )
+																		=> routeTarget . Process (
+																		callbackQuery ,
+																		args ,
+																		currentSession ,
+																		tag ) ,
+																	routeTarget . Timeout ) ) ;
 					}
 				}
 			}
 			catch ( Exception exception )
 			{
 				Console . WriteLine ( exception ) ;
-			}
-		}
-
-		public void Stop ( )
-		{
-			lock ( this )
-			{
-				if ( ! IsRunning )
-				{
-					return ;
-				}
-
-				ReceivingCancellationSource . Cancel ( ) ;
-				TaskDispatcher . Stop ( ) ;
-				IsRunning = false ;
 			}
 		}
 

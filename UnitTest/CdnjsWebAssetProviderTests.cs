@@ -11,11 +11,11 @@ using Microsoft . VisualStudio . TestTools . UnitTesting ;
 namespace DreamRecorder . ToolBox . UnitTest
 {
 
-	[TestClass ( )]
+	[TestClass]
 	public class CdnjsWebAssetProviderTests
 	{
 
-		[TestMethod ( )]
+		[TestMethod]
 		public async Task GetFileUrlTest ( )
 		{
 			CdnjsWebAssetProvider assetProvider = new CdnjsWebAssetProvider ( ) ;

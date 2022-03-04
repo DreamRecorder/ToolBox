@@ -11,7 +11,6 @@
 		<AssemblyName>DreamRecorder.ToolBox.AspNet.Example</AssemblyName>
 		<Description>Tools for other Dreamry project.</Description>
 		<RootNamespace>DreamRecorder.ToolBox.AspNet.Example</RootNamespace>
-		<UserSecretsId>cb253bed-bc18-49f9-bf3a-10c39780c2b4</UserSecretsId>
 	</PropertyGroup>
 
 	<ItemGroup>

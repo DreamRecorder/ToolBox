@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk" >
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0-preview-20220131-20" />
@@ -21,7 +21,7 @@
 		<ProjectReference Include="..\General\Network\Network.csproj" />
 	</ItemGroup>
 
-	<PropertyGroup Label="Globals">
+	<PropertyGroup Label="Globals" >
 		<SccAuxPath>SAK</SccAuxPath>
 		<SccLocalPath>SAK</SccLocalPath>
 		<SccProjectName>SAK</SccProjectName>

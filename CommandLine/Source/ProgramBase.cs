@@ -158,11 +158,14 @@ namespace DreamRecorder . ToolBox . CommandLine
 			}
 		}
 
-		public virtual void ShowLogo ( ) 
+		public virtual void ShowLogo ( )
 		{
-			StringBuilder logo = new StringBuilder();
-			logo.AppendLine(new AsciiArt(typeof(T).Assembly.GetProgramName(), width: CharacterWidth.Smush).ToString());
-			Console.WriteLine(logo.ToString());
+			StringBuilder logo = new StringBuilder ( ) ;
+			logo . AppendLine (
+								new AsciiArt (
+											typeof ( T ) . Assembly . GetProgramName ( ) ,
+											width : CharacterWidth . Smush ) . ToString ( ) ) ;
+			Console . WriteLine ( logo . ToString ( ) ) ;
 		}
 
 		public abstract void ShowCopyright ( ) ;
@@ -289,7 +292,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 		{
 			Current = ( T )this ;
 
-			Logger = LoggerFactory . Create ( ( builder ) => builder . AddConsole ( ) ) . CreateLogger <T> ( ) ;
+			Logger = LoggerFactory . Create ( builder => builder . AddConsole ( ) ) . CreateLogger <T> ( ) ;
 
 			CommandLineApplication = new CommandLineApplication ( ThrowOnUnexpectedArg ) ;
 

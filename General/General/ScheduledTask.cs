@@ -14,7 +14,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public Func <DateTimeOffset ?> Action { get ; set ; }
 
-		public DateTimeOffset ? LastRun { get ; private set ; } = null ;
+		public DateTimeOffset ? LastRun { get ; private set ; }
 
 		public DateTimeOffset ? NextRun { get ; set ; }
 
@@ -34,7 +34,7 @@ namespace DreamRecorder . ToolBox . General
 			Priority = priority ;
 		}
 
-		public ScheduledTask ( ) { NextRun = DateTimeOffset . UtcNow ; }
+		public ScheduledTask ( ) => NextRun = DateTimeOffset . UtcNow ;
 
 		public TimeSpan Timeout { get ; set ; }
 
@@ -87,9 +87,7 @@ namespace DreamRecorder . ToolBox . General
 						}
 						catch ( Exception e )
 						{
-							Logger ? . LogError (
-												e ,
-												$"{nameof ( ScheduledTask )} thrown unhandled exception." ) ;
+							Logger ? . LogError ( e , $"{nameof ( ScheduledTask )} thrown unhandled exception." ) ;
 						}
 
 						RunCount++ ;

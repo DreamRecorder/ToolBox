@@ -143,7 +143,7 @@ namespace DreamRecorder . ToolBox . General
 				throw new ArgumentNullException ( nameof ( random ) ) ;
 			}
 
-			return (random . Next() &1) ==1;
+			return ( random . Next ( ) & 1 ) == 1 ;
 		}
 
 		/// <summary>

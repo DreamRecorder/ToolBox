@@ -21,7 +21,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public override int GetHashCode ( ) => Value . GetHashCode ( ) ;
 
-		public static NormalValue MaxValue { get ; } = short.MaxValue ;
+		public static NormalValue MaxValue { get ; } = short . MaxValue ;
 
 		public static NormalValue MinValue { get ; } = 0 ;
 
@@ -58,7 +58,7 @@ namespace DreamRecorder . ToolBox . General
 
 		public int ToInt32 ( ) => this ;
 
-		public NormalValue ( int value ) => Value = Math . Min ( Math . Max ( value , MinValue) , MaxValue) ;
+		public NormalValue ( int value ) => Value = Math . Min ( Math . Max ( value , MinValue ) , MaxValue ) ;
 
 		public static implicit operator NormalValue ( int value ) => new NormalValue ( value ) ;
 

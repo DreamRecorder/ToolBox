@@ -13,52 +13,52 @@ namespace DreamRecorder . ToolBox . General
 {
 
 	[PublicAPI]
-	public class StaticRandom :  IRandom
+	public class StaticRandom : IRandom
 	{
 
-		public static StaticRandom Current { get ; }=new StaticRandom();
+		public static StaticRandom Current { get ; } = new StaticRandom ( ) ;
+
+		private PcgRandom Random { get ; } = new PcgRandom ( ) ;
 
 		private StaticRandom ( ) { }
 
-		private PcgRandom Random{ get; }=new PcgRandom ();
-
 		public int Next ( )
 		{
-			lock (Random)
+			lock ( Random )
 			{
-				return Random. Next ( ) ;
+				return Random . Next ( ) ;
 			}
 		}
 
 		public int Next ( int maxValue )
 		{
-			lock (Random)
+			lock ( Random )
 			{
-				return Random. Next ( maxValue ) ;
+				return Random . Next ( maxValue ) ;
 			}
 		}
 
 		public int Next ( int minValue , int maxValue )
 		{
-			lock (Random)
+			lock ( Random )
 			{
-				return Random. Next ( minValue , maxValue ) ;
+				return Random . Next ( minValue , maxValue ) ;
 			}
 		}
 
 		public void NextBytes ( byte [ ] buffer )
 		{
-			lock (Random)
+			lock ( Random )
 			{
-				Random. NextBytes ( buffer ) ;
+				Random . NextBytes ( buffer ) ;
 			}
 		}
 
 		public double NextDouble ( )
 		{
-			lock (Random)
+			lock ( Random )
 			{
-				return Random. NextDouble ( ) ;
+				return Random . NextDouble ( ) ;
 			}
 		}
 

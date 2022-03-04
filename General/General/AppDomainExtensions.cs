@@ -73,20 +73,18 @@ namespace DreamRecorder . ToolBox . General
 											type
 												=> type . GetProperties ( ) .
 														Select (
-																( prop )
+																prop
 																	=> ( prop ,
-																				prop .
-																					GetCustomAttribute
-																						<TAttribute> ( ) ) ) .
+																			prop .
+																				GetCustomAttribute <
+																					TAttribute> ( ) ) ) .
 														Where ( prop => prop . Item2 != null ) ) .
 								Distinct ( ) .
 								Where ( predicate . Invoke ) .
 								ToList ( ) ;
 		}
 
-		private static void CurrentDomain_AssemblyLoad (
-			object                sender ,
-			AssemblyLoadEventArgs args )
+		private static void CurrentDomain_AssemblyLoad ( object sender , AssemblyLoadEventArgs args )
 		{
 			lock ( StaticServiceProvider . ServiceCollection )
 			{

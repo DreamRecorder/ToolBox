@@ -8,10 +8,10 @@ namespace DreamRecorder . ToolBox . General ;
 public interface IStartStop
 {
 
-	bool IsRunning { get;  }
+	bool IsRunning { get ; }
 
-	void Start ();
+	void Start ( ) ;
 
-	void Stop ();
+	void Stop ( ) ;
 
 }
