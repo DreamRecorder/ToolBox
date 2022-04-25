@@ -680,10 +680,10 @@ namespace DreamRecorder . ToolBox . Network . Ip
 					&& numbers [ 2 ] == 0
 					&& numbers [ 3 ] == 0
 					&& numbers [ 4 ] == 0
-					&& ( numbers [ 5 ] == 0 && numbers [ 6 ] == 0 && numbers [ 7 ] == 1
-						|| numbers [ 6 ] == 0x7F00
-						&& numbers [ 7 ] == 0x0001
-						&& ( numbers [ 5 ] == 0 || numbers [ 5 ] == 0xFFFF ) ) ;
+					&& ( ( numbers [ 5 ] == 0 && numbers [ 6 ] == 0 && numbers [ 7 ] == 1 )
+						|| ( numbers [ 6 ]   == 0x7F00
+							&& numbers [ 7 ] == 0x0001
+							&& ( numbers [ 5 ] == 0 || numbers [ 5 ] == 0xFFFF ) ) ) ;
 		}
 
 	}

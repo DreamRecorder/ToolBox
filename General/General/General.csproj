@@ -1,25 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
-<Project Sdk="Microsoft.NET.Sdk" >
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<ItemGroup>
 		<PackageReference Include="JetBrains.Annotations" Version="2022.1.0-eap3" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0-preview.1.22076.8" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0-preview.1.22076.8" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0-preview.2.22152.2" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0-preview.2.22152.2" />
 		<PackageReference Include="PcgRandom" Version="1.1.0" />
-		<PackageReference Include="semver" Version="2.0.6" />
-		<PackageReference Include="System.Diagnostics.PerformanceCounter" Version="7.0.0-preview.1.22076.8" />
-		<PackageReference Include="System.Runtime.Experimental" Version="7.0.0-preview.1.22076.8" />
+		<PackageReference Include="semver" Version="2.1.0" />
+		<PackageReference Include="System.Diagnostics.PerformanceCounter" Version="7.0.0-preview.2.22152.2" />
+		<PackageReference Include="System.Runtime.Experimental" Version="7.0.0-preview.2.22152.2" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="..\..\DreamryLogo.png" >
+		<None Include="..\..\DreamryLogo.png">
 			<Pack>True</Pack>
 			<PackagePath />
 		</None>
 	</ItemGroup>
 
-	<PropertyGroup Label="Globals" >
+	<PropertyGroup Label="Globals">
 		<SccAuxPath>SAK</SccAuxPath>
 		<SccLocalPath>SAK</SccLocalPath>
 		<SccProjectName>SAK</SccProjectName>

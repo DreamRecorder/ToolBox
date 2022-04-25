@@ -148,7 +148,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 				}
 				else if ( ch  == '/'
 						|| ch == '\\'
-						|| notImplicitFile && ( ch == ':' || ch == '?' || ch == '#' ) )
+						|| ( notImplicitFile && ( ch == ':' || ch == '?' || ch == '#' ) ) )
 				{
 					break ;
 				}
@@ -180,7 +180,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 				else if ( ch == '.' )
 				{
 					if ( ! haveNumber
-						|| number > 0 && firstCharIsZero )
+						|| ( number > 0 && firstCharIsZero ) )
 					{
 						// 0 is not allowed to prefix a number.
 						return false ;
@@ -331,7 +331,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			}
 			else if ( ( ch = name [ current ] ) == '/'
 					|| ch                       == '\\'
-					|| notImplicitFile && ( ch == ':' || ch == '?' || ch == '#' ) )
+					|| ( notImplicitFile && ( ch == ':' || ch == '?' || ch == '#' ) ) )
 			{
 				end = current ;
 			}
