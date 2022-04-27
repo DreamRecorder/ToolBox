@@ -4,7 +4,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
-		<PackageReference Include="System.Text.Json" Version="7.0.0-preview.2.22152.2" />
+		<PackageReference Include="System.Text.Json" Version="7.0.0-preview.3.22175.4" />
 	</ItemGroup>
 
 	<ItemGroup>

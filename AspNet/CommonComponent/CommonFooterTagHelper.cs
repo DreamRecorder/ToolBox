@@ -5,6 +5,8 @@ using System . Net . Http ;
 using System . Text ;
 using System . Threading . Tasks ;
 
+using DreamRecorder . ToolBox . AspNet . General ;
+
 using Microsoft . AspNetCore . Mvc . Rendering ;
 using Microsoft . AspNetCore . Mvc . ViewFeatures ;
 using Microsoft . AspNetCore . Razor . TagHelpers ;
@@ -26,7 +28,7 @@ namespace DreamRecorder . ToolBox . AspNet . CommonComponent
 			output . TagMode = TagMode . StartTagAndEndTag ;
 			output . Content . SetHtmlContent (
 												await HttpClient . GetStringAsync (
-												"https://webresources.dreamry.org/CommonFooter.html" ) ) ;
+												$"{ConstantUrls.WebResource}CommonFooter.html") ) ;
 		}
 
 	}
