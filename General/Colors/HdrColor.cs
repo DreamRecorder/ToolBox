@@ -276,7 +276,7 @@ namespace DreamRecorder . ToolBox . Colors
 
 		public (byte R , byte G , byte B) ToDrawingColor ( ToneMappingAlgorithm mappingAlgorithm = null )
 		{
-			mappingAlgorithm ??= KnowToneMapping . AcesMapping ;
+			mappingAlgorithm ??= KnownToneMapping . AcesMapping ;
 
 			return ( mappingAlgorithm ( R ) , mappingAlgorithm ( G ) , mappingAlgorithm ( B ) ) ;
 		}

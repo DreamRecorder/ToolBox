@@ -6,10 +6,10 @@ using System . Linq ;
 namespace DreamRecorder . ToolBox . Colors
 {
 
-	public static class KnowToneMapping
+	public static class KnownToneMapping
 	{
 
-		public static byte Drop ( double value )
+		public static byte Crop ( double value )
 		{
 			value = Math . Max ( 0 , value ) ;
 			value = Math . Min ( 1 , value ) ;
@@ -27,7 +27,9 @@ namespace DreamRecorder . ToolBox . Colors
 			const float d = 0.59f ;
 			const float e = 0.14f ;
 
-			return ( byte )( value * ( a * value + b ) / ( value * ( c * value + d ) + e ) * 255 ) ;
+			value = value * (a * value + b) / (value * (c * value + d) + e);
+
+			return Crop ( value ) ;
 		}
 
 	}
