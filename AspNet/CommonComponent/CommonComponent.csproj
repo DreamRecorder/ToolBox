@@ -34,6 +34,8 @@
 		<Description>Tools for other Dreamry project.</Description>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<IncludeRazorContentInPack>true</IncludeRazorContentInPack>
+		<EmbedRazorGenerateSources>true</EmbedRazorGenerateSources>
+		<CopyRazorGenerateFilesToPublishDirectory>true</CopyRazorGenerateFilesToPublishDirectory>
 		<RootNamespace>DreamRecorder.ToolBox.AspNet.CommonComponent</RootNamespace>
 	</PropertyGroup>
 

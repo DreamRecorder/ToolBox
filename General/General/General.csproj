@@ -9,7 +9,6 @@
 		<PackageReference Include="PcgRandom" Version="1.1.0" />
 		<PackageReference Include="semver" Version="2.2.0-rc.0" />
 		<PackageReference Include="System.Diagnostics.PerformanceCounter" Version="7.0.0-preview.4.22229.4" />
-		<PackageReference Include="System.Runtime.Experimental" Version="7.0.0-preview.2.22152.2" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -27,7 +27,8 @@ namespace DreamRecorder . ToolBox . AspNet . Example
 			services . AddSession ( ) ;
 
 			services . AddControllersWithViews ( ) ;
-
+			services.AddRazorPages();
+			
 			services . AddHttpClient ( ) ;
 
 			services . AddSingleton <IWebAssetProvider , CdnjsWebAssetProvider> ( ) ;
@@ -60,10 +61,12 @@ namespace DreamRecorder . ToolBox . AspNet . Example
 			app . UseEndpoints (
 								endpoints =>
 								{
+									endpoints . MapRazorPages() ;
 									endpoints . MapControllerRoute (
 																	"default" ,
 																	"{controller=Home}/{action=Index}/{id?}" ) ;
 								} ) ;
+
 		}
 
 	}
