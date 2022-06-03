@@ -12,6 +12,17 @@ namespace DreamRecorder . ToolBox . General
 
 		private static volatile bool _loaded ;
 
+		private static void LoadReferencedAssembly ( Assembly assembly )
+		{
+			foreach ( AssemblyName name in assembly . GetReferencedAssemblies ( ) )
+			{
+				if ( AppDomain . CurrentDomain . GetAssemblies ( ) . All ( a => a . FullName != name . FullName ) )
+				{
+					LoadReferencedAssembly ( Assembly . Load ( name ) ) ;
+				}
+			}
+		}
+
 		public static void PrepareCurrentDomain ( )
 		{
 			if ( ! _loaded )
@@ -28,9 +39,20 @@ namespace DreamRecorder . ToolBox . General
 					}
 				}
 
-				AppDomain . CurrentDomain . AssemblyLoad += CurrentDomain_AssemblyLoad ;
+				Assembly [ ] assemblies ;
 
-				Assembly [ ] assemblies = AppDomain . CurrentDomain . GetAssemblies ( ) ;
+				do
+				{
+					assemblies = AppDomain . CurrentDomain . GetAssemblies ( ) ;
+
+					foreach ( Assembly assembly in AppDomain . CurrentDomain . GetAssemblies ( ) )
+					{
+						LoadReferencedAssembly ( assembly ) ;
+					}
+				}
+				while ( assemblies . Length != AppDomain . CurrentDomain . GetAssemblies ( ) . Length ) ;
+
+				AppDomain . CurrentDomain . AssemblyLoad += CurrentDomain_AssemblyLoad ;
 
 				foreach ( Assembly assembly in assemblies )
 				{

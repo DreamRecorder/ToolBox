@@ -11,19 +11,19 @@ namespace DreamRecorder . ToolBox . Network . Ip
 	public abstract class IpPrefix : Prefix
 	{
 
-		public static explicit operator IpPrefix ( [NotNull] string address )
+		public static explicit operator IpPrefix ( [NotNull] string prefix )
 		{
-			if ( address == null )
+			if ( prefix == null )
 			{
-				throw new ArgumentNullException ( nameof ( address ) ) ;
+				throw new ArgumentNullException ( nameof ( prefix ) ) ;
 			}
 
-			if ( address . Contains ( ':' ) )
+			if ( prefix . Contains ( ':' ) )
 			{
-				return new Ipv6Prefix ( address ) ;
+				return new Ipv6Prefix ( prefix ) ;
 			}
 
-			return new Ipv4Prefix ( address ) ;
+			return new Ipv4Prefix ( prefix ) ;
 		}
 
 	}
