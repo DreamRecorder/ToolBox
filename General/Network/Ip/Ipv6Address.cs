@@ -14,7 +14,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 	{
 
 		[Flags]
-		public enum Ipv6AddressStyle
+		public enum AddressStyle
 		{
 
 			Compressed = 0 ,
@@ -137,7 +137,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 		public override object Clone ( ) => new Ipv6Address ( AddressBytes ) ;
 
-		public string ToString ( Ipv6AddressStyle style )
+		public string ToString ( AddressStyle style )
 		{
 			StringBuilder builder = new StringBuilder ( ) ;
 
@@ -145,7 +145,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			{
 				int segment = ( ushort )( AddressBytes . Span [ i ] << 8 ) | AddressBytes . Span [ i + 1 ] ;
 
-				if ( style . HasFlag ( Ipv6AddressStyle . LeadingZero ) )
+				if ( style . HasFlag ( AddressStyle . LeadingZero ) )
 				{
 					builder . AppendFormat ( "{0:X4}" , segment ) ;
 				}
@@ -160,7 +160,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 				}
 			}
 
-			if ( ! style . HasFlag ( Ipv6AddressStyle . NoOmitHextets ) )
+			if ( ! style . HasFlag ( AddressStyle . NoOmitHextets ) )
 			{
 				MatchCollection matchs = ShortenRegex . Matches ( builder . ToString ( ) ) ;
 
@@ -189,7 +189,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			return builder . ToString ( ) ;
 		}
 
-		public override string ToString ( ) => ToString ( Ipv6AddressStyle . Compressed ) ;
+		public override string ToString ( ) => ToString ( AddressStyle . Compressed ) ;
 
 	}
 
