@@ -15,7 +15,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 		public Ipv4Address ( ) => AddressBytes = new byte[ 4 ] ;
 
-		public Ipv4Address ( long address ) : this ( )
+		public Ipv4Address ( uint address ) : this ( )
 		{
 			byte [ ] addressBytes = new byte[ 4 ] ;
 			addressBytes [ 0 ] = ( byte )address ;

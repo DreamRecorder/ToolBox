@@ -59,7 +59,6 @@ namespace DreamRecorder . ToolBox . UnitTest
 
 	}
 
-
 	[TestClass]
 	public class ByteBooleanExtensionsTests
 	{

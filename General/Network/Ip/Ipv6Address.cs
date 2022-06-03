@@ -3,6 +3,7 @@ using System . Collections ;
 using System . Collections . Generic ;
 using System . Linq ;
 using System . Text ;
+using System . Text . RegularExpressions ;
 
 using JetBrains . Annotations ;
 
@@ -12,9 +13,27 @@ namespace DreamRecorder . ToolBox . Network . Ip
 	public class Ipv6Address : IpAddress
 	{
 
+		[Flags]
+		public enum Ipv6AddressStyle
+		{
+
+			Compressed = 0 ,
+
+			LeadingZero = 1 << 0 ,
+
+			NoOmitHextets = 1 << 1 ,
+
+			Preferred = LeadingZero | NoOmitHextets ,
+
+		}
+
 		public override AddressType Type => AddressType . Ipv6 ;
 
 		public string ScopeId { get ; set ; }
+
+		public static Regex ShortenRegex { get ; } = new Regex (
+																"(?:(?:^|:)0{1,4})+" ,
+																RegexOptions . IgnoreCase | RegexOptions . Compiled ) ;
 
 		public Ipv6Address ( ) => AddressBytes = new byte[ 16 ] ;
 
@@ -83,21 +102,25 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 							for ( int i = 0 ; i < NumberOfLabels ; i++ )
 							{
-								addressBytes [ j++ ] = ( byte )( ( address [ i ] >> 8 ) & 0xFF ) ;
-								addressBytes [ j++ ] = ( byte )( address [ i ]          & 0xFF ) ;
+								addressBytes [ j++ ] = ( byte )( ( numbers [ i ] >> 8 ) & 0xFF ) ;
+								addressBytes [ j++ ] = ( byte )( numbers [ i ]          & 0xFF ) ;
 							}
 
 							AddressBytes = addressBytes ;
 
 							ScopeId = scopeId ;
 						}
+						else
+						{
+							throw new FormatException ( ) ;
+						}
 					}
 				}
-
-				throw new FormatException ( ) ;
 			}
-
-			throw new ArgumentException ( "" , nameof ( address ) ) ; //todo
+			else
+			{
+				throw new ArgumentException ( "" , nameof ( address ) ) ; //todo
+			}
 		}
 
 		private const int NumberOfLabels = 8 ;
@@ -114,14 +137,22 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 		public override object Clone ( ) => new Ipv6Address ( AddressBytes ) ;
 
-		public override string ToString ( )
+		public string ToString ( Ipv6AddressStyle style )
 		{
 			StringBuilder builder = new StringBuilder ( ) ;
 
 			for ( int i = 0 ; i < AddressBytes . Length ; i += 2 )
 			{
 				int segment = ( ushort )( AddressBytes . Span [ i ] << 8 ) | AddressBytes . Span [ i + 1 ] ;
-				builder . AppendFormat ( "{0:X}" , segment ) ;
+
+				if ( style . HasFlag ( Ipv6AddressStyle . LeadingZero ) )
+				{
+					builder . AppendFormat ( "{0:X4}" , segment ) ;
+				}
+				else
+				{
+					builder . AppendFormat ( "{0:X}" , segment ) ;
+				}
 
 				if ( i + 2 != AddressBytes . Length )
 				{
@@ -129,8 +160,36 @@ namespace DreamRecorder . ToolBox . Network . Ip
 				}
 			}
 
+			if ( ! style . HasFlag ( Ipv6AddressStyle . NoOmitHextets ) )
+			{
+				MatchCollection matchs = ShortenRegex . Matches ( builder . ToString ( ) ) ;
+
+
+				if ( matchs . MaxBy ( match => match . Length ) is Match longestMatch )
+				{
+					if ( longestMatch . Index + longestMatch . Length == builder . Length )
+					{
+						builder . Replace (
+											longestMatch . Value ,
+											"::" ,
+											longestMatch . Index ,
+											longestMatch . Length ) ;
+					}
+					else
+					{
+						builder . Replace (
+											longestMatch . Value ,
+											":" ,
+											longestMatch . Index ,
+											longestMatch . Length ) ;
+					}
+				}
+			}
+
 			return builder . ToString ( ) ;
 		}
+
+		public override string ToString ( ) => ToString ( Ipv6AddressStyle . Compressed ) ;
 
 	}
 
