@@ -2,6 +2,7 @@
 using System . Collections ;
 using System . Collections . Generic ;
 using System . Linq ;
+using System . Text ;
 
 using JetBrains . Annotations ;
 
@@ -86,6 +87,21 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 		public override string ToString ( )
 			=> $"{AddressBytes . Span [ 0 ]}.{AddressBytes . Span [ 1 ]}.{AddressBytes . Span [ 2 ]}.{AddressBytes . Span [ 3 ]}" ;
+
+		public override string GetReverseLookupAddress ( )
+		{
+			StringBuilder res = new StringBuilder ( ) ;
+
+			for ( int i = AddressBytes . Length - 1 ; i >= 0 ; i-- )
+			{
+				res . Append ( AddressBytes . Span [ i ] ) ;
+				res . Append ( "." ) ;
+			}
+
+			res . Append ( "in-addr.arpa" ) ;
+
+			return res . ToString ( ) ;
+		}
 
 	}
 

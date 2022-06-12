@@ -20,7 +20,7 @@ namespace DreamRecorder . ToolBox . AspNet . CommonComponent
 
 		private HttpClient HttpClient { get ; }
 
-		public CommonFooterTagHelper ( HttpClient httpClient ) { HttpClient = httpClient ; }
+		public CommonFooterTagHelper ( HttpClient httpClient ) => HttpClient = httpClient ;
 
 		public override async Task ProcessAsync ( TagHelperContext context , TagHelperOutput output )
 		{

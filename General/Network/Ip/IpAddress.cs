@@ -49,6 +49,12 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			}
 		}
 
+		/// <summary>
+		///     Returns the reverse lookup address of an IPAddress
+		/// </summary>
+		/// <returns> A string with the reverse lookup address </returns>
+		public abstract string GetReverseLookupAddress ( ) ;
+
 	}
 
 }

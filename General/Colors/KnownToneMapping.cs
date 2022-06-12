@@ -27,7 +27,7 @@ namespace DreamRecorder . ToolBox . Colors
 			const float d = 0.59f ;
 			const float e = 0.14f ;
 
-			value = value * (a * value + b) / (value * (c * value + d) + e);
+			value = value * ( a * value + b ) / ( value * ( c * value + d ) + e ) ;
 
 			return Crop ( value ) ;
 		}

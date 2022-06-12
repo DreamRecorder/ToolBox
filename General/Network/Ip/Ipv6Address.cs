@@ -191,6 +191,24 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 		public override string ToString ( ) => ToString ( AddressStyle . Compressed ) ;
 
+		public override string GetReverseLookupAddress ( )
+		{
+			StringBuilder res = new StringBuilder ( ) ;
+
+			for ( int i = AddressBytes . Length - 1 ; i >= 0 ; i-- )
+			{
+				string hex = AddressBytes . Span [ i ] . ToString ( "x2" ) ;
+				res . Append ( hex [ 1 ] ) ;
+				res . Append ( "." ) ;
+				res . Append ( hex [ 0 ] ) ;
+				res . Append ( "." ) ;
+			}
+
+			res . Append ( "ip6.arpa" ) ;
+
+			return res . ToString ( ) ;
+		}
+
 	}
 
 }
