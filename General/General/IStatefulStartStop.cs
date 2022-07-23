@@ -21,8 +21,8 @@ public interface IStatefulStartStop : IStartStop
 				return ;
 			}
 
-			StartOverride ( ) ;
-			IsRunningStatus = true ;
+			IsRunningStatus = true;
+			StartOverride( ) ;
 		}
 	}
 
@@ -34,9 +34,9 @@ public interface IStatefulStartStop : IStartStop
 			{
 				return ;
 			}
-
-			StopOverride ( ) ;
-			IsRunningStatus = false ;
+			
+			IsRunningStatus = false;
+			StopOverride( ) ;
 		}
 	}
 

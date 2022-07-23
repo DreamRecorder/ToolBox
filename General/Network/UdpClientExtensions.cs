@@ -8,8 +8,8 @@ using System . Threading . Tasks ;
 
 namespace DreamRecorder . ToolBox . Network
 {
-
-	internal static class UdpClientExtensions
+	
+	public static class UdpClientExtensions
 	{
 
 		public static async Task <UdpReceiveResult> ReceiveAsync (
