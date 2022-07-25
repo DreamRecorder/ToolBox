@@ -44,10 +44,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="weight"> Weight of the record </param>
 		/// <param name="target"> Target of the record </param>
 		public UriRecord ( DomainName name , int timeToLive , ushort priority , ushort weight , string target ) : base (
-																														name ,
-																														RecordType . Uri ,
-																														RecordClass . INet ,
-																														timeToLive )
+		name ,
+		RecordType . Uri ,
+		RecordClass . INet ,
+		timeToLive )
 		{
 			Priority = priority ;
 			Weight   = weight ;

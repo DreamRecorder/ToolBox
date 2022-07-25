@@ -316,7 +316,11 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 
 			var nsec3Parameter = nsecRecords . Where ( x => x . Name . GetParentName ( ) . Equals ( zoneApex ) ) .
 												Where ( x => x . HashAlgorithm . IsSupported ( ) ) .
-												Select ( x => new { x . HashAlgorithm , x . Iterations , x . Salt , } ) .
+												Select (
+														x => new
+															{
+																x . HashAlgorithm , x . Iterations , x . Salt ,
+															} ) .
 												OrderBy ( x => x . HashAlgorithm . GetPriority ( ) ) .
 												First ( ) ;
 

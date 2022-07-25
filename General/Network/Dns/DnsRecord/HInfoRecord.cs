@@ -38,10 +38,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="cpu"> Type of the CPU of the host </param>
 		/// <param name="operatingSystem"> Name of the operating system of the host </param>
 		public HInfoRecord ( DomainName name , int timeToLive , string cpu , string operatingSystem ) : base (
-																											name ,
-																											RecordType . HInfo ,
-																											RecordClass . INet ,
-																											timeToLive )
+		name ,
+		RecordType . HInfo ,
+		RecordClass . INet ,
+		timeToLive )
 		{
 			Cpu             = cpu             ?? string . Empty ;
 			OperatingSystem = operatingSystem ?? string . Empty ;

@@ -32,10 +32,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="timeToLive"> Seconds the record should be cached at most </param>
 		/// <param name="pointerDomainName"> Domain name the address points to </param>
 		public PtrRecord ( DomainName name , int timeToLive , DomainName pointerDomainName ) : base (
-																									name ,
-																									RecordType . Ptr ,
-																									RecordClass . INet ,
-																									timeToLive )
+		name ,
+		RecordType . Ptr ,
+		RecordClass . INet ,
+		timeToLive )
 			=> PointerDomainName = pointerDomainName ?? DomainName . Root ;
 
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )

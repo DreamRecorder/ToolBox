@@ -29,10 +29,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DynamicUpdate
 		/// <param name="name"> Name of record that should be checked </param>
 		/// <param name="recordType"> Type of record that should be checked </param>
 		public RecordExistsPrerequisite ( DomainName name , RecordType recordType ) : base (
-																						name ,
-																						recordType ,
-																						RecordClass . Any ,
-																						0 )
+		name ,
+		recordType ,
+		RecordClass . Any ,
+		0 )
 		{
 		}
 

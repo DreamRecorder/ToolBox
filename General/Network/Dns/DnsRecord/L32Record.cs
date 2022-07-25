@@ -39,10 +39,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="preference"> The preference </param>
 		/// <param name="locator32"> The Locator </param>
 		public L32Record ( DomainName name , int timeToLive , ushort preference , uint locator32 ) : base (
-																											name ,
-																											RecordType . L32 ,
-																											RecordClass . INet ,
-																											timeToLive )
+		name ,
+		RecordType . L32 ,
+		RecordClass . INet ,
+		timeToLive )
 		{
 			Preference = preference ;
 			Locator32  = locator32 ;

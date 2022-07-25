@@ -209,8 +209,7 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 		{
 			if ( Algorithm == DnsSecAlgorithm . RsaMd5 )
 			{
-				return ( ushort )( PublicKey [ ^4 ]
-									& ( PublicKey [ ^3 ] << 8 ) ) ;
+				return ( ushort )( PublicKey [ ^4 ] & ( PublicKey [ ^3 ] << 8 ) ) ;
 			}
 
 			byte [ ] buffer          = new byte[ MaximumRecordDataLength ] ;

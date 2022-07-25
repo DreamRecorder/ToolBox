@@ -13,13 +13,17 @@ namespace DreamRecorder . ToolBox . Network . Dns . DynamicUpdate
 	/// </summary>
 	public abstract class PrerequisiteBase : DnsRecordBase
 	{
+
 		internal PrerequisiteBase ( ) { }
 
-		protected PrerequisiteBase ( DomainName name , RecordType recordType , RecordClass recordClass , int timeToLive )
-			: base ( name , recordType , recordClass , timeToLive )
+		protected PrerequisiteBase (
+			DomainName  name ,
+			RecordType  recordType ,
+			RecordClass recordClass ,
+			int         timeToLive ) : base ( name , recordType , recordClass , timeToLive )
 		{
 		}
-		
+
 		internal override string RecordDataToString ( ) => null ;
 
 		internal override void ParseRecordData ( DomainName origin , string [ ] stringRepresentation )

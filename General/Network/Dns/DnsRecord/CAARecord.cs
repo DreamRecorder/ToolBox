@@ -46,10 +46,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="tag">The name of the tag</param>
 		/// <param name="value">The value of the tag</param>
 		public CAARecord ( DomainName name , int timeToLive , byte flags , string tag , string value ) : base (
-																												name ,
-																												RecordType . CAA ,
-																												RecordClass . INet ,
-																												timeToLive )
+		name ,
+		RecordType . CAA ,
+		RecordClass . INet ,
+		timeToLive )
 		{
 			Flags = flags ;
 			Tag   = tag ;

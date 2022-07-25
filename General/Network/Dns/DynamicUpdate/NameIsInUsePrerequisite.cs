@@ -20,7 +20,9 @@ namespace DreamRecorder . ToolBox . Network . Dns . DynamicUpdate
 		///     Creates a new instance of the NameIsInUsePrerequisite class
 		/// </summary>
 		/// <param name="name"> Name that should be checked </param>
-		public NameIsInUsePrerequisite ( DomainName name ) : base ( name , RecordType . Any , RecordClass . Any , 0 ) { }
+		public NameIsInUsePrerequisite ( DomainName name ) : base ( name , RecordType . Any , RecordClass . Any , 0 )
+		{
+		}
 
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length ) { }
 

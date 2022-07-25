@@ -37,10 +37,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="timeToLive"> Seconds the record should be cached at most </param>
 		/// <param name="isdnAddress"> ISDN number </param>
 		public IsdnRecord ( DomainName name , int timeToLive , string isdnAddress ) : this (
-																							name ,
-																							timeToLive ,
-																							isdnAddress ,
-																							string . Empty )
+		name ,
+		timeToLive ,
+		isdnAddress ,
+		string . Empty )
 		{
 		}
 
@@ -52,10 +52,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="isdnAddress"> ISDN number </param>
 		/// <param name="subAddress"> Sub address </param>
 		public IsdnRecord ( DomainName name , int timeToLive , string isdnAddress , string subAddress ) : base (
-																												name ,
-																												RecordType . Isdn ,
-																												RecordClass . INet ,
-																												timeToLive )
+		name ,
+		RecordType . Isdn ,
+		RecordClass . INet ,
+		timeToLive )
 		{
 			IsdnAddress = isdnAddress ?? string . Empty ;
 			SubAddress  = subAddress  ?? string . Empty ;

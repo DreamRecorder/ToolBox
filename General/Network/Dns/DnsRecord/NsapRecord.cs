@@ -36,10 +36,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="timeToLive"> Seconds the record should be cached at most </param>
 		/// <param name="recordData"> Binary encoded NSAP data </param>
 		public NsapRecord ( DomainName name , int timeToLive , byte [ ] recordData ) : base (
-																							name ,
-																							RecordType . Nsap ,
-																							RecordClass . INet ,
-																							timeToLive )
+		name ,
+		RecordType . Nsap ,
+		RecordClass . INet ,
+		timeToLive )
 		{
 			RecordData = recordData ?? new byte [ ] { } ;
 		}

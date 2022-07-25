@@ -669,9 +669,11 @@ namespace DreamRecorder . ToolBox . Network . Dns
 
 		protected virtual void PrepareEncoding ( ) { }
 
-		internal int Encode ( bool addLengthPrefix , out byte [ ] messageData ) => Encode ( addLengthPrefix , null , false , out messageData , out byte [ ] _ ) ;
+		internal int Encode ( bool addLengthPrefix , out byte [ ] messageData )
+			=> Encode ( addLengthPrefix , null , false , out messageData , out byte [ ] _ ) ;
 
-		internal int Encode ( bool addLengthPrefix , byte [ ] originalTsigMac , out byte [ ] messageData ) => Encode ( addLengthPrefix , originalTsigMac , false , out messageData , out byte [ ] _ ) ;
+		internal int Encode ( bool addLengthPrefix , byte [ ] originalTsigMac , out byte [ ] messageData )
+			=> Encode ( addLengthPrefix , originalTsigMac , false , out messageData , out byte [ ] _ ) ;
 
 		internal int Encode (
 			bool         addLengthPrefix ,

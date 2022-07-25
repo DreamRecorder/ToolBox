@@ -80,10 +80,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 		/// <param name="timeToLive"> Seconds the record should be cached at most </param>
 		/// <param name="digestType"> Type of the digest </param>
 		public DsRecord ( DnsKeyRecord key , int timeToLive , DnsSecDigestType digestType ) : base (
-																									key . Name ,
-																									RecordType . Ds ,
-																									key . RecordClass ,
-																									timeToLive )
+		key . Name ,
+		RecordType . Ds ,
+		key . RecordClass ,
+		timeToLive )
 		{
 			KeyTag     = key . CalculateKeyTag ( ) ;
 			Algorithm  = key . Algorithm ;

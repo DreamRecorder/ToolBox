@@ -49,7 +49,7 @@ namespace DreamRecorder . ToolBox . UnitTest
 				Assert . AreEqual (
 									data . NoOmitHextets ,
 									new Ipv6Address ( data . Perferred ) . ToString (
-									Ipv6Address.AddressStyle.NoOmitHextets ) ,
+									Ipv6Address . AddressStyle . NoOmitHextets ) ,
 									true ) ;
 			}
 		}

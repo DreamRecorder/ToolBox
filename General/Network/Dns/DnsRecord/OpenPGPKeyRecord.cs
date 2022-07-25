@@ -36,10 +36,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="timeToLive"> Seconds the record should be cached at most </param>
 		/// <param name="publicKey"> The Public Key</param>
 		public OpenPGPKeyRecord ( DomainName name , int timeToLive , byte [ ] publicKey ) : base (
-																								name ,
-																								RecordType . OpenPGPKey ,
-																								RecordClass . INet ,
-																								timeToLive )
+		name ,
+		RecordType . OpenPGPKey ,
+		RecordClass . INet ,
+		timeToLive )
 		{
 			PublicKey = publicKey ?? new byte [ ] { } ;
 		}

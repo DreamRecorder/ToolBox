@@ -32,10 +32,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="timeToLive"> Seconds the record should be cached at most </param>
 		/// <param name="address"> The EUI48 address</param>
 		public Eui48Record ( DomainName name , int timeToLive , byte [ ] address ) : base (
-																							name ,
-																							RecordType . Eui48 ,
-																							RecordClass . INet ,
-																							timeToLive )
+		name ,
+		RecordType . Eui48 ,
+		RecordClass . INet ,
+		timeToLive )
 			=> Address = address ?? new byte[ 6 ] ;
 
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )

@@ -54,7 +54,7 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 		/// <param name="servers"> The list of servers to use </param>
 		/// <param name="queryTimeout"> The query timeout in milliseconds </param>
 		public DnsStubResolver ( IEnumerable <IPAddress> servers , int queryTimeout ) : this (
-																							new DnsClient ( servers , queryTimeout ) )
+		new DnsClient ( servers , queryTimeout ) )
 		{
 		}
 

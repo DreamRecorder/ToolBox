@@ -65,9 +65,9 @@ namespace DreamRecorder . ToolBox . Network . Dns
 		/// <param name="udpListenerCount"> The count of threads listings on udp, 0 to deactivate udp </param>
 		/// <param name="tcpListenerCount"> The count of threads listings on tcp, 0 to deactivate tcp </param>
 		public DnsServer ( int udpListenerCount , int tcpListenerCount ) : this (
-																				IPAddress . Any ,
-																				udpListenerCount ,
-																				tcpListenerCount )
+		IPAddress . Any ,
+		udpListenerCount ,
+		tcpListenerCount )
 		{
 		}
 
@@ -78,9 +78,9 @@ namespace DreamRecorder . ToolBox . Network . Dns
 		/// <param name="udpListenerCount"> The count of threads listings on udp, 0 to deactivate udp </param>
 		/// <param name="tcpListenerCount"> The count of threads listings on tcp, 0 to deactivate tcp </param>
 		public DnsServer ( IPAddress bindAddress , int udpListenerCount , int tcpListenerCount ) : this (
-																										new IPEndPoint ( bindAddress , _DNS_PORT ) ,
-																										udpListenerCount ,
-																										tcpListenerCount )
+		new IPEndPoint ( bindAddress , _DNS_PORT ) ,
+		udpListenerCount ,
+		tcpListenerCount )
 		{
 		}
 
@@ -452,7 +452,7 @@ namespace DreamRecorder . ToolBox . Network . Dns
 					while ( true )
 					{
 						byte [ ] buffer = await ReadIntoBufferAsync ( client , stream , 2 ) ;
-						if ( buffer == null) // client disconnected while reading or timeout
+						if ( buffer == null ) // client disconnected while reading or timeout
 						{
 							break ;
 						}
@@ -463,7 +463,7 @@ namespace DreamRecorder . ToolBox . Network . Dns
 						buffer = await ReadIntoBufferAsync ( client , stream , length ) ;
 						if ( buffer == null ) // client disconnected while reading or timeout
 						{
-							throw new Exception ("Client disconnected or timed out while sending data") ;
+							throw new Exception ( "Client disconnected or timed out while sending data" ) ;
 						}
 
 						DnsMessageBase query ;

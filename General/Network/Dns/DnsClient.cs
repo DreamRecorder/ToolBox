@@ -62,9 +62,9 @@ namespace DreamRecorder . ToolBox . Network . Dns
 		/// <param name="dnsServers"> The IPAddresses of the dns servers to use </param>
 		/// <param name="queryTimeout"> Query timeout in milliseconds </param>
 		public DnsClient ( IEnumerable <IPAddress> dnsServers , int queryTimeout ) : base (
-																							dnsServers ,
-																							queryTimeout ,
-																							53 )
+		dnsServers ,
+		queryTimeout ,
+		53 )
 		{
 			IsUdpEnabled = true ;
 			IsTcpEnabled = true ;

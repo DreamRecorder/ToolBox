@@ -32,10 +32,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="timeToLive"> Seconds the record should be cached at most </param>
 		/// <param name="nameServer"> Name of the authoritative name server </param>
 		public NsRecord ( DomainName name , int timeToLive , DomainName nameServer ) : base (
-																							name ,
-																							RecordType . Ns ,
-																							RecordClass . INet ,
-																							timeToLive )
+		name ,
+		RecordType . Ns ,
+		RecordClass . INet ,
+		timeToLive )
 			=> NameServer = nameServer ?? DomainName . Root ;
 
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )

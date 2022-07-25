@@ -38,10 +38,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="preference"> The preference </param>
 		/// <param name="nodeID"> The Node ID </param>
 		public NIdRecord ( DomainName name , int timeToLive , ushort preference , ulong nodeID ) : base (
-																										name ,
-																										RecordType . NId ,
-																										RecordClass . INet ,
-																										timeToLive )
+		name ,
+		RecordType . NId ,
+		RecordClass . INet ,
+		timeToLive )
 		{
 			Preference = preference ;
 			NodeID     = nodeID ;

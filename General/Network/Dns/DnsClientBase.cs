@@ -667,7 +667,7 @@ namespace DreamRecorder . ToolBox . Network . Dns
 			{
 				if ( endpointInfo . IsMulticast )
 				{
-					using UdpClient udpClient      = new UdpClient ( new IPEndPoint ( endpointInfo . LocalAddress , 0 ) ) ;
+					using UdpClient udpClient = new UdpClient ( new IPEndPoint ( endpointInfo . LocalAddress , 0 ) ) ;
 					IPEndPoint      serverEndpoint = new IPEndPoint ( endpointInfo . ServerAddress , _port ) ;
 					await udpClient . SendAsync ( messageData , messageLength , serverEndpoint ) ;
 

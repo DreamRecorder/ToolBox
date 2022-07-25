@@ -42,10 +42,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="preference"> The preference </param>
 		/// <param name="fqdn"> The FQDN </param>
 		public LPRecord ( DomainName name , int timeToLive , ushort preference , DomainName fqdn ) : base (
-																											name ,
-																											RecordType . LP ,
-																											RecordClass . INet ,
-																											timeToLive )
+		name ,
+		RecordType . LP ,
+		RecordClass . INet ,
+		timeToLive )
 		{
 			Preference = preference ;
 			FQDN       = fqdn ;

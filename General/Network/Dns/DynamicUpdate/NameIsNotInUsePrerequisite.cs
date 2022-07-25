@@ -20,7 +20,11 @@ namespace DreamRecorder . ToolBox . Network . Dns . DynamicUpdate
 		///     Creates a new instance of the NameIsNotInUsePrerequisite class
 		/// </summary>
 		/// <param name="name"> Name that should be checked </param>
-		public NameIsNotInUsePrerequisite ( DomainName name ) : base ( name , RecordType . Any , RecordClass . None , 0 )
+		public NameIsNotInUsePrerequisite ( DomainName name ) : base (
+																	name ,
+																	RecordType . Any ,
+																	RecordClass . None ,
+																	0 )
 		{
 		}
 

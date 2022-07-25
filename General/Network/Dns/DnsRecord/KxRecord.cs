@@ -38,10 +38,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="preference"> Preference of the record </param>
 		/// <param name="exchanger"> Domain name of the exchange host </param>
 		public KxRecord ( DomainName name , int timeToLive , ushort preference , DomainName exchanger ) : base (
-																												name ,
-																												RecordType . Kx ,
-																												RecordClass . INet ,
-																												timeToLive )
+		name ,
+		RecordType . Kx ,
+		RecordClass . INet ,
+		timeToLive )
 		{
 			Preference = preference ;
 			Exchanger  = exchanger ?? DomainName . Root ;

@@ -32,10 +32,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="timeToLive"> Seconds the record should be cached at most </param>
 		/// <param name="canonicalName"> Canocical name for the alias of the host </param>
 		public CNameRecord ( DomainName name , int timeToLive , DomainName canonicalName ) : base (
-																									name ,
-																									RecordType . CName ,
-																									RecordClass . INet ,
-																									timeToLive )
+		name ,
+		RecordType . CName ,
+		RecordClass . INet ,
+		timeToLive )
 			=> CanonicalName = canonicalName ?? DomainName . Root ;
 
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )

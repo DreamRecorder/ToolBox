@@ -8,16 +8,17 @@ using DreamRecorder . ToolBox . Network ;
 
 using Microsoft . VisualStudio . TestTools . UnitTesting ;
 
-namespace DreamRecorder . ToolBox .UnitTest
+namespace DreamRecorder . ToolBox . UnitTest
 {
-	[TestClass()]
+
+	[TestClass]
 	public class TcpServerTests
 	{
 
 		[TestMethod]
 		public void Restart ( )
 		{
-			TcpServer server =new TcpServer(0);
+			TcpServer server = new TcpServer ( 0 ) ;
 			( ( IStartStop )server ) . Start ( ) ;
 			( ( IStartStop )server ) . Stop ( ) ;
 			( ( IStartStop )server ) . Start ( ) ;
@@ -25,4 +26,5 @@ namespace DreamRecorder . ToolBox .UnitTest
 		}
 
 	}
+
 }

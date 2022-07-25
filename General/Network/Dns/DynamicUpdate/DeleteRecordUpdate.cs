@@ -29,10 +29,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DynamicUpdate
 		/// <param name="name"> Name of the record that should be deleted </param>
 		/// <param name="recordType"> Type of the record that should be deleted </param>
 		public DeleteRecordUpdate ( DomainName name , RecordType recordType ) : base (
-																					name ,
-																					recordType ,
-																					RecordClass . Any ,
-																					0 )
+		name ,
+		recordType ,
+		RecordClass . Any ,
+		0 )
 		{
 		}
 

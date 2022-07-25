@@ -34,10 +34,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="timeToLive"> Seconds the record should be cached at most </param>
 		/// <param name="recordData"> Record data </param>
 		public DhcidRecord ( DomainName name , int timeToLive , byte [ ] recordData ) : base (
-																							name ,
-																							RecordType . Dhcid ,
-																							RecordClass . INet ,
-																							timeToLive )
+		name ,
+		RecordType . Dhcid ,
+		RecordClass . INet ,
+		timeToLive )
 		{
 			RecordData = recordData ?? new byte [ ] { } ;
 		}

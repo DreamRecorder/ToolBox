@@ -38,10 +38,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="preference"> Preference of the record </param>
 		/// <param name="intermediateHost"> Name of the intermediate host </param>
 		public RtRecord ( DomainName name , int timeToLive , ushort preference , DomainName intermediateHost ) : base (
-																														name ,
-																														RecordType . Rt ,
-																														RecordClass . INet ,
-																														timeToLive )
+		name ,
+		RecordType . Rt ,
+		RecordClass . INet ,
+		timeToLive )
 		{
 			Preference       = preference ;
 			IntermediateHost = intermediateHost ?? DomainName . Root ;

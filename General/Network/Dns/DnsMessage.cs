@@ -122,8 +122,7 @@ namespace DreamRecorder . ToolBox . Network . Dns
 		{
 			if ( isSubsequentResponseMessage )
 			{
-				return ( AnswerRecords . Count                 > 0 )
-						&& ( AnswerRecords [ ^1 ] . RecordType != RecordType . Soa ) ;
+				return ( AnswerRecords . Count > 0 ) && ( AnswerRecords [ ^1 ] . RecordType != RecordType . Soa ) ;
 			}
 
 			if ( Questions . Count == 0 )
@@ -139,8 +138,7 @@ namespace DreamRecorder . ToolBox . Network . Dns
 
 			return ( AnswerRecords . Count                > 0 )
 					&& ( AnswerRecords [ 0 ] . RecordType == RecordType . Soa )
-					&& ( ( AnswerRecords . Count               == 1 )
-						|| ( AnswerRecords [ ^1 ] . RecordType != RecordType . Soa ) ) ;
+					&& ( ( AnswerRecords . Count == 1 ) || ( AnswerRecords [ ^1 ] . RecordType != RecordType . Soa ) ) ;
 		}
 
 		#region Header

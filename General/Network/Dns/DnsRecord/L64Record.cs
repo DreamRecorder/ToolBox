@@ -38,10 +38,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="preference"> The preference </param>
 		/// <param name="locator64"> The Locator </param>
 		public L64Record ( DomainName name , int timeToLive , ushort preference , ulong locator64 ) : base (
-																											name ,
-																											RecordType . L64 ,
-																											RecordClass . INet ,
-																											timeToLive )
+		name ,
+		RecordType . L64 ,
+		RecordClass . INet ,
+		timeToLive )
 		{
 			Preference = preference ;
 			Locator64  = locator64 ;

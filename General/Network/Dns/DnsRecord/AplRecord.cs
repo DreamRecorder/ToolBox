@@ -34,10 +34,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="timeToLive"> Seconds the record should be cached at most </param>
 		/// <param name="prefixes"> List of address prefixes covered by this record </param>
 		public AplRecord ( DomainName name , int timeToLive , List <AddressPrefix> prefixes ) : base (
-																									name ,
-																									RecordType . Apl ,
-																									RecordClass . INet ,
-																									timeToLive )
+		name ,
+		RecordType . Apl ,
+		RecordClass . INet ,
+		timeToLive )
 			=> Prefixes = prefixes ?? new List <AddressPrefix> ( ) ;
 
 		internal override void ParseRecordData ( byte [ ] resultData , int currentPosition , int length )

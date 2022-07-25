@@ -66,10 +66,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="subType"> Subtype of the record </param>
 		/// <param name="hostname"> Hostname of the AFS database </param>
 		public AfsdbRecord ( DomainName name , int timeToLive , AfsSubType subType , DomainName hostname ) : base (
-																													name ,
-																													RecordType . Afsdb ,
-																													RecordClass . INet ,
-																													timeToLive )
+		name ,
+		RecordType . Afsdb ,
+		RecordClass . INet ,
+		timeToLive )
 		{
 			SubType  = subType ;
 			Hostname = hostname ?? DomainName . Root ;

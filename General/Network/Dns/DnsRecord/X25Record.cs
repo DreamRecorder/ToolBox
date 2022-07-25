@@ -32,10 +32,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="timeToLive"> Seconds the record should be cached at most </param>
 		/// <param name="x25Address"> PSDN (Public Switched Data Network) address </param>
 		public X25Record ( DomainName name , int timeToLive , string x25Address ) : base (
-																						name ,
-																						RecordType . X25 ,
-																						RecordClass . INet ,
-																						timeToLive )
+		name ,
+		RecordType . X25 ,
+		RecordClass . INet ,
+		timeToLive )
 			=> X25Address = x25Address ?? string . Empty ;
 
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )

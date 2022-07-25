@@ -32,10 +32,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="timeToLive"> Seconds the record should be cached at most </param>
 		/// <param name="target"> Target of the redirection </param>
 		public DNameRecord ( DomainName name , int timeToLive , DomainName target ) : base (
-																							name ,
-																							RecordType . DName ,
-																							RecordClass . INet ,
-																							timeToLive )
+		name ,
+		RecordType . DName ,
+		RecordClass . INet ,
+		timeToLive )
 			=> Target = target ?? DomainName . Root ;
 
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )

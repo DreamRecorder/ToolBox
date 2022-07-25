@@ -28,10 +28,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="timeToLive"> Seconds the record should be cached at most </param>
 		/// <param name="address"> IP address of the host </param>
 		public AaaaRecord ( DomainName name , int timeToLive , IPAddress address ) : base (
-																							name ,
-																							RecordType . Aaaa ,
-																							timeToLive ,
-																							address ?? IPAddress . IPv6None )
+		name ,
+		RecordType . Aaaa ,
+		timeToLive ,
+		address ?? IPAddress . IPv6None )
 		{
 		}
 

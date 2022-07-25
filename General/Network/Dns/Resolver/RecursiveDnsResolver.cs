@@ -248,7 +248,11 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 				return cachedResults ;
 			}
 
-			if ( _cache . TryGetRecords ( name , RecordType . CName , recordClass , out List <CNameRecord> cachedCNames ) )
+			if ( _cache . TryGetRecords (
+										name ,
+										RecordType . CName ,
+										recordClass ,
+										out List <CNameRecord> cachedCNames ) )
 			{
 				DomainName cNameCanonicalName = cachedCNames . First ( ) . CanonicalName ;
 				if ( name . Equals ( cNameCanonicalName ) )

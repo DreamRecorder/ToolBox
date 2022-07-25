@@ -53,10 +53,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . EDns
 		/// <param name="sequence"> The sequence number </param>
 		/// <param name="primaryMacAddress"> The primary MAC address </param>
 		public OwnerOption ( byte sequence , PhysicalAddress primaryMacAddress ) : this (
-																						0 ,
-																						sequence ,
-																						primaryMacAddress ,
-																						null )
+		0 ,
+		sequence ,
+		primaryMacAddress ,
+		null )
 		{
 		}
 
@@ -67,10 +67,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . EDns
 		/// <param name="sequence"> The sequence number </param>
 		/// <param name="primaryMacAddress"> The primary MAC address </param>
 		public OwnerOption ( byte version , byte sequence , PhysicalAddress primaryMacAddress ) : this (
-																										version ,
-																										sequence ,
-																										primaryMacAddress ,
-																										null )
+		version ,
+		sequence ,
+		primaryMacAddress ,
+		null )
 		{
 		}
 
