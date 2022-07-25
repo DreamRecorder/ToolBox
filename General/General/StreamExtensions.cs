@@ -11,7 +11,7 @@ namespace DreamRecorder . ToolBox . General ;
 public static class StreamExtensions
 {
 
-	public static int ReadToFillBuffer ( [NotNull] this Stream stream , Span <byte> buffer )
+	public static bool ReadToFillBuffer ( [NotNull] this Stream stream , Span <byte> buffer )
 	{
 		if ( stream == null )
 		{
@@ -27,11 +27,11 @@ public static class StreamExtensions
 			}
 			else
 			{
-				return i ;
+				return false ;
 			}
 		}
 
-		return buffer . Length ;
+		return true ;
 	}
 
 }

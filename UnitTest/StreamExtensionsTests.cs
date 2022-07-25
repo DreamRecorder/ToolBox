@@ -16,7 +16,7 @@ namespace DreamRecorder . ToolBox . UnitTest
 	{
 
 		[TestMethod]
-		public void ReadToFillBufferTest ( )
+		public void ReadToFillBufferTest1 ( )
 		{
 			byte [ ] sourceBuffer = new byte [ 128 ] ;
 			StaticRandom . Current . NextBytes ( sourceBuffer ) ;
@@ -28,12 +28,35 @@ namespace DreamRecorder . ToolBox . UnitTest
 			byte [ ]    destinationBuffer = new byte[ 128 ] ;
 			Span <byte> buffer            = new Span <byte> ( destinationBuffer ) ;
 
-			memoryStream . ReadToFillBuffer ( buffer ) ;
+			Assert . IsTrue ( memoryStream . ReadToFillBuffer ( buffer ) ) ;
 
-			for ( int i = 0 ; i < sourceBuffer . Length ; i++ )
+			for ( int i = 0 ; i < destinationBuffer . Length ; i++ )
 			{
 				Assert . AreEqual ( sourceBuffer [ i ] , destinationBuffer [ i ] ) ;
 			}
+		}
+
+		[TestMethod]
+		public void ReadToFillBufferTest2 ( )
+		{
+			byte [ ] sourceBuffer = new byte[ 128 ] ;
+			StaticRandom . Current . NextBytes ( sourceBuffer ) ;
+
+			MemoryStream memoryStream = new MemoryStream ( sourceBuffer ) ;
+
+			memoryStream . Position = 0 ;
+
+			byte [ ]    destinationBuffer = new byte[ 64 ] ;
+			Span <byte> buffer            = new Span <byte> ( destinationBuffer ) ;
+
+			Assert . IsTrue ( memoryStream . ReadToFillBuffer ( buffer ) ) ;
+
+			for ( int i = 0 ; i < destinationBuffer . Length ; i++ )
+			{
+				Assert . AreEqual ( sourceBuffer [ i ] , destinationBuffer [ i ] ) ;
+			}
+
+			Assert . AreEqual ( memoryStream . Position , 64 ) ;
 		}
 
 	}
