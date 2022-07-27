@@ -34,27 +34,27 @@ public static class StreamExtensions
 		return true ;
 	}
 
-	public static bool ReadToFillBuffer([NotNull] this BinaryReader reader, Span<byte> buffer)
+	public static bool ReadToFillBuffer ( [NotNull] this BinaryReader reader , Span <byte> buffer )
 	{
-		if (reader == null)
+		if ( reader == null )
 		{
-			throw new ArgumentNullException(nameof(reader));
+			throw new ArgumentNullException ( nameof ( reader ) ) ;
 		}
 
-		for (int i = 0; i < buffer.Length;)
+		for ( int i = 0 ; i < buffer . Length ; )
 		{
-			int currentRead = reader.Read(buffer.Slice(i, buffer.Length - i));
-			if (currentRead > 0)
+			int currentRead = reader . Read ( buffer . Slice ( i , buffer . Length - i ) ) ;
+			if ( currentRead > 0 )
 			{
-				i += currentRead;
+				i += currentRead ;
 			}
 			else
 			{
-				return false;
+				return false ;
 			}
 		}
 
-		return true;
+		return true ;
 	}
 
 }

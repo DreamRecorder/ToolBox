@@ -6,7 +6,7 @@ using System . Linq ;
 namespace DreamRecorder . ToolBox . General
 {
 
-	public interface ILoadFrom <T>
+	public interface ILoadFrom <T> : IToT <T>
 	{
 
 		void LoadFrom ( T value ) ;
