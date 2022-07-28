@@ -5,9 +5,9 @@ using System . Linq ;
 
 namespace DreamRecorder . ToolBox . General ;
 
-public interface ICreateFrom <out T,TSource> : IToT <TSource> where T: ICreateFrom<T, TSource>
+public interface IToT <out T>
 {
 
-	static abstract T CreateFrom ( TSource value ) ;
+	T ToT ( ) ;
 
 }

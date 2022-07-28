@@ -6,10 +6,10 @@ using System . Linq ;
 namespace DreamRecorder . ToolBox . General
 {
 
-	public interface ILoadFrom <T> : IToT <T>
+	public interface ILoadFrom <TSource> : IToT <TSource>
 	{
 
-		void LoadFrom ( T value ) ;
+		void LoadFrom ( TSource value ) ;
 
 	}
 

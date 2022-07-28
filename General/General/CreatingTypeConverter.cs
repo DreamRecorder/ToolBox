@@ -8,7 +8,7 @@ using System . Linq ;
 
 namespace DreamRecorder . ToolBox . General ;
 
-public class CreatingTypeConverter <TSource , TTarget> : TypeConverter where TTarget : ICreateFrom <TSource>
+public class CreatingTypeConverter <TSource , TTarget> : TypeConverter where TTarget : ICreateFrom <TTarget , TSource>
 {
 
 	public override bool CanConvertFrom ( ITypeDescriptorContext context , [NotNullWhen ( true )] Type sourceType )
