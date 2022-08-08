@@ -206,7 +206,7 @@ namespace DreamRecorder . ToolBox . Network . Dns
 
 					if ( parts [ 0 ] . Equals ( "$origin" , StringComparison . InvariantCultureIgnoreCase ) )
 					{
-						origin = DomainName . ParseFromMasterfile ( parts [ 1 ] ) ;
+						origin = DomainName . ParseFromMasterFile ( parts [ 1 ] ) ;
 					}
 
 					if ( parts [ 0 ] . Equals ( "$ttl" , StringComparison . InvariantCultureIgnoreCase ) )
@@ -227,7 +227,7 @@ namespace DreamRecorder . ToolBox . Network . Dns
 													parts [ 1 ] ) ;
 
 						DomainName includeOrigin = ( parts . Length > 2 )
-														? DomainName . ParseFromMasterfile ( parts [ 2 ] )
+														? DomainName . ParseFromMasterFile ( parts [ 2 ] )
 														: origin ;
 
 						using StreamReader includeReader = new StreamReader ( path ) ;
@@ -348,11 +348,11 @@ namespace DreamRecorder . ToolBox . Network . Dns
 						}
 						else if ( domainString . EndsWith ( "." ) )
 						{
-							domain = DomainName . ParseFromMasterfile ( domainString ) ;
+							domain = DomainName . ParseFromMasterFile ( domainString ) ;
 						}
 						else
 						{
-							domain = DomainName . ParseFromMasterfile ( domainString ) + origin ;
+							domain = DomainName . ParseFromMasterFile ( domainString ) + origin ;
 						}
 
 						if ( recordClass == RecordClass . Invalid )
@@ -727,7 +727,7 @@ namespace DreamRecorder . ToolBox . Network . Dns
 								Item1 . GetNSec3Hash ( nsec3Algorithm , nsec3Iterations , nsec3Salt ) ;
 				nSec3Records . Add (
 									new NSec3Record (
-													DomainName . ParseFromMasterfile ( hash . ToBase32HexString ( ) )
+													DomainName . ParseFromMasterFile ( hash . ToBase32HexString ( ) )
 													+ Name ,
 													soaRecord . RecordClass ,
 													soaRecord . NegativeCachingTTL ,
@@ -748,7 +748,7 @@ namespace DreamRecorder . ToolBox . Network . Dns
 						hash = possibleNonTerminal . GetNSec3Hash ( nsec3Algorithm , nsec3Iterations , nsec3Salt ) ;
 						nSec3Records . Add (
 											new NSec3Record (
-															DomainName . ParseFromMasterfile (
+															DomainName . ParseFromMasterFile (
 															hash . ToBase32HexString ( ) )
 															+ Name ,
 															soaRecord . RecordClass ,

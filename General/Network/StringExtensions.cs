@@ -14,8 +14,6 @@ namespace DreamRecorder . ToolBox . Network
 		private static readonly Regex _fromStringRepresentationRegex =
 			new Regex ( @"\\(?<key>([^0-9]|\d\d\d))" , RegexOptions . Compiled ) ;
 
-		private static readonly Random _random = new Random ( ) ;
-
 		internal static string FromMasterfileLabelRepresentation ( this string s )
 		{
 			if ( s == null )
@@ -92,7 +90,7 @@ namespace DreamRecorder . ToolBox . Network
 
 			for ( int i = 0 ; i < s . Length ; i++ )
 			{
-				bool isLower = _random . Next ( ) > 0x3ffffff ;
+				bool isLower = Random.Shared . Next ( ) > 0x3ffffff ;
 
 				char current = s [ i ] ;
 

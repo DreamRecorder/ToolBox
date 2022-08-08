@@ -216,7 +216,7 @@ namespace DreamRecorder . ToolBox . Network . Dns
 			DomainName         zoneApex )
 			=> new DomainName ( GetNSec3Hash ( algorithm , iterations , salt ) . ToBase32HexString ( ) , zoneApex ) ;
 
-		internal static DomainName ParseFromMasterfile ( string s )
+		internal static DomainName ParseFromMasterFile ( string s )
 		{
 			if ( s == "." )
 			{

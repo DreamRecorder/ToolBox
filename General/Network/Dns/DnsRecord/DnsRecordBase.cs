@@ -312,10 +312,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 
 			if ( name . EndsWith ( "." ) )
 			{
-				return DomainName . ParseFromMasterfile ( name ) ;
+				return DomainName . ParseFromMasterFile ( name ) ;
 			}
 
-			return DomainName . ParseFromMasterfile ( name ) + origin ;
+			return DomainName . ParseFromMasterFile ( name ) + origin ;
 		}
 
 		#endregion
