@@ -53,6 +53,8 @@ namespace DreamRecorder . ToolBox . General
 			}
 		}
 
+	
+
 		#region Logger
 
 		private static ILogger Logger
