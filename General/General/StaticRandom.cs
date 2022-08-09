@@ -11,15 +11,13 @@ namespace DreamRecorder . ToolBox . General
 {
 
 	[PublicAPI]
-	public static class StaticRandom 
+	public static class StaticRandom
 	{
-		public static IRandom Current { get ; } = (SystemRandomWrapper)Random.Shared ;
+
+		public static IRandom Current { get ; } = ( SystemRandomWrapper )Random . Shared ;
 
 		[Prepare]
-		public static void StartUp ( )
-		{
-			StaticServiceProvider . ServiceCollection . AddSingleton <IRandom> ( Current ) ;
-		}
+		public static void StartUp ( ) { StaticServiceProvider . ServiceCollection . AddSingleton ( Current ) ; }
 
 	}
 

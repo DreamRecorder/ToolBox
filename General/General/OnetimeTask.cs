@@ -53,7 +53,6 @@ namespace DreamRecorder . ToolBox . General
 			}
 		}
 
-	
 
 		#region Logger
 

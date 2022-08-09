@@ -10,7 +10,11 @@ namespace DreamRecorder . ToolBox . General ;
 public static class TaskDispatcherExtensions
 {
 
-	public static OnetimeTask Dispatch ( [NotNull] ITaskDispatcher dispatcher , Action action , TimeSpan? timeout =default,TaskPriority priority=TaskPriority.Normal)
+	public static OnetimeTask Dispatch (
+		[NotNull] this ITaskDispatcher dispatcher ,
+		Action                         action ,
+		TimeSpan ?                     timeout  = default ,
+		TaskPriority                   priority = TaskPriority . Normal )
 	{
 		if ( dispatcher == null )
 		{
@@ -18,9 +22,10 @@ public static class TaskDispatcherExtensions
 		}
 
 		OnetimeTask task = new OnetimeTask ( action , timeout ?? TimeSpan . MaxValue , priority ) ;
-			
-		dispatcher. Dispatch ( task) ;
-			
-		return task;
+
+		dispatcher . Dispatch ( task ) ;
+
+		return task ;
 	}
+
 }
