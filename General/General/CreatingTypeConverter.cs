@@ -8,6 +8,16 @@ using System . Linq ;
 
 namespace DreamRecorder . ToolBox . General ;
 
+public static class ICreateFromExtensions
+{
+
+	IEnumerable <T> CreateFromList <T , TSource> (IEnumerable<TSource> sources) where T : ICreateFrom <T , TSource>
+	{
+
+	}
+
+}
+
 public class CreatingTypeConverter <TSource , TTarget> : TypeConverter where TTarget : ICreateFrom <TTarget , TSource>
 {
 
