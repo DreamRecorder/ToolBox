@@ -22,7 +22,7 @@ namespace DreamRecorder . ToolBox . General
 			}
 		}
 
-		public static T IgnoreException <T> ( this Func <T> func , T onError = default )
+		public static T IgnoreException <T> ( this Func <T> func , T onError = default )where T:class
 		{
 			try
 			{
@@ -31,6 +31,18 @@ namespace DreamRecorder . ToolBox . General
 			catch
 			{
 				return onError ;
+			}
+		}
+
+		public static T? IgnoreException<T>(this Func<T> func, T? onError = default) where T : struct
+		{
+			try
+			{
+				return func();
+			}
+			catch
+			{
+				return onError;
 			}
 		}
 
