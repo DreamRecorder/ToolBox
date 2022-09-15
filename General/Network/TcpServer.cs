@@ -23,7 +23,7 @@ public class TcpServer : IStatefulStartStop
 
 	public virtual IPAddress LocalAddress { get ; set ; } = IPAddress . IPv6Any ;
 
-	public virtual int ListeningPort { get ; set ; }
+	public int ListeningPort { get ; set ; }
 
 	public TcpListener Listener { get ; private set ; }
 

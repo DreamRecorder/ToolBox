@@ -187,8 +187,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 		#region Logger
 
-		private static ILogger Logger
-			=> _logger ??= StaticServiceProvider . Provider . GetService <ILoggerFactory> ( ) . CreateLogger <T> ( ) ;
+		private static ILogger Logger => _logger ??= StaticServiceProvider . Provider . GetService <ILoggerFactory> ( ) ?. CreateLogger <T> ( ) ;
 
 		// ReSharper disable once StaticMemberInGenericType
 		// By design
