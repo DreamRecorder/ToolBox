@@ -24,7 +24,7 @@ namespace DreamRecorder . ToolBox .UnitTest
 		public object PassObject()=>new object();
 
 		[TestMethod()]
-		public void IgnoreExceptionTest()
+		public void IgnoreExceptionTestObject()
 		{
 			Assert . IsNull ( ExceptionHelper . IgnoreException ( ErrorObject ) ) ;
 			Assert . IsNotNull ( ExceptionHelper . IgnoreException ( PassObject ) ) ;
@@ -35,10 +35,21 @@ namespace DreamRecorder . ToolBox .UnitTest
 		public int PassInt ( ) => default ;
 
 		[TestMethod()]
-		public void IgnoreExceptionTest1()
+		public void IgnoreExceptionTestInt32()
 		{
 			Assert.IsNull(ExceptionHelper.IgnoreException(ErrorInt));
 			Assert.AreEqual(ExceptionHelper.IgnoreException(PassInt),default(int));
+		}
+
+		public DateTime ErrorDateTime() => throw new Exception();
+
+		public DateTime PassDateTime() => default;
+
+		[TestMethod()]
+		public void IgnoreExceptionTestDateTime()
+		{
+			Assert.IsNull(ExceptionHelper.IgnoreException(ErrorDateTime));
+			Assert.AreEqual(ExceptionHelper.IgnoreException(PassDateTime), default(DateTime));
 		}
 
 		[TestMethod()]
