@@ -2,6 +2,7 @@
 using System . Collections ;
 using System . Collections . Generic ;
 using System . Linq ;
+using System.Xml.Serialization;
 
 using DreamRecorder . ToolBox . General ;
 
@@ -36,9 +37,10 @@ public class StartStopTests
 
 	public class StatefulStartStopMemberStartStopTestStub : IStatefulStartStop
 	{
+        [XmlIgnore]
+        public IStartStop Member { get ; set ; }
 
-		public IStartStop Member { get ; set ; }
-
+		[XmlIgnore]
 		public IStartStop Exception => throw null ;
 
 		public string Name { get ; set ; }
