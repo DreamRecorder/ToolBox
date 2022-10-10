@@ -1,23 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
-<Project Sdk="Microsoft.NET.Sdk" >
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<ItemGroup>
 		<PackageReference Include="JetBrains.Annotations" Version="2022.1.0" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0-preview.7.22375.6" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0-preview.7.22375.6" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0-rc.1.22426.10" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0-rc.1.22426.10" />
 		<PackageReference Include="semver" Version="2.3.0-alpha.0" />
-		<PackageReference Include="System.Diagnostics.PerformanceCounter" Version="7.0.0-preview.7.22375.6" />
+		<PackageReference Include="System.Diagnostics.PerformanceCounter" Version="7.0.0-rc.1.22426.10" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="..\..\DreamryLogo.png" >
+		<None Include="..\..\DreamryLogo.png">
 			<Pack>True</Pack>
 			<PackagePath />
 		</None>
 	</ItemGroup>
 
-	<PropertyGroup Label="Globals" >
+	<PropertyGroup Label="Globals">
 		<SccAuxPath>SAK</SccAuxPath>
 		<SccLocalPath>SAK</SccLocalPath>
 		<SccProjectName>SAK</SccProjectName>
