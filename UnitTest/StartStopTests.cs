@@ -64,7 +64,7 @@ public class StartStopTests
 	[TestMethod]
 	public void SelfStartStopTest ( )
 	{
-		IStartStop stub = new StatefulStartStopSelfStartStopTestStub { Name = nameof ( stub ) } ;
+		IStartStop stub = new StatefulStartStopSelfStartStopTestStub { Name = nameof ( stub ) ,} ;
 		stub . Start ( ) ;
 		stub . Stop ( ) ;
 		stub . Start ( ) ;
@@ -75,9 +75,9 @@ public class StartStopTests
 	public void LoopMemberStartStopTest ( )
 	{
 		StatefulStartStopMemberStartStopTestStub stub1 =
-			new StatefulStartStopMemberStartStopTestStub { Name = nameof ( stub1 ) } ;
+			new StatefulStartStopMemberStartStopTestStub { Name = nameof ( stub1 ) ,} ;
 		StatefulStartStopMemberStartStopTestStub stub2 =
-			new StatefulStartStopMemberStartStopTestStub { Name = nameof ( stub2 ) } ;
+			new StatefulStartStopMemberStartStopTestStub { Name = nameof ( stub2 ) ,} ;
 
 		stub1 . Member = stub2 ;
 		stub2 . Member = stub1 ;
@@ -100,7 +100,7 @@ public class StartStopTests
 	public void SelfMemberStartStopTest ( )
 	{
 		StatefulStartStopMemberStartStopTestStub stub1 =
-			new StatefulStartStopMemberStartStopTestStub { Name = nameof ( stub1 ) } ;
+			new StatefulStartStopMemberStartStopTestStub { Name = nameof ( stub1 ), } ;
 
 		stub1 . Member = stub1 ;
 
