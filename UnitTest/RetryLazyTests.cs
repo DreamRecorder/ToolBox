@@ -43,7 +43,6 @@ namespace DreamRecorder . ToolBox . UnitTest
 			Assert . AreEqual ( 6 , count ) ;
 		}
 
-
 		public class Test
 		{
 

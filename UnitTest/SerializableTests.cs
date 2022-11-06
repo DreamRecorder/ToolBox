@@ -36,9 +36,12 @@ namespace DreamRecorder . ToolBox . UnitTest
 		[TestMethod]
 		public void XmlSerializableTest ( )
 		{
-			string result = new XmlTestStub ( ) . Serialize ( ) ;
+			string result = new XmlTestStub ( ) . Serialize ( new [ ] { typeof ( XmlTestStub ) , } ) ;
 			Console . WriteLine ( result ) ;
-			Assert . AreEqual ( result , result . Deserialize <XmlTestStub> ( ) . Serialize ( ) ) ;
+			Assert . AreEqual (
+								result ,
+								result . Deserialize <XmlTestStub> ( new [ ] { typeof ( XmlTestStub ) , } ) .
+										Serialize ( new [ ] { typeof ( XmlTestStub ) , } ) ) ;
 		}
 
 		[DataContract]
