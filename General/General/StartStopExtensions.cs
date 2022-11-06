@@ -29,34 +29,34 @@ public static class StartStopExtensions
 
 		foreach ( PropertyInfo propertyInfo in readable )
 		{
-			if (ExceptionHelper.IgnoreException(() => propertyInfo.GetValue(startStop)) is IStartStop ss)
+			if ( ExceptionHelper . IgnoreException ( ( ) => propertyInfo . GetValue ( startStop ) ) is IStartStop ss )
 			{
 				ss . Start ( ) ;
 			}
 		}
 	}
 
-	public static void StopMembers([NotNull] this IStartStop startStop)
+	public static void StopMembers ( [NotNull] this IStartStop startStop )
 	{
-		if (startStop == null)
+		if ( startStop == null )
 		{
-			throw new ArgumentNullException(nameof(startStop));
+			throw new ArgumentNullException ( nameof ( startStop ) ) ;
 		}
 
-		List<PropertyInfo> readable = startStop.GetType().
-												GetProperties().
-												Where(
-													p
-														=> p.CanRead
-															&& (!p.GetAccessors().
-																	Any(m => m.IsStatic))).
-												ToList();
+		List <PropertyInfo> readable = startStop . GetType ( ) .
+													GetProperties ( ) .
+													Where (
+															p
+																=> p . CanRead
+																	&& ( ! p . GetAccessors ( ) .
+																				Any ( m => m . IsStatic ) ) ) .
+													ToList ( ) ;
 
-		foreach (PropertyInfo propertyInfo in readable)
+		foreach ( PropertyInfo propertyInfo in readable )
 		{
-			if (ExceptionHelper.IgnoreException(() => propertyInfo.GetValue(startStop)) is IStartStop ss)
+			if ( ExceptionHelper . IgnoreException ( ( ) => propertyInfo . GetValue ( startStop ) ) is IStartStop ss )
 			{
-				ss.Stop();
+				ss . Stop ( ) ;
 			}
 		}
 	}

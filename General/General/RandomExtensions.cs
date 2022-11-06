@@ -12,6 +12,10 @@ namespace DreamRecorder . ToolBox . General
 	public static class RandomExtensions
 	{
 
+		public const string AlphabetAndNumbers = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" ;
+
+		public static char [ ] AlphabetAndNumbersArray = AlphabetAndNumbers . ToCharArray ( ) ;
+
 		public static T NextEnum <T> ( [NotNull] this IRandom random ) where T : struct , Enum
 			=> Enum . GetValues <T> ( ) . RandomItem ( random ) ;
 
@@ -201,25 +205,21 @@ namespace DreamRecorder . ToolBox . General
 			return minValue + Convert . ToDecimal ( random . NextDouble ( ) ) * ( maxValue - minValue ) ;
 		}
 
-		public const string AlphabetAndNumbers = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-		public static char [ ] AlphabetAndNumbersArray = AlphabetAndNumbers . ToCharArray ( ) ;
-
-		public static string NextString([NotNull] this IRandom random, int length,char[] chars=null)
+		public static string NextString ( [NotNull] this IRandom random , int length , char [ ] chars = null )
 		{
-			if (random == null)
+			if ( random == null )
 			{
-				throw new ArgumentNullException(nameof(random));
+				throw new ArgumentNullException ( nameof ( random ) ) ;
 			}
 
-			if (length < 0)
+			if ( length < 0 )
 			{
-				throw new ArgumentOutOfRangeException(nameof(length));
+				throw new ArgumentOutOfRangeException ( nameof ( length ) ) ;
 			}
 
-			return new string((chars??AlphabetAndNumbersArray).RandomChoose(length).ToArray());
+			return new string ( ( chars ?? AlphabetAndNumbersArray ) . RandomChoose ( length ) . ToArray ( ) ) ;
 		}
-		
+
 	}
 
 }

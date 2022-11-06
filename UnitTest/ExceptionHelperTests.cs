@@ -7,24 +7,22 @@ using DreamRecorder . ToolBox . General ;
 
 using Microsoft . VisualStudio . TestTools . UnitTesting ;
 
-namespace DreamRecorder . ToolBox .UnitTest
+namespace DreamRecorder . ToolBox . UnitTest
 {
-	[TestClass()]
+
+	[TestClass]
 	public class ExceptionHelperTests
 	{
 
+		[TestMethod]
+		public void SuccessTest ( ) { }
 
-		[TestMethod()]
-		public void SuccessTest()
-		{
-		
-		}
+		public object ErrorObject ( ) => throw new Exception ( ) ;
 
-		public object ErrorObject()=>throw	new Exception();
-		public object PassObject()=>new object();
+		public object PassObject ( ) => new object ( ) ;
 
-		[TestMethod()]
-		public void IgnoreExceptionTestObject()
+		[TestMethod]
+		public void IgnoreExceptionTestObject ( )
 		{
 			Assert . IsNull ( ExceptionHelper . IgnoreException ( ErrorObject ) ) ;
 			Assert . IsNotNull ( ExceptionHelper . IgnoreException ( PassObject ) ) ;
@@ -34,28 +32,27 @@ namespace DreamRecorder . ToolBox .UnitTest
 
 		public int PassInt ( ) => default ;
 
-		[TestMethod()]
-		public void IgnoreExceptionTestInt32()
+		[TestMethod]
+		public void IgnoreExceptionTestInt32 ( )
 		{
-			Assert.IsNull(ExceptionHelper.IgnoreException(ErrorInt));
-			Assert.AreEqual(ExceptionHelper.IgnoreException(PassInt),default(int));
+			Assert . IsNull ( ExceptionHelper . IgnoreException ( ErrorInt ) ) ;
+			Assert . AreEqual ( ExceptionHelper . IgnoreException ( PassInt ) , default ( int ) ) ;
 		}
 
-		public DateTime ErrorDateTime() => throw new Exception();
+		public DateTime ErrorDateTime ( ) => throw new Exception ( ) ;
 
-		public DateTime PassDateTime() => default;
+		public DateTime PassDateTime ( ) => default ;
 
-		[TestMethod()]
-		public void IgnoreExceptionTestDateTime()
+		[TestMethod]
+		public void IgnoreExceptionTestDateTime ( )
 		{
-			Assert.IsNull(ExceptionHelper.IgnoreException(ErrorDateTime));
-			Assert.AreEqual(ExceptionHelper.IgnoreException(PassDateTime), default(DateTime));
+			Assert . IsNull ( ExceptionHelper . IgnoreException ( ErrorDateTime ) ) ;
+			Assert . AreEqual ( ExceptionHelper . IgnoreException ( PassDateTime ) , default ( DateTime ) ) ;
 		}
 
-		[TestMethod()]
-		public void XmlNameMismatchTest()
-		{
+		[TestMethod]
+		public void XmlNameMismatchTest ( ) { }
 
-		}
 	}
+
 }

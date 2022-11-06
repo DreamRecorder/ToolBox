@@ -63,7 +63,7 @@ namespace DreamRecorder . ToolBox . General
 			{
 				throw new ArgumentNullException ( nameof ( list ) ) ;
 			}
-			
+
 			if ( count < 0 )
 			{
 				throw new ArgumentOutOfRangeException ( nameof ( count ) ) ;
