@@ -17,6 +17,113 @@ namespace DreamRecorder . ToolBox . General
 	{
 
 		/// <summary>
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="value"></param>
+		/// <returns></returns>
+		public static byte [ ] CastToBytes <T> ( this T value ) where T : struct
+		{
+			int size = Marshal . SizeOf <T> ( ) ;
+
+			byte [ ] bytes = new byte[ size ] ;
+
+			IntPtr buffer = Marshal . AllocHGlobal ( size ) ;
+
+			try
+			{
+				Marshal . StructureToPtr ( value , buffer , false ) ;
+				Marshal . Copy ( buffer , bytes , 0 , size ) ;
+				return bytes ;
+			}
+			finally
+			{
+				Marshal . FreeHGlobal ( buffer ) ;
+			}
+		}
+
+		public static byte [ ] CastToBytes <T> ( this ICollection <T> value ) where T : struct
+		{
+			int size = Marshal . SizeOf <T> ( ) ;
+
+			byte [ ] destination = new byte[ size * value . Count ] ;
+
+			IntPtr buffer = Marshal . AllocHGlobal ( size ) ;
+
+			IEnumerator <T> e = value . GetEnumerator ( ) ;
+
+			try
+			{
+				int i = 0 ;
+				while ( e . MoveNext ( ) )
+				{
+					Marshal . StructureToPtr ( e . Current , buffer , false ) ;
+					Marshal . Copy ( buffer , destination , i * size , size ) ;
+					i++ ;
+				}
+
+				return destination ;
+			}
+			finally
+			{
+				e . Dispose ( ) ;
+				Marshal . FreeHGlobal ( buffer ) ;
+			}
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="bytes"></param>
+		/// <returns></returns>
+		public static T CastToStruct <T> ( this byte [ ] bytes ) where T : struct
+		{
+			int    size   = Marshal . SizeOf <T> ( ) ;
+			IntPtr buffer = Marshal . AllocHGlobal ( size ) ;
+
+			try
+			{
+				Marshal . Copy ( bytes , 0 , buffer , size ) ;
+
+				return Marshal . PtrToStructure <T> ( buffer ) ;
+			}
+			finally
+			{
+				Marshal . FreeHGlobal ( buffer ) ;
+			}
+		}
+
+		public static List <T> CastToStructs <T> ( this byte [ ] bytes ) where T : struct
+		{
+			int size = Marshal . SizeOf <T> ( ) ;
+
+			if ( bytes . Length % size != 0 )
+			{
+				throw new ArgumentException ( ) ;
+			}
+
+			int length = bytes . Length / size ;
+
+			IntPtr buffer = Marshal . AllocHGlobal ( bytes . Length ) ;
+			try
+			{
+				List <T> result = new List <T> ( length ) ;
+
+				Marshal . Copy ( bytes , 0 , buffer , bytes . Length ) ;
+
+				for ( int i = 0 ; i < length ; i++ )
+				{
+					result . Add ( Marshal . PtrToStructure <T> ( buffer + i * size ) ) ;
+				}
+
+				return result ;
+			}
+			finally
+			{
+				Marshal . FreeHGlobal ( buffer ) ;
+			}
+		}
+
+		/// <summary>
 		///     Convert a byte as boolean array
 		/// </summary>
 		/// <param name="b">the byte</param>
@@ -140,113 +247,6 @@ namespace DreamRecorder . ToolBox . General
 			}
 
 			return result ;
-		}
-
-		public static List <T> CastToStructs <T> ( this byte [ ] bytes ) where T : struct
-		{
-			int size = Marshal . SizeOf <T> ( ) ;
-
-			if ( bytes . Length % size != 0 )
-			{
-				throw new ArgumentException ( ) ;
-			}
-
-			int length = bytes . Length / size ;
-
-			IntPtr buffer = Marshal . AllocHGlobal ( bytes . Length ) ;
-			try
-			{
-				List <T> result = new List <T> ( length ) ;
-
-				Marshal . Copy ( bytes , 0 , buffer , bytes . Length ) ;
-
-				for ( int i = 0 ; i < length ; i++ )
-				{
-					result . Add ( Marshal . PtrToStructure <T> ( buffer + i * size ) ) ;
-				}
-
-				return result ;
-			}
-			finally
-			{
-				Marshal . FreeHGlobal ( buffer ) ;
-			}
-		}
-
-		/// <summary>
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="bytes"></param>
-		/// <returns></returns>
-		public static T CastToStruct <T> ( this byte [ ] bytes ) where T : struct
-		{
-			int    size   = Marshal . SizeOf <T> ( ) ;
-			IntPtr buffer = Marshal . AllocHGlobal ( size ) ;
-
-			try
-			{
-				Marshal . Copy ( bytes , 0 , buffer , size ) ;
-
-				return Marshal . PtrToStructure <T> ( buffer ) ;
-			}
-			finally
-			{
-				Marshal . FreeHGlobal ( buffer ) ;
-			}
-		}
-
-		/// <summary>
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="value"></param>
-		/// <returns></returns>
-		public static byte [ ] CastToBytes <T> ( this T value ) where T : struct
-		{
-			int size = Marshal . SizeOf <T> ( ) ;
-
-			byte [ ] bytes = new byte[ size ] ;
-
-			IntPtr buffer = Marshal . AllocHGlobal ( size ) ;
-
-			try
-			{
-				Marshal . StructureToPtr ( value , buffer , false ) ;
-				Marshal . Copy ( buffer , bytes , 0 , size ) ;
-				return bytes ;
-			}
-			finally
-			{
-				Marshal . FreeHGlobal ( buffer ) ;
-			}
-		}
-
-		public static byte [ ] CastToBytes <T> ( this ICollection <T> value ) where T : struct
-		{
-			int size = Marshal . SizeOf <T> ( ) ;
-
-			byte [ ] destination = new byte[ size * value . Count ] ;
-
-			IntPtr buffer = Marshal . AllocHGlobal ( size ) ;
-
-			IEnumerator <T> e = value . GetEnumerator ( ) ;
-
-			try
-			{
-				int i = 0 ;
-				while ( e . MoveNext ( ) )
-				{
-					Marshal . StructureToPtr ( e . Current , buffer , false ) ;
-					Marshal . Copy ( buffer , destination , i * size , size ) ;
-					i++ ;
-				}
-
-				return destination ;
-			}
-			finally
-			{
-				e . Dispose ( ) ;
-				Marshal . FreeHGlobal ( buffer ) ;
-			}
 		}
 
 	}

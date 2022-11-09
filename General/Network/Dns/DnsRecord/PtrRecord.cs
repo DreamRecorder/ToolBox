@@ -16,12 +16,12 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 	public class PtrRecord : DnsRecordBase
 	{
 
+		protected internal override int MaximumRecordDataLength => PointerDomainName . MaximumRecordDataLength + 2 ;
+
 		/// <summary>
 		///     Domain name the address points to
 		/// </summary>
 		public DomainName PointerDomainName { get ; private set ; }
-
-		protected internal override int MaximumRecordDataLength => PointerDomainName . MaximumRecordDataLength + 2 ;
 
 		internal PtrRecord ( ) { }
 
@@ -32,11 +32,27 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="timeToLive"> Seconds the record should be cached at most </param>
 		/// <param name="pointerDomainName"> Domain name the address points to </param>
 		public PtrRecord ( DomainName name , int timeToLive , DomainName pointerDomainName ) : base (
-		name ,
-		RecordType . Ptr ,
-		RecordClass . INet ,
-		timeToLive )
+		 name ,
+		 RecordType . Ptr ,
+		 RecordClass . INet ,
+		 timeToLive )
 			=> PointerDomainName = pointerDomainName ?? DomainName . Root ;
+
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			DnsMessageBase . EncodeDomainName (
+											   messageData ,
+											   offset ,
+											   ref currentPosition ,
+											   PointerDomainName ,
+											   domainNames ,
+											   useCanonical ) ;
+		}
 
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )
 		{
@@ -54,22 +70,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		}
 
 		internal override string RecordDataToString ( ) => PointerDomainName . ToString ( ) ;
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			DnsMessageBase . EncodeDomainName (
-												messageData ,
-												offset ,
-												ref currentPosition ,
-												PointerDomainName ,
-												domainNames ,
-												useCanonical ) ;
-		}
 
 	}
 

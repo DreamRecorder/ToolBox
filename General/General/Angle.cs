@@ -70,7 +70,7 @@ namespace DreamRecorder . ToolBox . General
 			}
 
 			if ( value . EndsWith ( "ᵍ" )
-				|| value . EndsWith ( "gon" ) )
+				 || value . EndsWith ( "gon" ) )
 			{
 				return FromGrad ( Convert . ToDouble ( value . TrimEnd ( ( "ᵍ" + "gon" ) . ToCharArray ( ) ) ) ) ;
 			}

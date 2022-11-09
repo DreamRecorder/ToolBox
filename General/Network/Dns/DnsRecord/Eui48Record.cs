@@ -32,11 +32,21 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="timeToLive"> Seconds the record should be cached at most </param>
 		/// <param name="address"> The EUI48 address</param>
 		public Eui48Record ( DomainName name , int timeToLive , byte [ ] address ) : base (
-		name ,
-		RecordType . Eui48 ,
-		RecordClass . INet ,
-		timeToLive )
+		 name ,
+		 RecordType . Eui48 ,
+		 RecordClass . INet ,
+		 timeToLive )
 			=> Address = address ?? new byte[ 6 ] ;
+
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , Address ) ;
+		}
 
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )
 		{
@@ -51,9 +61,9 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 			}
 
 			Address = stringRepresentation [ 0 ] .
-					Split ( '-' ) .
-					Select ( x => Convert . ToByte ( x , 16 ) ) .
-					ToArray ( ) ;
+					  Split ( '-' ) .
+					  Select ( x => Convert . ToByte ( x , 16 ) ) .
+					  ToArray ( ) ;
 
 			if ( Address . Length != 6 )
 			{
@@ -64,16 +74,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		internal override string RecordDataToString ( )
 		{
 			return string . Join ( "-" , Address . Select ( x => x . ToString ( "x2" ) ) . ToArray ( ) ) ;
-		}
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , Address ) ;
 		}
 
 	}

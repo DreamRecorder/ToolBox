@@ -25,77 +25,49 @@ namespace DreamRecorder . ToolBox . Network
 		private static readonly IPAddress _ipv6MulticastNetworkAddress = IPAddress . Parse ( "FF00::" ) ;
 
 		/// <summary>
-		///     Returns the reverse lookup DomainName of an IPAddress
+		///     Returns the index for the interface which has the ip address assigned
 		/// </summary>
-		/// <param name="ipAddress"> Instance of the IPAddress, that should be used </param>
-		/// <returns> A DomainName with the reverse lookup address </returns>
-		public static DomainName GetReverseLookupDomain ( this IPAddress ipAddress )
-		{
-			if ( ipAddress == null )
-			{
-				throw new ArgumentNullException ( nameof ( ipAddress ) ) ;
-			}
-
-			byte [ ] addressBytes = ipAddress . GetAddressBytes ( ) ;
-
-			if ( ipAddress . AddressFamily == AddressFamily . InterNetwork )
-			{
-				string [ ] labels = new string[ addressBytes . Length + 2 ] ;
-
-				int labelPos = 0 ;
-
-				for ( int i = addressBytes . Length - 1 ; i >= 0 ; i-- )
-				{
-					labels [ labelPos++ ] = addressBytes [ i ] . ToString ( ) ;
-				}
-
-				labels [ labelPos++ ] = "in-addr" ;
-				labels [ labelPos ]   = "arpa" ;
-
-				return new DomainName ( labels ) ;
-			}
-			else
-			{
-				string [ ] labels = new string[ addressBytes . Length * 2 + 2 ] ;
-
-				int labelPos = 0 ;
-
-				for ( int i = addressBytes . Length - 1 ; i >= 0 ; i-- )
-				{
-					string hex = addressBytes [ i ] . ToString ( "x2" ) ;
-
-					labels [ labelPos++ ] = hex [ 1 ] . ToString ( ) ;
-					labels [ labelPos++ ] = hex [ 0 ] . ToString ( ) ;
-				}
-
-				labels [ labelPos++ ] = "ip6" ;
-				labels [ labelPos ]   = "arpa" ;
-
-				return new DomainName ( labels ) ;
-			}
-		}
-
-		/// <summary>
-		///     Reverses the order of the bytes of an IPAddress
-		/// </summary>
-		/// <param name="ipAddress"> Instance of the IPAddress, that should be reversed </param>
-		/// <returns> New instance of IPAddress with reversed address </returns>
-		public static IPAddress Reverse ( this IPAddress ipAddress )
+		/// <param name="ipAddress"> The ip address to look for </param>
+		/// <returns> The index for the interface which has the ip address assigned </returns>
+		public static int GetInterfaceIndex ( this IPAddress ipAddress )
 		{
 			if ( ipAddress == null )
 			{
 				throw new ArgumentNullException ( "ipAddress" ) ;
 			}
 
-			byte [ ] addressBytes = ipAddress . GetAddressBytes ( ) ;
-			byte [ ] res          = new byte[ addressBytes . Length ] ;
+			IPInterfaceProperties interfaceProperty = NetworkInterface . GetAllNetworkInterfaces ( ) .
+																		 Select ( n => n . GetIPProperties ( ) ) .
+																		 FirstOrDefault (
+																		  p
+																			  => p . UnicastAddresses . Any (
+																			   a
+																				   => a . Address . Equals (
+																					ipAddress ) ) ) ;
 
-			for ( int i = 0 ; i < res . Length ; i++ )
+			if ( interfaceProperty != null )
 			{
-				res [ i ] = addressBytes [ addressBytes . Length - i - 1 ] ;
+				if ( ipAddress . AddressFamily == AddressFamily . InterNetwork )
+				{
+					IPv4InterfaceProperties property = interfaceProperty . GetIPv4Properties ( ) ;
+					if ( property != null )
+					{
+						return property . Index ;
+					}
+				}
+				else
+				{
+					IPv6InterfaceProperties property = interfaceProperty . GetIPv6Properties ( ) ;
+					if ( property != null )
+					{
+						return property . Index ;
+					}
+				}
 			}
 
-			return new IPAddress ( res ) ;
+			throw new ArgumentOutOfRangeException (
+												   "ipAddress" ,
+												   "The given ip address is not configured on the local system" ) ;
 		}
 
 		/// <summary>
@@ -119,8 +91,8 @@ namespace DreamRecorder . ToolBox . Network
 			if ( ipAddress . AddressFamily != netmask . AddressFamily )
 			{
 				throw new ArgumentOutOfRangeException (
-														"netmask" ,
-														"Protocoll version of ipAddress and netmask do not match" ) ;
+													   "netmask" ,
+													   "Protocoll version of ipAddress and netmask do not match" ) ;
 			}
 
 			byte [ ] resultBytes    = ipAddress . GetAddressBytes ( ) ;
@@ -149,17 +121,17 @@ namespace DreamRecorder . ToolBox . Network
 			}
 
 			if ( ( ipAddress . AddressFamily == AddressFamily . InterNetwork )
-				&& ( ( netmask < 0 ) || ( netmask > 32 ) ) )
+				 && ( ( netmask < 0 ) || ( netmask > 32 ) ) )
 			{
 				throw new ArgumentException ( "Netmask have to be in range of 0 to 32 on IPv4 addresses" , "netmask" ) ;
 			}
 
 			if ( ( ipAddress . AddressFamily == AddressFamily . InterNetworkV6 )
-				&& ( ( netmask < 0 ) || ( netmask > 128 ) ) )
+				 && ( ( netmask < 0 ) || ( netmask > 128 ) ) )
 			{
 				throw new ArgumentException (
-											"Netmask have to be in range of 0 to 128 on IPv6 addresses" ,
-											"netmask" ) ;
+											 "Netmask have to be in range of 0 to 128 on IPv6 addresses" ,
+											 "netmask" ) ;
 			}
 
 			byte [ ] ipAddressBytes = ipAddress . GetAddressBytes ( ) ;
@@ -228,6 +200,57 @@ namespace DreamRecorder . ToolBox . Network
 		}
 
 		/// <summary>
+		///     Returns the reverse lookup DomainName of an IPAddress
+		/// </summary>
+		/// <param name="ipAddress"> Instance of the IPAddress, that should be used </param>
+		/// <returns> A DomainName with the reverse lookup address </returns>
+		public static DomainName GetReverseLookupDomain ( this IPAddress ipAddress )
+		{
+			if ( ipAddress == null )
+			{
+				throw new ArgumentNullException ( nameof ( ipAddress ) ) ;
+			}
+
+			byte [ ] addressBytes = ipAddress . GetAddressBytes ( ) ;
+
+			if ( ipAddress . AddressFamily == AddressFamily . InterNetwork )
+			{
+				string [ ] labels = new string[ addressBytes . Length + 2 ] ;
+
+				int labelPos = 0 ;
+
+				for ( int i = addressBytes . Length - 1 ; i >= 0 ; i-- )
+				{
+					labels [ labelPos++ ] = addressBytes [ i ] . ToString ( ) ;
+				}
+
+				labels [ labelPos++ ] = "in-addr" ;
+				labels [ labelPos ]   = "arpa" ;
+
+				return new DomainName ( labels ) ;
+			}
+			else
+			{
+				string [ ] labels = new string[ addressBytes . Length * 2 + 2 ] ;
+
+				int labelPos = 0 ;
+
+				for ( int i = addressBytes . Length - 1 ; i >= 0 ; i-- )
+				{
+					string hex = addressBytes [ i ] . ToString ( "x2" ) ;
+
+					labels [ labelPos++ ] = hex [ 1 ] . ToString ( ) ;
+					labels [ labelPos++ ] = hex [ 0 ] . ToString ( ) ;
+				}
+
+				labels [ labelPos++ ] = "ip6" ;
+				labels [ labelPos ]   = "arpa" ;
+
+				return new DomainName ( labels ) ;
+			}
+		}
+
+		/// <summary>
 		///     Returns a value indicating whether a ip address is a multicast address
 		/// </summary>
 		/// <param name="ipAddress"> Instance of the IPAddress, that should be used </param>
@@ -250,49 +273,26 @@ namespace DreamRecorder . ToolBox . Network
 		}
 
 		/// <summary>
-		///     Returns the index for the interface which has the ip address assigned
+		///     Reverses the order of the bytes of an IPAddress
 		/// </summary>
-		/// <param name="ipAddress"> The ip address to look for </param>
-		/// <returns> The index for the interface which has the ip address assigned </returns>
-		public static int GetInterfaceIndex ( this IPAddress ipAddress )
+		/// <param name="ipAddress"> Instance of the IPAddress, that should be reversed </param>
+		/// <returns> New instance of IPAddress with reversed address </returns>
+		public static IPAddress Reverse ( this IPAddress ipAddress )
 		{
 			if ( ipAddress == null )
 			{
 				throw new ArgumentNullException ( "ipAddress" ) ;
 			}
 
-			IPInterfaceProperties interfaceProperty = NetworkInterface . GetAllNetworkInterfaces ( ) .
-																		Select ( n => n . GetIPProperties ( ) ) .
-																		FirstOrDefault (
-																		p
-																			=> p . UnicastAddresses . Any (
-																			a
-																				=> a . Address . Equals (
-																				ipAddress ) ) ) ;
+			byte [ ] addressBytes = ipAddress . GetAddressBytes ( ) ;
+			byte [ ] res          = new byte[ addressBytes . Length ] ;
 
-			if ( interfaceProperty != null )
+			for ( int i = 0 ; i < res . Length ; i++ )
 			{
-				if ( ipAddress . AddressFamily == AddressFamily . InterNetwork )
-				{
-					IPv4InterfaceProperties property = interfaceProperty . GetIPv4Properties ( ) ;
-					if ( property != null )
-					{
-						return property . Index ;
-					}
-				}
-				else
-				{
-					IPv6InterfaceProperties property = interfaceProperty . GetIPv6Properties ( ) ;
-					if ( property != null )
-					{
-						return property . Index ;
-					}
-				}
+				res [ i ] = addressBytes [ addressBytes . Length - i - 1 ] ;
 			}
 
-			throw new ArgumentOutOfRangeException (
-													"ipAddress" ,
-													"The given ip address is not configured on the local system" ) ;
+			return new IPAddress ( res ) ;
 		}
 
 		private static byte ReverseBitOrder ( byte value )

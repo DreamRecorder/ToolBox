@@ -23,6 +23,50 @@ namespace DreamRecorder . ToolBox . General
 
 		public static readonly Regex MultipleHyphens = new Regex ( @"-{2,}" , RegexOptions . Compiled ) ;
 
+		public static bool CanBeFileName ( this string fileName )
+		{
+			int indexOfInvalidChar = fileName . IndexOfAny ( Path . GetInvalidFileNameChars ( ) ) ;
+			return indexOfInvalidChar == - 1 ;
+		}
+
+		public static object ParseTo ( this string value , Type type )
+		{
+			TypeConverter typeConverter = TypeDescriptor . GetConverter ( type ) ;
+
+			return typeConverter . ConvertFromString ( value ) ;
+		}
+
+		public static T ParseTo <T> ( this string value ) => ( T )value . ParseTo ( typeof ( T ) ) ;
+
+		private static string RemoveDiacritics ( string input )
+		{
+			string normalizedInput = input . Normalize ( NormalizationForm . FormD ) ;
+
+			return new string (
+							   normalizedInput . Where (
+														c
+															=> CharUnicodeInfo . GetUnicodeCategory ( c )
+															   != UnicodeCategory . NonSpacingMark ) .
+												 ToArray ( ) ) . Normalize ( NormalizationForm . FormC ) ;
+		}
+
+		public static string [ ] SplitByCamelCase ( [NotNull] string value )
+		{
+			if ( value == null )
+			{
+				throw new ArgumentNullException ( nameof ( value ) ) ;
+			}
+
+			string [ ] words = Regex . Matches ( value , "(^[a-z]+|[A-Z]+(?![a-z])|[A-Z][a-z]+)" ) .
+									   OfType <Match> ( ) .
+									   Select ( m => m . Value ) .
+									   ToArray ( ) ;
+
+			return words ;
+		}
+
+		public static string ToSlug ( this string name ) => ToUrlSlug ( name ) ;
+
 		private static string ToUrlSlug ( string value )
 		{
 			value = value . ToLowerInvariant ( ) ;
@@ -36,50 +80,6 @@ namespace DreamRecorder . ToolBox . General
 			value = MultipleHyphens . Replace ( value , "-" ) ;
 
 			return value . Trim ( '-' ) ;
-		}
-
-		private static string RemoveDiacritics ( string input )
-		{
-			string normalizedInput = input . Normalize ( NormalizationForm . FormD ) ;
-
-			return new string (
-								normalizedInput . Where (
-														c
-															=> CharUnicodeInfo . GetUnicodeCategory ( c )
-																!= UnicodeCategory . NonSpacingMark ) .
-												ToArray ( ) ) . Normalize ( NormalizationForm . FormC ) ;
-		}
-
-		public static bool CanBeFileName ( this string fileName )
-		{
-			int indexOfInvalidChar = fileName . IndexOfAny ( Path . GetInvalidFileNameChars ( ) ) ;
-			return indexOfInvalidChar == - 1 ;
-		}
-
-		public static string ToSlug ( this string name ) => ToUrlSlug ( name ) ;
-
-		public static object ParseTo ( this string value , Type type )
-		{
-			TypeConverter typeConverter = TypeDescriptor . GetConverter ( type ) ;
-
-			return typeConverter . ConvertFromString ( value ) ;
-		}
-
-		public static T ParseTo <T> ( this string value ) => ( T )value . ParseTo ( typeof ( T ) ) ;
-
-		public static string [ ] SplitByCamelCase ( [NotNull] string value )
-		{
-			if ( value == null )
-			{
-				throw new ArgumentNullException ( nameof ( value ) ) ;
-			}
-
-			string [ ] words = Regex . Matches ( value , "(^[a-z]+|[A-Z]+(?![a-z])|[A-Z][a-z]+)" ) .
-										OfType <Match> ( ) .
-										Select ( m => m . Value ) .
-										ToArray ( ) ;
-
-			return words ;
 		}
 
 		public static string TrimEndPattern (

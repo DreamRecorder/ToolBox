@@ -20,24 +20,14 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 	{
 
 		/// <summary>
-		///     Version number of representation
+		///     Altitude of the geographical position
 		/// </summary>
-		public byte Version { get ; private set ; }
-
-		/// <summary>
-		///     Size of location in centimeters
-		/// </summary>
-		public double Size { get ; private set ; }
+		public double Altitude { get ; private set ; }
 
 		/// <summary>
 		///     Horizontal precision in centimeters
 		/// </summary>
 		public double HorizontalPrecision { get ; private set ; }
-
-		/// <summary>
-		///     Vertical precision in centimeters
-		/// </summary>
-		public double VerticalPrecision { get ; private set ; }
 
 		/// <summary>
 		///     Latitude of the geographical position
@@ -49,12 +39,22 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// </summary>
 		public Degree Longitude { get ; private set ; }
 
-		/// <summary>
-		///     Altitude of the geographical position
-		/// </summary>
-		public double Altitude { get ; private set ; }
-
 		protected internal override int MaximumRecordDataLength => 16 ;
+
+		/// <summary>
+		///     Size of location in centimeters
+		/// </summary>
+		public double Size { get ; private set ; }
+
+		/// <summary>
+		///     Version number of representation
+		/// </summary>
+		public byte Version { get ; private set ; }
+
+		/// <summary>
+		///     Vertical precision in centimeters
+		/// </summary>
+		public double VerticalPrecision { get ; private set ; }
 
 		internal LocRecord ( ) { }
 
@@ -96,6 +96,22 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 																| RegexOptions . ExplicitCapture
 																| RegexOptions . Compiled ) ;
 
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			messageData [ currentPosition++ ] = Version ;
+			messageData [ currentPosition++ ] = ConvertPrecision ( Size ) ;
+			messageData [ currentPosition++ ] = ConvertPrecision ( HorizontalPrecision ) ;
+			messageData [ currentPosition++ ] = ConvertPrecision ( VerticalPrecision ) ;
+			DnsMessageBase . EncodeInt ( messageData , ref currentPosition , ConvertDegree ( Latitude ) ) ;
+			DnsMessageBase . EncodeInt ( messageData , ref currentPosition , ConvertDegree ( Longitude ) ) ;
+			DnsMessageBase . EncodeInt ( messageData , ref currentPosition , ConvertAltitude ( Altitude ) ) ;
+		}
+
 		internal override void ParseRecordData ( byte [ ] resultData , int currentPosition , int length )
 		{
 			Version             = resultData [ currentPosition++ ] ;
@@ -114,11 +130,11 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 			bool latNegative =
 				groups [ "lat" ] . Value . Equals ( "S" , StringComparison . InvariantCultureIgnoreCase ) ;
 			Latitude = new Degree (
-									latNegative ,
-									groups [ "latd" ] . Value ,
-									groups [ "latm" ] . Value ,
-									groups [ "lats" ] . Value ,
-									groups [ "latms" ] . Value ) ;
+								   latNegative ,
+								   groups [ "latd" ] . Value ,
+								   groups [ "latm" ] . Value ,
+								   groups [ "lats" ] . Value ,
+								   groups [ "latms" ] . Value ) ;
 
 			bool longNegative =
 				groups [ "long" ] . Value . Equals ( "W" , StringComparison . InvariantCultureIgnoreCase ) ;
@@ -131,11 +147,11 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 
 			Altitude = double . Parse ( groups [ "alt" ] . Value , CultureInfo . InvariantCulture ) ;
 			Size = string . IsNullOrEmpty ( groups [ "size" ] . Value )
-						? 1
-						: double . Parse ( groups [ "size" ] . Value , CultureInfo . InvariantCulture ) ;
+					   ? 1
+					   : double . Parse ( groups [ "size" ] . Value , CultureInfo . InvariantCulture ) ;
 			HorizontalPrecision = string . IsNullOrEmpty ( groups [ "hp" ] . Value )
-									? 10000
-									: double . Parse ( groups [ "hp" ] . Value , CultureInfo . InvariantCulture ) ;
+									  ? 10000
+									  : double . Parse ( groups [ "hp" ] . Value , CultureInfo . InvariantCulture ) ;
 			VerticalPrecision = string . IsNullOrEmpty ( groups [ "vp" ] . Value )
 									? 10
 									: double . Parse ( groups [ "vp" ] . Value , CultureInfo . InvariantCulture ) ;
@@ -144,34 +160,18 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		[SuppressMessage ( "ReSharper" , "CompareOfFloatsByEqualityOperator" )]
 		internal override string RecordDataToString ( )
 			=> Latitude . ToLatitudeString ( )
-				+ " "
-				+ Longitude . ToLongitudeString ( )
-				+ " "
-				+ Altitude . ToString ( CultureInfo . InvariantCulture )
-				+ "m"
-				+ ( ( ( Size != 1 ) || ( HorizontalPrecision != 10000 ) || ( VerticalPrecision != 10 ) )
-						? " " + Size + "m"
-						: "" )
-				+ ( ( ( HorizontalPrecision != 10000 ) || ( VerticalPrecision != 10 ) )
-						? " " + HorizontalPrecision + "m"
-						: "" )
-				+ ( ( VerticalPrecision != 10 ) ? " " + VerticalPrecision + "m" : "" ) ;
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			messageData [ currentPosition++ ] = Version ;
-			messageData [ currentPosition++ ] = ConvertPrecision ( Size ) ;
-			messageData [ currentPosition++ ] = ConvertPrecision ( HorizontalPrecision ) ;
-			messageData [ currentPosition++ ] = ConvertPrecision ( VerticalPrecision ) ;
-			DnsMessageBase . EncodeInt ( messageData , ref currentPosition , ConvertDegree ( Latitude ) ) ;
-			DnsMessageBase . EncodeInt ( messageData , ref currentPosition , ConvertDegree ( Longitude ) ) ;
-			DnsMessageBase . EncodeInt ( messageData , ref currentPosition , ConvertAltitude ( Altitude ) ) ;
-		}
+			   + " "
+			   + Longitude . ToLongitudeString ( )
+			   + " "
+			   + Altitude . ToString ( CultureInfo . InvariantCulture )
+			   + "m"
+			   + ( ( ( Size != 1 ) || ( HorizontalPrecision != 10000 ) || ( VerticalPrecision != 10 ) )
+					   ? " " + Size + "m"
+					   : "" )
+			   + ( ( ( HorizontalPrecision != 10000 ) || ( VerticalPrecision != 10 ) )
+					   ? " " + HorizontalPrecision + "m"
+					   : "" )
+			   + ( ( VerticalPrecision != 10 ) ? " " + VerticalPrecision + "m" : "" ) ;
 
 		/// <summary>
 		///     Represents a geopgraphical degree
@@ -180,14 +180,28 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		{
 
 			/// <summary>
-			///     Is negative value
+			///     Returns the decimal representation of the Degree instance
 			/// </summary>
-			public bool IsNegative { get ; }
+			public double DecimalDegrees
+				=> ( IsNegative ? - 1d : 1d )
+				   * ( Degrees
+					   + ( double )Minutes                           / 6000   * 100
+					   + ( Seconds + ( double )Milliseconds / 1000 ) / 360000 * 100 ) ;
 
 			/// <summary>
 			///     Number of full degrees
 			/// </summary>
 			public int Degrees { get ; }
+
+			/// <summary>
+			///     Is negative value
+			/// </summary>
+			public bool IsNegative { get ; }
+
+			/// <summary>
+			///     Number of Milliseconds
+			/// </summary>
+			public int Milliseconds { get ; }
 
 			/// <summary>
 			///     Number of minutes
@@ -198,20 +212,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 			///     Number of seconds
 			/// </summary>
 			public int Seconds { get ; }
-
-			/// <summary>
-			///     Number of Milliseconds
-			/// </summary>
-			public int Milliseconds { get ; }
-
-			/// <summary>
-			///     Returns the decimal representation of the Degree instance
-			/// </summary>
-			public double DecimalDegrees
-				=> ( IsNegative ? - 1d : 1d )
-					* ( Degrees
-						+ ( double )Minutes                           / 6000   * 100
-						+ ( Seconds + ( double )Milliseconds / 1000 ) / 360000 * 100 ) ;
 
 			/// <summary>
 			///     Creates a new instance of the Degree class
@@ -274,13 +274,13 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 				}
 
 				if ( ( res . Length > 0 )
-					|| ( Seconds    != 0 ) )
+					 || ( Seconds   != 0 ) )
 				{
 					res = " " + Seconds + res ;
 				}
 
 				if ( ( res . Length > 0 )
-					|| ( Minutes    != 0 ) )
+					 || ( Minutes   != 0 ) )
 				{
 					res = " " + Minutes + res ;
 				}
@@ -363,10 +363,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 
 		private static int ConvertDegree ( Degree degrees )
 		{
-			int res = degrees . Degrees * 3600000
-					+ degrees . Minutes * 60000
-					+ degrees . Seconds * 1000
-					+ degrees . Milliseconds ;
+			int res = degrees . Degrees   * 3600000
+					  + degrees . Minutes * 60000
+					  + degrees . Seconds * 1000
+					  + degrees . Milliseconds ;
 
 			if ( degrees . IsNegative )
 			{
@@ -384,16 +384,16 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 
 		private static double ConvertAltitude ( int altitude )
 			=> ( ( altitude < _ALTITUDE_REFERENCE )
-					? ( ( _ALTITUDE_REFERENCE - altitude ) * - 1 )
-					: ( altitude - _ALTITUDE_REFERENCE ) )
-				/ 100d ;
+					 ? ( ( _ALTITUDE_REFERENCE - altitude ) * - 1 )
+					 : ( altitude - _ALTITUDE_REFERENCE ) )
+			   / 100d ;
 
 		private static int ConvertAltitude ( double altitude )
 		{
 			int centimeter = ( int )( altitude * 100 ) ;
 			return ( ( centimeter > 0 )
-						? ( _ALTITUDE_REFERENCE + centimeter )
-						: ( centimeter          + _ALTITUDE_REFERENCE ) ) ;
+						 ? ( _ALTITUDE_REFERENCE + centimeter )
+						 : ( centimeter          + _ALTITUDE_REFERENCE ) ) ;
 		}
 
 		#endregion

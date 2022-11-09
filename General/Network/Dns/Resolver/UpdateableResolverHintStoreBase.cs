@@ -48,6 +48,49 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 			private set => _rootKeys = value ;
 		}
 
+		private void EnsureInit ( )
+		{
+			if ( ! _isInitiated )
+			{
+				Zone zone = Load ( ) ;
+
+				LoadZoneInternal ( zone ) ;
+
+				_isInitiated = true ;
+			}
+		}
+
+		/// <summary>
+		///     Loads the hints from a local storage
+		/// </summary>
+		/// <returns></returns>
+		protected abstract Zone Load ( ) ;
+
+		private void LoadZoneInternal ( Zone zone )
+		{
+			IEnumerable <DomainName> nameServers = zone . OfType <NsRecord> ( ) .
+														  Where ( x => x . Name == DomainName . Root ) .
+														  Select ( x => x . NameServer ) ;
+			RootServers = zone .
+						  Where ( x => x . RecordType == RecordType . A || x . RecordType == RecordType . Aaaa ) .
+						  Join (
+								nameServers ,
+								x => x . Name ,
+								x => x ,
+								( x , y ) => ( ( IAddressRecord )x ) . Address ) .
+						  ToList ( ) ;
+			RootKeys = zone . OfType <DnsKeyRecord> ( ) .
+							  Where ( x => ( x . Name == DomainName . Root ) && x . IsSecureEntryPoint ) .
+							  Select ( x => new DsRecord ( x , x . TimeToLive , DnsSecDigestType . Sha256 ) ) .
+							  ToList ( ) ;
+		}
+
+		/// <summary>
+		///     Saves the hints to a local storage
+		/// </summary>
+		/// <param name="zone"></param>
+		protected abstract void Save ( Zone zone ) ;
+
 		/// <summary>
 		///     Forces to update all hints using the given resolver
 		/// </summary>
@@ -66,52 +109,13 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 			}
 
 			zone . AddRange (
-							resolver . Resolve <DnsKeyRecord> ( DomainName . Root , RecordType . DnsKey ) .
+							 resolver . Resolve <DnsKeyRecord> ( DomainName . Root , RecordType . DnsKey ) .
 										Where ( x => x . IsSecureEntryPoint ) ) ;
 
 			LoadZoneInternal ( zone ) ;
 
 			Save ( zone ) ;
 		}
-
-		private void EnsureInit ( )
-		{
-			if ( ! _isInitiated )
-			{
-				Zone zone = Load ( ) ;
-
-				LoadZoneInternal ( zone ) ;
-
-				_isInitiated = true ;
-			}
-		}
-
-		private void LoadZoneInternal ( Zone zone )
-		{
-			IEnumerable <DomainName> nameServers = zone . OfType <NsRecord> ( ) .
-														Where ( x => x . Name == DomainName . Root ) .
-														Select ( x => x . NameServer ) ;
-			RootServers = zone .
-						Where ( x => x . RecordType == RecordType . A || x . RecordType == RecordType . Aaaa ) .
-						Join ( nameServers , x => x . Name , x => x , ( x , y ) => ( ( IAddressRecord )x ) . Address ) .
-						ToList ( ) ;
-			RootKeys = zone . OfType <DnsKeyRecord> ( ) .
-							Where ( x => ( x . Name == DomainName . Root ) && x . IsSecureEntryPoint ) .
-							Select ( x => new DsRecord ( x , x . TimeToLive , DnsSecDigestType . Sha256 ) ) .
-							ToList ( ) ;
-		}
-
-		/// <summary>
-		///     Saves the hints to a local storage
-		/// </summary>
-		/// <param name="zone"></param>
-		protected abstract void Save ( Zone zone ) ;
-
-		/// <summary>
-		///     Loads the hints from a local storage
-		/// </summary>
-		/// <returns></returns>
-		protected abstract Zone Load ( ) ;
 
 	}
 

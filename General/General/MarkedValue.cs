@@ -13,9 +13,9 @@ namespace DreamRecorder . ToolBox . General
 		where TValue : IEquatable <TValue>
 	{
 
-		public TValue Value { get ; }
-
 		public TMark Mark { get ; set ; }
+
+		public TValue Value { get ; }
 
 		public MarkedValue ( TValue value , TMark mark )
 		{
@@ -33,7 +33,7 @@ namespace DreamRecorder . ToolBox . General
 			}
 
 			return ReferenceEquals ( this , other )
-					|| EqualityComparer <TValue> . Default . Equals ( Value , other . Value ) ;
+				   || EqualityComparer <TValue> . Default . Equals ( Value , other . Value ) ;
 		}
 
 		public override bool Equals ( object obj )
@@ -56,13 +56,13 @@ namespace DreamRecorder . ToolBox . General
 		public static bool operator == ( MarkedValue <TValue , TMark> left , MarkedValue <TValue , TMark> right )
 			=> Equals ( left , right ) ;
 
-		public static bool operator != ( MarkedValue <TValue , TMark> left , MarkedValue <TValue , TMark> right )
-			=> ! Equals ( left , right ) ;
+		public static implicit operator MarkedValue <TValue , TMark> ( TValue value )
+			=> new MarkedValue <TValue , TMark> ( value , default ) ;
 
 		public static implicit operator TValue ( MarkedValue <TValue , TMark> value ) => value . Value ;
 
-		public static implicit operator MarkedValue <TValue , TMark> ( TValue value )
-			=> new MarkedValue <TValue , TMark> ( value , default ) ;
+		public static bool operator != ( MarkedValue <TValue , TMark> left , MarkedValue <TValue , TMark> right )
+			=> ! Equals ( left , right ) ;
 
 	}
 

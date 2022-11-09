@@ -18,12 +18,12 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 	public class DhcidRecord : DnsRecordBase
 	{
 
+		protected internal override int MaximumRecordDataLength => RecordData . Length ;
+
 		/// <summary>
 		///     Record data
 		/// </summary>
 		public byte [ ] RecordData { get ; private set ; }
-
-		protected internal override int MaximumRecordDataLength => RecordData . Length ;
 
 		internal DhcidRecord ( ) { }
 
@@ -34,12 +34,22 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="timeToLive"> Seconds the record should be cached at most </param>
 		/// <param name="recordData"> Record data </param>
 		public DhcidRecord ( DomainName name , int timeToLive , byte [ ] recordData ) : base (
-		name ,
-		RecordType . Dhcid ,
-		RecordClass . INet ,
-		timeToLive )
+		 name ,
+		 RecordType . Dhcid ,
+		 RecordClass . INet ,
+		 timeToLive )
 		{
 			RecordData = recordData ?? new byte [ ] { } ;
+		}
+
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , RecordData ) ;
 		}
 
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )
@@ -58,16 +68,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		}
 
 		internal override string RecordDataToString ( ) => RecordData . ToBase64String ( ) ;
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , RecordData ) ;
-		}
 
 	}
 

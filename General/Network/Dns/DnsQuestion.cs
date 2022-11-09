@@ -54,15 +54,17 @@ namespace DreamRecorder . ToolBox . Network . Dns
 			Dictionary <DomainName , ushort> domainNames )
 		{
 			DnsMessageBase . EncodeDomainName (
-												messageData ,
-												offset ,
-												ref currentPosition ,
-												Name ,
-												domainNames ,
-												false ) ;
+											   messageData ,
+											   offset ,
+											   ref currentPosition ,
+											   Name ,
+											   domainNames ,
+											   false ) ;
 			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , ( ushort )RecordType ) ;
 			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , ( ushort )RecordClass ) ;
 		}
+
+		public override bool Equals ( object obj ) => Equals ( obj as DnsQuestion ) ;
 
 		[SuppressMessage ( "ReSharper" , "NonReadonlyMemberInGetHashCode" )]
 		public override int GetHashCode ( )
@@ -74,8 +76,6 @@ namespace DreamRecorder . ToolBox . Network . Dns
 
 			return _hashCode . Value ;
 		}
-
-		public override bool Equals ( object obj ) => Equals ( obj as DnsQuestion ) ;
 
 	}
 

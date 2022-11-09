@@ -21,12 +21,12 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// </summary>
 		public string Cpu { get ; private set ; }
 
+		protected internal override int MaximumRecordDataLength => 2 + Cpu . Length + OperatingSystem . Length ;
+
 		/// <summary>
 		///     Name of the operating system of the host
 		/// </summary>
 		public string OperatingSystem { get ; private set ; }
-
-		protected internal override int MaximumRecordDataLength => 2 + Cpu . Length + OperatingSystem . Length ;
 
 		internal HInfoRecord ( ) { }
 
@@ -38,13 +38,24 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="cpu"> Type of the CPU of the host </param>
 		/// <param name="operatingSystem"> Name of the operating system of the host </param>
 		public HInfoRecord ( DomainName name , int timeToLive , string cpu , string operatingSystem ) : base (
-		name ,
-		RecordType . HInfo ,
-		RecordClass . INet ,
-		timeToLive )
+		 name ,
+		 RecordType . HInfo ,
+		 RecordClass . INet ,
+		 timeToLive )
 		{
 			Cpu             = cpu             ?? string . Empty ;
 			OperatingSystem = operatingSystem ?? string . Empty ;
+		}
+
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			DnsMessageBase . EncodeTextBlock ( messageData , ref currentPosition , Cpu ) ;
+			DnsMessageBase . EncodeTextBlock ( messageData , ref currentPosition , OperatingSystem ) ;
 		}
 
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )
@@ -66,22 +77,11 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 
 		internal override string RecordDataToString ( )
 			=> "\""
-				+ Cpu . ToMasterfileLabelRepresentation ( )
-				+ "\""
-				+ " \""
-				+ OperatingSystem . ToMasterfileLabelRepresentation ( )
-				+ "\"" ;
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			DnsMessageBase . EncodeTextBlock ( messageData , ref currentPosition , Cpu ) ;
-			DnsMessageBase . EncodeTextBlock ( messageData , ref currentPosition , OperatingSystem ) ;
-		}
+			   + Cpu . ToMasterfileLabelRepresentation ( )
+			   + "\""
+			   + " \""
+			   + OperatingSystem . ToMasterfileLabelRepresentation ( )
+			   + "\"" ;
 
 	}
 

@@ -16,17 +16,17 @@ namespace DreamRecorder . ToolBox . General
 
 		public static ProgramBase Current { get ; protected set ; }
 
-		public abstract string License { get ; }
-
 		public bool IsDebug { get ; protected set ; }
+
+		public abstract string License { get ; }
 
 		protected ILogger Logger { get ; set ; }
 
-		public abstract void RunMain ( string [ ] args ) ;
+		public abstract bool OnStartupExceptions ( Exception e ) ;
 
 		public abstract bool OnUnhandledExceptions ( Exception e ) ;
 
-		public abstract bool OnStartupExceptions ( Exception e ) ;
+		public abstract void RunMain ( string [ ] args ) ;
 
 	}
 

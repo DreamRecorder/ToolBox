@@ -40,11 +40,11 @@ namespace DreamRecorder . ToolBox . AspNet . General
 			else
 			{
 				CdnjsVersions apiQuery = JsonConvert . DeserializeObject <CdnjsVersions> (
-				await CurrentClient . GetStringAsync (
-													$"https://api.cdnjs.com/libraries/{packageName}?fields=versions" ) ) ;
+				 await CurrentClient . GetStringAsync (
+													   $"https://api.cdnjs.com/libraries/{packageName}?fields=versions" ) ) ;
 				version = apiQuery . versions . Max (
-													( ComparisonExtensions . Select <string , SemVersion> (
-														str => SemVersion . Parse ( str ) ) ) . ToComparer ( ) ) ;
+													 ( ComparisonExtensions . Select <string , SemVersion> (
+														  str => SemVersion . Parse ( str ) ) ) . ToComparer ( ) ) ;
 
 				if ( string . IsNullOrWhiteSpace ( version ) )
 				{

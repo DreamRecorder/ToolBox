@@ -14,13 +14,13 @@ namespace DreamRecorder . ToolBox . AspNet . General
 	public class ExternalAssetTagHelper : TagHelper
 	{
 
-		public IWebAssetProvider WebAssetProvider { get ; }
+		public string FileName { get ; set ; }
 
 		public string PackageName { get ; set ; }
 
-		public string FileName { get ; set ; }
-
 		public string Version { get ; set ; }
+
+		public IWebAssetProvider WebAssetProvider { get ; }
 
 		public ExternalAssetTagHelper ( IWebAssetProvider webAssetProvider ) => WebAssetProvider = webAssetProvider ;
 
@@ -31,7 +31,7 @@ namespace DreamRecorder . ToolBox . AspNet . General
 		public override async Task ProcessAsync ( TagHelperContext context , TagHelperOutput output )
 		{
 			if ( PackageName == null
-				|| FileName  == null )
+				 || FileName == null )
 			{
 				return ;
 			}

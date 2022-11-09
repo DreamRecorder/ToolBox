@@ -17,13 +17,9 @@ namespace DreamRecorder . ToolBox . Network . Dns
 	{
 
 		/// <summary>
-		///     <para>Gets or sets the recursion desired (RD) flag</para>
-		///     <para>
-		///         Defined in
-		///         <see cref="!:http://tools.ietf.org/html/rfc1035">RFC 1035</see>
-		///     </para>
+		///     Gets or set the OptRecord for the EDNS options
 		/// </summary>
-		public bool IsRecursionDesired { get ; set ; }
+		public OptRecord EDnsOptions { get ; set ; }
 
 		/// <summary>
 		///     <para>Gets or sets the checking disabled (CD) flag</para>
@@ -33,30 +29,6 @@ namespace DreamRecorder . ToolBox . Network . Dns
 		///     </para>
 		/// </summary>
 		public bool IsCheckingDisabled { get ; set ; }
-
-		/// <summary>
-		///     Enables or disables EDNS
-		/// </summary>
-		public bool IsEDnsEnabled
-		{
-			get => ( EDnsOptions != null ) ;
-			set
-			{
-				if ( value && ( EDnsOptions == null ) )
-				{
-					EDnsOptions = new OptRecord ( ) ;
-				}
-				else if ( ! value )
-				{
-					EDnsOptions = null ;
-				}
-			}
-		}
-
-		/// <summary>
-		///     Gets or set the OptRecord for the EDNS options
-		/// </summary>
-		public OptRecord EDnsOptions { get ; set ; }
 
 		/// <summary>
 		///     <para>Gets or sets the DNSSEC answer OK (DO) flag</para>
@@ -82,8 +54,8 @@ namespace DreamRecorder . ToolBox . Network . Dns
 					if ( value )
 					{
 						throw new ArgumentOutOfRangeException (
-																nameof ( value ) ,
-																"Setting DO flag is allowed in edns messages only" ) ;
+															   nameof ( value ) ,
+															   "Setting DO flag is allowed in edns messages only" ) ;
 					}
 				}
 				else
@@ -92,6 +64,34 @@ namespace DreamRecorder . ToolBox . Network . Dns
 				}
 			}
 		}
+
+		/// <summary>
+		///     Enables or disables EDNS
+		/// </summary>
+		public bool IsEDnsEnabled
+		{
+			get => ( EDnsOptions != null ) ;
+			set
+			{
+				if ( value && ( EDnsOptions == null ) )
+				{
+					EDnsOptions = new OptRecord ( ) ;
+				}
+				else if ( ! value )
+				{
+					EDnsOptions = null ;
+				}
+			}
+		}
+
+		/// <summary>
+		///     <para>Gets or sets the recursion desired (RD) flag</para>
+		///     <para>
+		///         Defined in
+		///         <see cref="!:http://tools.ietf.org/html/rfc1035">RFC 1035</see>
+		///     </para>
+		/// </summary>
+		public bool IsRecursionDesired { get ; set ; }
 
 	}
 

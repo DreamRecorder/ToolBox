@@ -12,13 +12,13 @@ namespace DreamRecorder . ToolBox . General
 	public static class ConsoleReader
 	{
 
-		private static Thread InputThread { get ; }
-
 		private static AutoResetEvent GetInput { get ; }
 
 		private static AutoResetEvent GotInput { get ; }
 
 		public static string Input { get ; private set ; }
+
+		private static Thread InputThread { get ; }
 
 		static ConsoleReader ( )
 		{
@@ -26,8 +26,6 @@ namespace DreamRecorder . ToolBox . General
 			GotInput    = new AutoResetEvent ( false ) ;
 			InputThread = new Thread ( Reader ) { IsBackground = true , } ;
 		}
-
-		public static void Start ( ) { InputThread . Start ( ) ; }
 
 		private static void Reader ( )
 		{
@@ -54,6 +52,8 @@ namespace DreamRecorder . ToolBox . General
 				return null ;
 			}
 		}
+
+		public static void Start ( ) { InputThread . Start ( ) ; }
 
 	}
 

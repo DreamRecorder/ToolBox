@@ -18,12 +18,12 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 	public class AplRecord : DnsRecordBase
 	{
 
+		protected internal override int MaximumRecordDataLength => Prefixes . Count * 20 ;
+
 		/// <summary>
 		///     List of address prefixes covered by this record
 		/// </summary>
 		public List <AddressPrefix> Prefixes { get ; private set ; }
-
-		protected internal override int MaximumRecordDataLength => Prefixes . Count * 20 ;
 
 		internal AplRecord ( ) { }
 
@@ -34,11 +34,48 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="timeToLive"> Seconds the record should be cached at most </param>
 		/// <param name="prefixes"> List of address prefixes covered by this record </param>
 		public AplRecord ( DomainName name , int timeToLive , List <AddressPrefix> prefixes ) : base (
-		name ,
-		RecordType . Apl ,
-		RecordClass . INet ,
-		timeToLive )
+		 name ,
+		 RecordType . Apl ,
+		 RecordClass . INet ,
+		 timeToLive )
 			=> Prefixes = prefixes ?? new List <AddressPrefix> ( ) ;
+
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			foreach ( AddressPrefix addressPrefix in Prefixes )
+			{
+				DnsMessageBase . EncodeUShort (
+											   messageData ,
+											   ref currentPosition ,
+											   ( ushort )addressPrefix . AddressFamily ) ;
+				messageData [ currentPosition++ ] = addressPrefix . Prefix ;
+
+				// no increment of position pointer, just set 1 bit
+				if ( addressPrefix . IsNegated )
+				{
+					messageData [ currentPosition ] = 128 ;
+				}
+
+				byte [ ] addressData = addressPrefix . Address . GetNetworkAddress ( addressPrefix . Prefix ) .
+													   GetAddressBytes ( ) ;
+				int length = addressData . Length ;
+				for ( ; length > 0 ; length-- )
+				{
+					if ( addressData [ length - 1 ] != 0 )
+					{
+						break ;
+					}
+				}
+
+				messageData [ currentPosition++ ] |= ( byte )length ;
+				DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , addressData , length ) ;
+			}
+		}
 
 		internal override void ParseRecordData ( byte [ ] resultData , int currentPosition , int length )
 		{
@@ -81,66 +118,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 			return string . Join ( " " , Prefixes . Select ( p => p . ToString ( ) ) ) ;
 		}
 
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			foreach ( AddressPrefix addressPrefix in Prefixes )
-			{
-				DnsMessageBase . EncodeUShort (
-												messageData ,
-												ref currentPosition ,
-												( ushort )addressPrefix . AddressFamily ) ;
-				messageData [ currentPosition++ ] = addressPrefix . Prefix ;
-
-				// no increment of position pointer, just set 1 bit
-				if ( addressPrefix . IsNegated )
-				{
-					messageData [ currentPosition ] = 128 ;
-				}
-
-				byte [ ] addressData = addressPrefix . Address . GetNetworkAddress ( addressPrefix . Prefix ) .
-														GetAddressBytes ( ) ;
-				int length = addressData . Length ;
-				for ( ; length > 0 ; length-- )
-				{
-					if ( addressData [ length - 1 ] != 0 )
-					{
-						break ;
-					}
-				}
-
-				messageData [ currentPosition++ ] |= ( byte )length ;
-				DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , addressData , length ) ;
-			}
-		}
-
-		internal enum Family : ushort
-		{
-
-			/// <summary>
-			///     <para>IPv4</para>
-			///     <para>
-			///         Defined in
-			///         <see cref="!:http://tools.ietf.org/html/rfc3123">RFC 3123</see>
-			///     </para>
-			/// </summary>
-			IpV4 = 1 ,
-
-			/// <summary>
-			///     <para>IPv6</para>
-			///     <para>
-			///         Defined in
-			///         <see cref="!:http://tools.ietf.org/html/rfc3123">RFC 3123</see>
-			///     </para>
-			/// </summary>
-			IpV6 = 2 ,
-
-		}
-
 		/// <summary>
 		///     Represents an address prefix
 		/// </summary>
@@ -148,9 +125,9 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		{
 
 			/// <summary>
-			///     Is negated prefix
+			///     Network address
 			/// </summary>
-			public bool IsNegated { get ; }
+			public IPAddress Address { get ; }
 
 			/// <summary>
 			///     Address familiy
@@ -158,9 +135,9 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 			internal Family AddressFamily { get ; }
 
 			/// <summary>
-			///     Network address
+			///     Is negated prefix
 			/// </summary>
-			public IPAddress Address { get ; }
+			public bool IsNegated { get ; }
 
 			/// <summary>
 			///     Prefix of the network
@@ -188,6 +165,24 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 																	RegexOptions . ExplicitCapture
 																	| RegexOptions . Compiled ) ;
 
+			internal static AddressPrefix Parse ( string s )
+			{
+				GroupCollection groups = _parserRegex . Match ( s ) . Groups ;
+
+				IPAddress address = IPAddress . Parse ( groups [ "addr" ] . Value ) ;
+
+				if ( ( address . AddressFamily     == System . Net . Sockets . AddressFamily . InterNetwork )
+					 && ( groups [ "fam" ] . Value != "1" ) )
+				{
+					throw new FormatException ( ) ;
+				}
+
+				return new AddressPrefix (
+										  groups [ "isneg" ] . Success ,
+										  address ,
+										  byte . Parse ( groups [ "pref" ] . Value ) ) ;
+			}
+
 			/// <summary>
 			///     Returns the textual representation of an address prefix
 			/// </summary>
@@ -195,23 +190,28 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 			public override string ToString ( )
 				=> ( IsNegated ? "!" : "" ) + ( ushort )AddressFamily + ":" + Address + "/" + Prefix ;
 
-			internal static AddressPrefix Parse ( string s )
-			{
-				GroupCollection groups = _parserRegex . Match ( s ) . Groups ;
+		}
 
-				IPAddress address = IPAddress . Parse ( groups [ "addr" ] . Value ) ;
+		internal enum Family : ushort
+		{
 
-				if ( ( address . AddressFamily    == System . Net . Sockets . AddressFamily . InterNetwork )
-					&& ( groups [ "fam" ] . Value != "1" ) )
-				{
-					throw new FormatException ( ) ;
-				}
+			/// <summary>
+			///     <para>IPv4</para>
+			///     <para>
+			///         Defined in
+			///         <see cref="!:http://tools.ietf.org/html/rfc3123">RFC 3123</see>
+			///     </para>
+			/// </summary>
+			IpV4 = 1 ,
 
-				return new AddressPrefix (
-										groups [ "isneg" ] . Success ,
-										address ,
-										byte . Parse ( groups [ "pref" ] . Value ) ) ;
-			}
+			/// <summary>
+			///     <para>IPv6</para>
+			///     <para>
+			///         Defined in
+			///         <see cref="!:http://tools.ietf.org/html/rfc3123">RFC 3123</see>
+			///     </para>
+			/// </summary>
+			IpV6 = 2 ,
 
 		}
 

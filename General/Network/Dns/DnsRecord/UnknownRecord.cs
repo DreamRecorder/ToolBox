@@ -14,12 +14,12 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 	public class UnknownRecord : DnsRecordBase
 	{
 
+		protected internal override int MaximumRecordDataLength => RecordData . Length ;
+
 		/// <summary>
 		///     Binary data of the RDATA section of the record
 		/// </summary>
 		public byte [ ] RecordData { get ; private set ; }
-
-		protected internal override int MaximumRecordDataLength => RecordData . Length ;
 
 		internal UnknownRecord ( ) { }
 
@@ -41,6 +41,16 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 			RecordData = recordData ?? new byte [ ] { } ;
 		}
 
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , RecordData ) ;
+		}
+
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )
 		{
 			RecordData = DnsMessageBase . ParseByteData ( resultData , ref startPosition , length ) ;
@@ -53,16 +63,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 
 		internal override string RecordDataToString ( )
 			=> @"\# " + ( ( RecordData == null ) ? "0" : RecordData . Length + " " + RecordData . ToBase16String ( ) ) ;
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , RecordData ) ;
-		}
 
 	}
 

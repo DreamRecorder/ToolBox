@@ -20,12 +20,12 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 	public class OpenPGPKeyRecord : DnsRecordBase
 	{
 
+		protected internal override int MaximumRecordDataLength => PublicKey . Length ;
+
 		/// <summary>
 		///     The Public Key
 		/// </summary>
 		public byte [ ] PublicKey { get ; private set ; }
-
-		protected internal override int MaximumRecordDataLength => PublicKey . Length ;
 
 		internal OpenPGPKeyRecord ( ) { }
 
@@ -36,12 +36,22 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="timeToLive"> Seconds the record should be cached at most </param>
 		/// <param name="publicKey"> The Public Key</param>
 		public OpenPGPKeyRecord ( DomainName name , int timeToLive , byte [ ] publicKey ) : base (
-		name ,
-		RecordType . OpenPGPKey ,
-		RecordClass . INet ,
-		timeToLive )
+		 name ,
+		 RecordType . OpenPGPKey ,
+		 RecordClass . INet ,
+		 timeToLive )
 		{
 			PublicKey = publicKey ?? new byte [ ] { } ;
+		}
+
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , PublicKey ) ;
 		}
 
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )
@@ -60,16 +70,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		}
 
 		internal override string RecordDataToString ( ) => PublicKey . ToBase64String ( ) ;
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , PublicKey ) ;
-		}
 
 	}
 

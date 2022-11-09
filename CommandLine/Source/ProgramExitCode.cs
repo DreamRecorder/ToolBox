@@ -14,13 +14,13 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 		public int Code { get ; private set ; }
 
-		public static T Success => ( ProgramExitCode <T> )0 ;
+		public static T ExceptionUnhandled => ( ProgramExitCode <T> )2 ;
 
 		public static T LicenseNotAccepted => ( ProgramExitCode <T> )1 ;
 
-		public static T ExceptionUnhandled => ( ProgramExitCode <T> )2 ;
-
 		public static T SignalInterrupt => ( ProgramExitCode <T> )140 ;
+
+		public static T Success => ( ProgramExitCode <T> )0 ;
 
 
 		public static T InvalidSetting = ( ProgramExitCode <T> )3 ;

@@ -9,9 +9,9 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 	internal interface IDnsSecValidatorContext
 	{
 
-		bool HasDomainAlreadyBeenResolvedInValidation ( DomainName name , RecordType recordType ) ;
-
 		void AddResolvedDomainInValidation ( DomainName name , RecordType recordType ) ;
+
+		bool HasDomainAlreadyBeenResolvedInValidation ( DomainName name , RecordType recordType ) ;
 
 	}
 

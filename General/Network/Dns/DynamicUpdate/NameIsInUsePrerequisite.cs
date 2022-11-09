@@ -24,8 +24,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DynamicUpdate
 		{
 		}
 
-		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length ) { }
-
 		protected internal override void EncodeRecordData (
 			byte [ ]                         messageData ,
 			int                              offset ,
@@ -34,6 +32,8 @@ namespace DreamRecorder . ToolBox . Network . Dns . DynamicUpdate
 			bool                             useCanonical )
 		{
 		}
+
+		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length ) { }
 
 	}
 

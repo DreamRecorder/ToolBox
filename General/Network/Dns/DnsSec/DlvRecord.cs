@@ -20,14 +20,14 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 	{
 
 		/// <summary>
-		///     Key tag
-		/// </summary>
-		public ushort KeyTag { get ; private set ; }
-
-		/// <summary>
 		///     Algorithm used
 		/// </summary>
 		public DnsSecAlgorithm Algorithm { get ; private set ; }
+
+		/// <summary>
+		///     Binary data of the digest
+		/// </summary>
+		public byte [ ] Digest { get ; private set ; }
 
 		/// <summary>
 		///     Type of the digest
@@ -35,9 +35,9 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 		public DnsSecDigestType DigestType { get ; private set ; }
 
 		/// <summary>
-		///     Binary data of the digest
+		///     Key tag
 		/// </summary>
-		public byte [ ] Digest { get ; private set ; }
+		public ushort KeyTag { get ; private set ; }
 
 		protected internal override int MaximumRecordDataLength => 4 + Digest . Length ;
 
@@ -68,6 +68,19 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 			Digest     = digest ?? new byte [ ] { } ;
 		}
 
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , KeyTag ) ;
+			messageData [ currentPosition++ ] = ( byte )Algorithm ;
+			messageData [ currentPosition++ ] = ( byte )DigestType ;
+			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , Digest ) ;
+		}
+
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )
 		{
 			KeyTag     = DnsMessageBase . ParseUShort ( resultData , ref startPosition ) ;
@@ -91,19 +104,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 
 		internal override string RecordDataToString ( )
 			=> KeyTag + " " + ( byte )Algorithm + " " + ( byte )DigestType + " " + Digest . ToBase16String ( ) ;
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , KeyTag ) ;
-			messageData [ currentPosition++ ] = ( byte )Algorithm ;
-			messageData [ currentPosition++ ] = ( byte )DigestType ;
-			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , Digest ) ;
-		}
 
 	}
 

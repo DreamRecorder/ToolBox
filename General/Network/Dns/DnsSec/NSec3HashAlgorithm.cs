@@ -26,18 +26,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 	internal static class NSec3HashAlgorithmHelper
 	{
 
-		public static bool IsSupported ( this NSec3HashAlgorithm algorithm )
-		{
-			switch ( algorithm )
-			{
-				case NSec3HashAlgorithm . Sha1 :
-					return true ;
-
-				default :
-					return false ;
-			}
-		}
-
 		public static int GetPriority ( this NSec3HashAlgorithm algorithm )
 		{
 			switch ( algorithm )
@@ -47,6 +35,18 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 
 				default :
 					throw new NotSupportedException ( ) ;
+			}
+		}
+
+		public static bool IsSupported ( this NSec3HashAlgorithm algorithm )
+		{
+			switch ( algorithm )
+			{
+				case NSec3HashAlgorithm . Sha1 :
+					return true ;
+
+				default :
+					return false ;
 			}
 		}
 

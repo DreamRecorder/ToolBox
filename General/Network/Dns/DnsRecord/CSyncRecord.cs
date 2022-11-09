@@ -43,21 +43,21 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		}
 
 		/// <summary>
+		///     Flags
+		/// </summary>
+		public CSyncFlags Flags { get ; internal set ; }
+
+		protected internal override int MaximumRecordDataLength => 7 + GetMaximumTypeBitmapLength ( Types ) ;
+
+		/// <summary>
 		///     SOA Serial Field
 		/// </summary>
 		public uint SerialNumber { get ; internal set ; }
 
 		/// <summary>
-		///     Flags
-		/// </summary>
-		public CSyncFlags Flags { get ; internal set ; }
-
-		/// <summary>
 		///     Record types
 		/// </summary>
 		public List <RecordType> Types { get ; private set ; }
-
-		protected internal override int MaximumRecordDataLength => 7 + GetMaximumTypeBitmapLength ( Types ) ;
 
 		internal CSyncRecord ( ) { }
 
@@ -81,8 +81,8 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 			SerialNumber = serialNumber ;
 			Flags        = flags ;
 
-			if ( ( types           == null )
-				|| ( types . Count == 0 ) )
+			if ( ( types            == null )
+				 || ( types . Count == 0 ) )
 			{
 				Types = new List <RecordType> ( ) ;
 			}
@@ -90,83 +90,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 			{
 				Types = types . Distinct ( ) . OrderBy ( x => x ) . ToList ( ) ;
 			}
-		}
-
-		internal override void ParseRecordData ( byte [ ] resultData , int currentPosition , int length )
-		{
-			int endPosition = currentPosition + length ;
-
-			SerialNumber = DnsMessageBase . ParseUInt ( resultData , ref currentPosition ) ;
-			Flags        = ( CSyncFlags )DnsMessageBase . ParseUShort ( resultData , ref currentPosition ) ;
-			Types        = ParseTypeBitMap ( resultData , ref currentPosition , endPosition ) ;
-		}
-
-		internal static List <RecordType> ParseTypeBitMap (
-			byte [ ] resultData ,
-			ref int  currentPosition ,
-			int      endPosition )
-		{
-			List <RecordType> types = new List <RecordType> ( ) ;
-			while ( currentPosition < endPosition )
-			{
-				byte windowNumber = resultData [ currentPosition++ ] ;
-				byte windowLength = resultData [ currentPosition++ ] ;
-
-				for ( int i = 0 ; i < windowLength ; i++ )
-				{
-					byte bitmap = resultData [ currentPosition++ ] ;
-
-					for ( int bit = 0 ; bit < 8 ; bit++ )
-					{
-						if ( ( bitmap & ( 1 << Math . Abs ( bit - 7 ) ) ) != 0 )
-						{
-							types . Add ( ( RecordType )( windowNumber * 256 + i * 8 + bit ) ) ;
-						}
-					}
-				}
-			}
-
-			return types ;
-		}
-
-		internal override void ParseRecordData ( DomainName origin , string [ ] stringRepresentation )
-		{
-			if ( stringRepresentation . Length < 3 )
-			{
-				throw new FormatException ( ) ;
-			}
-
-			SerialNumber = uint . Parse ( stringRepresentation [ 0 ] ) ;
-			Flags = ( CSyncFlags )ushort . Parse ( stringRepresentation [ 1 ] ) ;
-			Types = stringRepresentation . Skip ( 2 ) . Select ( RecordTypeHelper . ParseShortString ) . ToList ( ) ;
-		}
-
-		internal override string RecordDataToString ( )
-			=> SerialNumber
-				+ " "
-				+ ( ushort )Flags
-				+ " "
-				+ string . Join ( " " , Types . Select ( RecordTypeHelper . ToShortString ) ) ;
-
-		internal static int GetMaximumTypeBitmapLength ( List <RecordType> types )
-		{
-			int res = 0 ;
-
-			int    windowEnd = 255 ;
-			ushort lastType  = 0 ;
-
-			foreach ( ushort type in types . Select ( t => ( ushort )t ) )
-			{
-				if ( type > windowEnd )
-				{
-					res       += 3 + lastType % 256 / 8 ;
-					windowEnd =  ( type / 256 + 1 ) * 256 - 1 ;
-				}
-
-				lastType = type ;
-			}
-
-			return res + 3 + lastType % 256 / 8 ;
 		}
 
 		protected internal override void EncodeRecordData (
@@ -199,10 +122,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 						messageData [ currentPosition++ ] = ( byte )( windowEnd / 256 ) ;
 						messageData [ currentPosition++ ] = ( byte )windowLength ;
 						DnsMessageBase . EncodeByteArray (
-														messageData ,
-														ref currentPosition ,
-														windowData ,
-														windowLength ) ;
+														  messageData ,
+														  ref currentPosition ,
+														  windowData ,
+														  windowLength ) ;
 					}
 
 					windowEnd    = ( type / 256 + 1 ) * 256 - 1 ;
@@ -232,6 +155,83 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 				DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , windowData , windowLength ) ;
 			}
 		}
+
+		internal static int GetMaximumTypeBitmapLength ( List <RecordType> types )
+		{
+			int res = 0 ;
+
+			int    windowEnd = 255 ;
+			ushort lastType  = 0 ;
+
+			foreach ( ushort type in types . Select ( t => ( ushort )t ) )
+			{
+				if ( type > windowEnd )
+				{
+					res       += 3 + lastType % 256 / 8 ;
+					windowEnd =  ( type / 256 + 1 ) * 256 - 1 ;
+				}
+
+				lastType = type ;
+			}
+
+			return res + 3 + lastType % 256 / 8 ;
+		}
+
+		internal override void ParseRecordData ( byte [ ] resultData , int currentPosition , int length )
+		{
+			int endPosition = currentPosition + length ;
+
+			SerialNumber = DnsMessageBase . ParseUInt ( resultData , ref currentPosition ) ;
+			Flags        = ( CSyncFlags )DnsMessageBase . ParseUShort ( resultData , ref currentPosition ) ;
+			Types        = ParseTypeBitMap ( resultData , ref currentPosition , endPosition ) ;
+		}
+
+		internal override void ParseRecordData ( DomainName origin , string [ ] stringRepresentation )
+		{
+			if ( stringRepresentation . Length < 3 )
+			{
+				throw new FormatException ( ) ;
+			}
+
+			SerialNumber = uint . Parse ( stringRepresentation [ 0 ] ) ;
+			Flags = ( CSyncFlags )ushort . Parse ( stringRepresentation [ 1 ] ) ;
+			Types = stringRepresentation . Skip ( 2 ) . Select ( RecordTypeHelper . ParseShortString ) . ToList ( ) ;
+		}
+
+		internal static List <RecordType> ParseTypeBitMap (
+			byte [ ] resultData ,
+			ref int  currentPosition ,
+			int      endPosition )
+		{
+			List <RecordType> types = new List <RecordType> ( ) ;
+			while ( currentPosition < endPosition )
+			{
+				byte windowNumber = resultData [ currentPosition++ ] ;
+				byte windowLength = resultData [ currentPosition++ ] ;
+
+				for ( int i = 0 ; i < windowLength ; i++ )
+				{
+					byte bitmap = resultData [ currentPosition++ ] ;
+
+					for ( int bit = 0 ; bit < 8 ; bit++ )
+					{
+						if ( ( bitmap & ( 1 << Math . Abs ( bit - 7 ) ) ) != 0 )
+						{
+							types . Add ( ( RecordType )( windowNumber * 256 + i * 8 + bit ) ) ;
+						}
+					}
+				}
+			}
+
+			return types ;
+		}
+
+		internal override string RecordDataToString ( )
+			=> SerialNumber
+			   + " "
+			   + ( ushort )Flags
+			   + " "
+			   + string . Join ( " " , Types . Select ( RecordTypeHelper . ToShortString ) ) ;
 
 	}
 

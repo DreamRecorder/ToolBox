@@ -19,9 +19,9 @@ namespace DreamRecorder . ToolBox . TelegramBot
 		where TUser : IUser
 	{
 
-		public WebProxy WebProxy { get ; set ; }
-
 		public TelegramBot <TUser> Bot { get ; set ; }
+
+		public WebProxy WebProxy { get ; set ; }
 
 		public override void Start ( string [ ] args ) { Bot . Start ( ) ; }
 

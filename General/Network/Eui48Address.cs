@@ -61,13 +61,13 @@ namespace DreamRecorder . ToolBox . Network
 			{
 				int value = t ;
 
-				if ( value   >= 0x30
-					&& value <= 0x39 )
+				if ( value    >= 0x30
+					 && value <= 0x39 )
 				{
 					value -= 0x30 ;
 				}
-				else if ( value  >= 0x41
-						&& value <= 0x46 )
+				else if ( value    >= 0x41
+						  && value <= 0x46 )
 				{
 					value -= 0x37 ;
 				}
@@ -114,6 +114,18 @@ namespace DreamRecorder . ToolBox . Network
 			AddressBytes = buffer . Take ( 8 ) . ToArray ( ) ;
 		}
 
+		public override object Clone ( ) => new Eui48Address ( AddressBytes ) ;
+
+		public static explicit operator Eui48Address ( [NotNull] string address )
+		{
+			if ( address == null )
+			{
+				throw new ArgumentNullException ( nameof ( address ) ) ;
+			}
+
+			return new Eui48Address ( address ) ;
+		}
+
 		public override string ToString ( )
 		{
 			StringBuilder addressString = new StringBuilder ( ) ;
@@ -139,18 +151,6 @@ namespace DreamRecorder . ToolBox . Network
 
 			return addressString . ToString ( ) ;
 		}
-
-		public static explicit operator Eui48Address ( [NotNull] string address )
-		{
-			if ( address == null )
-			{
-				throw new ArgumentNullException ( nameof ( address ) ) ;
-			}
-
-			return new Eui48Address ( address ) ;
-		}
-
-		public override object Clone ( ) => new Eui48Address ( AddressBytes ) ;
 
 	}
 

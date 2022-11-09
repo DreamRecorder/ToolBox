@@ -15,15 +15,6 @@ namespace DreamRecorder . ToolBox . Network . Dns
 	{
 
 		/// <summary>
-		///     Gets or sets the entries in the question section
-		/// </summary>
-		public new List <DnsQuestion> Questions
-		{
-			get => base . Questions ;
-			set => base . Questions = ( value ?? new List <DnsQuestion> ( ) ) ;
-		}
-
-		/// <summary>
 		///     Gets or sets the entries in the answer records section
 		/// </summary>
 		public new List <DnsRecordBase> AnswerRecords
@@ -41,12 +32,23 @@ namespace DreamRecorder . ToolBox . Network . Dns
 			set => base . AuthorityRecords = ( value ?? new List <DnsRecordBase> ( ) ) ;
 		}
 
+		internal override bool IsTcpResendingRequested => IsTruncated ;
+
 		internal override bool IsTcpUsingRequested
 			=> ( Questions . Count > 0 )
-				&& ( ( Questions [ 0 ] . RecordType   == RecordType . Axfr )
+			   && ( ( Questions [ 0 ] . RecordType    == RecordType . Axfr )
 					|| ( Questions [ 0 ] . RecordType == RecordType . Ixfr ) ) ;
 
-		internal override bool IsTcpResendingRequested => IsTruncated ;
+		/// <summary>
+		///     Gets or sets the entries in the question section
+		/// </summary>
+		public new List <DnsQuestion> Questions
+		{
+			get => base . Questions ;
+			set => base . Questions = ( value ?? new List <DnsQuestion> ( ) ) ;
+		}
+
+		internal override bool IsTcpNextMessageWaiting ( bool isSubsequentResponseMessage ) => false ;
 
 		/// <summary>
 		///     Parses a the contents of a byte array as MulticastDnsMessage
@@ -54,8 +56,6 @@ namespace DreamRecorder . ToolBox . Network . Dns
 		/// <param name="data">Buffer, that contains the message data</param>
 		/// <returns>A new instance of the MulticastDnsMessage class</returns>
 		public static MulticastDnsMessage Parse ( byte [ ] data ) => Parse <MulticastDnsMessage> ( data ) ;
-
-		internal override bool IsTcpNextMessageWaiting ( bool isSubsequentResponseMessage ) => false ;
 
 		#region Header
 

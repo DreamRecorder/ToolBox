@@ -17,17 +17,23 @@ namespace DreamRecorder . ToolBox . General
 		public static Dictionary <Assembly , Dictionary <string , string>> DllMaps { get ; } =
 			new Dictionary <Assembly , Dictionary <string , string>> ( ) ;
 
-		public static void Register (
-			[JetBrains . Annotations . NotNull] this Assembly assembly ,
-			XDocument                                         config = null )
+		public static bool CheckOS ( string os ) => os == null || OperatingSystem . IsOSPlatform ( os ) ;
+
+		public static bool CheckWordSize ( [NotNull] string wordSize )
 		{
-			if ( assembly == null )
+			if ( wordSize == null )
 			{
-				throw new ArgumentNullException ( nameof ( assembly ) ) ;
+				return true ;
 			}
 
-			ReadConfig ( assembly , config ) ;
-			NativeLibrary . SetDllImportResolver ( assembly , MapAndLoad ) ;
+			if ( int . Parse ( wordSize ) == 64 )
+			{
+				return Environment . Is64BitProcess ;
+			}
+			else
+			{
+				return ! Environment . Is64BitProcess ;
+			}
 		}
 
 		// The callback: which loads the mapped library in place of the original
@@ -67,25 +73,6 @@ namespace DreamRecorder . ToolBox . General
 				{
 					ReadConfig ( assembly ) ;
 				}
-			}
-		}
-
-		public static bool CheckOS ( string os ) => os == null || OperatingSystem . IsOSPlatform ( os ) ;
-
-		public static bool CheckWordSize ( [NotNull] string wordSize )
-		{
-			if ( wordSize == null )
-			{
-				return true ;
-			}
-
-			if ( int . Parse ( wordSize ) == 64 )
-			{
-				return Environment . Is64BitProcess ;
-			}
-			else
-			{
-				return ! Environment . Is64BitProcess ;
 			}
 		}
 
@@ -187,6 +174,19 @@ namespace DreamRecorder . ToolBox . General
 			{
 				Console . WriteLine ( e ) ;
 			}
+		}
+
+		public static void Register (
+			[JetBrains . Annotations . NotNull] this Assembly assembly ,
+			XDocument                                         config = null )
+		{
+			if ( assembly == null )
+			{
+				throw new ArgumentNullException ( nameof ( assembly ) ) ;
+			}
+
+			ReadConfig ( assembly , config ) ;
+			NativeLibrary . SetDllImportResolver ( assembly , MapAndLoad ) ;
 		}
 
 	}

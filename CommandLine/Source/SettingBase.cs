@@ -79,7 +79,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 			for ( int i = 0 ; i < stringBuilders . Length ; i++ )
 			{
 				builder . AppendLine (
-									$"##{( TSettingCategory )Enum . ToObject ( typeof ( TSettingCategory ) , i )}" ) ;
+									  $"##{( TSettingCategory )Enum . ToObject ( typeof ( TSettingCategory ) , i )}" ) ;
 				builder . AppendLine ( ) ;
 				builder . AppendLine ( stringBuilders [ i ] . ToString ( ) ) ;
 				builder . AppendLine ( ) ;
@@ -116,8 +116,8 @@ namespace DreamRecorder . ToolBox . CommandLine
 			T settings = new T ( ) ;
 
 			foreach ( string line in source . Split (
-													new [ ] { Environment . NewLine , } ,
-													StringSplitOptions . RemoveEmptyEntries ) )
+													 new [ ] { Environment . NewLine , } ,
+													 StringSplitOptions . RemoveEmptyEntries ) )
 			{
 				ParseLine ( settings , line ) ;
 			}
@@ -150,7 +150,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 		public static void ParseLine ( T settings , string line )
 		{
 			if ( ! string . IsNullOrWhiteSpace ( line )
-				&& ! line . StartsWith ( "#" ) )
+				 && ! line . StartsWith ( "#" ) )
 			{
 				Match match = LineValuePattern . Match ( line ) ;
 
@@ -187,7 +187,8 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 		#region Logger
 
-		private static ILogger Logger => _logger ??= StaticServiceProvider . Provider . GetService <ILoggerFactory> ( ) ?. CreateLogger <T> ( ) ;
+		private static ILogger Logger
+			=> _logger ??= StaticServiceProvider . Provider . GetService <ILoggerFactory> ( ) ? . CreateLogger <T> ( ) ;
 
 		// ReSharper disable once StaticMemberInGenericType
 		// By design

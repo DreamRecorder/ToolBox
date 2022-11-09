@@ -24,13 +24,23 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// </summary>
 		public IPAddress Address { get ; private set ; }
 
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , Address . GetAddressBytes ( ) ) ;
+		}
+
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )
 		{
 			Address = new IPAddress (
-									DnsMessageBase . ParseByteData (
-																	resultData ,
-																	ref startPosition ,
-																	MaximumRecordDataLength ) ) ;
+									 DnsMessageBase . ParseByteData (
+																	 resultData ,
+																	 ref startPosition ,
+																	 MaximumRecordDataLength ) ) ;
 		}
 
 		internal override void ParseRecordData ( DomainName origin , string [ ] stringRepresentation )
@@ -44,16 +54,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		}
 
 		internal override string RecordDataToString ( ) => Address . ToString ( ) ;
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , Address . GetAddressBytes ( ) ) ;
-		}
 
 	}
 

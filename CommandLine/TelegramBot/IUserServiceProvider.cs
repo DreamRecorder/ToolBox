@@ -10,35 +10,35 @@ namespace DreamRecorder . ToolBox . TelegramBot
 	public interface IUserServiceProvider <TUser> where TUser : IUser
 	{
 
-		Task <TUser> GetUserAsync ( int telegramUserId ) ;
+		TUser BindCommandPermissionGroup ( TUser user , CommandPermissionGroup commandPermissionGroup ) ;
 
-		Task <bool> CheckUserAsync ( Guid user ) ;
+		Task <TUser> BindCommandPermissionGroupAsync ( TUser user , CommandPermissionGroup commandPermissionGroup ) ;
+
+		TUser BindUser ( long telegramUserId , TUser user ) ;
 
 		Task <TUser> BindUserAsync ( int telegramUserId , TUser user ) ;
 
-		Task <TUser> UnbindUserAsync ( int telegramUserId , TUser user ) ;
-
-		Task <TUser> CreateUserAsync ( ) ;
+		bool CheckCommandPermissionGroup ( TUser user , CommandPermissionGroup commandPermissionGroup ) ;
 
 		Task <bool> CheckCommandPermissionGroupAsync ( TUser user , CommandPermissionGroup commandPermissionGroup ) ;
 
-		Task <TUser> BindCommandPermissionGroupAsync ( TUser user , CommandPermissionGroup commandPermissionGroup ) ;
+		bool CheckUser ( Guid user ) ;
+
+		Task <bool> CheckUserAsync ( Guid user ) ;
+
+		TUser CreateUser ( ) ;
+
+		Task <TUser> CreateUserAsync ( ) ;
+
+		Guid GetContinuationCode ( TUser user ) ;
 
 		Task <Guid> GetContinuationCodeAsync ( TUser user ) ;
 
 		TUser GetUser ( int telegramUserId ) ;
 
-		bool CheckUser ( Guid user ) ;
+		Task <TUser> GetUserAsync ( int telegramUserId ) ;
 
-		TUser BindUser ( long telegramUserId , TUser user ) ;
-
-		TUser CreateUser ( ) ;
-
-		bool CheckCommandPermissionGroup ( TUser user , CommandPermissionGroup commandPermissionGroup ) ;
-
-		TUser BindCommandPermissionGroup ( TUser user , CommandPermissionGroup commandPermissionGroup ) ;
-
-		Guid GetContinuationCode ( TUser user ) ;
+		Task <TUser> UnbindUserAsync ( int telegramUserId , TUser user ) ;
 
 	}
 

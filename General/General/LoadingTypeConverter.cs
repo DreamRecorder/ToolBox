@@ -17,21 +17,6 @@ public class LoadingTypeConverter <TSource , TTarget> : TypeConverter where TTar
 	public override bool CanConvertTo ( ITypeDescriptorContext context , [NotNullWhen ( true )] Type destinationType )
 		=> destinationType == typeof ( TSource ) || base . CanConvertTo ( context , destinationType ) ;
 
-	public override object ConvertTo (
-		ITypeDescriptorContext context ,
-		CultureInfo            culture ,
-		object                 value ,
-		Type                   destinationType )
-	{
-		if ( value is TTarget t
-			&& destinationType == typeof ( TSource ) )
-		{
-			return t . ToT ( ) ;
-		}
-
-		return base . ConvertTo ( context , culture , value , destinationType ) ;
-	}
-
 	public override object ConvertFrom ( ITypeDescriptorContext context , CultureInfo culture , object value )
 	{
 		if ( value is TSource source )
@@ -42,6 +27,21 @@ public class LoadingTypeConverter <TSource , TTarget> : TypeConverter where TTar
 		}
 
 		return base . ConvertFrom ( context , culture , value ) ;
+	}
+
+	public override object ConvertTo (
+		ITypeDescriptorContext context ,
+		CultureInfo            culture ,
+		object                 value ,
+		Type                   destinationType )
+	{
+		if ( value is TTarget t
+			 && destinationType == typeof ( TSource ) )
+		{
+			return t . ToT ( ) ;
+		}
+
+		return base . ConvertTo ( context , culture , value , destinationType ) ;
 	}
 
 }

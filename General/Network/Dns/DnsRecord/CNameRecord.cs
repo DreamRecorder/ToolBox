@@ -32,11 +32,27 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="timeToLive"> Seconds the record should be cached at most </param>
 		/// <param name="canonicalName"> Canocical name for the alias of the host </param>
 		public CNameRecord ( DomainName name , int timeToLive , DomainName canonicalName ) : base (
-		name ,
-		RecordType . CName ,
-		RecordClass . INet ,
-		timeToLive )
+		 name ,
+		 RecordType . CName ,
+		 RecordClass . INet ,
+		 timeToLive )
 			=> CanonicalName = canonicalName ?? DomainName . Root ;
+
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			DnsMessageBase . EncodeDomainName (
+											   messageData ,
+											   offset ,
+											   ref currentPosition ,
+											   CanonicalName ,
+											   domainNames ,
+											   useCanonical ) ;
+		}
 
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )
 		{
@@ -54,22 +70,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		}
 
 		internal override string RecordDataToString ( ) => CanonicalName . ToString ( ) ;
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			DnsMessageBase . EncodeDomainName (
-												messageData ,
-												offset ,
-												ref currentPosition ,
-												CanonicalName ,
-												domainNames ,
-												useCanonical ) ;
-		}
 
 	}
 

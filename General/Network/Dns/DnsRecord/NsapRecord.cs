@@ -20,12 +20,12 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 	public class NsapRecord : DnsRecordBase
 	{
 
+		protected internal override int MaximumRecordDataLength => RecordData . Length ;
+
 		/// <summary>
 		///     Binary encoded NSAP data
 		/// </summary>
 		public byte [ ] RecordData { get ; private set ; }
-
-		protected internal override int MaximumRecordDataLength => RecordData . Length ;
 
 		internal NsapRecord ( ) { }
 
@@ -36,12 +36,22 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="timeToLive"> Seconds the record should be cached at most </param>
 		/// <param name="recordData"> Binary encoded NSAP data </param>
 		public NsapRecord ( DomainName name , int timeToLive , byte [ ] recordData ) : base (
-		name ,
-		RecordType . Nsap ,
-		RecordClass . INet ,
-		timeToLive )
+		 name ,
+		 RecordType . Nsap ,
+		 RecordClass . INet ,
+		 timeToLive )
 		{
 			RecordData = recordData ?? new byte [ ] { } ;
+		}
+
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , RecordData ) ;
 		}
 
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )
@@ -62,22 +72,12 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 			}
 
 			RecordData = stringRepresentation [ 0 ] .
-						Substring ( 2 ) .
-						Replace ( "." , string . Empty ) .
-						FromBase16String ( ) ;
+						 Substring ( 2 ) .
+						 Replace ( "." , string . Empty ) .
+						 FromBase16String ( ) ;
 		}
 
 		internal override string RecordDataToString ( ) => "0x" + RecordData . ToBase16String ( ) ;
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , RecordData ) ;
-		}
 
 	}
 

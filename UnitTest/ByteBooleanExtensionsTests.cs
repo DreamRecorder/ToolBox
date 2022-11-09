@@ -64,31 +64,6 @@ namespace DreamRecorder . ToolBox . UnitTest
 	{
 
 		[TestMethod]
-		public void CastToBytesTest2 ( )
-		{
-			List <Permission> source = new List <Permission>
-										{
-											new Permission (
-															PermissionStatus . Allow ,
-															PermissionType . Write ,
-															Guid . Parse ( "162e0359-7a24-41d0-bc92-d627f51b9ae9" ) ) ,
-											new Permission (
-															PermissionStatus . Allow ,
-															PermissionType . Read ,
-															Guid . Parse ( "D7A1809A-2E3B-4BCD-8927-3E2D96751F1F" ) ) ,
-										} ;
-
-			byte [ ] buffer = source . CastToBytes ( ) ;
-
-			List <Permission> result = buffer . CastToStructs <Permission> ( ) ;
-
-			for ( int i = 0 ; i < source . Count ; i++ )
-			{
-				Assert . AreEqual ( result [ i ] , source [ i ] ) ;
-			}
-		}
-
-		[TestMethod]
 		public void CastToBytesTest ( )
 		{
 			Permission source = new Permission (
@@ -102,32 +77,57 @@ namespace DreamRecorder . ToolBox . UnitTest
 		}
 
 		[TestMethod]
+		public void CastToBytesTest2 ( )
+		{
+			List <Permission> source = new List <Permission>
+									   {
+										   new Permission (
+														   PermissionStatus . Allow ,
+														   PermissionType . Write ,
+														   Guid . Parse ( "162e0359-7a24-41d0-bc92-d627f51b9ae9" ) ) ,
+										   new Permission (
+														   PermissionStatus . Allow ,
+														   PermissionType . Read ,
+														   Guid . Parse ( "D7A1809A-2E3B-4BCD-8927-3E2D96751F1F" ) ) ,
+									   } ;
+
+			byte [ ] buffer = source . CastToBytes ( ) ;
+
+			List <Permission> result = buffer . CastToStructs <Permission> ( ) ;
+
+			for ( int i = 0 ; i < source . Count ; i++ )
+			{
+				Assert . AreEqual ( result [ i ] , source [ i ] ) ;
+			}
+		}
+
+		[TestMethod]
 		public void ToBooleanArrayTest ( )
 		{
 			Assert . AreEqual (
-								0b0000_0001 ,
-								new [ ] { true , false , false , false , false , false , false , false , } .
-									ToByte ( ) ) ;
+							   0b0000_0001 ,
+							   new [ ] { true , false , false , false , false , false , false , false , } .
+								   ToByte ( ) ) ;
 			Assert . AreEqual (
-								0b0000_1000 ,
-								new [ ] { false , false , false , true , false , false , false , false , } .
-									ToByte ( ) ) ;
+							   0b0000_1000 ,
+							   new [ ] { false , false , false , true , false , false , false , false , } .
+								   ToByte ( ) ) ;
 			Assert . AreEqual (
-								0b0001_0000 ,
-								new [ ] { false , false , false , false , true , false , false , false , } .
-									ToByte ( ) ) ;
+							   0b0001_0000 ,
+							   new [ ] { false , false , false , false , true , false , false , false , } .
+								   ToByte ( ) ) ;
 			Assert . AreEqual (
-								0b1000_0000 ,
-								new [ ] { false , false , false , false , false , false , false , true , } .
-									ToByte ( ) ) ;
+							   0b1000_0000 ,
+							   new [ ] { false , false , false , false , false , false , false , true , } .
+								   ToByte ( ) ) ;
 
 			Assert . AreEqual (
-								new [ ] { true , true , true , true , true , true , true , true , } . ToByte ( ) ,
-								0b1111_1111 ) ;
+							   new [ ] { true , true , true , true , true , true , true , true , } . ToByte ( ) ,
+							   0b1111_1111 ) ;
 			Assert . AreEqual (
-								new [ ] { false , false , false , false , false , false , false , false , } .
-									ToByte ( ) ,
-								0b0000_0000 ) ;
+							   new [ ] { false , false , false , false , false , false , false , false , } .
+								   ToByte ( ) ,
+							   0b0000_0000 ) ;
 
 			Assert . ThrowsException <ArgumentException> ( ( ) => { new bool [ ] { } . ToByte ( ) ; } ) ;
 			Assert . ThrowsException <ArgumentException> ( ( ) => { new [ ] { false , true , } . ToByte ( ) ; } ) ;

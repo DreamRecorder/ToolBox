@@ -19,14 +19,41 @@ namespace DreamRecorder . ToolBox . General
 	public static class SelfSerializableExtensions
 	{
 
-		public static string ToXmlString ( [NotNull] this ISelfSerializable item )
+		public static T Deserialize <T> ( [NotNull] this string element , Type [ ] types = null )
 		{
-			if ( item == null )
+			if ( element == null )
 			{
-				throw new ArgumentNullException ( nameof ( item ) ) ;
+				throw new ArgumentNullException ( nameof ( element ) ) ;
 			}
 
-			return item . ToXElement ( ) . ToString ( ) ;
+			if ( typeof ( ISelfSerializable ) . IsAssignableFrom ( typeof ( T ) ) )
+			{
+				return ( T )Activator . CreateInstance ( typeof ( T ) , XElement . Parse ( element ) ) ;
+			}
+			else
+			{
+				if ( typeof ( T ) . GetCustomAttribute <DataContractAttribute> ( )    != null
+					 || typeof ( T ) . GetCustomAttribute <SerializableAttribute> ( ) != null )
+				{
+					DataContractSerializer dataContractSerializer =
+						new DataContractSerializer ( typeof ( T ) , types ?? typeof ( T ) . Assembly . GetTypes ( ) ) ;
+					return ( T )dataContractSerializer . ReadObject (
+																	 new MemoryStream (
+																	  Encoding . UTF8 . GetBytes ( element ) ) ) ;
+				}
+				else
+				{
+					XmlSerializer xmlSerializer = new XmlSerializer (
+																	 typeof ( T ) ,
+																	 types
+																	 ?? typeof ( T ) . Assembly .
+																		 GetExportedTypes ( ) ) ;
+					return ( T )xmlSerializer . Deserialize (
+															 new MemoryStream (
+																			   Encoding . UTF8 .
+																				   GetBytes ( element ) ) ) ;
+				}
+			}
 		}
 
 		public static T ReadNecessaryValue <T> ( this XElement element , string name )
@@ -97,8 +124,8 @@ namespace DreamRecorder . ToolBox . General
 																	OmitXmlDeclaration = true ,
 																} ) ;
 
-				if ( typeof ( T ) . GetCustomAttribute <DataContractAttribute> ( )   != null
-					|| typeof ( T ) . GetCustomAttribute <SerializableAttribute> ( ) != null )
+				if ( typeof ( T ) . GetCustomAttribute <DataContractAttribute> ( )    != null
+					 || typeof ( T ) . GetCustomAttribute <SerializableAttribute> ( ) != null )
 				{
 					DataContractSerializer dataContractSerializer =
 						new DataContractSerializer ( typeof ( T ) , types ?? typeof ( T ) . Assembly . GetTypes ( ) ) ;
@@ -108,14 +135,14 @@ namespace DreamRecorder . ToolBox . General
 				else
 				{
 					XmlSerializer xmlSerializer = new XmlSerializer (
-																	typeof ( T ) ,
-																	types
-																	?? typeof ( T ) . Assembly .
-																		GetExportedTypes ( ) ) ;
+																	 typeof ( T ) ,
+																	 types
+																	 ?? typeof ( T ) . Assembly .
+																		 GetExportedTypes ( ) ) ;
 					xmlSerializer . Serialize (
-												xmlWriter ,
-												obj ,
-												new XmlSerializerNamespaces (
+											   xmlWriter ,
+											   obj ,
+											   new XmlSerializerNamespaces (
 																			new [ ] { XmlQualifiedName . Empty , } ) ) ;
 				}
 
@@ -125,40 +152,14 @@ namespace DreamRecorder . ToolBox . General
 			}
 		}
 
-		public static T Deserialize <T> ( [NotNull] this string element , Type [ ] types = null )
+		public static string ToXmlString ( [NotNull] this ISelfSerializable item )
 		{
-			if ( element == null )
+			if ( item == null )
 			{
-				throw new ArgumentNullException ( nameof ( element ) ) ;
+				throw new ArgumentNullException ( nameof ( item ) ) ;
 			}
 
-			if ( typeof ( ISelfSerializable ) . IsAssignableFrom ( typeof ( T ) ) )
-			{
-				return ( T )Activator . CreateInstance ( typeof ( T ) , XElement . Parse ( element ) ) ;
-			}
-			else
-			{
-				if ( typeof ( T ) . GetCustomAttribute <DataContractAttribute> ( )   != null
-					|| typeof ( T ) . GetCustomAttribute <SerializableAttribute> ( ) != null )
-				{
-					DataContractSerializer dataContractSerializer =
-						new DataContractSerializer ( typeof ( T ) , types ?? typeof ( T ) . Assembly . GetTypes ( ) ) ;
-					return ( T )dataContractSerializer . ReadObject (
-																	new MemoryStream (
-																	Encoding . UTF8 . GetBytes ( element ) ) ) ;
-				}
-				else
-				{
-					XmlSerializer xmlSerializer = new XmlSerializer (
-																	typeof ( T ) ,
-																	types
-																	?? typeof ( T ) . Assembly .
-																		GetExportedTypes ( ) ) ;
-					return ( T )xmlSerializer . Deserialize (
-															new MemoryStream (
-																			Encoding . UTF8 . GetBytes ( element ) ) ) ;
-				}
-			}
+			return item . ToXElement ( ) . ToString ( ) ;
 		}
 
 	}

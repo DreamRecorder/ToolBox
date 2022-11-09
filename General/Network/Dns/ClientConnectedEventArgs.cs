@@ -22,14 +22,14 @@ namespace DreamRecorder . ToolBox . Network . Dns
 		public ProtocolType ProtocolType { get ; private set ; }
 
 		/// <summary>
-		///     Remote endpoint of the client
-		/// </summary>
-		public IPEndPoint RemoteEndpoint { get ; private set ; }
-
-		/// <summary>
 		///     If true, the client connection will be refused
 		/// </summary>
 		public bool RefuseConnect { get ; set ; }
+
+		/// <summary>
+		///     Remote endpoint of the client
+		/// </summary>
+		public IPEndPoint RemoteEndpoint { get ; private set ; }
 
 		internal ClientConnectedEventArgs ( ProtocolType protocolType , IPEndPoint remoteEndpoint )
 		{

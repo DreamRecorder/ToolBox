@@ -23,6 +23,8 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// </summary>
 		public byte Flags { get ; private set ; }
 
+		protected internal override int MaximumRecordDataLength => 2 + Tag . Length + Value . Length ;
+
 		/// <summary>
 		///     The name of the tag
 		/// </summary>
@@ -32,8 +34,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		///     The value of the tag
 		/// </summary>
 		public string Value { get ; private set ; }
-
-		protected internal override int MaximumRecordDataLength => 2 + Tag . Length + Value . Length ;
 
 		internal CAARecord ( ) { }
 
@@ -46,14 +46,26 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="tag">The name of the tag</param>
 		/// <param name="value">The value of the tag</param>
 		public CAARecord ( DomainName name , int timeToLive , byte flags , string tag , string value ) : base (
-		name ,
-		RecordType . CAA ,
-		RecordClass . INet ,
-		timeToLive )
+		 name ,
+		 RecordType . CAA ,
+		 RecordClass . INet ,
+		 timeToLive )
 		{
 			Flags = flags ;
 			Tag   = tag ;
 			Value = value ;
+		}
+
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			messageData [ currentPosition++ ] = Flags ;
+			DnsMessageBase . EncodeTextBlock ( messageData , ref currentPosition , Tag ) ;
+			DnsMessageBase . EncodeTextWithoutLength ( messageData , ref currentPosition , Value ) ;
 		}
 
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )
@@ -77,22 +89,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 
 		internal override string RecordDataToString ( )
 			=> Flags
-				+ " "
-				+ Tag . ToMasterfileLabelRepresentation ( )
-				+ " "
-				+ Value . ToMasterfileLabelRepresentation ( ) ;
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			messageData [ currentPosition++ ] = Flags ;
-			DnsMessageBase . EncodeTextBlock ( messageData , ref currentPosition , Tag ) ;
-			DnsMessageBase . EncodeTextWithoutLength ( messageData , ref currentPosition , Value ) ;
-		}
+			   + " "
+			   + Tag . ToMasterfileLabelRepresentation ( )
+			   + " "
+			   + Value . ToMasterfileLabelRepresentation ( ) ;
 
 	}
 

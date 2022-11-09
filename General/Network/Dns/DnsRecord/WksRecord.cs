@@ -23,17 +23,17 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// </summary>
 		public IPAddress Address { get ; private set ; }
 
-		/// <summary>
-		///     Type of the protocol
-		/// </summary>
-		public ProtocolType Protocol { get ; private set ; }
+		protected internal override int MaximumRecordDataLength => 5 + Ports . Max ( ) / 8 + 1 ;
 
 		/// <summary>
 		///     List of ports which are supported by the host
 		/// </summary>
 		public List <ushort> Ports { get ; private set ; }
 
-		protected internal override int MaximumRecordDataLength => 5 + Ports . Max ( ) / 8 + 1 ;
+		/// <summary>
+		///     Type of the protocol
+		/// </summary>
+		public ProtocolType Protocol { get ; private set ; }
 
 		internal WksRecord ( ) { }
 
@@ -55,6 +55,28 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 			Address  = address ?? IPAddress . None ;
 			Protocol = protocol ;
 			Ports    = ports ?? new List <ushort> ( ) ;
+		}
+
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , Address . GetAddressBytes ( ) ) ;
+			messageData [ currentPosition++ ] = ( byte )Protocol ;
+
+			foreach ( ushort port in Ports )
+			{
+				int  octetPosition = port / 8 + currentPosition ;
+				int  bitPos        = port % 8 ;
+				byte octet         = messageData [ octetPosition ] ;
+				octet                         |= ( byte )( 1 << Math . Abs ( bitPos - 7 ) ) ;
+				messageData [ octetPosition ] =  octet ;
+			}
+
+			currentPosition += Ports . Max ( ) / 8 + 1 ;
 		}
 
 		internal override void ParseRecordData ( byte [ ] resultData , int currentPosition , int length )
@@ -96,32 +118,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		internal override string RecordDataToString ( )
 		{
 			return Address
-					+ " "
-					+ ( byte )Protocol
-					+ " "
-					+ string . Join ( " " , Ports . Select ( port => port . ToString ( ) ) ) ;
-		}
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , Address . GetAddressBytes ( ) ) ;
-			messageData [ currentPosition++ ] = ( byte )Protocol ;
-
-			foreach ( ushort port in Ports )
-			{
-				int  octetPosition = port / 8 + currentPosition ;
-				int  bitPos        = port % 8 ;
-				byte octet         = messageData [ octetPosition ] ;
-				octet                         |= ( byte )( 1 << Math . Abs ( bitPos - 7 ) ) ;
-				messageData [ octetPosition ] =  octet ;
-			}
-
-			currentPosition += Ports . Max ( ) / 8 + 1 ;
+				   + " "
+				   + ( byte )Protocol
+				   + " "
+				   + string . Join ( " " , Ports . Select ( port => port . ToString ( ) ) ) ;
 		}
 
 	}

@@ -21,15 +21,15 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// </summary>
 		public DomainName MailBox { get ; protected set ; }
 
+		protected internal override int MaximumRecordDataLength
+			=> 4 + MailBox . MaximumRecordDataLength + TxtDomainName . MaximumRecordDataLength ;
+
 		/// <summary>
 		///     Domain name of a
 		///     <see cref="TxtRecord" />
 		///     with additional information
 		/// </summary>
 		public DomainName TxtDomainName { get ; protected set ; }
-
-		protected internal override int MaximumRecordDataLength
-			=> 4 + MailBox . MaximumRecordDataLength + TxtDomainName . MaximumRecordDataLength ;
 
 		internal RpRecord ( ) { }
 
@@ -45,13 +45,36 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		///     with additional information
 		/// </param>
 		public RpRecord ( DomainName name , int timeToLive , DomainName mailBox , DomainName txtDomainName ) : base (
-																													name ,
-																													RecordType . Rp ,
-																													RecordClass . INet ,
-																													timeToLive )
+																													 name ,
+																													 RecordType . Rp ,
+																													 RecordClass . INet ,
+																													 timeToLive )
 		{
 			MailBox       = mailBox       ?? DomainName . Root ;
 			TxtDomainName = txtDomainName ?? DomainName . Root ;
+		}
+
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			DnsMessageBase . EncodeDomainName (
+											   messageData ,
+											   offset ,
+											   ref currentPosition ,
+											   MailBox ,
+											   null ,
+											   useCanonical ) ;
+			DnsMessageBase . EncodeDomainName (
+											   messageData ,
+											   offset ,
+											   ref currentPosition ,
+											   TxtDomainName ,
+											   null ,
+											   useCanonical ) ;
 		}
 
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )
@@ -72,29 +95,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		}
 
 		internal override string RecordDataToString ( ) => MailBox + " " + TxtDomainName ;
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			DnsMessageBase . EncodeDomainName (
-												messageData ,
-												offset ,
-												ref currentPosition ,
-												MailBox ,
-												null ,
-												useCanonical ) ;
-			DnsMessageBase . EncodeDomainName (
-												messageData ,
-												offset ,
-												ref currentPosition ,
-												TxtDomainName ,
-												null ,
-												useCanonical ) ;
-		}
 
 	}
 

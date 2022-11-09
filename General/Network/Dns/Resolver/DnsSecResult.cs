@@ -15,6 +15,11 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 	{
 
 		/// <summary>
+		///     The records representing the response
+		/// </summary>
+		public List <T> Records { get ; private set ; }
+
+		/// <summary>
 		///     Gets the return code (RCODE)
 		/// </summary>
 		public ReturnCode ReturnCode { get ; }
@@ -23,11 +28,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 		///     The result of the validation process
 		/// </summary>
 		public DnsSecValidationResult ValidationResult { get ; private set ; }
-
-		/// <summary>
-		///     The records representing the response
-		/// </summary>
-		public List <T> Records { get ; private set ; }
 
 		public DnsSecResult ( ReturnCode returnCode , List <T> records , DnsSecValidationResult validationResult )
 		{

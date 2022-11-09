@@ -21,47 +21,25 @@ namespace DreamRecorder . ToolBox . TelegramBot
 	public class CreateUserCommand <TUser> : TelegramCommand <TUser> where TUser : IUser
 	{
 
-		private IUserServiceProvider <TUser> ServiceProvider
-			=> StaticServiceProvider . Provider . GetService <IUserServiceProvider <TUser>> ( ) ;
-
-		public override TimeSpan Timeout => TimeSpan . FromMinutes ( 1 ) ;
-
-		public override CommandPermissionGroup PermissionGroup => null ;
-
 		public static List <InlineKeyboardButton> CreateUserKeyboard { get ; } =
 			new List <InlineKeyboardButton>
 			{
 				InlineKeyboardButton . WithCallbackData (
-														"Do create New User and Bind it" ,
-														$"{nameof ( CreateUserCommand <TUser> )}" ) ,
+														 "Do create New User and Bind it" ,
+														 $"{nameof ( CreateUserCommand <TUser> )}" ) ,
 			} ;
 
 		public override string HelpInformation
 			=> $"Create new user and bind on it.{Environment . NewLine}```{Environment . NewLine}/CreateUser```" ;
 
+		public override CommandPermissionGroup PermissionGroup => null ;
+
+		private IUserServiceProvider <TUser> ServiceProvider
+			=> StaticServiceProvider . Provider . GetService <IUserServiceProvider <TUser>> ( ) ;
+
+		public override TimeSpan Timeout => TimeSpan . FromMinutes ( 1 ) ;
+
 		public override bool CanBeRouteTarget ( Session <TUser> session ) => session . User is null ;
-
-		public override bool Process (
-			Message         message ,
-			string [ ]      args ,
-			Session <TUser> session ,
-			bool            isExactlyMatched ,
-			object          tag = null )
-		{
-			if ( isExactlyMatched )
-			{
-				CreateUser ( message . From , message , session ) ;
-			}
-			else
-			{
-				session . ReplyText (
-									message ,
-									"Issue the following inline keyboard button to create a new user." ,
-									replyMarkup : new InlineKeyboardMarkup ( CreateUserKeyboard ) ) ;
-			}
-
-			return true ;
-		}
 
 		private void CreateUser ( User requester , [CanBeNull] Message message , Session <TUser> session )
 		{
@@ -82,6 +60,28 @@ namespace DreamRecorder . ToolBox . TelegramBot
 			session . ReplyText ( message , builder . ToString ( ) , parseMode : ParseMode . Markdown ) ;
 		}
 
+		public override bool Process (
+			Message         message ,
+			string [ ]      args ,
+			Session <TUser> session ,
+			bool            isExactlyMatched ,
+			object          tag = null )
+		{
+			if ( isExactlyMatched )
+			{
+				CreateUser ( message . From , message , session ) ;
+			}
+			else
+			{
+				session . ReplyText (
+									 message ,
+									 "Issue the following inline keyboard button to create a new user." ,
+									 replyMarkup : new InlineKeyboardMarkup ( CreateUserKeyboard ) ) ;
+			}
+
+			return true ;
+		}
+
 		public override void Process (
 			CallbackQuery   callbackQuery ,
 			string [ ]      args ,
@@ -91,9 +91,9 @@ namespace DreamRecorder . ToolBox . TelegramBot
 			CreateUser ( callbackQuery . From , null , session ) ;
 
 			session . BotClient . EditMessageReplyMarkupAsync (
-																callbackQuery . Message . Chat . Id ,
-																callbackQuery . Message . MessageId ) .
-					Wait ( ) ;
+															   callbackQuery . Message . Chat . Id ,
+															   callbackQuery . Message . MessageId ) .
+					  Wait ( ) ;
 		}
 
 	}

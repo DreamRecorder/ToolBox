@@ -12,9 +12,9 @@ namespace DreamRecorder . ToolBox . Renderer
 
 		float ScreenWidth { get ; set ; }
 
-		Vector2 Project ( Vector3 point ) ;
-
 		Ray Project ( Vector2 point ) ;
+
+		Vector2 Project ( Vector3 point ) ;
 
 	}
 

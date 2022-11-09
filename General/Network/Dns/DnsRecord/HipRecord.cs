@@ -28,16 +28,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// </summary>
 		public byte [ ] Hit { get ; private set ; }
 
-		/// <summary>
-		///     Binary data of the public key
-		/// </summary>
-		public byte [ ] PublicKey { get ; private set ; }
-
-		/// <summary>
-		///     Possible rendezvous servers
-		/// </summary>
-		public List <DomainName> RendezvousServers { get ; private set ; }
-
 		protected internal override int MaximumRecordDataLength
 		{
 			get
@@ -49,6 +39,16 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 				return res ;
 			}
 		}
+
+		/// <summary>
+		///     Binary data of the public key
+		/// </summary>
+		public byte [ ] PublicKey { get ; private set ; }
+
+		/// <summary>
+		///     Possible rendezvous servers
+		/// </summary>
+		public List <DomainName> RendezvousServers { get ; private set ; }
 
 		internal HipRecord ( ) { }
 
@@ -73,6 +73,30 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 			Hit               = hit               ?? new byte [ ] { } ;
 			PublicKey         = publicKey         ?? new byte [ ] { } ;
 			RendezvousServers = rendezvousServers ?? new List <DomainName> ( ) ;
+		}
+
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			messageData [ currentPosition++ ] = ( byte )Hit . Length ;
+			messageData [ currentPosition++ ] = ( byte )Algorithm ;
+			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , ( ushort )PublicKey . Length ) ;
+			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , Hit ) ;
+			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , PublicKey ) ;
+			foreach ( DomainName server in RendezvousServers )
+			{
+				DnsMessageBase . EncodeDomainName (
+												   messageData ,
+												   offset ,
+												   ref currentPosition ,
+												   server ,
+												   null ,
+												   false ) ;
+			}
 		}
 
 		internal override void ParseRecordData ( byte [ ] resultData , int currentPosition , int length )
@@ -102,43 +126,19 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 			Hit       = stringRepresentation [ 1 ] . FromBase16String ( ) ;
 			PublicKey = stringRepresentation [ 2 ] . FromBase64String ( ) ;
 			RendezvousServers = stringRepresentation . Skip ( 3 ) .
-														Select ( x => ParseDomainName ( origin , x ) ) .
-														ToList ( ) ;
+													   Select ( x => ParseDomainName ( origin , x ) ) .
+													   ToList ( ) ;
 		}
 
 		internal override string RecordDataToString ( )
 		{
 			return ( byte )Algorithm
-					+ " "
-					+ Hit . ToBase16String ( )
-					+ " "
-					+ PublicKey . ToBase64String ( )
-					+ " "
-					+ string . Join ( " " , RendezvousServers . Select ( s => s . ToString ( ) ) ) ;
-		}
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			messageData [ currentPosition++ ] = ( byte )Hit . Length ;
-			messageData [ currentPosition++ ] = ( byte )Algorithm ;
-			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , ( ushort )PublicKey . Length ) ;
-			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , Hit ) ;
-			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , PublicKey ) ;
-			foreach ( DomainName server in RendezvousServers )
-			{
-				DnsMessageBase . EncodeDomainName (
-													messageData ,
-													offset ,
-													ref currentPosition ,
-													server ,
-													null ,
-													false ) ;
-			}
+				   + " "
+				   + Hit . ToBase16String ( )
+				   + " "
+				   + PublicKey . ToBase64String ( )
+				   + " "
+				   + string . Join ( " " , RendezvousServers . Select ( s => s . ToString ( ) ) ) ;
 		}
 
 	}

@@ -16,12 +16,12 @@ namespace DreamRecorder . ToolBox . Network . Dns . EDns
 	public class ExpireOption : EDnsOptionBase
 	{
 
+		internal override ushort DataLength => ( ushort )( SoaExpire . HasValue ? 4 : 0 ) ;
+
 		/// <summary>
 		///     The expiration of the SOA record in seconds. Should be null on queries.
 		/// </summary>
 		public int ? SoaExpire { get ; private set ; }
-
-		internal override ushort DataLength => ( ushort )( SoaExpire . HasValue ? 4 : 0 ) ;
 
 		/// <summary>
 		///     Creates a new instance of the ExpireOption class
@@ -34,19 +34,19 @@ namespace DreamRecorder . ToolBox . Network . Dns . EDns
 		/// <param name="soaExpire">The expiration of the SOA record in seconds</param>
 		public ExpireOption ( int soaExpire ) : this ( ) => SoaExpire = soaExpire ;
 
-		internal override void ParseData ( byte [ ] resultData , int startPosition , int length )
-		{
-			if ( length == 4 )
-			{
-				SoaExpire = DnsMessageBase . ParseInt ( resultData , ref startPosition ) ;
-			}
-		}
-
 		internal override void EncodeData ( byte [ ] messageData , ref int currentPosition )
 		{
 			if ( SoaExpire . HasValue )
 			{
 				DnsMessageBase . EncodeInt ( messageData , ref currentPosition , SoaExpire . Value ) ;
+			}
+		}
+
+		internal override void ParseData ( byte [ ] resultData , int startPosition , int length )
+		{
+			if ( length == 4 )
+			{
+				SoaExpire = DnsMessageBase . ParseInt ( resultData , ref startPosition ) ;
 			}
 		}
 

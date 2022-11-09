@@ -16,12 +16,12 @@ namespace DreamRecorder . ToolBox . Network . Dns . EDns
 	public class UpdateLeaseOption : EDnsOptionBase
 	{
 
+		internal override ushort DataLength => 4 ;
+
 		/// <summary>
 		///     Desired lease (request) or granted lease (response)
 		/// </summary>
 		public TimeSpan LeaseTime { get ; private set ; }
-
-		internal override ushort DataLength => 4 ;
 
 		internal UpdateLeaseOption ( ) : base ( EDnsOptionType . UpdateLease ) { }
 
@@ -30,14 +30,14 @@ namespace DreamRecorder . ToolBox . Network . Dns . EDns
 		/// </summary>
 		public UpdateLeaseOption ( TimeSpan leaseTime ) : this ( ) => LeaseTime = leaseTime ;
 
-		internal override void ParseData ( byte [ ] resultData , int startPosition , int length )
-		{
-			LeaseTime = TimeSpan . FromSeconds ( DnsMessageBase . ParseInt ( resultData , ref startPosition ) ) ;
-		}
-
 		internal override void EncodeData ( byte [ ] messageData , ref int currentPosition )
 		{
 			DnsMessageBase . EncodeInt ( messageData , ref currentPosition , ( int )LeaseTime . TotalSeconds ) ;
+		}
+
+		internal override void ParseData ( byte [ ] resultData , int startPosition , int length )
+		{
+			LeaseTime = TimeSpan . FromSeconds ( DnsMessageBase . ParseInt ( resultData , ref startPosition ) ) ;
 		}
 
 	}

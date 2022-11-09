@@ -28,14 +28,14 @@ namespace DreamRecorder . ToolBox . Network . Dns . EDns
 		/// <param name="data">The data of the option</param>
 		public UnknownOption ( EDnsOptionType type , byte [ ] data ) : this ( type ) => Data = data ;
 
-		internal override void ParseData ( byte [ ] resultData , int startPosition , int length )
-		{
-			Data = DnsMessageBase . ParseByteData ( resultData , ref startPosition , length ) ;
-		}
-
 		internal override void EncodeData ( byte [ ] messageData , ref int currentPosition )
 		{
 			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , Data ) ;
+		}
+
+		internal override void ParseData ( byte [ ] resultData , int startPosition , int length )
+		{
+			Data = DnsMessageBase . ParseByteData ( resultData , ref startPosition , length ) ;
 		}
 
 	}

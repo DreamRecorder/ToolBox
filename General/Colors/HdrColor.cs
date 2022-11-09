@@ -74,9 +74,9 @@ namespace DreamRecorder . ToolBox . Colors
 			if ( element . Name == nameof ( HdrColor ) )
 			{
 				throw new ArgumentException (
-											ExceptionMessages . XmlNameMismatch (
-											nameof ( element ) ,
-											typeof ( HdrColor ) ) ) ;
+											 ExceptionMessages . XmlNameMismatch (
+											  nameof ( element ) ,
+											  typeof ( HdrColor ) ) ) ;
 			}
 
 			R = element . ReadNecessaryValue <double> ( nameof ( R ) ) ;
@@ -159,9 +159,9 @@ namespace DreamRecorder . ToolBox . Colors
 		/// <returns>The minimized vector.</returns>
 		public static HdrColor Min ( HdrColor value1 , HdrColor value2 )
 			=> new HdrColor (
-							value1 . R < value2 . R ? value1 . R : value2 . R ,
-							value1 . G < value2 . G ? value1 . G : value2 . G ,
-							value1 . B < value2 . B ? value1 . B : value2 . B ) ;
+							 value1 . R < value2 . R ? value1 . R : value2 . R ,
+							 value1 . G < value2 . G ? value1 . G : value2 . G ,
+							 value1 . B < value2 . B ? value1 . B : value2 . B ) ;
 
 		/// <summary>
 		///     Returns a vector whose elements are the maximum of each of the pairs of elements in the two source vectors.
@@ -171,9 +171,9 @@ namespace DreamRecorder . ToolBox . Colors
 		/// <returns>The maximized vector.</returns>
 		public static HdrColor Max ( HdrColor value1 , HdrColor value2 )
 			=> new HdrColor (
-							value1 . R > value2 . R ? value1 . R : value2 . R ,
-							value1 . G > value2 . G ? value1 . G : value2 . G ,
-							value1 . B > value2 . B ? value1 . B : value2 . B ) ;
+							 value1 . R > value2 . R ? value1 . R : value2 . R ,
+							 value1 . G > value2 . G ? value1 . G : value2 . G ,
+							 value1 . B > value2 . B ? value1 . B : value2 . B ) ;
 
 		/// <summary>
 		///     Adds two vectors together.

@@ -32,20 +32,25 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="timeToLive"> Seconds the record should be cached at most </param>
 		/// <param name="address"> The EUI48 address</param>
 		public Eui64Record ( DomainName name , int timeToLive , byte [ ] address ) : base (
-		name ,
-		RecordType . Eui64 ,
-		RecordClass . INet ,
-		timeToLive )
+		 name ,
+		 RecordType . Eui64 ,
+		 RecordClass . INet ,
+		 timeToLive )
 			=> Address = address ?? new byte[ 8 ] ;
+
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , Address ) ;
+		}
 
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )
 		{
 			Address = DnsMessageBase . ParseByteData ( resultData , ref startPosition , 8 ) ;
-		}
-
-		internal override string RecordDataToString ( )
-		{
-			return string . Join ( "-" , Address . Select ( x => x . ToString ( "x2" ) ) . ToArray ( ) ) ;
 		}
 
 		internal override void ParseRecordData ( DomainName origin , string [ ] stringRepresentation )
@@ -56,9 +61,9 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 			}
 
 			Address = stringRepresentation [ 0 ] .
-					Split ( '-' ) .
-					Select ( x => Convert . ToByte ( x , 16 ) ) .
-					ToArray ( ) ;
+					  Split ( '-' ) .
+					  Select ( x => Convert . ToByte ( x , 16 ) ) .
+					  ToArray ( ) ;
 
 			if ( Address . Length != 8 )
 			{
@@ -66,14 +71,9 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 			}
 		}
 
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
+		internal override string RecordDataToString ( )
 		{
-			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , Address ) ;
+			return string . Join ( "-" , Address . Select ( x => x . ToString ( "x2" ) ) . ToArray ( ) ) ;
 		}
 
 	}

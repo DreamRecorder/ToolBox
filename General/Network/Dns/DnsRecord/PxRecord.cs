@@ -17,11 +17,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 	{
 
 		/// <summary>
-		///     Preference of the record
-		/// </summary>
-		public ushort Preference { get ; private set ; }
-
-		/// <summary>
 		///     Domain name containing the RFC822 domain
 		/// </summary>
 		public DomainName Map822 { get ; private set ; }
@@ -33,6 +28,11 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 
 		protected internal override int MaximumRecordDataLength
 			=> 6 + Map822 . MaximumRecordDataLength + MapX400 . MaximumRecordDataLength ;
+
+		/// <summary>
+		///     Preference of the record
+		/// </summary>
+		public ushort Preference { get ; private set ; }
 
 		internal PxRecord ( ) { }
 
@@ -56,6 +56,30 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 			MapX400    = mapX400 ?? DomainName . Root ;
 		}
 
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , Preference ) ;
+			DnsMessageBase . EncodeDomainName (
+											   messageData ,
+											   offset ,
+											   ref currentPosition ,
+											   Map822 ,
+											   null ,
+											   useCanonical ) ;
+			DnsMessageBase . EncodeDomainName (
+											   messageData ,
+											   offset ,
+											   ref currentPosition ,
+											   MapX400 ,
+											   null ,
+											   useCanonical ) ;
+		}
+
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )
 		{
 			Preference = DnsMessageBase . ParseUShort ( resultData , ref startPosition ) ;
@@ -76,30 +100,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		}
 
 		internal override string RecordDataToString ( ) => Preference + " " + Map822 + " " + MapX400 ;
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , Preference ) ;
-			DnsMessageBase . EncodeDomainName (
-												messageData ,
-												offset ,
-												ref currentPosition ,
-												Map822 ,
-												null ,
-												useCanonical ) ;
-			DnsMessageBase . EncodeDomainName (
-												messageData ,
-												offset ,
-												ref currentPosition ,
-												MapX400 ,
-												null ,
-												useCanonical ) ;
-		}
 
 	}
 

@@ -19,8 +19,8 @@ namespace DreamRecorder . ToolBox . General
 		public static readonly string CommaWithNewline = $",{Environment . NewLine}" ;
 
 		public static Regex InformationalVersionRegex = new Regex (
-																	"Code version \"([^\"]+)\" build by \"([^\"]+)\" at \"([^\"]+)\"" ,
-																	RegexOptions . Compiled ) ;
+																   "Code version \"([^\"]+)\" build by \"([^\"]+)\" at \"([^\"]+)\"" ,
+																   RegexOptions . Compiled ) ;
 
 		public static string GetAssemblyFullName ( this Type type )
 			=> type . GetTypeInfo ( ) . Assembly . GetName ( ) . FullName . Replace ( ", " , CommaWithNewline ) ;
@@ -66,7 +66,7 @@ namespace DreamRecorder . ToolBox . General
 			{
 				builder . AppendLine ( $"Code version {informationalVersion ? . SourceCodeVersion}" ) ;
 				builder . AppendLine (
-									$"Built by {informationalVersion ? . Builder} at\u00A0{informationalVersion ? . BuildTime . ToString ( ) . Replace ( ' ' , '\u00A0' )}" ) ;
+									  $"Built by {informationalVersion ? . Builder} at\u00A0{informationalVersion ? . BuildTime . ToString ( ) . Replace ( ' ' , '\u00A0' )}" ) ;
 			}
 
 			builder . AppendLine ( assembly . GetCustomAttribute <AssemblyCopyrightAttribute> ( ) ? . Copyright ) ;
@@ -82,23 +82,24 @@ namespace DreamRecorder . ToolBox . General
 			GetAssemblyInfo ( typeof ( T ) . Assembly , builder ) ;
 		}
 
-		public static void Prepare ( this Assembly assembly )
+		public static string GetBuilder ( [NotNull] this Assembly assembly )
 		{
-			PrepareAttribute attribute = assembly . GetCustomAttribute <PrepareAttribute> ( ) ;
-
-			if ( attribute != null )
+			if ( assembly == null )
 			{
-				foreach ( TypeInfo type in assembly . DefinedTypes )
-				{
-					foreach ( MethodInfo method in type . DeclaredMethods )
-					{
-						if ( method . GetCustomAttributes ( typeof ( PrepareAttribute ) ) . Any ( ) )
-						{
-							method . Invoke ( null , new object [ ] { } ) ;
-						}
-					}
-				}
+				throw new ArgumentNullException ( nameof ( assembly ) ) ;
 			}
+
+			return assembly . GetInformationalVersion ( ) ? . Builder ;
+		}
+
+		public static DateTimeOffset ? GetBuildTime ( [NotNull] this Assembly assembly )
+		{
+			if ( assembly == null )
+			{
+				throw new ArgumentNullException ( nameof ( assembly ) ) ;
+			}
+
+			return assembly . GetInformationalVersion ( ) ? . BuildTime ;
 		}
 
 		public static string GetDisplayName ( [NotNull] this Assembly assembly )
@@ -111,20 +112,6 @@ namespace DreamRecorder . ToolBox . General
 			AssemblyDisplayNameAttribute attribute = assembly . GetCustomAttribute <AssemblyDisplayNameAttribute> ( ) ;
 
 			return attribute ? . Name ?? assembly . GetName ( ) . Name ;
-		}
-
-		[CanBeNull]
-		public static string GetProgramName ( [NotNull] this Assembly assembly )
-		{
-			if ( assembly == null )
-			{
-				throw new ArgumentNullException ( nameof ( assembly ) ) ;
-			}
-
-			ApplicationDisplayNameAttribute attribute =
-				assembly . GetCustomAttribute <ApplicationDisplayNameAttribute> ( ) ;
-
-			return attribute ? . Name ;
 		}
 
 		public static Guid ? GetGuid ( [NotNull] this Assembly assembly )
@@ -164,11 +151,25 @@ namespace DreamRecorder . ToolBox . General
 				if ( match . Success )
 				{
 					return ( match . Groups [ 1 ] . Value , match . Groups [ 2 ] . Value ,
-								DateTimeOffset . Parse ( match . Groups [ 3 ] . Value ) ) ;
+							   DateTimeOffset . Parse ( match . Groups [ 3 ] . Value ) ) ;
 				}
 			}
 
 			return default ;
+		}
+
+		[CanBeNull]
+		public static string GetProgramName ( [NotNull] this Assembly assembly )
+		{
+			if ( assembly == null )
+			{
+				throw new ArgumentNullException ( nameof ( assembly ) ) ;
+			}
+
+			ApplicationDisplayNameAttribute attribute =
+				assembly . GetCustomAttribute <ApplicationDisplayNameAttribute> ( ) ;
+
+			return attribute ? . Name ;
 		}
 
 		public static string GetSourceCodeVersion ( [NotNull] this Assembly assembly )
@@ -181,24 +182,23 @@ namespace DreamRecorder . ToolBox . General
 			return assembly . GetInformationalVersion ( ) ? . SourceCodeVersion ;
 		}
 
-		public static string GetBuilder ( [NotNull] this Assembly assembly )
+		public static void Prepare ( this Assembly assembly )
 		{
-			if ( assembly == null )
+			PrepareAttribute attribute = assembly . GetCustomAttribute <PrepareAttribute> ( ) ;
+
+			if ( attribute != null )
 			{
-				throw new ArgumentNullException ( nameof ( assembly ) ) ;
+				foreach ( TypeInfo type in assembly . DefinedTypes )
+				{
+					foreach ( MethodInfo method in type . DeclaredMethods )
+					{
+						if ( method . GetCustomAttributes ( typeof ( PrepareAttribute ) ) . Any ( ) )
+						{
+							method . Invoke ( null , new object [ ] { } ) ;
+						}
+					}
+				}
 			}
-
-			return assembly . GetInformationalVersion ( ) ? . Builder ;
-		}
-
-		public static DateTimeOffset ? GetBuildTime ( [NotNull] this Assembly assembly )
-		{
-			if ( assembly == null )
-			{
-				throw new ArgumentNullException ( nameof ( assembly ) ) ;
-			}
-
-			return assembly . GetInformationalVersion ( ) ? . BuildTime ;
 		}
 
 	}

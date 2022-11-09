@@ -20,9 +20,9 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 
 		private int ? _hashCode ;
 
-		internal int StartPosition { get ; set ; }
-
 		internal ushort RecordDataLength { get ; set ; }
+
+		internal int StartPosition { get ; set ; }
 
 		/// <summary>
 		///     Seconds which a record should be cached at most
@@ -100,10 +100,12 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 			return base . Equals ( other ) && RecordDataToString ( ) . Equals ( other . RecordDataToString ( ) ) ;
 		}
 
+		internal T Clone <T> ( ) where T : DnsRecordBase => ( T )MemberwiseClone ( ) ;
+
 		internal static DnsRecordBase Create ( RecordType type , byte [ ] resultData , int recordDataPosition )
 		{
-			if ( ( type                                    == RecordType . Key )
-				&& ( resultData [ recordDataPosition + 3 ] == ( byte )DnsSecAlgorithm . DiffieHellman ) )
+			if ( ( type                                     == RecordType . Key )
+				 && ( resultData [ recordDataPosition + 3 ] == ( byte )DnsSecAlgorithm . DiffieHellman ) )
 			{
 				return new DiffieHellmanKeyRecord ( ) ;
 			}
@@ -235,7 +237,7 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 			}
 		}
 
-		internal T Clone <T> ( ) where T : DnsRecordBase => ( T )MemberwiseClone ( ) ;
+		public override bool Equals ( object obj ) => Equals ( obj as DnsRecordBase ) ;
 
 		[SuppressMessage ( "ReSharper" , "NonReadonlyMemberInGetHashCode" )]
 		public override int GetHashCode ( )
@@ -247,8 +249,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 
 			return _hashCode . Value ;
 		}
-
-		public override bool Equals ( object obj ) => Equals ( obj as DnsRecordBase ) ;
 
 		#region ToString
 
@@ -262,13 +262,13 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		{
 			string recordData = RecordDataToString ( ) ;
 			return Name
-					+ " "
-					+ TimeToLive
-					+ " "
-					+ RecordClass . ToShortString ( )
-					+ " "
-					+ RecordType . ToShortString ( )
-					+ ( string . IsNullOrEmpty ( recordData ) ? "" : " " + recordData ) ;
+				   + " "
+				   + TimeToLive
+				   + " "
+				   + RecordClass . ToShortString ( )
+				   + " "
+				   + RecordType . ToShortString ( )
+				   + ( string . IsNullOrEmpty ( recordData ) ? "" : " " + recordData ) ;
 		}
 
 		#endregion
@@ -343,12 +343,12 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 			bool                             useCanonical )
 		{
 			DnsMessageBase . EncodeDomainName (
-												messageData ,
-												offset ,
-												ref currentPosition ,
-												Name ,
-												domainNames ,
-												useCanonical ) ;
+											   messageData ,
+											   offset ,
+											   ref currentPosition ,
+											   Name ,
+											   domainNames ,
+											   useCanonical ) ;
 			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , ( ushort )RecordType ) ;
 			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , ( ushort )RecordClass ) ;
 			DnsMessageBase . EncodeInt ( messageData , ref currentPosition , TimeToLive ) ;
@@ -374,9 +374,9 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 			int                              recordPosition )
 		{
 			DnsMessageBase . EncodeUShort (
-											messageData ,
-											ref recordDataOffset ,
-											( ushort )( recordPosition - recordDataOffset - 2 ) ) ;
+										   messageData ,
+										   ref recordDataOffset ,
+										   ( ushort )( recordPosition - recordDataOffset - 2 ) ) ;
 			recordDataOffset = recordPosition ;
 		}
 

@@ -22,14 +22,12 @@ namespace DreamRecorder . ToolBox . Network . Dns . DynamicUpdate
 		/// <param name="name"> Name of record that should be checked </param>
 		/// <param name="recordType"> Type of record that should be checked </param>
 		public RecordNotExistsPrerequisite ( DomainName name , RecordType recordType ) : base (
-		name ,
-		recordType ,
-		RecordClass . None ,
-		0 )
+		 name ,
+		 recordType ,
+		 RecordClass . None ,
+		 0 )
 		{
 		}
-
-		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length ) { }
 
 		protected internal override void EncodeRecordData (
 			byte [ ]                         messageData ,
@@ -39,6 +37,8 @@ namespace DreamRecorder . ToolBox . Network . Dns . DynamicUpdate
 			bool                             useCanonical )
 		{
 		}
+
+		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length ) { }
 
 	}
 

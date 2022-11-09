@@ -15,16 +15,6 @@ public class StartStopTests
 {
 
 	[TestMethod]
-	public void SelfStartStopTest ( )
-	{
-		IStartStop stub = new StatefulStartStopSelfStartStopTestStub { Name = nameof ( stub ) , } ;
-		stub . Start ( ) ;
-		stub . Stop ( ) ;
-		stub . Start ( ) ;
-		stub . Stop ( ) ;
-	}
-
-	[TestMethod]
 	public void LoopMemberStartStopTest ( )
 	{
 		StatefulStartStopMemberStartStopTestStub stub1 =
@@ -65,6 +55,43 @@ public class StartStopTests
 		stub . Stop ( ) ;
 	}
 
+	[TestMethod]
+	public void SelfStartStopTest ( )
+	{
+		IStartStop stub = new StatefulStartStopSelfStartStopTestStub { Name = nameof ( stub ) , } ;
+		stub . Start ( ) ;
+		stub . Stop ( ) ;
+		stub . Start ( ) ;
+		stub . Stop ( ) ;
+	}
+
+	public class StatefulStartStopMemberStartStopTestStub : IStatefulStartStop
+	{
+
+		[XmlIgnore]
+		public IStartStop Exception => throw null ;
+
+		[XmlIgnore]
+		public IStartStop Member { get ; set ; }
+
+		public string Name { get ; set ; }
+
+		bool IStatefulStartStop . IsRunningStatus { get ; set ; }
+
+		public void StartOverride ( )
+		{
+			Console . WriteLine ( $"{Name} start." ) ;
+			this . StartMembers ( ) ;
+		}
+
+		public void StopOverride ( )
+		{
+			Console . WriteLine ( $"{Name} stop." ) ;
+			this . StopMembers ( ) ;
+		}
+
+	}
+
 	public class StatefulStartStopSelfStartStopTestStub : IStatefulStartStop
 	{
 
@@ -82,33 +109,6 @@ public class StartStopTests
 		{
 			Console . WriteLine ( $"{Name} stop." ) ;
 			( this as IStartStop ) . Stop ( ) ;
-		}
-
-	}
-
-	public class StatefulStartStopMemberStartStopTestStub : IStatefulStartStop
-	{
-
-		[XmlIgnore]
-		public IStartStop Member { get ; set ; }
-
-		[XmlIgnore]
-		public IStartStop Exception => throw null ;
-
-		public string Name { get ; set ; }
-
-		bool IStatefulStartStop . IsRunningStatus { get ; set ; }
-
-		public void StartOverride ( )
-		{
-			Console . WriteLine ( $"{Name} start." ) ;
-			this . StartMembers ( ) ;
-		}
-
-		public void StopOverride ( )
-		{
-			Console . WriteLine ( $"{Name} stop." ) ;
-			this . StopMembers ( ) ;
 		}
 
 	}

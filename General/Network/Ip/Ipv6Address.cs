@@ -27,13 +27,13 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 		}
 
-		public override AddressType Type => AddressType . Ipv6 ;
-
 		public string ScopeId { get ; set ; }
 
 		public static Regex ShortenRegex { get ; } = new Regex (
 																"(?:(?:^|:)0{1,4})+" ,
 																RegexOptions . IgnoreCase | RegexOptions . Compiled ) ;
+
+		public override AddressType Type => AddressType . Ipv6 ;
 
 		public Ipv6Address ( ) => AddressBytes = new byte[ 16 ] ;
 
@@ -74,7 +74,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 					fixed ( char * name = address )
 					{
 						if ( Ipv6AddressHelper . IsValidStrict ( name , offset , ref end )
-							|| end != address . Length )
+							 || end != address . Length )
 						{
 							ushort [ ] numbers = new ushort[ NumberOfLabels ] ;
 							string     scopeId = null ;
@@ -125,6 +125,26 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 		private const int NumberOfLabels = 8 ;
 
+		public override object Clone ( ) => new Ipv6Address ( AddressBytes ) ;
+
+		public override string GetReverseLookupAddress ( )
+		{
+			StringBuilder res = new StringBuilder ( ) ;
+
+			for ( int i = AddressBytes . Length - 1 ; i >= 0 ; i-- )
+			{
+				string hex = AddressBytes . Span [ i ] . ToString ( "x2" ) ;
+				res . Append ( hex [ 1 ] ) ;
+				res . Append ( "." ) ;
+				res . Append ( hex [ 0 ] ) ;
+				res . Append ( "." ) ;
+			}
+
+			res . Append ( "ip6.arpa" ) ;
+
+			return res . ToString ( ) ;
+		}
+
 		public static explicit operator Ipv6Address ( [NotNull] string address )
 		{
 			if ( address == null )
@@ -134,8 +154,6 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 			return new Ipv6Address ( address ) ;
 		}
-
-		public override object Clone ( ) => new Ipv6Address ( AddressBytes ) ;
 
 		public string ToString ( AddressStyle style )
 		{
@@ -170,18 +188,18 @@ namespace DreamRecorder . ToolBox . Network . Ip
 					if ( longestMatch . Index + longestMatch . Length == builder . Length )
 					{
 						builder . Replace (
-											longestMatch . Value ,
-											"::" ,
-											longestMatch . Index ,
-											longestMatch . Length ) ;
+										   longestMatch . Value ,
+										   "::" ,
+										   longestMatch . Index ,
+										   longestMatch . Length ) ;
 					}
 					else
 					{
 						builder . Replace (
-											longestMatch . Value ,
-											":" ,
-											longestMatch . Index ,
-											longestMatch . Length ) ;
+										   longestMatch . Value ,
+										   ":" ,
+										   longestMatch . Index ,
+										   longestMatch . Length ) ;
 					}
 				}
 			}
@@ -190,24 +208,6 @@ namespace DreamRecorder . ToolBox . Network . Ip
 		}
 
 		public override string ToString ( ) => ToString ( AddressStyle . Compressed ) ;
-
-		public override string GetReverseLookupAddress ( )
-		{
-			StringBuilder res = new StringBuilder ( ) ;
-
-			for ( int i = AddressBytes . Length - 1 ; i >= 0 ; i-- )
-			{
-				string hex = AddressBytes . Span [ i ] . ToString ( "x2" ) ;
-				res . Append ( hex [ 1 ] ) ;
-				res . Append ( "." ) ;
-				res . Append ( hex [ 0 ] ) ;
-				res . Append ( "." ) ;
-			}
-
-			res . Append ( "ip6.arpa" ) ;
-
-			return res . ToString ( ) ;
-		}
 
 	}
 

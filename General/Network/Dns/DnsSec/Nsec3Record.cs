@@ -20,24 +20,22 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 	{
 
 		/// <summary>
-		///     Algorithm of hash
-		/// </summary>
-		public NSec3HashAlgorithm HashAlgorithm { get ; private set ; }
-
-		/// <summary>
 		///     Flags of the record
 		/// </summary>
 		public byte Flags { get ; private set ; }
+
+		/// <summary>
+		///     Algorithm of hash
+		/// </summary>
+		public NSec3HashAlgorithm HashAlgorithm { get ; private set ; }
 
 		/// <summary>
 		///     Number of iterations
 		/// </summary>
 		public ushort Iterations { get ; private set ; }
 
-		/// <summary>
-		///     Binary data of salt
-		/// </summary>
-		public byte [ ] Salt { get ; private set ; }
+		protected internal override int MaximumRecordDataLength
+			=> 6 + Salt . Length + NextHashedOwnerName . Length + NSecRecord . GetMaximumTypeBitmapLength ( Types ) ;
 
 		/// <summary>
 		///     Binary data of hash of next owner
@@ -45,12 +43,14 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 		public byte [ ] NextHashedOwnerName { get ; internal set ; }
 
 		/// <summary>
+		///     Binary data of salt
+		/// </summary>
+		public byte [ ] Salt { get ; private set ; }
+
+		/// <summary>
 		///     Types of next owner
 		/// </summary>
 		public List <RecordType> Types { get ; private set ; }
-
-		protected internal override int MaximumRecordDataLength
-			=> 6 + Salt . Length + NextHashedOwnerName . Length + NSecRecord . GetMaximumTypeBitmapLength ( Types ) ;
 
 		internal NSec3Record ( ) { }
 
@@ -83,8 +83,8 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 			Salt                = salt                ?? new byte [ ] { } ;
 			NextHashedOwnerName = nextHashedOwnerName ?? new byte [ ] { } ;
 
-			if ( ( types           == null )
-				|| ( types . Count == 0 ) )
+			if ( ( types            == null )
+				 || ( types . Count == 0 ) )
 			{
 				Types = new List <RecordType> ( ) ;
 			}
@@ -93,50 +93,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 				Types = types . Distinct ( ) . OrderBy ( x => x ) . ToList ( ) ;
 			}
 		}
-
-		internal override void ParseRecordData ( byte [ ] resultData , int currentPosition , int length )
-		{
-			int endPosition = currentPosition + length ;
-
-			HashAlgorithm = ( NSec3HashAlgorithm )resultData [ currentPosition++ ] ;
-			Flags         = resultData [ currentPosition++ ] ;
-			Iterations    = DnsMessageBase . ParseUShort ( resultData , ref currentPosition ) ;
-			int saltLength = resultData [ currentPosition++ ] ;
-			Salt = DnsMessageBase . ParseByteData ( resultData , ref currentPosition , saltLength ) ;
-			int hashLength = resultData [ currentPosition++ ] ;
-			NextHashedOwnerName = DnsMessageBase . ParseByteData ( resultData , ref currentPosition , hashLength ) ;
-			Types               = NSecRecord . ParseTypeBitMap ( resultData , ref currentPosition , endPosition ) ;
-		}
-
-		internal override void ParseRecordData ( DomainName origin , string [ ] stringRepresentation )
-		{
-			if ( stringRepresentation . Length < 5 )
-			{
-				throw new FormatException ( ) ;
-			}
-
-			HashAlgorithm = ( NSec3HashAlgorithm )byte . Parse ( stringRepresentation [ 0 ] ) ;
-			Flags         = byte . Parse ( stringRepresentation [ 1 ] ) ;
-			Iterations    = ushort . Parse ( stringRepresentation [ 2 ] ) ;
-			Salt = ( stringRepresentation [ 3 ] == "-" )
-						? new byte [ ] { }
-						: stringRepresentation [ 3 ] . FromBase16String ( ) ;
-			NextHashedOwnerName = stringRepresentation [ 4 ] . FromBase32HexString ( ) ;
-			Types = stringRepresentation . Skip ( 5 ) . Select ( RecordTypeHelper . ParseShortString ) . ToList ( ) ;
-		}
-
-		internal override string RecordDataToString ( )
-			=> ( byte )HashAlgorithm
-				+ " "
-				+ Flags
-				+ " "
-				+ Iterations
-				+ " "
-				+ ( ( Salt . Length == 0 ) ? "-" : Salt . ToBase16String ( ) )
-				+ " "
-				+ NextHashedOwnerName . ToBase32HexString ( )
-				+ " "
-				+ string . Join ( " " , Types . Select ( RecordTypeHelper . ToShortString ) ) ;
 
 		protected internal override void EncodeRecordData (
 			byte [ ]                         messageData ,
@@ -172,9 +128,53 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 			// 2. The name being queired is on the left side of the list (Name < name)
 			// If one of these three criteria is met, the record is covering the name being queried.
 			return ( name . CompareTo ( Name ) > 0 && name . CompareTo ( nextDomainName ) < 0 )
-					|| ( Name . CompareTo ( nextDomainName ) > 0
+				   || ( Name . CompareTo ( nextDomainName ) > 0
 						&& ( name . CompareTo ( Name ) > 0 || name . CompareTo ( nextDomainName ) < 0 ) ) ;
 		}
+
+		internal override void ParseRecordData ( byte [ ] resultData , int currentPosition , int length )
+		{
+			int endPosition = currentPosition + length ;
+
+			HashAlgorithm = ( NSec3HashAlgorithm )resultData [ currentPosition++ ] ;
+			Flags         = resultData [ currentPosition++ ] ;
+			Iterations    = DnsMessageBase . ParseUShort ( resultData , ref currentPosition ) ;
+			int saltLength = resultData [ currentPosition++ ] ;
+			Salt = DnsMessageBase . ParseByteData ( resultData , ref currentPosition , saltLength ) ;
+			int hashLength = resultData [ currentPosition++ ] ;
+			NextHashedOwnerName = DnsMessageBase . ParseByteData ( resultData , ref currentPosition , hashLength ) ;
+			Types               = NSecRecord . ParseTypeBitMap ( resultData , ref currentPosition , endPosition ) ;
+		}
+
+		internal override void ParseRecordData ( DomainName origin , string [ ] stringRepresentation )
+		{
+			if ( stringRepresentation . Length < 5 )
+			{
+				throw new FormatException ( ) ;
+			}
+
+			HashAlgorithm = ( NSec3HashAlgorithm )byte . Parse ( stringRepresentation [ 0 ] ) ;
+			Flags         = byte . Parse ( stringRepresentation [ 1 ] ) ;
+			Iterations    = ushort . Parse ( stringRepresentation [ 2 ] ) ;
+			Salt = ( stringRepresentation [ 3 ] == "-" )
+					   ? new byte [ ] { }
+					   : stringRepresentation [ 3 ] . FromBase16String ( ) ;
+			NextHashedOwnerName = stringRepresentation [ 4 ] . FromBase32HexString ( ) ;
+			Types = stringRepresentation . Skip ( 5 ) . Select ( RecordTypeHelper . ParseShortString ) . ToList ( ) ;
+		}
+
+		internal override string RecordDataToString ( )
+			=> ( byte )HashAlgorithm
+			   + " "
+			   + Flags
+			   + " "
+			   + Iterations
+			   + " "
+			   + ( ( Salt . Length == 0 ) ? "-" : Salt . ToBase16String ( ) )
+			   + " "
+			   + NextHashedOwnerName . ToBase32HexString ( )
+			   + " "
+			   + string . Join ( " " , Types . Select ( RecordTypeHelper . ToShortString ) ) ;
 
 	}
 

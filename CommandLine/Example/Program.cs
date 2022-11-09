@@ -17,23 +17,27 @@ namespace DreamRecorder . ToolBox . CommandLine . Example
 	public class Program : ProgramBase <Program , ProgramExitCode , ProgramSetting , ProgramSettingCatalog>
 	{
 
-		public override bool WaitForExit => true ;
-
-		public override string License => "AGPL" ;
+		public override bool AutoSaveSetting => true ;
 
 		public override bool CanExit => true ;
 
+		private ITaskDispatcher Dispatcher { get ; set ; }
+
 		public override bool HandleInput => false ;
 
-		public override bool LoadSetting => true ;
-
-		public override bool AutoSaveSetting => true ;
-
-		private ITaskDispatcher Dispatcher { get ; set ; }
+		public override string License => "AGPL" ;
 
 		public override bool LoadPlugin => true ;
 
-		public static void Main ( string [ ] args ) { new Program ( ) . RunMain ( args ) ; }
+		public override bool LoadSetting => true ;
+
+		public override bool WaitForExit => true ;
+
+		public override void ConfigureLogger ( ILoggingBuilder builder )
+		{
+			builder . AddDebug ( ) ;
+			builder . AddFilter <ConsoleLoggerProvider> ( "Default" , LogLevel . Information ) . AddConsole ( ) ;
+		}
 
 		public void DoSth ( )
 		{
@@ -42,8 +46,9 @@ namespace DreamRecorder . ToolBox . CommandLine . Example
 			ISettingProvider settingProvider = StaticServiceProvider . Provider . GetService <ISettingProvider> ( ) ;
 
 			Console . WriteLine (
-								settingProvider . GetValue <string> (
-																	nameof ( ProgramSetting . DatabaseConnection ) ) ) ;
+								 settingProvider . GetValue <string> (
+																	  nameof ( ProgramSetting .
+																				   DatabaseConnection ) ) ) ;
 
 			ReadOnlyDictionary <string , string> a = Emojis . EmojisList ;
 
@@ -52,6 +57,22 @@ namespace DreamRecorder . ToolBox . CommandLine . Example
 				Console . WriteLine ( $"{pair . Key}	{pair . Value}" ) ;
 			}
 		}
+
+		public static void Main ( string [ ] args ) { new Program ( ) . RunMain ( args ) ; }
+
+		public override void OnExit ( ProgramExitCode code ) { Dispatcher ? . Stop ( ) ; }
+
+		public void PrintTime1 ( )
+		{
+			Console . WriteLine ( $"1:{DateTimeOffset . Now}" ) ;
+			Thread . Sleep ( 1000 ) ;
+		}
+
+		public void PrintTime2 ( ) { Console . WriteLine ( $"2:{DateTimeOffset . Now}" ) ; }
+
+		public override void ShowCopyright ( ) { Console . WriteLine ( "Copyright" ) ; }
+
+		public override void ShowLogo ( ) { Console . WriteLine ( "Logo" ) ; }
 
 
 		public override void Start ( string [ ] args )
@@ -71,32 +92,12 @@ namespace DreamRecorder . ToolBox . CommandLine . Example
 			Dispatcher . Dispatch ( task1 ) ;
 
 			IntervalTask task2 = new IntervalTask (
-													PrintTime2 ,
-													TimeSpan . FromSeconds ( 1 ) ,
-													priority : TaskPriority . Background ) ;
+												   PrintTime2 ,
+												   TimeSpan . FromSeconds ( 1 ) ,
+												   priority : TaskPriority . Background ) ;
 
 			Dispatcher . Dispatch ( task2 ) ;
 		}
-
-		public void PrintTime1 ( )
-		{
-			Console . WriteLine ( $"1:{DateTimeOffset . Now}" ) ;
-			Thread . Sleep ( 1000 ) ;
-		}
-
-		public void PrintTime2 ( ) { Console . WriteLine ( $"2:{DateTimeOffset . Now}" ) ; }
-
-		public override void ConfigureLogger ( ILoggingBuilder builder )
-		{
-			builder . AddDebug ( ) ;
-			builder . AddFilter <ConsoleLoggerProvider> ( "Default" , LogLevel . Information ) . AddConsole ( ) ;
-		}
-
-		public override void ShowLogo ( ) { Console . WriteLine ( "Logo" ) ; }
-
-		public override void ShowCopyright ( ) { Console . WriteLine ( "Copyright" ) ; }
-
-		public override void OnExit ( ProgramExitCode code ) { Dispatcher ? . Stop ( ) ; }
 
 	}
 

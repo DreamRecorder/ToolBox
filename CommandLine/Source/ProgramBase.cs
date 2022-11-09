@@ -32,7 +32,21 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 		private volatile bool _isRunning ;
 
-		public bool IsExiting { get => _isExiting ; set => _isExiting = value ; }
+		public virtual string AcceptLicenseDeclare => "I accept this License." ;
+
+		public virtual string AcceptLicenseGuide
+			=> $"To accept this license, you should write \"{AcceptLicenseDeclare}\" at the end of this file." ;
+
+		public abstract bool AutoSaveSetting { get ; }
+
+		/// <summary>
+		///     If Program do not handle Input
+		/// </summary>
+		public abstract bool CanExit { get ; }
+
+		public virtual bool CheckLicense => true ;
+
+		protected CommandLineApplication CommandLineApplication { get ; set ; }
 
 		public new static T Current
 		{
@@ -40,87 +54,133 @@ namespace DreamRecorder . ToolBox . CommandLine
 			private set => ProgramBase . Current = value ;
 		}
 
-		public virtual bool IsRunning { get => _isRunning ; private set => _isRunning = value ; }
-
-		public bool IsVerbose { get ; set ; }
-
-		public virtual bool WaitForExit { get ; }
-
-		public TSetting Setting { get ; set ; }
-
-		/// <summary>
-		///     If Program do not handle Input
-		/// </summary>
-		public abstract bool CanExit { get ; }
+		private AutoResetEvent ExitEvent { get ; } = new AutoResetEvent ( false ) ;
 
 		/// <summary>
 		/// </summary>
 		public abstract bool HandleInput { get ; }
 
-		public abstract bool LoadSetting { get ; }
+		public bool IsExiting { get => _isExiting ; set => _isExiting = value ; }
 
-		public abstract bool AutoSaveSetting { get ; }
+		public virtual bool IsRunning { get => _isRunning ; private set => _isRunning = value ; }
 
-		public string SettingFilePath => SettingFilePathOverride ?? FileNameConst . SettingFilePath ;
+		public bool IsVerbose { get ; set ; }
 
 		public string LicenseFilePath => LicenseFilePathOverride ?? FileNameConst . LicenseFilePath ;
 
-		public string PluginDirectoryPath => PluginDirectoryPathOverride ?? FileNameConst . PluginDirectoryPath ;
-
-		protected virtual string SettingFilePathOverride => null ;
-
 		protected virtual string LicenseFilePathOverride => null ;
-
-		protected virtual string PluginDirectoryPathOverride => null ;
-
-		public virtual string AcceptLicenseDeclare => "I accept this License." ;
-
-		public virtual string AcceptLicenseGuide
-			=> $"To accept this license, you should write \"{AcceptLicenseDeclare}\" at the end of this file." ;
-
-		public virtual bool CheckLicense => true ;
-
-		private AutoResetEvent ExitEvent { get ; } = new AutoResetEvent ( false ) ;
-
-		protected CommandLineApplication CommandLineApplication { get ; set ; }
 
 		public virtual bool LoadPlugin => false ;
 
+		public abstract bool LoadSetting { get ; }
+
+		public string PluginDirectoryPath => PluginDirectoryPathOverride ?? FileNameConst . PluginDirectoryPath ;
+
+		protected virtual string PluginDirectoryPathOverride => null ;
+
 		public virtual string PluginSearchPattern => "*.dll" ;
 
-		public virtual bool WriteLicenseFile => true ;
+		public TSetting Setting { get ; set ; }
+
+		public string SettingFilePath => SettingFilePathOverride ?? FileNameConst . SettingFilePath ;
+
+		protected virtual string SettingFilePathOverride => null ;
 
 		public virtual bool ThrowOnUnexpectedArg => false ;
 
-		/// <summary>
-		///     This override should create a foreground thread before return or program will exit directly
-		/// </summary>
-		/// <param name="args"></param>
-		public abstract void Start ( string [ ] args ) ;
+		public virtual bool WaitForExit { get ; }
 
-		public virtual void RegisterArgument ( CommandLineApplication application ) { }
+		public virtual bool WriteLicenseFile => true ;
+
+		protected virtual void AfterCheckLicense ( ) { }
+
+		protected virtual void AfterLoadPlugin ( ) { }
+
+		protected virtual void AfterLoadSetting ( ) { }
+
+		public virtual void AfterPrepare ( ) { }
+
+		protected virtual void BeforeCheckLicense ( ) { }
+
+		protected virtual void BeforeLoadPlugin ( ) { }
+
+		protected virtual void BeforeLoadSetting ( ) { }
+
+		public virtual void BeforePrepare ( ) { }
+
+		public virtual bool CheckLicenseFile ( )
+		{
+			if ( ! File . Exists ( LicenseFilePath ) )
+			{
+				Logger . LogInformation ( "License file not found." ) ;
+				GenerateLicenseFile ( ) ;
+
+				return false ;
+			}
+
+			FileStream licenseFile = File . OpenRead ( LicenseFilePath ) ;
+			string     licenseFileContent ;
+
+			using ( StreamReader reader = new StreamReader ( licenseFile ) )
+			{
+				Logger . LogInformation ( "License file found, reading it." ) ;
+				licenseFileContent = reader . ReadToEnd ( ) . Trim ( ) ;
+			}
+
+			if ( licenseFileContent . StartsWith ( License ) )
+			{
+				licenseFileContent = licenseFileContent . TrimStartPattern ( License ) ;
+
+				if ( ! licenseFileContent . EndsWith ( AcceptLicenseDeclare ) )
+				{
+					Logger . LogInformation ( "License check failed." ) ;
+
+					licenseFileContent = licenseFileContent . TrimEndPattern ( AcceptLicenseGuide ) ;
+
+					if ( string . IsNullOrWhiteSpace ( licenseFileContent ) )
+					{
+						Console . WriteLine (
+											 @"You should read the License.txt and accept it before use this program." ) ;
+						return false ;
+					}
+				}
+				else
+				{
+					licenseFileContent = licenseFileContent . TrimEndPattern ( AcceptLicenseDeclare ) ;
+
+					licenseFileContent = licenseFileContent . Trim ( ) ;
+
+					licenseFileContent = licenseFileContent . TrimEndPattern ( AcceptLicenseGuide ) ;
+
+					if ( string . IsNullOrWhiteSpace ( licenseFileContent ) )
+					{
+						Logger . LogInformation ( "License check pass." ) ;
+						return true ;
+					}
+				}
+			}
+
+			Console . WriteLine ( @"License File is now broken." ) ;
+
+			GenerateLicenseFile ( ) ;
+
+			return false ;
+		}
 
 		public abstract void ConfigureLogger ( ILoggingBuilder builder ) ;
 
-		public void SaveSettingFile ( )
+		private void Console_CancelKeyPress ( object sender , ConsoleCancelEventArgs e )
 		{
-			string       config      = Setting ? . Save ( ) ;
-			FileStream   settingFile = File . OpenWrite ( SettingFilePath ) ;
-			StreamWriter writer      = new StreamWriter ( settingFile ) ;
-			writer . Write ( config ) ;
-			writer . Dispose ( ) ;
+			e . Cancel = true ;
+
+			e . Cancel = ConsoleCancelKeyPress ( ) ;
 		}
 
-		public override bool OnStartupExceptions ( Exception e )
+		protected virtual bool ConsoleCancelKeyPress ( )
 		{
-			Logger . LogCritical ( e , "Application failed to start." ) ;
-			return false ;
-		}
+			RequestExit ( ProgramExitCode <TExitCode> . SignalInterrupt ) ;
 
-		public override bool OnUnhandledExceptions ( Exception e )
-		{
-			Logger . LogCritical ( e , "Exception is unhandled." ) ;
-			return false ;
+			return true ;
 		}
 
 		public void Exit ( TExitCode exitCode = null )
@@ -158,43 +218,6 @@ namespace DreamRecorder . ToolBox . CommandLine
 			}
 		}
 
-		public virtual void ShowLogo ( )
-		{
-			StringBuilder logo = new StringBuilder ( ) ;
-			logo . AppendLine (
-								new AsciiArt (
-											typeof ( T ) . Assembly . GetProgramName ( ) ,
-											width : CharacterWidth . Smush ) . ToString ( ) ) ;
-			Console . WriteLine ( logo . ToString ( ) ) ;
-		}
-
-		public abstract void ShowCopyright ( ) ;
-
-		private void ShowExit ( )
-		{
-			Logger . LogInformation ( "Exiting" ) ;
-			Console . WriteLine ( ) ;
-			Console . WriteLine ( @"Exiting..." ) ;
-			Console . WriteLine ( ) ;
-		}
-
-		public virtual void RequestExit ( TExitCode programExitCode = default )
-		{
-			if ( CanExit )
-			{
-				Exit ( programExitCode ) ;
-			}
-			else
-			{
-				if ( ! HandleInput )
-				{
-					Console . WriteLine ( "Cannot exit at this time." ) ;
-				}
-			}
-		}
-
-		public abstract void OnExit ( TExitCode code ) ;
-
 		/// <summary>
 		/// </summary>
 		public virtual void GenerateLicenseFile ( )
@@ -213,76 +236,103 @@ namespace DreamRecorder . ToolBox . CommandLine
 			}
 		}
 
-		public virtual bool CheckLicenseFile ( )
+		protected void LoadPlugins ( )
 		{
-			if ( ! File . Exists ( LicenseFilePath ) )
+			BeforeLoadPlugin ( ) ;
+
+			if ( LoadPlugin )
 			{
-				Logger . LogInformation ( "License file not found." ) ;
-				GenerateLicenseFile ( ) ;
+				Logger . LogInformation ( "Finding plugin directory: {0}" , PluginDirectoryPath ) ;
 
-				return false ;
-			}
-
-			FileStream licenseFile = File . OpenRead ( LicenseFilePath ) ;
-			string     licenseFileContent ;
-
-			using ( StreamReader reader = new StreamReader ( licenseFile ) )
-			{
-				Logger . LogInformation ( "License file found, reading it." ) ;
-				licenseFileContent = reader . ReadToEnd ( ) . Trim ( ) ;
-			}
-
-			if ( licenseFileContent . StartsWith ( License ) )
-			{
-				licenseFileContent = licenseFileContent . TrimStartPattern ( License ) ;
-
-				if ( ! licenseFileContent . EndsWith ( AcceptLicenseDeclare ) )
+				if ( Directory . Exists ( PluginDirectoryPath ) )
 				{
-					Logger . LogInformation ( "License check failed." ) ;
+					Logger . LogInformation ( "Found plugin directory." ) ;
 
-					licenseFileContent = licenseFileContent . TrimEndPattern ( AcceptLicenseGuide ) ;
+					PluginHelper . LoadPlugin ( PluginDirectoryPath , PluginSearchPattern ) ;
+				}
+				else
+				{
+					Logger . LogWarning ( "Cannot found plugin directory." ) ;
 
-					if ( string . IsNullOrWhiteSpace ( licenseFileContent ) )
+					Directory . CreateDirectory ( PluginDirectoryPath ) ;
+
+					Logger . LogInformation ( "Plugin directory created." ) ;
+				}
+			}
+
+			AfterLoadPlugin ( ) ;
+		}
+
+		protected void LoadSettings ( )
+		{
+			BeforeLoadSetting ( ) ;
+
+			if ( LoadSetting )
+			{
+				Logger . LogInformation ( "Loading setting file." ) ;
+
+				if ( File . Exists ( SettingFilePath ) )
+				{
+					Logger . LogInformation ( "Setting file exists, Reading." ) ;
+
+					try
 					{
-						Console . WriteLine (
-											@"You should read the License.txt and accept it before use this program." ) ;
-						return false ;
+						using ( FileStream stream = File . OpenRead ( SettingFilePath ) )
+						{
+							Setting = SettingBase <TSetting , TSettingCategory> . Load ( stream ) ;
+						}
+
+						Logger . LogInformation ( "Setting file loaded." ) ;
+					}
+					catch ( Exception )
+					{
+						Logger . LogInformation ( "Setting file error, will use default value." ) ;
+						Setting = SettingBase <TSetting , TSettingCategory> . GenerateNew ( ) ;
 					}
 				}
 				else
 				{
-					licenseFileContent = licenseFileContent . TrimEndPattern ( AcceptLicenseDeclare ) ;
-
-					licenseFileContent = licenseFileContent . Trim ( ) ;
-
-					licenseFileContent = licenseFileContent . TrimEndPattern ( AcceptLicenseGuide ) ;
-
-					if ( string . IsNullOrWhiteSpace ( licenseFileContent ) )
-					{
-						Logger . LogInformation ( "License check pass." ) ;
-						return true ;
-					}
+					Logger . LogInformation ( "Setting file doesn't exists, generating new." ) ;
+					Setting = SettingBase <TSetting , TSettingCategory> . GenerateNew ( ) ;
+					SaveSettingFile ( ) ;
 				}
+
+				StaticServiceProvider . ServiceCollection . AddSingleton <ISettingProvider> ( Setting ) ;
 			}
 
-			Console . WriteLine ( @"License File is now broken." ) ;
+			AfterLoadSetting ( ) ;
+		}
 
-			GenerateLicenseFile ( ) ;
+		public abstract void OnExit ( TExitCode code ) ;
 
+		public override bool OnStartupExceptions ( Exception e )
+		{
+			Logger . LogCritical ( e , "Application failed to start." ) ;
 			return false ;
 		}
 
-		public void ShowVersion ( )
+		public override bool OnUnhandledExceptions ( Exception e )
 		{
-			StringBuilder builder = new StringBuilder ( ) ;
-			AssemblyExtensions . GetAssemblyInfo <T> ( builder ) ;
-
-			Logger . LogInformation ( builder . ToString ( ) ) ;
+			Logger . LogCritical ( e , "Exception is unhandled." ) ;
+			return false ;
 		}
 
-		public virtual void BeforePrepare ( ) { }
+		public virtual void RegisterArgument ( CommandLineApplication application ) { }
 
-		public virtual void AfterPrepare ( ) { }
+		public virtual void RequestExit ( TExitCode programExitCode = default )
+		{
+			if ( CanExit )
+			{
+				Exit ( programExitCode ) ;
+			}
+			else
+			{
+				if ( ! HandleInput )
+				{
+					Console . WriteLine ( "Cannot exit at this time." ) ;
+				}
+			}
+		}
 
 		/// <summary>
 		///     Call this after Create StaticLoggerFactory
@@ -301,24 +351,24 @@ namespace DreamRecorder . ToolBox . CommandLine
 			CommandLineApplication . HelpOption ( "-?|-h|--help|-help" ) ;
 
 			CommandOption noLogoOption = CommandLineApplication . Option (
-																		@"-noLogo|--noLogo" ,
-																		"Show no logo" ,
-																		CommandOptionType . NoValue ) ;
+																		  @"-noLogo|--noLogo" ,
+																		  "Show no logo" ,
+																		  CommandOptionType . NoValue ) ;
 
 			CommandOption acceptLicenseOption = CommandLineApplication . Option (
-			@"-acceptLicense|--acceptLicense" ,
-			"Accept License" ,
-			CommandOptionType . NoValue ) ;
+			 @"-acceptLicense|--acceptLicense" ,
+			 "Accept License" ,
+			 CommandOptionType . NoValue ) ;
 
 			CommandOption debugOption = CommandLineApplication . Option (
-																		@"-debug|--debug" ,
-																		"Launch in Debug mode" ,
-																		CommandOptionType . NoValue ) ;
+																		 @"-debug|--debug" ,
+																		 "Launch in Debug mode" ,
+																		 CommandOptionType . NoValue ) ;
 
 			CommandOption verboseOption = CommandLineApplication . Option (
-																			"-v|-verbose|--verbose" ,
-																			"Verbose Log" ,
-																			CommandOptionType . NoValue ) ;
+																		   "-v|-verbose|--verbose" ,
+																		   "Verbose Log" ,
+																		   CommandOptionType . NoValue ) ;
 
 
 			RegisterArgument ( CommandLineApplication ) ;
@@ -351,7 +401,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 				#endregion
 
 				Logger . LogInformation (
-										$"Start in {Environment . CurrentDirectory} with argument: {string . Join ( " " , args )}" ) ;
+										 $"Start in {Environment . CurrentDirectory} with argument: {string . Join ( " " , args )}" ) ;
 
 				#region Check Debug
 
@@ -379,7 +429,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 					if ( IsDebug )
 					{
 						Logger . LogInformation (
-												"Debug version, skip license check and you are assumed to accept license." ) ;
+												 "Debug version, skip license check and you are assumed to accept license." ) ;
 					}
 					else
 					{
@@ -419,7 +469,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 						if ( ! File . Exists ( LicenseFilePath ) )
 						{
 							Logger . LogInformation (
-													$"You can found license of this program at \"{LicenseFilePath}\"." ) ;
+													 $"You can found license of this program at \"{LicenseFilePath}\"." ) ;
 							GenerateLicenseFile ( ) ;
 						}
 					}
@@ -515,98 +565,48 @@ namespace DreamRecorder . ToolBox . CommandLine
 			}
 		}
 
-		protected void LoadPlugins ( )
+		public void SaveSettingFile ( )
 		{
-			BeforeLoadPlugin ( ) ;
-
-			if ( LoadPlugin )
-			{
-				Logger . LogInformation ( "Finding plugin directory: {0}" , PluginDirectoryPath ) ;
-
-				if ( Directory . Exists ( PluginDirectoryPath ) )
-				{
-					Logger . LogInformation ( "Found plugin directory." ) ;
-
-					PluginHelper . LoadPlugin ( PluginDirectoryPath , PluginSearchPattern ) ;
-				}
-				else
-				{
-					Logger . LogWarning ( "Cannot found plugin directory." ) ;
-
-					Directory . CreateDirectory ( PluginDirectoryPath ) ;
-
-					Logger . LogInformation ( "Plugin directory created." ) ;
-				}
-			}
-
-			AfterLoadPlugin ( ) ;
+			string       config      = Setting ? . Save ( ) ;
+			FileStream   settingFile = File . OpenWrite ( SettingFilePath ) ;
+			StreamWriter writer      = new StreamWriter ( settingFile ) ;
+			writer . Write ( config ) ;
+			writer . Dispose ( ) ;
 		}
 
-		protected void LoadSettings ( )
+		public abstract void ShowCopyright ( ) ;
+
+		private void ShowExit ( )
 		{
-			BeforeLoadSetting ( ) ;
-
-			if ( LoadSetting )
-			{
-				Logger . LogInformation ( "Loading setting file." ) ;
-
-				if ( File . Exists ( SettingFilePath ) )
-				{
-					Logger . LogInformation ( "Setting file exists, Reading." ) ;
-
-					try
-					{
-						using ( FileStream stream = File . OpenRead ( SettingFilePath ) )
-						{
-							Setting = SettingBase <TSetting , TSettingCategory> . Load ( stream ) ;
-						}
-
-						Logger . LogInformation ( "Setting file loaded." ) ;
-					}
-					catch ( Exception )
-					{
-						Logger . LogInformation ( "Setting file error, will use default value." ) ;
-						Setting = SettingBase <TSetting , TSettingCategory> . GenerateNew ( ) ;
-					}
-				}
-				else
-				{
-					Logger . LogInformation ( "Setting file doesn't exists, generating new." ) ;
-					Setting = SettingBase <TSetting , TSettingCategory> . GenerateNew ( ) ;
-					SaveSettingFile ( ) ;
-				}
-
-				StaticServiceProvider . ServiceCollection . AddSingleton <ISettingProvider> ( Setting ) ;
-			}
-
-			AfterLoadSetting ( ) ;
+			Logger . LogInformation ( "Exiting" ) ;
+			Console . WriteLine ( ) ;
+			Console . WriteLine ( @"Exiting..." ) ;
+			Console . WriteLine ( ) ;
 		}
 
-		protected virtual bool ConsoleCancelKeyPress ( )
+		public virtual void ShowLogo ( )
 		{
-			RequestExit ( ProgramExitCode <TExitCode> . SignalInterrupt ) ;
-
-			return true ;
+			StringBuilder logo = new StringBuilder ( ) ;
+			logo . AppendLine (
+							   new AsciiArt (
+											 typeof ( T ) . Assembly . GetProgramName ( ) ,
+											 width : CharacterWidth . Smush ) . ToString ( ) ) ;
+			Console . WriteLine ( logo . ToString ( ) ) ;
 		}
 
-		private void Console_CancelKeyPress ( object sender , ConsoleCancelEventArgs e )
+		public void ShowVersion ( )
 		{
-			e . Cancel = true ;
+			StringBuilder builder = new StringBuilder ( ) ;
+			AssemblyExtensions . GetAssemblyInfo <T> ( builder ) ;
 
-			e . Cancel = ConsoleCancelKeyPress ( ) ;
+			Logger . LogInformation ( builder . ToString ( ) ) ;
 		}
 
-		protected virtual void BeforeCheckLicense ( ) { }
-
-		protected virtual void AfterLoadPlugin ( ) { }
-
-		protected virtual void BeforeLoadPlugin ( ) { }
-
-		protected virtual void AfterCheckLicense ( ) { }
-
-		protected virtual void BeforeLoadSetting ( ) { }
-
-		protected virtual void AfterLoadSetting ( ) { }
+		/// <summary>
+		///     This override should create a foreground thread before return or program will exit directly
+		/// </summary>
+		/// <param name="args"></param>
+		public abstract void Start ( string [ ] args ) ;
 
 	}
 

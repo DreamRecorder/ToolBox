@@ -16,14 +16,14 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 	{
 
 		/// <summary>
-		///     List of hints to the root servers
-		/// </summary>
-		List <IPAddress> RootServers { get ; }
-
-		/// <summary>
 		///     List of DsRecords of the root zone
 		/// </summary>
 		List <DsRecord> RootKeys { get ; }
+
+		/// <summary>
+		///     List of hints to the root servers
+		/// </summary>
+		List <IPAddress> RootServers { get ; }
 
 	}
 

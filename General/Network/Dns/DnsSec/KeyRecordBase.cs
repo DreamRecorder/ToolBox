@@ -166,23 +166,23 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 		}
 
 		/// <summary>
+		///     Algorithm of the key
+		/// </summary>
+		public DnsSecAlgorithm Algorithm { get ; private set ; }
+
+		/// <summary>
 		///     Flags of the key
 		/// </summary>
 		public ushort Flags { get ; private set ; }
+
+		protected abstract int MaximumPublicKeyLength { get ; }
+
+		protected internal sealed override int MaximumRecordDataLength => 4 + MaximumPublicKeyLength ;
 
 		/// <summary>
 		///     Protocol for which the key is used
 		/// </summary>
 		public ProtocolType Protocol { get ; private set ; }
-
-		/// <summary>
-		///     Algorithm of the key
-		/// </summary>
-		public DnsSecAlgorithm Algorithm { get ; private set ; }
-
-		protected internal sealed override int MaximumRecordDataLength => 4 + MaximumPublicKeyLength ;
-
-		protected abstract int MaximumPublicKeyLength { get ; }
 
 		protected KeyRecordBase ( ) { }
 
@@ -199,20 +199,11 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 			Algorithm = algorithm ;
 		}
 
-		internal sealed override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )
-		{
-			Flags     = DnsMessageBase . ParseUShort ( resultData , ref startPosition ) ;
-			Protocol  = ( ProtocolType )resultData [ startPosition++ ] ;
-			Algorithm = ( DnsSecAlgorithm )resultData [ startPosition++ ] ;
-			ParsePublicKey ( resultData , startPosition , length - 4 ) ;
-		}
-
-		protected abstract void ParsePublicKey ( byte [ ] resultData , int startPosition , int length ) ;
-
-		internal sealed override string RecordDataToString ( )
-			=> Flags + " " + ( byte )Protocol + " " + ( byte )Algorithm + " " + PublicKeyToString ( ) ;
-
-		protected abstract string PublicKeyToString ( ) ;
+		protected abstract void EncodePublicKey (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ) ;
 
 		protected internal sealed override void EncodeRecordData (
 			byte [ ]                         messageData ,
@@ -227,11 +218,20 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 			EncodePublicKey ( messageData , offset , ref currentPosition , domainNames ) ;
 		}
 
-		protected abstract void EncodePublicKey (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ) ;
+		protected abstract void ParsePublicKey ( byte [ ] resultData , int startPosition , int length ) ;
+
+		internal sealed override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )
+		{
+			Flags     = DnsMessageBase . ParseUShort ( resultData , ref startPosition ) ;
+			Protocol  = ( ProtocolType )resultData [ startPosition++ ] ;
+			Algorithm = ( DnsSecAlgorithm )resultData [ startPosition++ ] ;
+			ParsePublicKey ( resultData , startPosition , length - 4 ) ;
+		}
+
+		protected abstract string PublicKeyToString ( ) ;
+
+		internal sealed override string RecordDataToString ( )
+			=> Flags + " " + ( byte )Protocol + " " + ( byte )Algorithm + " " + PublicKeyToString ( ) ;
 
 		#region Flags
 

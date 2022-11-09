@@ -30,14 +30,15 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 		private NameserverCache _nameserverCache = new NameserverCache ( ) ;
 
 		/// <summary>
-		///     Gets or sets a value indicating how much referals for a single query could be performed
+		///     Gets or set a value indicating whether the query labels are used for additional validation as described in
+		///     <see
+		///         cref="!:http://tools.ietf.org/id/draft-vixie-dnsext-dns0x20-00.txt">
+		///         draft-vixie-dnsext-dns0x20-00
+		///     </see>
 		/// </summary>
-		public int MaximumReferalCount { get ; set ; }
 
-		/// <summary>
-		///     Milliseconds after which a query times out.
-		/// </summary>
-		public int QueryTimeout { get ; set ; }
+		// ReSharper disable once InconsistentNaming
+		public bool Is0x20ValidationEnabled { get ; set ; }
 
 		/// <summary>
 		///     Gets or set a value indicating whether the response is validated as described in
@@ -49,15 +50,14 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 		public bool IsResponseValidationEnabled { get ; set ; }
 
 		/// <summary>
-		///     Gets or set a value indicating whether the query labels are used for additional validation as described in
-		///     <see
-		///         cref="!:http://tools.ietf.org/id/draft-vixie-dnsext-dns0x20-00.txt">
-		///         draft-vixie-dnsext-dns0x20-00
-		///     </see>
+		///     Gets or sets a value indicating how much referals for a single query could be performed
 		/// </summary>
+		public int MaximumReferalCount { get ; set ; }
 
-		// ReSharper disable once InconsistentNaming
-		public bool Is0x20ValidationEnabled { get ; set ; }
+		/// <summary>
+		///     Milliseconds after which a query times out.
+		/// </summary>
+		public int QueryTimeout { get ; set ; }
 
 		/// <summary>
 		///     Provides a new instance with custom root server hints
@@ -127,6 +127,194 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 			return ResolveAsyncInternal <T> ( name , recordType , recordClass , new State ( ) , token ) ;
 		}
 
+		private IEnumerable <IPAddress> GetBestNameservers ( DomainName name )
+		{
+			Random rnd = new Random ( ) ;
+
+			while ( name . LabelCount > 0 )
+			{
+				if ( _nameserverCache . TryGetAddresses ( name , out List <IPAddress> cachedAddresses ) )
+				{
+					return cachedAddresses .
+						   OrderBy ( x => x . AddressFamily == AddressFamily . InterNetworkV6 ? 0 : 1 ) .
+						   ThenBy ( x => rnd . Next ( ) ) ;
+				}
+
+				name = name . GetParentName ( ) ;
+			}
+
+			return _resolverHintStore . RootServers .
+										OrderBy ( x => x . AddressFamily == AddressFamily . InterNetworkV6 ? 0 : 1 ) .
+										ThenBy ( x => rnd . Next ( ) ) ;
+		}
+
+		private async Task <List <T>> ResolveAsyncInternal <T> (
+			DomainName        name ,
+			RecordType        recordType ,
+			RecordClass       recordClass ,
+			State             state ,
+			CancellationToken token ) where T : DnsRecordBase
+		{
+			if ( _cache . TryGetRecords ( name , recordType , recordClass , out List <T> cachedResults ) )
+			{
+				return cachedResults ;
+			}
+
+			if ( _cache . TryGetRecords (
+										 name ,
+										 RecordType . CName ,
+										 recordClass ,
+										 out List <CNameRecord> cachedCNames ) )
+			{
+				DomainName cNameCanonicalName = cachedCNames . First ( ) . CanonicalName ;
+				if ( name . Equals ( cNameCanonicalName ) )
+				{
+					throw new Exception ( $"CNAME loop detected for '{name}'." ) ;
+				}
+
+				return await ResolveAsyncInternal <T> (
+													   cNameCanonicalName ,
+													   recordType ,
+													   recordClass ,
+													   state ,
+													   token ) ;
+			}
+
+			DnsMessage msg = await ResolveMessageAsync ( name , recordType , recordClass , state , token ) ;
+
+			// check for cname
+			List <DnsRecordBase> cNameRecords = msg . AnswerRecords .
+													  Where (
+															 x
+																 => ( x . RecordType     == RecordType . CName )
+																	&& ( x . RecordClass == recordClass )
+																	&& x . Name . Equals ( name ) ) .
+													  ToList ( ) ;
+			if ( cNameRecords . Count > 0 )
+			{
+				_cache . Add (
+							  name ,
+							  RecordType . CName ,
+							  recordClass ,
+							  cNameRecords ,
+							  msg . ReturnCode ,
+							  DnsSecValidationResult . Indeterminate ,
+							  cNameRecords . Min ( x => x . TimeToLive ) ) ;
+
+				DomainName canonicalName = ( ( CNameRecord )cNameRecords . First ( ) ) . CanonicalName ;
+
+				List <DnsRecordBase> matchingAdditionalRecords = msg . AnswerRecords .
+																	   Where (
+																			  x
+																				  => ( x . RecordType == recordType )
+																					  && ( x . RecordClass
+																								  == recordClass )
+																					  && x . Name . Equals (
+																					   canonicalName ) ) .
+																	   ToList ( ) ;
+				if ( matchingAdditionalRecords . Count > 0 )
+				{
+					_cache . Add (
+								  canonicalName ,
+								  recordType ,
+								  recordClass ,
+								  matchingAdditionalRecords ,
+								  msg . ReturnCode ,
+								  DnsSecValidationResult . Indeterminate ,
+								  matchingAdditionalRecords . Min ( x => x . TimeToLive ) ) ;
+					return matchingAdditionalRecords . OfType <T> ( ) . ToList ( ) ;
+				}
+
+
+				if ( name . Equals ( canonicalName ) )
+				{
+					throw new Exception ( $"CNAME loop detected for '{name}'." ) ;
+				}
+
+				return await ResolveAsyncInternal <T> ( canonicalName , recordType , recordClass , state , token ) ;
+			}
+
+			// check for "normal" answer
+			List <DnsRecordBase> answerRecords = msg . AnswerRecords .
+													   Where (
+															  x
+																  => ( x . RecordType     == recordType )
+																	 && ( x . RecordClass == recordClass )
+																	 && x . Name . Equals ( name ) ) .
+													   ToList ( ) ;
+			if ( answerRecords . Count > 0 )
+			{
+				_cache . Add (
+							  name ,
+							  recordType ,
+							  recordClass ,
+							  answerRecords ,
+							  msg . ReturnCode ,
+							  DnsSecValidationResult . Indeterminate ,
+							  answerRecords . Min ( x => x . TimeToLive ) ) ;
+				return answerRecords . OfType <T> ( ) . ToList ( ) ;
+			}
+
+			// check for negative answer
+			SoaRecord soaRecord = msg . AuthorityRecords .
+										Where (
+											   x
+												   => ( x . RecordType == RecordType . Soa )
+													  && ( name . Equals ( x . Name )
+														   || name . IsSubDomainOf ( x . Name ) ) ) .
+										OfType <SoaRecord> ( ) .
+										FirstOrDefault ( ) ;
+
+			if ( soaRecord != null )
+			{
+				_cache . Add (
+							  name ,
+							  recordType ,
+							  recordClass ,
+							  new List <DnsRecordBase> ( ) ,
+							  msg . ReturnCode ,
+							  DnsSecValidationResult . Indeterminate ,
+							  soaRecord . NegativeCachingTTL ) ;
+				return new List <T> ( ) ;
+			}
+
+			// authoritative response does not contain answer
+			throw new Exception ( "Could not resolve " + name ) ;
+		}
+
+		private async Task <List <Tuple <IPAddress , int>>> ResolveHostWithTtlAsync (
+			DomainName        name ,
+			State             state ,
+			CancellationToken token )
+		{
+			List <Tuple <IPAddress , int>> result = new List <Tuple <IPAddress , int>> ( ) ;
+
+			List <AaaaRecord> aaaaRecords =
+				await ResolveAsyncInternal <AaaaRecord> (
+														 name ,
+														 RecordType . Aaaa ,
+														 RecordClass . INet ,
+														 state ,
+														 token ) ;
+			result . AddRange (
+							   aaaaRecords . Select (
+													 x
+														 => new Tuple <IPAddress , int> (
+														  x . Address ,
+														  x . TimeToLive ) ) ) ;
+
+			List <ARecord> aRecords =
+				await ResolveAsyncInternal <ARecord> ( name , RecordType . A , RecordClass . INet , state , token ) ;
+			result . AddRange (
+							   aRecords . Select (
+												  x
+													  => new Tuple <IPAddress , int> (
+													   x . Address ,
+													   x . TimeToLive ) ) ) ;
+
+			return result ;
+		}
+
 		private async Task <DnsMessage> ResolveMessageAsync (
 			DomainName        name ,
 			RecordType        recordType ,
@@ -138,24 +326,27 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 			{
 				DnsMessage msg =
 					await new DnsClient (
-										GetBestNameservers (
-															recordType == RecordType . Ds
-																? name . GetParentName ( )
-																: name ) ,
-										QueryTimeout )
-						{
-							IsResponseValidationEnabled = IsResponseValidationEnabled ,
-							Is0x20ValidationEnabled     = Is0x20ValidationEnabled ,
-						} . ResolveAsync (
-										name ,
-										recordType ,
-										recordClass ,
-										new DnsQueryOptions { IsRecursionDesired = false , IsEDnsEnabled = true , } ,
-										token ) ;
+										 GetBestNameservers (
+															 recordType == RecordType . Ds
+																 ? name . GetParentName ( )
+																 : name ) ,
+										 QueryTimeout )
+						  {
+							  IsResponseValidationEnabled = IsResponseValidationEnabled ,
+							  Is0x20ValidationEnabled     = Is0x20ValidationEnabled ,
+						  } . ResolveAsync (
+											name ,
+											recordType ,
+											recordClass ,
+											new DnsQueryOptions
+											{
+												IsRecursionDesired = false , IsEDnsEnabled = true ,
+											} ,
+											token ) ;
 
 				if ( ( msg != null )
-					&& ( ( msg . ReturnCode   == ReturnCode . NoError )
-						|| ( msg . ReturnCode == ReturnCode . NxDomain ) ) )
+					 && ( ( msg . ReturnCode    == ReturnCode . NoError )
+						  || ( msg . ReturnCode == ReturnCode . NxDomain ) ) )
 				{
 					if ( msg . IsAuthoritativeAnswer )
 					{
@@ -163,14 +354,13 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 					}
 
 					List <NsRecord> referalRecords = msg . AuthorityRecords .
-															Where (
-																	x
-																		=> ( x . RecordType == RecordType . Ns )
-																			&& ( name . Equals ( x . Name )
-																						|| name . IsSubDomainOf (
-																						x . Name ) ) ) .
-															OfType <NsRecord> ( ) .
-															ToList ( ) ;
+														   Where (
+																  x
+																	  => ( x . RecordType == RecordType . Ns )
+																		 && ( name . Equals ( x . Name )
+																			  || name . IsSubDomainOf ( x . Name ) ) ) .
+														   OfType <NsRecord> ( ) .
+														   ToList ( ) ;
 
 					if ( referalRecords . Count > 0 )
 					{
@@ -178,7 +368,7 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 						{
 							var newServers = referalRecords . Join (
 																	msg . AdditionalRecords .
-																		OfType <AddressRecordBase> ( ) ,
+																		  OfType <AddressRecordBase> ( ) ,
 																	x => x . NameServer ,
 																	x => x . Name ,
 																	( x , y ) => new
@@ -186,10 +376,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 																			y . Address ,
 																			TimeToLive =
 																				Math . Min (
-																				x . TimeToLive ,
-																				y . TimeToLive ) ,
+																				 x . TimeToLive ,
+																				 y . TimeToLive ) ,
 																		} ) .
-															ToList ( ) ;
+															  ToList ( ) ;
 
 							if ( newServers . Count > 0 )
 							{
@@ -234,194 +424,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 
 			// query limit reached without authoritative answer
 			throw new Exception ( "Could not resolve " + name ) ;
-		}
-
-		private async Task <List <T>> ResolveAsyncInternal <T> (
-			DomainName        name ,
-			RecordType        recordType ,
-			RecordClass       recordClass ,
-			State             state ,
-			CancellationToken token ) where T : DnsRecordBase
-		{
-			if ( _cache . TryGetRecords ( name , recordType , recordClass , out List <T> cachedResults ) )
-			{
-				return cachedResults ;
-			}
-
-			if ( _cache . TryGetRecords (
-										name ,
-										RecordType . CName ,
-										recordClass ,
-										out List <CNameRecord> cachedCNames ) )
-			{
-				DomainName cNameCanonicalName = cachedCNames . First ( ) . CanonicalName ;
-				if ( name . Equals ( cNameCanonicalName ) )
-				{
-					throw new Exception ( $"CNAME loop detected for '{name}'." ) ;
-				}
-
-				return await ResolveAsyncInternal <T> (
-														cNameCanonicalName ,
-														recordType ,
-														recordClass ,
-														state ,
-														token ) ;
-			}
-
-			DnsMessage msg = await ResolveMessageAsync ( name , recordType , recordClass , state , token ) ;
-
-			// check for cname
-			List <DnsRecordBase> cNameRecords = msg . AnswerRecords .
-													Where (
-															x
-																=> ( x . RecordType      == RecordType . CName )
-																	&& ( x . RecordClass == recordClass )
-																	&& x . Name . Equals ( name ) ) .
-													ToList ( ) ;
-			if ( cNameRecords . Count > 0 )
-			{
-				_cache . Add (
-							name ,
-							RecordType . CName ,
-							recordClass ,
-							cNameRecords ,
-							msg . ReturnCode ,
-							DnsSecValidationResult . Indeterminate ,
-							cNameRecords . Min ( x => x . TimeToLive ) ) ;
-
-				DomainName canonicalName = ( ( CNameRecord )cNameRecords . First ( ) ) . CanonicalName ;
-
-				List <DnsRecordBase> matchingAdditionalRecords = msg . AnswerRecords .
-																		Where (
-																				x
-																					=> ( x . RecordType == recordType )
-																						&& ( x . RecordClass
-																									== recordClass )
-																						&& x . Name . Equals (
-																						canonicalName ) ) .
-																		ToList ( ) ;
-				if ( matchingAdditionalRecords . Count > 0 )
-				{
-					_cache . Add (
-								canonicalName ,
-								recordType ,
-								recordClass ,
-								matchingAdditionalRecords ,
-								msg . ReturnCode ,
-								DnsSecValidationResult . Indeterminate ,
-								matchingAdditionalRecords . Min ( x => x . TimeToLive ) ) ;
-					return matchingAdditionalRecords . OfType <T> ( ) . ToList ( ) ;
-				}
-
-
-				if ( name . Equals ( canonicalName ) )
-				{
-					throw new Exception ( $"CNAME loop detected for '{name}'." ) ;
-				}
-
-				return await ResolveAsyncInternal <T> ( canonicalName , recordType , recordClass , state , token ) ;
-			}
-
-			// check for "normal" answer
-			List <DnsRecordBase> answerRecords = msg . AnswerRecords .
-														Where (
-																x
-																	=> ( x . RecordType      == recordType )
-																		&& ( x . RecordClass == recordClass )
-																		&& x . Name . Equals ( name ) ) .
-														ToList ( ) ;
-			if ( answerRecords . Count > 0 )
-			{
-				_cache . Add (
-							name ,
-							recordType ,
-							recordClass ,
-							answerRecords ,
-							msg . ReturnCode ,
-							DnsSecValidationResult . Indeterminate ,
-							answerRecords . Min ( x => x . TimeToLive ) ) ;
-				return answerRecords . OfType <T> ( ) . ToList ( ) ;
-			}
-
-			// check for negative answer
-			SoaRecord soaRecord = msg . AuthorityRecords .
-										Where (
-												x
-													=> ( x . RecordType == RecordType . Soa )
-														&& ( name . Equals ( x . Name )
-															|| name . IsSubDomainOf ( x . Name ) ) ) .
-										OfType <SoaRecord> ( ) .
-										FirstOrDefault ( ) ;
-
-			if ( soaRecord != null )
-			{
-				_cache . Add (
-							name ,
-							recordType ,
-							recordClass ,
-							new List <DnsRecordBase> ( ) ,
-							msg . ReturnCode ,
-							DnsSecValidationResult . Indeterminate ,
-							soaRecord . NegativeCachingTTL ) ;
-				return new List <T> ( ) ;
-			}
-
-			// authoritative response does not contain answer
-			throw new Exception ( "Could not resolve " + name ) ;
-		}
-
-		private async Task <List <Tuple <IPAddress , int>>> ResolveHostWithTtlAsync (
-			DomainName        name ,
-			State             state ,
-			CancellationToken token )
-		{
-			List <Tuple <IPAddress , int>> result = new List <Tuple <IPAddress , int>> ( ) ;
-
-			List <AaaaRecord> aaaaRecords =
-				await ResolveAsyncInternal <AaaaRecord> (
-														name ,
-														RecordType . Aaaa ,
-														RecordClass . INet ,
-														state ,
-														token ) ;
-			result . AddRange (
-								aaaaRecords . Select (
-													x
-														=> new Tuple <IPAddress , int> (
-														x . Address ,
-														x . TimeToLive ) ) ) ;
-
-			List <ARecord> aRecords =
-				await ResolveAsyncInternal <ARecord> ( name , RecordType . A , RecordClass . INet , state , token ) ;
-			result . AddRange (
-								aRecords . Select (
-													x
-														=> new Tuple <IPAddress , int> (
-														x . Address ,
-														x . TimeToLive ) ) ) ;
-
-			return result ;
-		}
-
-		private IEnumerable <IPAddress> GetBestNameservers ( DomainName name )
-		{
-			Random rnd = new Random ( ) ;
-
-			while ( name . LabelCount > 0 )
-			{
-				if ( _nameserverCache . TryGetAddresses ( name , out List <IPAddress> cachedAddresses ) )
-				{
-					return cachedAddresses .
-							OrderBy ( x => x . AddressFamily == AddressFamily . InterNetworkV6 ? 0 : 1 ) .
-							ThenBy ( x => rnd . Next ( ) ) ;
-				}
-
-				name = name . GetParentName ( ) ;
-			}
-
-			return _resolverHintStore . RootServers .
-										OrderBy ( x => x . AddressFamily == AddressFamily . InterNetworkV6 ? 0 : 1 ) .
-										ThenBy ( x => rnd . Next ( ) ) ;
 		}
 
 		private class State

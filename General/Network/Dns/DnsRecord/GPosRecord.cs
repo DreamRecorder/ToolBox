@@ -18,9 +18,9 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 	{
 
 		/// <summary>
-		///     Longitude of the geographical position
+		///     Altitude of the geographical position
 		/// </summary>
-		public double Longitude { get ; private set ; }
+		public double Altitude { get ; private set ; }
 
 		/// <summary>
 		///     Latitude of the geographical position
@@ -28,15 +28,15 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		public double Latitude { get ; private set ; }
 
 		/// <summary>
-		///     Altitude of the geographical position
+		///     Longitude of the geographical position
 		/// </summary>
-		public double Altitude { get ; private set ; }
+		public double Longitude { get ; private set ; }
 
 		protected internal override int MaximumRecordDataLength
 			=> 3
-				+ Longitude . ToString ( CultureInfo . InvariantCulture ) . Length
-				+ Latitude . ToString ( CultureInfo . InvariantCulture ) . Length
-				+ Altitude . ToString ( CultureInfo . InvariantCulture ) . Length ;
+			   + Longitude . ToString ( CultureInfo . InvariantCulture ) . Length
+			   + Latitude . ToString ( CultureInfo . InvariantCulture ) . Length
+			   + Altitude . ToString ( CultureInfo . InvariantCulture ) . Length ;
 
 		internal GPosRecord ( ) { }
 
@@ -56,17 +56,38 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 			Altitude  = altitude ;
 		}
 
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			DnsMessageBase . EncodeTextBlock (
+											  messageData ,
+											  ref currentPosition ,
+											  Longitude . ToString ( CultureInfo . InvariantCulture ) ) ;
+			DnsMessageBase . EncodeTextBlock (
+											  messageData ,
+											  ref currentPosition ,
+											  Latitude . ToString ( CultureInfo . InvariantCulture ) ) ;
+			DnsMessageBase . EncodeTextBlock (
+											  messageData ,
+											  ref currentPosition ,
+											  Altitude . ToString ( CultureInfo . InvariantCulture ) ) ;
+		}
+
 		internal override void ParseRecordData ( byte [ ] resultData , int currentPosition , int length )
 		{
 			Longitude = double . Parse (
 										DnsMessageBase . ParseText ( resultData , ref currentPosition ) ,
 										CultureInfo . InvariantCulture ) ;
 			Latitude = double . Parse (
-										DnsMessageBase . ParseText ( resultData , ref currentPosition ) ,
-										CultureInfo . InvariantCulture ) ;
+									   DnsMessageBase . ParseText ( resultData , ref currentPosition ) ,
+									   CultureInfo . InvariantCulture ) ;
 			Altitude = double . Parse (
-										DnsMessageBase . ParseText ( resultData , ref currentPosition ) ,
-										CultureInfo . InvariantCulture ) ;
+									   DnsMessageBase . ParseText ( resultData , ref currentPosition ) ,
+									   CultureInfo . InvariantCulture ) ;
 		}
 
 		internal override void ParseRecordData ( DomainName origin , string [ ] stringRepresentation )
@@ -83,31 +104,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 
 		internal override string RecordDataToString ( )
 			=> Longitude . ToString ( CultureInfo . InvariantCulture )
-				+ " "
-				+ Latitude . ToString ( CultureInfo . InvariantCulture )
-				+ " "
-				+ Altitude . ToString ( CultureInfo . InvariantCulture ) ;
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			DnsMessageBase . EncodeTextBlock (
-											messageData ,
-											ref currentPosition ,
-											Longitude . ToString ( CultureInfo . InvariantCulture ) ) ;
-			DnsMessageBase . EncodeTextBlock (
-											messageData ,
-											ref currentPosition ,
-											Latitude . ToString ( CultureInfo . InvariantCulture ) ) ;
-			DnsMessageBase . EncodeTextBlock (
-											messageData ,
-											ref currentPosition ,
-											Altitude . ToString ( CultureInfo . InvariantCulture ) ) ;
-		}
+			   + " "
+			   + Latitude . ToString ( CultureInfo . InvariantCulture )
+			   + " "
+			   + Altitude . ToString ( CultureInfo . InvariantCulture ) ;
 
 	}
 

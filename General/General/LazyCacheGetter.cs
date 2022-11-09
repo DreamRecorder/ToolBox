@@ -20,10 +20,10 @@ public static class LazyCacheGetter
 	{
 		TProp result = default ;
 		if ( target is not null
-			&& propertyName is not null )
+			 && propertyName is not null )
 		{
 			if ( ! Instances . TryGetValue ( target , out IDictionary <string , object> cache )
-				|| cache is null )
+				 || cache is null )
 			{
 				cache = new ConcurrentDictionary <string , object> ( ) ;
 				Instances . Add ( target , cache ) ;
@@ -49,10 +49,10 @@ public static class LazyCacheGetter
 	{
 		TProp result = default ;
 		if ( target is not null
-			&& propertyName is not null )
+			 && propertyName is not null )
 		{
 			if ( ! Instances . TryGetValue ( target , out IDictionary <string , object> cache )
-				|| cache is null )
+				 || cache is null )
 			{
 				cache = new ConcurrentDictionary <string , object> ( ) ;
 				Instances . Add ( target , cache ) ;

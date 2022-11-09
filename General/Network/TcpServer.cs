@@ -18,16 +18,16 @@ namespace DreamRecorder . ToolBox . Network ;
 public class TcpServer : IStatefulStartStop
 {
 
-	[CanBeNull]
-	public Logger <TcpServer> Logger { get ; set ; }
-
-	public virtual IPAddress LocalAddress { get ; set ; } = IPAddress . IPv6Any ;
+	public TcpListener Listener { get ; private set ; }
 
 	public int ListeningPort { get ; set ; }
 
-	public TcpListener Listener { get ; private set ; }
-
 	public Thread ListenThread { get ; private set ; }
+
+	public virtual IPAddress LocalAddress { get ; set ; } = IPAddress . IPv6Any ;
+
+	[CanBeNull]
+	public Logger <TcpServer> Logger { get ; set ; }
 
 	protected TcpServer ( ) { }
 
@@ -53,8 +53,6 @@ public class TcpServer : IStatefulStartStop
 		ListenThread . Join ( ) ;
 		ListenThread = new Thread ( ListenTcp ) ;
 	}
-
-	public event EventHandler <TcpClientAcceptedEventArgs> TcpClientAccepted ;
 
 	public void ListenTcp ( )
 	{
@@ -90,6 +88,8 @@ public class TcpServer : IStatefulStartStop
 
 		Listener . Stop ( ) ;
 	}
+
+	public event EventHandler <TcpClientAcceptedEventArgs> TcpClientAccepted ;
 
 	public class TcpClientAcceptedEventArgs : EventArgs
 	{

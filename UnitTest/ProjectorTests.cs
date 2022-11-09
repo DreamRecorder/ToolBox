@@ -16,9 +16,6 @@ namespace DreamRecorder . ToolBox . UnitTest
 	{
 
 		[TestMethod]
-		public void ProjectTest ( ) { }
-
-		[TestMethod]
 		public void IsometricProjectorTest ( )
 		{
 			IsometricProjector projector = new IsometricProjector ( ) ;
@@ -33,6 +30,9 @@ namespace DreamRecorder . ToolBox . UnitTest
 
 			projector . Project ( Vector3 . Zero ) ;
 		}
+
+		[TestMethod]
+		public void ProjectTest ( ) { }
 
 	}
 

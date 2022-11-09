@@ -65,9 +65,9 @@ namespace DreamRecorder . ToolBox . Network . Dns
 		/// <param name="udpListenerCount"> The count of threads listings on udp, 0 to deactivate udp </param>
 		/// <param name="tcpListenerCount"> The count of threads listings on tcp, 0 to deactivate tcp </param>
 		public DnsServer ( int udpListenerCount , int tcpListenerCount ) : this (
-		IPAddress . Any ,
-		udpListenerCount ,
-		tcpListenerCount )
+		 IPAddress . Any ,
+		 udpListenerCount ,
+		 tcpListenerCount )
 		{
 		}
 
@@ -78,9 +78,9 @@ namespace DreamRecorder . ToolBox . Network . Dns
 		/// <param name="udpListenerCount"> The count of threads listings on udp, 0 to deactivate udp </param>
 		/// <param name="tcpListenerCount"> The count of threads listings on tcp, 0 to deactivate tcp </param>
 		public DnsServer ( IPAddress bindAddress , int udpListenerCount , int tcpListenerCount ) : this (
-		new IPEndPoint ( bindAddress , _DNS_PORT ) ,
-		udpListenerCount ,
-		tcpListenerCount )
+		 new IPEndPoint ( bindAddress , _DNS_PORT ) ,
+		 udpListenerCount ,
+		 tcpListenerCount )
 		{
 		}
 
@@ -105,119 +105,193 @@ namespace DreamRecorder . ToolBox . Network . Dns
 		void IDisposable . Dispose ( ) { Stop ( ) ; }
 
 		/// <summary>
-		///     Starts the server
+		///     This event is fired whenever a client connects to the server
 		/// </summary>
-		public void Start ( )
-		{
-			if ( _udpListenerCount > 0 )
-			{
-				lock ( _listenerLock )
-				{
-					_availableUdpListener = _udpListenerCount ;
-				}
-
-				_udpListener = new UdpClient ( _bindEndPoint ) ;
-				StartUdpListenerTask ( ) ;
-			}
-
-			if ( _tcpListenerCount > 0 )
-			{
-				lock ( _listenerLock )
-				{
-					_availableTcpListener = _tcpListenerCount ;
-				}
-
-				_tcpListener = new TcpListener ( _bindEndPoint ) ;
-				_tcpListener . Start ( ) ;
-				StartTcpListenerTask ( ) ;
-			}
-		}
+		public event AsyncEventHandler <ClientConnectedEventArgs> ClientConnected ;
 
 		/// <summary>
-		///     Stops the server
+		///     This event is fired on exceptions of the listeners. You can use it for custom logging.
 		/// </summary>
-		public void Stop ( )
-		{
-			if ( _udpListenerCount > 0 )
-			{
-				_udpListener . Close ( ) ;
-			}
+		public event AsyncEventHandler <ExceptionEventArgs> ExceptionThrown ;
 
-			if ( _tcpListenerCount > 0 )
-			{
-				_tcpListener . Stop ( ) ;
-			}
-		}
-
-		private async Task <DnsMessageBase> ProcessMessageAsync (
-			DnsMessageBase query ,
-			ProtocolType   protocolType ,
-			IPEndPoint     remoteEndpoint )
+		private async void HandleTcpListenerAsync ( )
 		{
-			if ( query . TSigOptions != null )
+			TcpClient client = null ;
+
+			try
 			{
-				switch ( query . TSigOptions . ValidationResult )
+				try
 				{
-					case ReturnCode . BadKey :
-					case ReturnCode . BadSig :
-						query . IsQuery               = false ;
-						query . ReturnCode            = ReturnCode . NotAuthoritative ;
-						query . TSigOptions . Error   = query . TSigOptions . ValidationResult ;
-						query . TSigOptions . KeyData = null ;
+					client = await _tcpListener . AcceptTcpClientAsync ( ) ;
 
-#pragma warning disable 4014
-						InvalidSignedMessageReceived . RaiseAsync (
-																	this ,
-																	new InvalidSignedMessageEventArgs (
-																	query ,
-																	protocolType ,
-																	remoteEndpoint ) ) ;
-#pragma warning restore 4014
+					ClientConnectedEventArgs clientConnectedEventArgs =
+						new ClientConnectedEventArgs (
+													  ProtocolType . Tcp ,
+													  ( IPEndPoint )client . Client . RemoteEndPoint ) ;
+					await ClientConnected . RaiseAsync ( this , clientConnectedEventArgs ) ;
 
-						return query ;
-
-					case ReturnCode . BadTime :
-						query . IsQuery                 = false ;
-						query . ReturnCode              = ReturnCode . NotAuthoritative ;
-						query . TSigOptions . Error     = query . TSigOptions . ValidationResult ;
-						query . TSigOptions . OtherData = new byte[ 6 ] ;
-						int tmp = 0 ;
-						TSigRecord . EncodeDateTime ( query . TSigOptions . OtherData , ref tmp , DateTime . Now ) ;
-
-#pragma warning disable 4014
-						InvalidSignedMessageReceived . RaiseAsync (
-																	this ,
-																	new InvalidSignedMessageEventArgs (
-																	query ,
-																	protocolType ,
-																	remoteEndpoint ) ) ;
-#pragma warning restore 4014
-
-						return query ;
+					if ( clientConnectedEventArgs . RefuseConnect )
+					{
+						return ;
+					}
 				}
-			}
-
-			QueryReceivedEventArgs eventArgs = new QueryReceivedEventArgs ( query , protocolType , remoteEndpoint ) ;
-			await QueryReceived . RaiseAsync ( this , eventArgs ) ;
-			return eventArgs . Response ;
-		}
-
-		private void StartUdpListenerTask ( )
-		{
-			lock ( _listenerLock )
-			{
-				if ( ! _udpListener . Client . IsBound ) // server is stopped
+				finally
 				{
-					return ;
+					lock ( _listenerLock )
+					{
+						_hasActiveTcpListener = false ;
+					}
 				}
 
-				if ( ( _availableUdpListener > 0 )
-					&& ! _hasActiveUdpListener )
+				StartTcpListenerTask ( ) ;
+
+				using ( NetworkStream stream = client . GetStream ( ) )
 				{
-					_availableUdpListener-- ;
-					_hasActiveUdpListener = true ;
-					HandleUdpListenerAsync ( ) ;
+					while ( true )
+					{
+						byte [ ] buffer = await ReadIntoBufferAsync ( client , stream , 2 ) ;
+						if ( buffer == null ) // client disconnected while reading or timeout
+						{
+							break ;
+						}
+
+						int offset = 0 ;
+						int length = DnsMessageBase . ParseUShort ( buffer , ref offset ) ;
+
+						buffer = await ReadIntoBufferAsync ( client , stream , length ) ;
+						if ( buffer == null ) // client disconnected while reading or timeout
+						{
+							throw new Exception ( "Client disconnected or timed out while sending data" ) ;
+						}
+
+						DnsMessageBase query ;
+						byte [ ]       tsigMac ;
+						try
+						{
+							query   = DnsMessageBase . CreateByFlag ( buffer , TsigKeySelector , null ) ;
+							tsigMac = query . TSigOptions ? . Mac ;
+						}
+						catch ( Exception e )
+						{
+							throw new Exception ( "Error parsing dns query" , e ) ;
+						}
+
+						DnsMessageBase response ;
+						try
+						{
+							response = await ProcessMessageAsync (
+																  query ,
+																  ProtocolType . Tcp ,
+																  ( IPEndPoint )client . Client . RemoteEndPoint ) ;
+						}
+						catch ( Exception ex )
+						{
+							OnExceptionThrownAsync ( ex ) ;
+
+							response           = DnsMessageBase . CreateByFlag ( buffer , TsigKeySelector , null ) ;
+							response . IsQuery = false ;
+							response . AdditionalRecords . Clear ( ) ;
+							response . AuthorityRecords . Clear ( ) ;
+							response . ReturnCode = ReturnCode . ServerFailure ;
+						}
+
+						length = response . Encode ( true , tsigMac , false , out buffer , out byte [ ] newTsigMac ) ;
+
+						if ( length <= 65535 )
+						{
+							await stream . WriteAsync ( buffer , 0 , length ) ;
+						}
+						else
+						{
+							if ( ( response . Questions . Count               == 0 )
+								 || ( response . Questions [ 0 ] . RecordType != RecordType . Axfr ) )
+							{
+								OnExceptionThrownAsync (
+														new ArgumentException (
+																			   "The length of the serialized response is greater than 65,535 bytes" ) ) ;
+
+								response           = DnsMessageBase . CreateByFlag ( buffer , TsigKeySelector , null ) ;
+								response . IsQuery = false ;
+								response . AdditionalRecords . Clear ( ) ;
+								response . AuthorityRecords . Clear ( ) ;
+								response . ReturnCode = ReturnCode . ServerFailure ;
+
+								length = response . Encode ( true , tsigMac , false , out buffer , out newTsigMac ) ;
+								await stream . WriteAsync ( buffer , 0 , length ) ;
+							}
+							else
+							{
+								bool isSubSequentResponse = false ;
+
+								while ( true )
+								{
+									List <DnsRecordBase> nextPacketRecords = new List <DnsRecordBase> ( ) ;
+
+									while ( length > 65535 )
+									{
+										int lastIndex   = Math . Min ( 500 , response . AnswerRecords . Count / 2 ) ;
+										int removeCount = response . AnswerRecords . Count - lastIndex ;
+
+										nextPacketRecords . InsertRange (
+																		 0 ,
+																		 response . AnswerRecords . GetRange (
+																		  lastIndex ,
+																		  removeCount ) ) ;
+										response . AnswerRecords . RemoveRange ( lastIndex , removeCount ) ;
+
+										length = response . Encode (
+																	true ,
+																	tsigMac ,
+																	isSubSequentResponse ,
+																	out buffer ,
+																	out newTsigMac ) ;
+									}
+
+									await stream . WriteAsync ( buffer , 0 , length ) ;
+
+									if ( nextPacketRecords . Count == 0 )
+									{
+										break ;
+									}
+
+									isSubSequentResponse = true ;
+									tsigMac = newTsigMac ;
+									response . AnswerRecords = nextPacketRecords ;
+									length = response . Encode ( true , tsigMac , true , out buffer , out newTsigMac ) ;
+								}
+							}
+						}
+
+						// Since support for multiple tsig signed messages is not finished, just close connection after response to first signed query
+						if ( newTsigMac != null )
+						{
+							break ;
+						}
+					}
 				}
+			}
+			catch ( Exception ex )
+			{
+				OnExceptionThrownAsync ( ex ) ;
+			}
+			finally
+			{
+				try
+				{
+					// ReSharper disable once ConstantConditionalAccessQualifier
+					client ? . Close ( ) ;
+				}
+				catch
+				{
+					// ignored
+				}
+
+				lock ( _listenerLock )
+				{
+					_availableTcpListener++ ;
+				}
+
+				StartTcpListenerTask ( ) ;
 			}
 		}
 
@@ -271,9 +345,9 @@ namespace DreamRecorder . ToolBox . Network . Dns
 				try
 				{
 					response = await ProcessMessageAsync (
-														query ,
-														ProtocolType . Udp ,
-														receiveResult . RemoteEndPoint ) ;
+														  query ,
+														  ProtocolType . Udp ,
+														  receiveResult . RemoteEndPoint ) ;
 				}
 				catch ( Exception ex )
 				{
@@ -296,7 +370,7 @@ namespace DreamRecorder . ToolBox . Network . Dns
 				{
 					int maxLength = 512 ;
 					if ( query . IsEDnsEnabled
-						&& message . IsEDnsEnabled )
+						 && message . IsEDnsEnabled )
 					{
 						maxLength = Math . Max ( 512 , ( int )message . EDnsOptions . UdpPayloadSize ) ;
 					}
@@ -304,8 +378,8 @@ namespace DreamRecorder . ToolBox . Network . Dns
 					while ( length > maxLength )
 					{
 						// First step: remove data from additional records except the opt record
-						if ( ( message . IsEDnsEnabled     && ( message . AdditionalRecords . Count > 1 ) )
-							|| ( ! message . IsEDnsEnabled && ( message . AdditionalRecords . Count > 0 ) ) )
+						if ( ( message . IsEDnsEnabled      && ( message . AdditionalRecords . Count > 1 ) )
+							 || ( ! message . IsEDnsEnabled && ( message . AdditionalRecords . Count > 0 ) ) )
 						{
 							for ( int i = message . AdditionalRecords . Count - 1 ; i >= 0 ; i-- )
 							{
@@ -397,205 +471,79 @@ namespace DreamRecorder . ToolBox . Network . Dns
 			}
 		}
 
-		private void StartTcpListenerTask ( )
-		{
-			lock ( _listenerLock )
-			{
-				if ( ! _tcpListener . Server . IsBound ) // server is stopped
-				{
-					return ;
-				}
+		/// <summary>
+		///     This event is fired whenever a message is received, that is not correct signed
+		/// </summary>
+		public event AsyncEventHandler <InvalidSignedMessageEventArgs> InvalidSignedMessageReceived ;
 
-				if ( ( _availableTcpListener > 0 )
-					&& ! _hasActiveTcpListener )
-				{
-					_availableTcpListener-- ;
-					_hasActiveTcpListener = true ;
-					HandleTcpListenerAsync ( ) ;
-				}
+		private void OnExceptionThrownAsync ( Exception e )
+		{
+			if ( e is ObjectDisposedException )
+			{
+				return ;
 			}
+
+			Trace . TraceError ( "Exception in DnsServer: " + e ) ;
+			ExceptionThrown . RaiseAsync ( this , new ExceptionEventArgs ( e ) ) ;
 		}
 
-		private async void HandleTcpListenerAsync ( )
+		private async Task <DnsMessageBase> ProcessMessageAsync (
+			DnsMessageBase query ,
+			ProtocolType   protocolType ,
+			IPEndPoint     remoteEndpoint )
 		{
-			TcpClient client = null ;
-
-			try
+			if ( query . TSigOptions != null )
 			{
-				try
+				switch ( query . TSigOptions . ValidationResult )
 				{
-					client = await _tcpListener . AcceptTcpClientAsync ( ) ;
+					case ReturnCode . BadKey :
+					case ReturnCode . BadSig :
+						query . IsQuery               = false ;
+						query . ReturnCode            = ReturnCode . NotAuthoritative ;
+						query . TSigOptions . Error   = query . TSigOptions . ValidationResult ;
+						query . TSigOptions . KeyData = null ;
 
-					ClientConnectedEventArgs clientConnectedEventArgs =
-						new ClientConnectedEventArgs (
-													ProtocolType . Tcp ,
-													( IPEndPoint )client . Client . RemoteEndPoint ) ;
-					await ClientConnected . RaiseAsync ( this , clientConnectedEventArgs ) ;
+#pragma warning disable 4014
+						InvalidSignedMessageReceived . RaiseAsync (
+																   this ,
+																   new InvalidSignedMessageEventArgs (
+																	query ,
+																	protocolType ,
+																	remoteEndpoint ) ) ;
+#pragma warning restore 4014
 
-					if ( clientConnectedEventArgs . RefuseConnect )
-					{
-						return ;
-					}
-				}
-				finally
-				{
-					lock ( _listenerLock )
-					{
-						_hasActiveTcpListener = false ;
-					}
-				}
+						return query ;
 
-				StartTcpListenerTask ( ) ;
+					case ReturnCode . BadTime :
+						query . IsQuery                 = false ;
+						query . ReturnCode              = ReturnCode . NotAuthoritative ;
+						query . TSigOptions . Error     = query . TSigOptions . ValidationResult ;
+						query . TSigOptions . OtherData = new byte[ 6 ] ;
+						int tmp = 0 ;
+						TSigRecord . EncodeDateTime ( query . TSigOptions . OtherData , ref tmp , DateTime . Now ) ;
 
-				using ( NetworkStream stream = client . GetStream ( ) )
-				{
-					while ( true )
-					{
-						byte [ ] buffer = await ReadIntoBufferAsync ( client , stream , 2 ) ;
-						if ( buffer == null ) // client disconnected while reading or timeout
-						{
-							break ;
-						}
+#pragma warning disable 4014
+						InvalidSignedMessageReceived . RaiseAsync (
+																   this ,
+																   new InvalidSignedMessageEventArgs (
+																	query ,
+																	protocolType ,
+																	remoteEndpoint ) ) ;
+#pragma warning restore 4014
 
-						int offset = 0 ;
-						int length = DnsMessageBase . ParseUShort ( buffer , ref offset ) ;
-
-						buffer = await ReadIntoBufferAsync ( client , stream , length ) ;
-						if ( buffer == null ) // client disconnected while reading or timeout
-						{
-							throw new Exception ( "Client disconnected or timed out while sending data" ) ;
-						}
-
-						DnsMessageBase query ;
-						byte [ ]       tsigMac ;
-						try
-						{
-							query   = DnsMessageBase . CreateByFlag ( buffer , TsigKeySelector , null ) ;
-							tsigMac = query . TSigOptions ? . Mac ;
-						}
-						catch ( Exception e )
-						{
-							throw new Exception ( "Error parsing dns query" , e ) ;
-						}
-
-						DnsMessageBase response ;
-						try
-						{
-							response = await ProcessMessageAsync (
-																query ,
-																ProtocolType . Tcp ,
-																( IPEndPoint )client . Client . RemoteEndPoint ) ;
-						}
-						catch ( Exception ex )
-						{
-							OnExceptionThrownAsync ( ex ) ;
-
-							response           = DnsMessageBase . CreateByFlag ( buffer , TsigKeySelector , null ) ;
-							response . IsQuery = false ;
-							response . AdditionalRecords . Clear ( ) ;
-							response . AuthorityRecords . Clear ( ) ;
-							response . ReturnCode = ReturnCode . ServerFailure ;
-						}
-
-						length = response . Encode ( true , tsigMac , false , out buffer , out byte [ ] newTsigMac ) ;
-
-						if ( length <= 65535 )
-						{
-							await stream . WriteAsync ( buffer , 0 , length ) ;
-						}
-						else
-						{
-							if ( ( response . Questions . Count              == 0 )
-								|| ( response . Questions [ 0 ] . RecordType != RecordType . Axfr ) )
-							{
-								OnExceptionThrownAsync (
-														new ArgumentException (
-																				"The length of the serialized response is greater than 65,535 bytes" ) ) ;
-
-								response           = DnsMessageBase . CreateByFlag ( buffer , TsigKeySelector , null ) ;
-								response . IsQuery = false ;
-								response . AdditionalRecords . Clear ( ) ;
-								response . AuthorityRecords . Clear ( ) ;
-								response . ReturnCode = ReturnCode . ServerFailure ;
-
-								length = response . Encode ( true , tsigMac , false , out buffer , out newTsigMac ) ;
-								await stream . WriteAsync ( buffer , 0 , length ) ;
-							}
-							else
-							{
-								bool isSubSequentResponse = false ;
-
-								while ( true )
-								{
-									List <DnsRecordBase> nextPacketRecords = new List <DnsRecordBase> ( ) ;
-
-									while ( length > 65535 )
-									{
-										int lastIndex   = Math . Min ( 500 , response . AnswerRecords . Count / 2 ) ;
-										int removeCount = response . AnswerRecords . Count - lastIndex ;
-
-										nextPacketRecords . InsertRange (
-																		0 ,
-																		response . AnswerRecords . GetRange (
-																		lastIndex ,
-																		removeCount ) ) ;
-										response . AnswerRecords . RemoveRange ( lastIndex , removeCount ) ;
-
-										length = response . Encode (
-																	true ,
-																	tsigMac ,
-																	isSubSequentResponse ,
-																	out buffer ,
-																	out newTsigMac ) ;
-									}
-
-									await stream . WriteAsync ( buffer , 0 , length ) ;
-
-									if ( nextPacketRecords . Count == 0 )
-									{
-										break ;
-									}
-
-									isSubSequentResponse = true ;
-									tsigMac = newTsigMac ;
-									response . AnswerRecords = nextPacketRecords ;
-									length = response . Encode ( true , tsigMac , true , out buffer , out newTsigMac ) ;
-								}
-							}
-						}
-
-						// Since support for multiple tsig signed messages is not finished, just close connection after response to first signed query
-						if ( newTsigMac != null )
-						{
-							break ;
-						}
-					}
+						return query ;
 				}
 			}
-			catch ( Exception ex )
-			{
-				OnExceptionThrownAsync ( ex ) ;
-			}
-			finally
-			{
-				try
-				{
-					// ReSharper disable once ConstantConditionalAccessQualifier
-					client ? . Close ( ) ;
-				}
-				catch
-				{
-					// ignored
-				}
 
-				lock ( _listenerLock )
-				{
-					_availableTcpListener++ ;
-				}
-
-				StartTcpListenerTask ( ) ;
-			}
+			QueryReceivedEventArgs eventArgs = new QueryReceivedEventArgs ( query , protocolType , remoteEndpoint ) ;
+			await QueryReceived . RaiseAsync ( this , eventArgs ) ;
+			return eventArgs . Response ;
 		}
+
+		/// <summary>
+		///     This event is fired whenever a query is received by the server
+		/// </summary>
+		public event AsyncEventHandler <QueryReceivedEventArgs> QueryReceived ;
 
 		private async Task <byte [ ]> ReadIntoBufferAsync ( TcpClient client , NetworkStream stream , int count )
 		{
@@ -611,6 +559,89 @@ namespace DreamRecorder . ToolBox . Network . Dns
 			return null ;
 		}
 
+		/// <summary>
+		///     Starts the server
+		/// </summary>
+		public void Start ( )
+		{
+			if ( _udpListenerCount > 0 )
+			{
+				lock ( _listenerLock )
+				{
+					_availableUdpListener = _udpListenerCount ;
+				}
+
+				_udpListener = new UdpClient ( _bindEndPoint ) ;
+				StartUdpListenerTask ( ) ;
+			}
+
+			if ( _tcpListenerCount > 0 )
+			{
+				lock ( _listenerLock )
+				{
+					_availableTcpListener = _tcpListenerCount ;
+				}
+
+				_tcpListener = new TcpListener ( _bindEndPoint ) ;
+				_tcpListener . Start ( ) ;
+				StartTcpListenerTask ( ) ;
+			}
+		}
+
+		private void StartTcpListenerTask ( )
+		{
+			lock ( _listenerLock )
+			{
+				if ( ! _tcpListener . Server . IsBound ) // server is stopped
+				{
+					return ;
+				}
+
+				if ( ( _availableTcpListener > 0 )
+					 && ! _hasActiveTcpListener )
+				{
+					_availableTcpListener-- ;
+					_hasActiveTcpListener = true ;
+					HandleTcpListenerAsync ( ) ;
+				}
+			}
+		}
+
+		private void StartUdpListenerTask ( )
+		{
+			lock ( _listenerLock )
+			{
+				if ( ! _udpListener . Client . IsBound ) // server is stopped
+				{
+					return ;
+				}
+
+				if ( ( _availableUdpListener > 0 )
+					 && ! _hasActiveUdpListener )
+				{
+					_availableUdpListener-- ;
+					_hasActiveUdpListener = true ;
+					HandleUdpListenerAsync ( ) ;
+				}
+			}
+		}
+
+		/// <summary>
+		///     Stops the server
+		/// </summary>
+		public void Stop ( )
+		{
+			if ( _udpListenerCount > 0 )
+			{
+				_udpListener . Close ( ) ;
+			}
+
+			if ( _tcpListenerCount > 0 )
+			{
+				_tcpListener . Stop ( ) ;
+			}
+		}
+
 		private async Task <bool> TryReadAsync (
 			TcpClient         client ,
 			NetworkStream     stream ,
@@ -623,7 +654,7 @@ namespace DreamRecorder . ToolBox . Network . Dns
 			while ( readBytes < length )
 			{
 				if ( token . IsCancellationRequested
-					|| ! client . IsConnected ( ) )
+					 || ! client . IsConnected ( ) )
 				{
 					return false ;
 				}
@@ -633,37 +664,6 @@ namespace DreamRecorder . ToolBox . Network . Dns
 
 			return true ;
 		}
-
-		private void OnExceptionThrownAsync ( Exception e )
-		{
-			if ( e is ObjectDisposedException )
-			{
-				return ;
-			}
-
-			Trace . TraceError ( "Exception in DnsServer: " + e ) ;
-			ExceptionThrown . RaiseAsync ( this , new ExceptionEventArgs ( e ) ) ;
-		}
-
-		/// <summary>
-		///     This event is fired on exceptions of the listeners. You can use it for custom logging.
-		/// </summary>
-		public event AsyncEventHandler <ExceptionEventArgs> ExceptionThrown ;
-
-		/// <summary>
-		///     This event is fired whenever a message is received, that is not correct signed
-		/// </summary>
-		public event AsyncEventHandler <InvalidSignedMessageEventArgs> InvalidSignedMessageReceived ;
-
-		/// <summary>
-		///     This event is fired whenever a client connects to the server
-		/// </summary>
-		public event AsyncEventHandler <ClientConnectedEventArgs> ClientConnected ;
-
-		/// <summary>
-		///     This event is fired whenever a query is received by the server
-		/// </summary>
-		public event AsyncEventHandler <QueryReceivedEventArgs> QueryReceived ;
 
 	}
 

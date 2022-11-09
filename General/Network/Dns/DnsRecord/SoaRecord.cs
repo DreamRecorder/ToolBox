@@ -17,34 +17,17 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 	{
 
 		/// <summary>
+		///     Seconds that can elapse before the zone is no longer authorative
+		/// </summary>
+		public int ExpireInterval { get ; private set ; }
+
+		/// <summary>
 		///     Hostname of the primary name server
 		/// </summary>
 		public DomainName MasterName { get ; private set ; }
 
-		/// <summary>
-		///     Mail address of the responsable person. The @ should be replaced by a dot.
-		/// </summary>
-		public DomainName ResponsibleName { get ; private set ; }
-
-		/// <summary>
-		///     Serial number of the zone
-		/// </summary>
-		public uint SerialNumber { get ; private set ; }
-
-		/// <summary>
-		///     Seconds before the zone should be refreshed
-		/// </summary>
-		public int RefreshInterval { get ; private set ; }
-
-		/// <summary>
-		///     Seconds that should be elapsed before retry of failed transfer
-		/// </summary>
-		public int RetryInterval { get ; private set ; }
-
-		/// <summary>
-		///     Seconds that can elapse before the zone is no longer authorative
-		/// </summary>
-		public int ExpireInterval { get ; private set ; }
+		protected internal override int MaximumRecordDataLength
+			=> MasterName . MaximumRecordDataLength + ResponsibleName . MaximumRecordDataLength + 24 ;
 
 		/// <summary>
 		///     <para>Seconds a negative answer could be cached</para>
@@ -57,8 +40,25 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		// ReSharper disable once InconsistentNaming
 		public int NegativeCachingTTL { get ; private set ; }
 
-		protected internal override int MaximumRecordDataLength
-			=> MasterName . MaximumRecordDataLength + ResponsibleName . MaximumRecordDataLength + 24 ;
+		/// <summary>
+		///     Seconds before the zone should be refreshed
+		/// </summary>
+		public int RefreshInterval { get ; private set ; }
+
+		/// <summary>
+		///     Mail address of the responsable person. The @ should be replaced by a dot.
+		/// </summary>
+		public DomainName ResponsibleName { get ; private set ; }
+
+		/// <summary>
+		///     Seconds that should be elapsed before retry of failed transfer
+		/// </summary>
+		public int RetryInterval { get ; private set ; }
+
+		/// <summary>
+		///     Serial number of the zone
+		/// </summary>
+		public uint SerialNumber { get ; private set ; }
 
 		internal SoaRecord ( ) { }
 
@@ -102,6 +102,34 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 			NegativeCachingTTL = negativeCachingTTL ;
 		}
 
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			DnsMessageBase . EncodeDomainName (
+											   messageData ,
+											   offset ,
+											   ref currentPosition ,
+											   MasterName ,
+											   domainNames ,
+											   useCanonical ) ;
+			DnsMessageBase . EncodeDomainName (
+											   messageData ,
+											   offset ,
+											   ref currentPosition ,
+											   ResponsibleName ,
+											   domainNames ,
+											   useCanonical ) ;
+			DnsMessageBase . EncodeUInt ( messageData , ref currentPosition , SerialNumber ) ;
+			DnsMessageBase . EncodeInt ( messageData , ref currentPosition , RefreshInterval ) ;
+			DnsMessageBase . EncodeInt ( messageData , ref currentPosition , RetryInterval ) ;
+			DnsMessageBase . EncodeInt ( messageData , ref currentPosition , ExpireInterval ) ;
+			DnsMessageBase . EncodeInt ( messageData , ref currentPosition , NegativeCachingTTL ) ;
+		}
+
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )
 		{
 			MasterName      = DnsMessageBase . ParseDomainName ( resultData , ref startPosition ) ;
@@ -128,46 +156,18 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 
 		internal override string RecordDataToString ( )
 			=> MasterName
-				+ " "
-				+ ResponsibleName
-				+ " "
-				+ SerialNumber
-				+ " "
-				+ RefreshInterval
-				+ " "
-				+ RetryInterval
-				+ " "
-				+ ExpireInterval
-				+ " "
-				+ NegativeCachingTTL ;
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			DnsMessageBase . EncodeDomainName (
-												messageData ,
-												offset ,
-												ref currentPosition ,
-												MasterName ,
-												domainNames ,
-												useCanonical ) ;
-			DnsMessageBase . EncodeDomainName (
-												messageData ,
-												offset ,
-												ref currentPosition ,
-												ResponsibleName ,
-												domainNames ,
-												useCanonical ) ;
-			DnsMessageBase . EncodeUInt ( messageData , ref currentPosition , SerialNumber ) ;
-			DnsMessageBase . EncodeInt ( messageData , ref currentPosition , RefreshInterval ) ;
-			DnsMessageBase . EncodeInt ( messageData , ref currentPosition , RetryInterval ) ;
-			DnsMessageBase . EncodeInt ( messageData , ref currentPosition , ExpireInterval ) ;
-			DnsMessageBase . EncodeInt ( messageData , ref currentPosition , NegativeCachingTTL ) ;
-		}
+			   + " "
+			   + ResponsibleName
+			   + " "
+			   + SerialNumber
+			   + " "
+			   + RefreshInterval
+			   + " "
+			   + RetryInterval
+			   + " "
+			   + ExpireInterval
+			   + " "
+			   + NegativeCachingTTL ;
 
 	}
 

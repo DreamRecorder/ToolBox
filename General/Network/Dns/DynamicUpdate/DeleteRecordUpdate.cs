@@ -14,12 +14,12 @@ namespace DreamRecorder . ToolBox . Network . Dns . DynamicUpdate
 	public class DeleteRecordUpdate : UpdateBase
 	{
 
+		protected internal override int MaximumRecordDataLength => Record ? . MaximumRecordDataLength ?? 0 ;
+
 		/// <summary>
 		///     Record that should be deleted
 		/// </summary>
 		public DnsRecordBase Record { get ; }
-
-		protected internal override int MaximumRecordDataLength => Record ? . MaximumRecordDataLength ?? 0 ;
 
 		internal DeleteRecordUpdate ( ) { }
 
@@ -29,10 +29,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DynamicUpdate
 		/// <param name="name"> Name of the record that should be deleted </param>
 		/// <param name="recordType"> Type of the record that should be deleted </param>
 		public DeleteRecordUpdate ( DomainName name , RecordType recordType ) : base (
-		name ,
-		recordType ,
-		RecordClass . Any ,
-		0 )
+		 name ,
+		 recordType ,
+		 RecordClass . Any ,
+		 0 )
 		{
 		}
 
@@ -41,15 +41,11 @@ namespace DreamRecorder . ToolBox . Network . Dns . DynamicUpdate
 		/// </summary>
 		/// <param name="record"> Record that should be deleted </param>
 		public DeleteRecordUpdate ( DnsRecordBase record ) : base (
-																	record . Name ,
-																	record . RecordType ,
-																	RecordClass . None ,
-																	0 )
+																   record . Name ,
+																   record . RecordType ,
+																   RecordClass . None ,
+																   0 )
 			=> Record = record ;
-
-		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length ) { }
-
-		internal override string RecordDataToString ( ) => Record ? . RecordDataToString ( ) ;
 
 		protected internal override void EncodeRecordData (
 			byte [ ]                         messageData ,
@@ -60,6 +56,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DynamicUpdate
 		{
 			Record ? . EncodeRecordData ( messageData , offset , ref currentPosition , domainNames , useCanonical ) ;
 		}
+
+		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length ) { }
+
+		internal override string RecordDataToString ( ) => Record ? . RecordDataToString ( ) ;
 
 	}
 

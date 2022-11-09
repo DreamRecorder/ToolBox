@@ -9,14 +9,6 @@ namespace DreamRecorder . ToolBox . Colors
 	public static class KnownToneMapping
 	{
 
-		public static byte Crop ( double value )
-		{
-			value = Math . Max ( 0 , value ) ;
-			value = Math . Min ( 1 , value ) ;
-
-			return Convert . ToByte ( value * 255 ) ;
-		}
-
 		public static byte AcesMapping ( double value )
 		{
 			value = Math . Max ( 0 , value ) ;
@@ -30,6 +22,14 @@ namespace DreamRecorder . ToolBox . Colors
 			value = value * ( a * value + b ) / ( value * ( c * value + d ) + e ) ;
 
 			return Crop ( value ) ;
+		}
+
+		public static byte Crop ( double value )
+		{
+			value = Math . Max ( 0 , value ) ;
+			value = Math . Min ( 1 , value ) ;
+
+			return Convert . ToByte ( value * 255 ) ;
 		}
 
 	}

@@ -71,6 +71,8 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			}
 		}
 
+		public override object Clone ( ) => new Ipv6Prefix ( AddressBytes , Length ) ;
+
 		public static explicit operator Ipv6Prefix ( [NotNull] string address )
 		{
 			if ( address == null )
@@ -80,8 +82,6 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 			return new Ipv6Prefix ( address ) ;
 		}
-
-		public override object Clone ( ) => new Ipv6Prefix ( AddressBytes , Length ) ;
 
 		public override string ToString ( )
 		{

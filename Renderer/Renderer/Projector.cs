@@ -13,13 +13,13 @@ namespace DreamRecorder . ToolBox . Renderer
 	public abstract class Projector : IProjector
 	{
 
-		public float Height { get ; set ; }
-
 		public Vector3 CenterAt { get ; set ; }
 
-		public float WorldWidth { get ; set ; }
-
 		public abstract Vector3 Direction { get ; }
+
+		public float Height { get ; set ; }
+
+		public float WorldWidth { get ; set ; }
 
 		public float ScreenWidth { get ; set ; }
 

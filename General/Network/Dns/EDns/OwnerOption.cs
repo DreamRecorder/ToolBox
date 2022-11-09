@@ -17,15 +17,13 @@ namespace DreamRecorder . ToolBox . Network . Dns . EDns
 	public class OwnerOption : EDnsOptionBase
 	{
 
-		/// <summary>
-		///     The version
-		/// </summary>
-		public byte Version { get ; private set ; }
+		internal override ushort DataLength
+			=> ( ushort )( 8 + ( WakeupMacAddress != null ? 6 : 0 ) + ( Password ? . Length ?? 0 ) ) ;
 
 		/// <summary>
-		///     The sequence number
+		///     The password, should be empty, 4 bytes long or 6 bytes long
 		/// </summary>
-		public byte Sequence { get ; private set ; }
+		public byte [ ] Password { get ; private set ; }
 
 		/// <summary>
 		///     The primary MAC address
@@ -33,17 +31,19 @@ namespace DreamRecorder . ToolBox . Network . Dns . EDns
 		public PhysicalAddress PrimaryMacAddress { get ; private set ; }
 
 		/// <summary>
+		///     The sequence number
+		/// </summary>
+		public byte Sequence { get ; private set ; }
+
+		/// <summary>
+		///     The version
+		/// </summary>
+		public byte Version { get ; private set ; }
+
+		/// <summary>
 		///     The Wakeup MAC address
 		/// </summary>
 		public PhysicalAddress WakeupMacAddress { get ; private set ; }
-
-		/// <summary>
-		///     The password, should be empty, 4 bytes long or 6 bytes long
-		/// </summary>
-		public byte [ ] Password { get ; private set ; }
-
-		internal override ushort DataLength
-			=> ( ushort )( 8 + ( WakeupMacAddress != null ? 6 : 0 ) + ( Password ? . Length ?? 0 ) ) ;
 
 		internal OwnerOption ( ) : base ( EDnsOptionType . Owner ) { }
 
@@ -53,10 +53,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . EDns
 		/// <param name="sequence"> The sequence number </param>
 		/// <param name="primaryMacAddress"> The primary MAC address </param>
 		public OwnerOption ( byte sequence , PhysicalAddress primaryMacAddress ) : this (
-		0 ,
-		sequence ,
-		primaryMacAddress ,
-		null )
+		 0 ,
+		 sequence ,
+		 primaryMacAddress ,
+		 null )
 		{
 		}
 
@@ -67,10 +67,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . EDns
 		/// <param name="sequence"> The sequence number </param>
 		/// <param name="primaryMacAddress"> The primary MAC address </param>
 		public OwnerOption ( byte version , byte sequence , PhysicalAddress primaryMacAddress ) : this (
-		version ,
-		sequence ,
-		primaryMacAddress ,
-		null )
+		 version ,
+		 sequence ,
+		 primaryMacAddress ,
+		 null )
 		{
 		}
 
@@ -97,11 +97,11 @@ namespace DreamRecorder . ToolBox . Network . Dns . EDns
 			byte            sequence ,
 			PhysicalAddress primaryMacAddress ,
 			PhysicalAddress wakeupMacAddress ) : this (
-														version ,
-														sequence ,
-														primaryMacAddress ,
-														wakeupMacAddress ,
-														null )
+													   version ,
+													   sequence ,
+													   primaryMacAddress ,
+													   wakeupMacAddress ,
+													   null )
 		{
 		}
 
@@ -142,6 +142,25 @@ namespace DreamRecorder . ToolBox . Network . Dns . EDns
 			Password          = password ;
 		}
 
+		internal override void EncodeData ( byte [ ] messageData , ref int currentPosition )
+		{
+			messageData [ currentPosition++ ] = Version ;
+			messageData [ currentPosition++ ] = Sequence ;
+			DnsMessageBase . EncodeByteArray (
+											  messageData ,
+											  ref currentPosition ,
+											  PrimaryMacAddress . GetAddressBytes ( ) ) ;
+			if ( WakeupMacAddress != null )
+			{
+				DnsMessageBase . EncodeByteArray (
+												  messageData ,
+												  ref currentPosition ,
+												  WakeupMacAddress . GetAddressBytes ( ) ) ;
+			}
+
+			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , Password ) ;
+		}
+
 		internal override void ParseData ( byte [ ] resultData , int startPosition , int length )
 		{
 			Version  = resultData [ startPosition++ ] ;
@@ -158,25 +177,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . EDns
 			{
 				Password = DnsMessageBase . ParseByteData ( resultData , ref startPosition , length - 14 ) ;
 			}
-		}
-
-		internal override void EncodeData ( byte [ ] messageData , ref int currentPosition )
-		{
-			messageData [ currentPosition++ ] = Version ;
-			messageData [ currentPosition++ ] = Sequence ;
-			DnsMessageBase . EncodeByteArray (
-											messageData ,
-											ref currentPosition ,
-											PrimaryMacAddress . GetAddressBytes ( ) ) ;
-			if ( WakeupMacAddress != null )
-			{
-				DnsMessageBase . EncodeByteArray (
-												messageData ,
-												ref currentPosition ,
-												WakeupMacAddress . GetAddressBytes ( ) ) ;
-			}
-
-			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , Password ) ;
 		}
 
 	}

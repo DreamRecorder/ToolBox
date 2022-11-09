@@ -153,16 +153,16 @@ namespace DreamRecorder . ToolBox . General
 
 			List <PropertyInfo> result = type . GetProperties ( ) .
 												Where (
-														prop
-															=> prop . GetCustomAttribute <IgnoreAttribute> ( )
-																== null ) .
+													   prop
+														   => prop . GetCustomAttribute <IgnoreAttribute> ( )
+															  == null ) .
 												ToList ( ) ;
 
 			Comparison <PropertyInfo> comp = ( x , y )
-												=> ( x . GetCustomAttribute <SortIndexAttribute> ( ) ? . Value
-													?? int . MaxValue ) . CompareTo (
-												y . GetCustomAttribute <SortIndexAttribute> ( ) ? . Value
-												?? int . MaxValue ) ;
+												 => ( x . GetCustomAttribute <SortIndexAttribute> ( ) ? . Value
+													  ?? int . MaxValue ) . CompareTo (
+												  y . GetCustomAttribute <SortIndexAttribute> ( ) ? . Value
+												  ?? int . MaxValue ) ;
 
 			result . Sort ( comp . Union ( ( x , y ) => string . CompareOrdinal ( x . Name , y . Name ) ) ) ;
 
@@ -186,8 +186,8 @@ namespace DreamRecorder . ToolBox . General
 			}
 
 			return type . GetSortedPropertiesWithNullableAttribute <TAttribute> ( ) .
-						Where ( prop => prop . Attribute != null ) .
-						ToList ( ) ;
+						  Where ( prop => prop . Attribute != null ) .
+						  ToList ( ) ;
 		}
 
 		#endregion
@@ -207,11 +207,11 @@ namespace DreamRecorder . ToolBox . General
 			}
 
 			return type . GetSortedProperties ( ) .
-						Select (
-								prop
-									=> ( (PropertyInfo PropertyInfo , TAttribute Attribute) )
-									( prop , prop . GetCustomAttribute <TAttribute> ( true ) ) ) .
-						ToList ( ) ;
+						  Select (
+								  prop
+									  => ( (PropertyInfo PropertyInfo , TAttribute Attribute) )
+									  ( prop , prop . GetCustomAttribute <TAttribute> ( true ) ) ) .
+						  ToList ( ) ;
 		}
 
 		#endregion

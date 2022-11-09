@@ -16,12 +16,12 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 	public class DNameRecord : DnsRecordBase
 	{
 
+		protected internal override int MaximumRecordDataLength => Target . MaximumRecordDataLength + 2 ;
+
 		/// <summary>
 		///     Target of the redirection
 		/// </summary>
 		public DomainName Target { get ; private set ; }
-
-		protected internal override int MaximumRecordDataLength => Target . MaximumRecordDataLength + 2 ;
 
 		internal DNameRecord ( ) { }
 
@@ -32,11 +32,27 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="timeToLive"> Seconds the record should be cached at most </param>
 		/// <param name="target"> Target of the redirection </param>
 		public DNameRecord ( DomainName name , int timeToLive , DomainName target ) : base (
-		name ,
-		RecordType . DName ,
-		RecordClass . INet ,
-		timeToLive )
+		 name ,
+		 RecordType . DName ,
+		 RecordClass . INet ,
+		 timeToLive )
 			=> Target = target ?? DomainName . Root ;
+
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			DnsMessageBase . EncodeDomainName (
+											   messageData ,
+											   offset ,
+											   ref currentPosition ,
+											   Target ,
+											   null ,
+											   useCanonical ) ;
+		}
 
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )
 		{
@@ -54,22 +70,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		}
 
 		internal override string RecordDataToString ( ) => Target . ToString ( ) ;
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			DnsMessageBase . EncodeDomainName (
-												messageData ,
-												offset ,
-												ref currentPosition ,
-												Target ,
-												null ,
-												useCanonical ) ;
-		}
 
 	}
 

@@ -25,10 +25,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="timeToLive"> Seconds the record should be cached at most </param>
 		/// <param name="textData"> Text data </param>
 		public TxtRecord ( DomainName name , int timeToLive , string textData ) : base (
-		name ,
-		RecordType . Txt ,
-		timeToLive ,
-		textData )
+		 name ,
+		 RecordType . Txt ,
+		 timeToLive ,
+		 textData )
 		{
 		}
 
@@ -39,10 +39,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="timeToLive"> Seconds the record should be cached at most </param>
 		/// <param name="textParts"> All parts of the text data </param>
 		public TxtRecord ( DomainName name , int timeToLive , IEnumerable <string> textParts ) : base (
-		name ,
-		RecordType . Txt ,
-		timeToLive ,
-		textParts )
+		 name ,
+		 RecordType . Txt ,
+		 timeToLive ,
+		 textParts )
 		{
 		}
 

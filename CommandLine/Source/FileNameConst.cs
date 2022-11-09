@@ -17,11 +17,11 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 		public static string LicenseFilePath => AppDomain . CurrentDomain . BaseDirectory + LicenseFile ;
 
-		public static string SettingFilePath => AppDomain . CurrentDomain . BaseDirectory + SettingFile ;
+		public static string PluginDirectory => "Plugins" ;
 
 		public static string PluginDirectoryPath => AppDomain . CurrentDomain . BaseDirectory + PluginDirectory ;
 
-		public static string PluginDirectory => "Plugins" ;
+		public static string SettingFilePath => AppDomain . CurrentDomain . BaseDirectory + SettingFile ;
 
 		public const string LicenseFile = "License.txt" ;
 

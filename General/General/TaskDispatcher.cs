@@ -15,12 +15,12 @@ namespace DreamRecorder . ToolBox . General
 	public class TaskDispatcher : ITaskDispatcher
 	{
 
-		public ConcurrentQueue <ITask> [ ] TaskQueues { get ; }
-
 		private LinkedList <(Task RunningTask , ITask Task)> RunningTasks { get ; } =
 			new LinkedList <(Task RunningTask , ITask Task)> ( ) ;
 
 		private Thread RunningThread { get ; set ; }
+
+		public ConcurrentQueue <ITask> [ ] TaskQueues { get ; }
 
 		public void Dispatch ( ITask task )
 		{
@@ -64,12 +64,6 @@ namespace DreamRecorder . ToolBox . General
 			}
 		}
 
-		[Prepare]
-		public static void Prepare ( )
-		{
-			StaticServiceProvider . ServiceCollection . AddSingleton <ITaskDispatcher , TaskDispatcher> ( ) ;
-		}
-
 		private void Execute ( )
 		{
 			while ( IsRunning )
@@ -79,23 +73,23 @@ namespace DreamRecorder . ToolBox . General
 					if ( taskQueue . TryDequeue ( out ITask task ) )
 					{
 						if ( task . Status == TaskStatus . Ready
-							&& RunningTasks . All ( taskPair => taskPair . Task != task ) )
+							 && RunningTasks . All ( taskPair => taskPair . Task != task ) )
 						{
 							Task runningTask = Task . Run (
-															( ) =>
-															{
-																try
-																{
-																	task . Invoke ( this ) ;
-																}
-																catch ( Exception e )
-																{
-																	Logger . LogWarning (
+														   ( ) =>
+														   {
+															   try
+															   {
+																   task . Invoke ( this ) ;
+															   }
+															   catch ( Exception e )
+															   {
+																   Logger . LogWarning (
 																	e ,
 																	"Task {0} throw unhandled exception." ,
 																	task . GetType ( ) . Name ) ;
-																}
-															} ) ;
+															   }
+														   } ) ;
 
 							lock ( RunningTasks )
 							{
@@ -147,11 +141,17 @@ namespace DreamRecorder . ToolBox . General
 			}
 		}
 
+		[Prepare]
+		public static void Prepare ( )
+		{
+			StaticServiceProvider . ServiceCollection . AddSingleton <ITaskDispatcher , TaskDispatcher> ( ) ;
+		}
+
 		#region Logger
 
 		private static ILogger Logger
 			=> _logger ??= StaticServiceProvider . Provider . GetService <ILoggerFactory> ( ) .
-													CreateLogger <ScheduledTask> ( ) ;
+												   CreateLogger <ScheduledTask> ( ) ;
 
 		private static ILogger _logger ;
 

@@ -10,11 +10,11 @@ namespace DreamRecorder . ToolBox . AspNet . General
 	public interface IWebAssetProvider
 	{
 
-		Task <string> GetPackageVersion ( string packageName ) ;
+		Task ClearCache ( ) ;
 
 		Task <string> GetFileUrl ( string packageName , string fileName , string version ) ;
 
-		Task ClearCache ( ) ;
+		Task <string> GetPackageVersion ( string packageName ) ;
 
 	}
 

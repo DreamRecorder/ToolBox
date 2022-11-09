@@ -11,11 +11,11 @@ namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 	public class Alert : IEquatable <Alert>
 	{
 
-		public BootstrapVariation Variation { get ; set ; }
+		public string Content { get ; set ; }
 
 		public bool Dismissible { get ; set ; }
 
-		public string Content { get ; set ; }
+		public BootstrapVariation Variation { get ; set ; }
 
 		public Alert ( BootstrapVariation variation , string content , bool dismissible = false )
 		{
@@ -36,6 +36,14 @@ namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 		public bool Equals ( Alert other )
 			=> Variation == other . Variation && Dismissible == other . Dismissible && Content == other . Content ;
 
+		public override bool Equals ( object obj ) => obj is Alert other && Equals ( other ) ;
+
+		public override int GetHashCode ( ) => HashCode . Combine ( ( int )Variation , Dismissible , Content ) ;
+
+		public static bool operator == ( Alert left , Alert right ) => left . Equals ( right ) ;
+
+		public static bool operator != ( Alert left , Alert right ) => ! left . Equals ( right ) ;
+
 		public virtual string ToHtmlString ( )
 		{
 			string dismissible = null ;
@@ -50,14 +58,6 @@ namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 			return
 				$"<div class=\"alert alert-{Variation . ToString ( ) . ToLower ( )}{dismissible}\" role=\"alert\">\n{Content}{button}\n</div>" ;
 		}
-
-		public override bool Equals ( object obj ) => obj is Alert other && Equals ( other ) ;
-
-		public override int GetHashCode ( ) => HashCode . Combine ( ( int )Variation , Dismissible , Content ) ;
-
-		public static bool operator == ( Alert left , Alert right ) => left . Equals ( right ) ;
-
-		public static bool operator != ( Alert left , Alert right ) => ! left . Equals ( right ) ;
 
 	}
 

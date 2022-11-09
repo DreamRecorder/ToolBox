@@ -83,15 +83,7 @@ namespace DreamRecorder . ToolBox . Network . Dns . EDns
 
 		}
 
-		/// <summary>
-		///     Version of LLQ protocol implemented
-		/// </summary>
-		public ushort Version { get ; private set ; }
-
-		/// <summary>
-		///     Identifies LLQ operation
-		/// </summary>
-		public LlqOperationCode OperationCode { get ; private set ; }
+		internal override ushort DataLength => 18 ;
 
 		/// <summary>
 		///     Identifies LLQ errors
@@ -108,7 +100,15 @@ namespace DreamRecorder . ToolBox . Network . Dns . EDns
 		/// </summary>
 		public TimeSpan LeaseTime { get ; private set ; }
 
-		internal override ushort DataLength => 18 ;
+		/// <summary>
+		///     Identifies LLQ operation
+		/// </summary>
+		public LlqOperationCode OperationCode { get ; private set ; }
+
+		/// <summary>
+		///     Version of LLQ protocol implemented
+		/// </summary>
+		public ushort Version { get ; private set ; }
 
 		internal LongLivedQueryOption ( ) : base ( EDnsOptionType . LongLivedQuery ) { }
 
@@ -149,15 +149,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . EDns
 			LeaseTime     = leaseTime ;
 		}
 
-		internal override void ParseData ( byte [ ] resultData , int startPosition , int length )
-		{
-			Version       = DnsMessageBase . ParseUShort ( resultData , ref startPosition ) ;
-			OperationCode = ( LlqOperationCode )DnsMessageBase . ParseUShort ( resultData , ref startPosition ) ;
-			ErrorCode     = ( LlqErrorCode )DnsMessageBase . ParseUShort ( resultData ,     ref startPosition ) ;
-			Id            = DnsMessageBase . ParseULong ( resultData , ref startPosition ) ;
-			LeaseTime     = TimeSpan . FromSeconds ( DnsMessageBase . ParseUInt ( resultData , ref startPosition ) ) ;
-		}
-
 		internal override void EncodeData ( byte [ ] messageData , ref int currentPosition )
 		{
 			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , Version ) ;
@@ -165,6 +156,15 @@ namespace DreamRecorder . ToolBox . Network . Dns . EDns
 			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , ( ushort )ErrorCode ) ;
 			DnsMessageBase . EncodeULong ( messageData , ref currentPosition , Id ) ;
 			DnsMessageBase . EncodeUInt ( messageData , ref currentPosition , ( uint )LeaseTime . TotalSeconds ) ;
+		}
+
+		internal override void ParseData ( byte [ ] resultData , int startPosition , int length )
+		{
+			Version       = DnsMessageBase . ParseUShort ( resultData , ref startPosition ) ;
+			OperationCode = ( LlqOperationCode )DnsMessageBase . ParseUShort ( resultData , ref startPosition ) ;
+			ErrorCode     = ( LlqErrorCode )DnsMessageBase . ParseUShort ( resultData ,     ref startPosition ) ;
+			Id            = DnsMessageBase . ParseULong ( resultData , ref startPosition ) ;
+			LeaseTime     = TimeSpan . FromSeconds ( DnsMessageBase . ParseUInt ( resultData , ref startPosition ) ) ;
 		}
 
 	}

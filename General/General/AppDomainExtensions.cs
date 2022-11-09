@@ -12,6 +12,56 @@ namespace DreamRecorder . ToolBox . General
 
 		private static volatile bool _loaded ;
 
+		private static void CurrentDomain_AssemblyLoad ( object sender , AssemblyLoadEventArgs args )
+		{
+			lock ( StaticServiceProvider . ServiceCollection )
+			{
+				args . LoadedAssembly . Prepare ( ) ;
+			}
+
+			StaticServiceProvider . Update ( ) ;
+		}
+
+		public static List <(PropertyInfo info , TAttribute attribute)> FindProperty
+			<TAttribute> ( Predicate <(PropertyInfo info , TAttribute attribute)> predicate )
+			where TAttribute : Attribute
+		{
+			return AppDomain . CurrentDomain . GetAssemblies ( ) .
+							   SelectMany ( assembly => assembly . GetTypes ( ) ) .
+							   SelectMany (
+										   type
+											   => type . GetProperties ( ) .
+														 Select (
+																 prop
+																	 => ( prop ,
+																			prop .
+																				GetCustomAttribute <
+																					TAttribute> ( ) ) ) .
+														 Where ( prop => prop . Item2 != null ) ) .
+							   Distinct ( ) .
+							   Where ( predicate . Invoke ) .
+							   ToList ( ) ;
+		}
+
+		public static List <PropertyInfo> FindProperty ( Predicate <PropertyInfo> predicate )
+		{
+			return AppDomain . CurrentDomain . GetAssemblies ( ) .
+							   SelectMany ( assembly => assembly . GetTypes ( ) ) .
+							   SelectMany ( type => type . GetProperties ( ) ) .
+							   Distinct ( ) .
+							   Where ( predicate . Invoke ) .
+							   ToList ( ) ;
+		}
+
+		public static List <Type> FindType ( Predicate <Type> predicate )
+		{
+			return AppDomain . CurrentDomain . GetAssemblies ( ) .
+							   SelectMany ( assembly => assembly . GetTypes ( ) ) .
+							   Distinct ( ) .
+							   Where ( predicate . Invoke ) .
+							   ToList ( ) ;
+		}
+
 		private static void LoadReferencedAssembly ( Assembly assembly )
 		{
 			foreach ( AssemblyName name in assembly . GetReferencedAssemblies ( ) )
@@ -64,56 +114,6 @@ namespace DreamRecorder . ToolBox . General
 
 				StaticServiceProvider . Update ( ) ;
 			}
-		}
-
-		public static List <Type> FindType ( Predicate <Type> predicate )
-		{
-			return AppDomain . CurrentDomain . GetAssemblies ( ) .
-								SelectMany ( assembly => assembly . GetTypes ( ) ) .
-								Distinct ( ) .
-								Where ( predicate . Invoke ) .
-								ToList ( ) ;
-		}
-
-		public static List <PropertyInfo> FindProperty ( Predicate <PropertyInfo> predicate )
-		{
-			return AppDomain . CurrentDomain . GetAssemblies ( ) .
-								SelectMany ( assembly => assembly . GetTypes ( ) ) .
-								SelectMany ( type => type . GetProperties ( ) ) .
-								Distinct ( ) .
-								Where ( predicate . Invoke ) .
-								ToList ( ) ;
-		}
-
-		public static List <(PropertyInfo info , TAttribute attribute)> FindProperty
-			<TAttribute> ( Predicate <(PropertyInfo info , TAttribute attribute)> predicate )
-			where TAttribute : Attribute
-		{
-			return AppDomain . CurrentDomain . GetAssemblies ( ) .
-								SelectMany ( assembly => assembly . GetTypes ( ) ) .
-								SelectMany (
-											type
-												=> type . GetProperties ( ) .
-														Select (
-																prop
-																	=> ( prop ,
-																			prop .
-																				GetCustomAttribute <
-																					TAttribute> ( ) ) ) .
-														Where ( prop => prop . Item2 != null ) ) .
-								Distinct ( ) .
-								Where ( predicate . Invoke ) .
-								ToList ( ) ;
-		}
-
-		private static void CurrentDomain_AssemblyLoad ( object sender , AssemblyLoadEventArgs args )
-		{
-			lock ( StaticServiceProvider . ServiceCollection )
-			{
-				args . LoadedAssembly . Prepare ( ) ;
-			}
-
-			StaticServiceProvider . Update ( ) ;
 		}
 
 	}

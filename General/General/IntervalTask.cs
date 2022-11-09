@@ -14,17 +14,17 @@ namespace DreamRecorder . ToolBox . General
 
 		public Action Action { get ; set ; }
 
-		public DateTimeOffset StartFrom { get ; set ; }
-
 		public TimeSpan Interval { get ; set ; }
 
-		public int RunCount { get ; set ; }
+		private bool IsRunning { get ; set ; }
 
 		public DateTimeOffset LastRun { get ; set ; }
 
 		public DateTimeOffset NextRun { get ; set ; }
 
-		private bool IsRunning { get ; set ; }
+		public int RunCount { get ; set ; }
+
+		public DateTimeOffset StartFrom { get ; set ; }
 
 		public IntervalTask (
 			Action           action ,
@@ -114,7 +114,7 @@ namespace DreamRecorder . ToolBox . General
 
 		private static ILogger Logger
 			=> _logger ??= StaticServiceProvider . Provider . GetService <ILoggerFactory> ( ) .
-													CreateLogger <ScheduledTask> ( ) ;
+												   CreateLogger <ScheduledTask> ( ) ;
 
 
 		private static ILogger _logger ;

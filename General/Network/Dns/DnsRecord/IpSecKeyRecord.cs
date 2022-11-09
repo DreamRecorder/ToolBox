@@ -92,16 +92,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		}
 
 		/// <summary>
-		///     Precedence of the record
-		/// </summary>
-		public byte Precedence { get ; private set ; }
-
-		/// <summary>
-		///     Type of gateway
-		/// </summary>
-		public IpSecGatewayType GatewayType { get ; private set ; }
-
-		/// <summary>
 		///     Algorithm of the key
 		/// </summary>
 		public IpSecAlgorithm Algorithm { get ; private set ; }
@@ -112,9 +102,9 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		public string Gateway { get ; private set ; }
 
 		/// <summary>
-		///     Binary data of the public key
+		///     Type of gateway
 		/// </summary>
-		public byte [ ] PublicKey { get ; private set ; }
+		public IpSecGatewayType GatewayType { get ; private set ; }
 
 		protected internal override int MaximumRecordDataLength
 		{
@@ -138,6 +128,16 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 				return res ;
 			}
 		}
+
+		/// <summary>
+		///     Precedence of the record
+		/// </summary>
+		public byte Precedence { get ; private set ; }
+
+		/// <summary>
+		///     Binary data of the public key
+		/// </summary>
+		public byte [ ] PublicKey { get ; private set ; }
 
 		internal IpSecKeyRecord ( ) { }
 
@@ -184,11 +184,58 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		{
 			Precedence = precedence ;
 			GatewayType = ( gateway . AddressFamily == AddressFamily . InterNetwork )
-							? IpSecGatewayType . IpV4
-							: IpSecGatewayType . IpV6 ;
+							  ? IpSecGatewayType . IpV4
+							  : IpSecGatewayType . IpV6 ;
 			Algorithm = algorithm ;
 			Gateway   = gateway . ToString ( ) ;
 			PublicKey = publicKey ?? new byte [ ] { } ;
+		}
+
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			messageData [ currentPosition++ ] = Precedence ;
+			messageData [ currentPosition++ ] = ( byte )GatewayType ;
+			messageData [ currentPosition++ ] = ( byte )Algorithm ;
+			switch ( GatewayType )
+			{
+				case IpSecGatewayType . IpV4 :
+				case IpSecGatewayType . IpV6 :
+					byte [ ] addressBuffer = IPAddress . Parse ( Gateway ) . GetAddressBytes ( ) ;
+					DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , addressBuffer ) ;
+					break ;
+				case IpSecGatewayType . Domain :
+					DnsMessageBase . EncodeDomainName (
+													   messageData ,
+													   offset ,
+													   ref currentPosition ,
+													   ParseDomainName ( DomainName . Root , Gateway ) ,
+													   null ,
+													   false ) ;
+					break ;
+			}
+
+			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , PublicKey ) ;
+		}
+
+		private string GatewayToString ( )
+		{
+			switch ( GatewayType )
+			{
+				case IpSecGatewayType . Domain :
+					return Gateway . ToMasterfileLabelRepresentation ( ) + "." ;
+
+				case IpSecGatewayType . IpV4 :
+				case IpSecGatewayType . IpV6 :
+					return Gateway ;
+
+				default :
+					return "." ;
+			}
 		}
 
 		internal override void ParseRecordData ( byte [ ] resultData , int currentPosition , int length )
@@ -240,61 +287,14 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 
 		internal override string RecordDataToString ( )
 			=> Precedence
-				+ " "
-				+ ( byte )GatewayType
-				+ " "
-				+ ( byte )Algorithm
-				+ " "
-				+ GatewayToString ( )
-				+ " "
-				+ PublicKey . ToBase64String ( ) ;
-
-		private string GatewayToString ( )
-		{
-			switch ( GatewayType )
-			{
-				case IpSecGatewayType . Domain :
-					return Gateway . ToMasterfileLabelRepresentation ( ) + "." ;
-
-				case IpSecGatewayType . IpV4 :
-				case IpSecGatewayType . IpV6 :
-					return Gateway ;
-
-				default :
-					return "." ;
-			}
-		}
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			messageData [ currentPosition++ ] = Precedence ;
-			messageData [ currentPosition++ ] = ( byte )GatewayType ;
-			messageData [ currentPosition++ ] = ( byte )Algorithm ;
-			switch ( GatewayType )
-			{
-				case IpSecGatewayType . IpV4 :
-				case IpSecGatewayType . IpV6 :
-					byte [ ] addressBuffer = IPAddress . Parse ( Gateway ) . GetAddressBytes ( ) ;
-					DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , addressBuffer ) ;
-					break ;
-				case IpSecGatewayType . Domain :
-					DnsMessageBase . EncodeDomainName (
-														messageData ,
-														offset ,
-														ref currentPosition ,
-														ParseDomainName ( DomainName . Root , Gateway ) ,
-														null ,
-														false ) ;
-					break ;
-			}
-
-			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , PublicKey ) ;
-		}
+			   + " "
+			   + ( byte )GatewayType
+			   + " "
+			   + ( byte )Algorithm
+			   + " "
+			   + GatewayToString ( )
+			   + " "
+			   + PublicKey . ToBase64String ( ) ;
 
 	}
 

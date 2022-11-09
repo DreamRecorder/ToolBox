@@ -19,6 +19,35 @@ namespace DreamRecorder . ToolBox . UnitTest
 
 		private int count2 ;
 
+		private Test RecursionRetryTest ( )
+		{
+			Assert . IsTrue ( count2++ == 0 ) ;
+			return new Test ( count2 ) ;
+		}
+
+		[TestMethod]
+		public void RetryLazyRecursionTest ( )
+		{
+			count2 = 0 ;
+			RetryLazy <Test> lazy = null ;
+			lazy = new RetryLazy <Test> (
+										 RecursionRetryTest ,
+										 result =>
+										 {
+											 Assert . IsNotNull ( lazy ? . GetValue ( ) ) ;
+											 Assert . AreSame ( result , lazy ? . GetValue ( ) ) ;
+										 } ) ;
+		}
+
+		[TestMethod]
+		public void RetryLazyTest ( )
+		{
+			count1 = 0 ;
+			RetryLazy <Test> lazy = new RetryLazy <Test> ( RetryTest ) ;
+			Parallel . For ( 0 , Environment . ProcessorCount * 8 , _ => lazy . GetValue ( ) ) ;
+			Assert . AreEqual ( 6 , count1 ) ;
+		}
+
 		private Test RetryTest ( )
 		{
 			if ( ++count1 > 5 )
@@ -34,35 +63,6 @@ namespace DreamRecorder . ToolBox . UnitTest
 			{
 				return null ;
 			}
-		}
-
-		[TestMethod]
-		public void RetryLazyTest ( )
-		{
-			count1 = 0 ;
-			RetryLazy <Test> lazy = new RetryLazy <Test> ( RetryTest ) ;
-			Parallel . For ( 0 , Environment . ProcessorCount * 8 , _ => lazy . GetValue ( ) ) ;
-			Assert . AreEqual ( 6 , count1 ) ;
-		}
-
-		private Test RecursionRetryTest ( )
-		{
-			Assert . IsTrue ( count2++ == 0 ) ;
-			return new Test ( count2 ) ;
-		}
-
-		[TestMethod]
-		public void RetryLazyRecursionTest ( )
-		{
-			count2 = 0 ;
-			RetryLazy <Test> lazy = null ;
-			lazy = new RetryLazy <Test> (
-										RecursionRetryTest ,
-										result =>
-										{
-											Assert . IsNotNull ( lazy ? . GetValue ( ) ) ;
-											Assert . AreSame ( result , lazy ? . GetValue ( ) ) ;
-										} ) ;
 		}
 
 		public class Test

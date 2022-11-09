@@ -16,12 +16,12 @@ namespace DreamRecorder . ToolBox . Network . Dns . EDns
 	public class NsIdOption : EDnsOptionBase
 	{
 
+		internal override ushort DataLength => ( ushort )( Payload ? . Length ?? 0 ) ;
+
 		/// <summary>
 		///     Binary data of the payload
 		/// </summary>
 		public byte [ ] Payload { get ; private set ; }
-
-		internal override ushort DataLength => ( ushort )( Payload ? . Length ?? 0 ) ;
 
 		internal NsIdOption ( ) : base ( EDnsOptionType . NsId ) { }
 
@@ -30,14 +30,14 @@ namespace DreamRecorder . ToolBox . Network . Dns . EDns
 		/// </summary>
 		public NsIdOption ( byte [ ] payload ) : this ( ) => Payload = payload ;
 
-		internal override void ParseData ( byte [ ] resultData , int startPosition , int length )
-		{
-			Payload = DnsMessageBase . ParseByteData ( resultData , ref startPosition , length ) ;
-		}
-
 		internal override void EncodeData ( byte [ ] messageData , ref int currentPosition )
 		{
 			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , Payload ) ;
+		}
+
+		internal override void ParseData ( byte [ ] resultData , int startPosition , int length )
+		{
+			Payload = DnsMessageBase . ParseByteData ( resultData , ref startPosition , length ) ;
 		}
 
 	}

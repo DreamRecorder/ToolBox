@@ -58,7 +58,7 @@ namespace DreamRecorder . ToolBox . General
 
 		private static ILogger Logger
 			=> _logger ??= StaticServiceProvider . Provider . GetService <ILoggerFactory> ( ) .
-													CreateLogger <OnetimeTask> ( ) ;
+												   CreateLogger <OnetimeTask> ( ) ;
 
 
 		private static ILogger _logger ;

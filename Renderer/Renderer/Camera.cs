@@ -15,19 +15,6 @@ namespace DreamRecorder . ToolBox . Renderer
 	public abstract class Camera : ICamera
 	{
 
-		//Z
-		public Vector3 Forward => Vector3 . Normalize ( LookAt - Position ) ;
-
-		//X
-		public Vector3 Right => Vector3 . Normalize ( Vector3 . Cross ( Forward , - Vector3 . UnitY ) ) ;
-
-		//Y
-		public Vector3 Up => Vector3 . Normalize ( Vector3 . Cross ( Forward , Right ) ) ;
-
-		public Angle FOV { get ; set ; }
-
-		public virtual Matrix4x4 WorldConversionMatrix => Matrix4x4 . CreateLookAt ( Position , LookAt , Up ) ;
-
 		public virtual Matrix4x4 CameraConversionMatrix
 		{
 			get
@@ -41,7 +28,20 @@ namespace DreamRecorder . ToolBox . Renderer
 			}
 		}
 
+		//Z
+		public Vector3 Forward => Vector3 . Normalize ( LookAt - Position ) ;
+
+		public Angle FOV { get ; set ; }
+
 		protected double HalfFovTan => Math . Tan ( FOV / 2 ) ;
+
+		//X
+		public Vector3 Right => Vector3 . Normalize ( Vector3 . Cross ( Forward , - Vector3 . UnitY ) ) ;
+
+		//Y
+		public Vector3 Up => Vector3 . Normalize ( Vector3 . Cross ( Forward , Right ) ) ;
+
+		public virtual Matrix4x4 WorldConversionMatrix => Matrix4x4 . CreateLookAt ( Position , LookAt , Up ) ;
 
 		public Camera ( ) { }
 
@@ -76,11 +76,11 @@ namespace DreamRecorder . ToolBox . Renderer
 
 		protected abstract Vector3 CalculateProject ( Vector2 point ) ;
 
-		public virtual Vector3 WorldConversion ( Vector3 worldPosition )
-			=> Vector3 . Transform ( worldPosition , WorldConversionMatrix ) ;
-
 		public virtual Vector3 CameraConversion ( Vector3 cameraPosition )
 			=> Vector3 . Transform ( cameraPosition , CameraConversionMatrix ) ;
+
+		public virtual Vector3 WorldConversion ( Vector3 worldPosition )
+			=> Vector3 . Transform ( worldPosition , WorldConversionMatrix ) ;
 
 	}
 

@@ -21,14 +21,12 @@ namespace DreamRecorder . ToolBox . Network . Dns . DynamicUpdate
 		/// </summary>
 		/// <param name="name"> Name that should be checked </param>
 		public NameIsNotInUsePrerequisite ( DomainName name ) : base (
-																	name ,
-																	RecordType . Any ,
-																	RecordClass . None ,
-																	0 )
+																	  name ,
+																	  RecordType . Any ,
+																	  RecordClass . None ,
+																	  0 )
 		{
 		}
-
-		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length ) { }
 
 		protected internal override void EncodeRecordData (
 			byte [ ]                         messageData ,
@@ -38,6 +36,8 @@ namespace DreamRecorder . ToolBox . Network . Dns . DynamicUpdate
 			bool                             useCanonical )
 		{
 		}
+
+		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length ) { }
 
 	}
 

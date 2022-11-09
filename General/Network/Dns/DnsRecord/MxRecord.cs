@@ -17,16 +17,16 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 	{
 
 		/// <summary>
-		///     Preference of the record
-		/// </summary>
-		public ushort Preference { get ; private set ; }
-
-		/// <summary>
 		///     Host name of the mail exchanger
 		/// </summary>
 		public DomainName ExchangeDomainName { get ; private set ; }
 
 		protected internal override int MaximumRecordDataLength => ExchangeDomainName . MaximumRecordDataLength + 4 ;
+
+		/// <summary>
+		///     Preference of the record
+		/// </summary>
+		public ushort Preference { get ; private set ; }
 
 		internal MxRecord ( ) { }
 
@@ -42,6 +42,23 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		{
 			Preference         = preference ;
 			ExchangeDomainName = exchangeDomainName ?? DomainName . Root ;
+		}
+
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , Preference ) ;
+			DnsMessageBase . EncodeDomainName (
+											   messageData ,
+											   offset ,
+											   ref currentPosition ,
+											   ExchangeDomainName ,
+											   domainNames ,
+											   useCanonical ) ;
 		}
 
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )
@@ -62,23 +79,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		}
 
 		internal override string RecordDataToString ( ) => Preference + " " + ExchangeDomainName ;
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , Preference ) ;
-			DnsMessageBase . EncodeDomainName (
-												messageData ,
-												offset ,
-												ref currentPosition ,
-												ExchangeDomainName ,
-												domainNames ,
-												useCanonical ) ;
-		}
 
 	}
 

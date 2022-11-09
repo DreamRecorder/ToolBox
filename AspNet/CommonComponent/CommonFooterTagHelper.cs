@@ -25,7 +25,7 @@ namespace DreamRecorder . ToolBox . AspNet . CommonComponent
 			output . TagName = @"div" ;
 			output . TagMode = TagMode . StartTagAndEndTag ;
 			output . Content . SetHtmlContent (
-												await HttpClient . GetStringAsync (
+											   await HttpClient . GetStringAsync (
 												$"{ConstantUrls . WebResource}CommonFooter.html" ) ) ;
 		}
 

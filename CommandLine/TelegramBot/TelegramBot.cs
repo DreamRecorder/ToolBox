@@ -24,25 +24,25 @@ namespace DreamRecorder . ToolBox . TelegramBot
 	public class TelegramBot <TUser> : IStartStop where TUser : IUser
 	{
 
-		protected ILogger Logger { get ; }
+		public ITelegramBotClient BotClient { get ; private set ; }
 
 		public string BotToken { get ; set ; }
 
-		public HttpClient HttpClient { get ; set ; }
-
-		public ITelegramBotClient BotClient { get ; private set ; }
-
-		public ISessionProvider <TUser> SessionProvider { get ; private set ; }
-
 		public ICommandProvider <TUser> CommandProvider { get ; private set ; }
 
-		public ITelegramIdUserProvider <TUser> UserProvider { get ; private set ; }
+		public HttpClient HttpClient { get ; set ; }
+
+		protected ILogger Logger { get ; }
 
 		public IUserPermissionProvider <TUser> PermissionProvider { get ; private set ; }
 
+		private CancellationTokenSource ReceivingCancellationSource { get ; } = new CancellationTokenSource ( ) ;
+
+		public ISessionProvider <TUser> SessionProvider { get ; private set ; }
+
 		public ITaskDispatcher TaskDispatcher { get ; set ; }
 
-		private CancellationTokenSource ReceivingCancellationSource { get ; } = new CancellationTokenSource ( ) ;
+		public ITelegramIdUserProvider <TUser> UserProvider { get ; private set ; }
 
 		public bool IsRunning { get ; private set ; }
 
@@ -223,14 +223,14 @@ namespace DreamRecorder . ToolBox . TelegramBot
 						}
 
 						TaskDispatcher . Dispatch (
-													new OnetimeTask (
+												   new OnetimeTask (
 																	( )
 																		=> routeTarget . Process (
-																		message ,
-																		args ?? new string [ ] { } ,
-																		currentSession ,
-																		isExactlyMatched ,
-																		tag ) ,
+																		 message ,
+																		 args ?? new string [ ] { } ,
+																		 currentSession ,
+																		 isExactlyMatched ,
+																		 tag ) ,
 																	routeTarget . Timeout ) ) ;
 					}
 				}
@@ -279,7 +279,7 @@ namespace DreamRecorder . ToolBox . TelegramBot
 					currentSession . BotClient = BotClient ;
 
 					ICommand <TUser> routeTarget = currentSession . RouteBind
-													?? CommandProvider . GetCommand (
+												   ?? CommandProvider . GetCommand (
 													args . First ( ) . TrimEndPattern ( "Command" ) ,
 													currentSession ) ;
 
@@ -298,13 +298,13 @@ namespace DreamRecorder . ToolBox . TelegramBot
 						}
 
 						TaskDispatcher . Dispatch (
-													new OnetimeTask (
+												   new OnetimeTask (
 																	( )
 																		=> routeTarget . Process (
-																		callbackQuery ,
-																		args ,
-																		currentSession ,
-																		tag ) ,
+																		 callbackQuery ,
+																		 args ,
+																		 currentSession ,
+																		 tag ) ,
 																	routeTarget . Timeout ) ) ;
 					}
 				}

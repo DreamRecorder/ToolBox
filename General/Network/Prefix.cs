@@ -68,8 +68,6 @@ namespace DreamRecorder . ToolBox . Network
 			return false ;
 		}
 
-		public static explicit operator string ( Prefix prefix ) => prefix . ToString ( ) ;
-
 		public override bool Equals ( object obj )
 		{
 			if ( obj is null )
@@ -99,6 +97,8 @@ namespace DreamRecorder . ToolBox . Network
 		}
 
 		public static bool operator == ( Prefix left , Prefix right ) => Equals ( left , right ) ;
+
+		public static explicit operator string ( Prefix prefix ) => prefix . ToString ( ) ;
 
 		public static bool operator != ( Prefix left , Prefix right ) => ! Equals ( left , right ) ;
 

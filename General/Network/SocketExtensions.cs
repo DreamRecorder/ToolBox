@@ -13,6 +13,33 @@ namespace DreamRecorder . ToolBox . Network
 	public static class SocketExtensions
 	{
 
+		public static void CleanTcpClient ( [NotNull] this List <TcpClient> clients )
+		{
+			if ( clients == null )
+			{
+				throw new ArgumentNullException ( nameof ( clients ) ) ;
+			}
+
+			lock ( clients )
+			{
+				clients . RemoveAll (
+									 client =>
+									 {
+										 lock ( client )
+										 {
+											 if ( client . Client . IsAvailable ( ) )
+											 {
+												 return false ;
+											 }
+
+											 client . Dispose ( ) ;
+
+											 return true ;
+										 }
+									 } ) ;
+			}
+		}
+
 		public static bool IsAvailable ( [NotNull] this Socket socket )
 		{
 			if ( socket == null )
@@ -27,33 +54,6 @@ namespace DreamRecorder . ToolBox . Network
 			catch ( SocketException )
 			{
 				return false ;
-			}
-		}
-
-		public static void CleanTcpClient ( [NotNull] this List <TcpClient> clients )
-		{
-			if ( clients == null )
-			{
-				throw new ArgumentNullException ( nameof ( clients ) ) ;
-			}
-
-			lock ( clients )
-			{
-				clients . RemoveAll (
-									client =>
-									{
-										lock ( client )
-										{
-											if ( client . Client . IsAvailable ( ) )
-											{
-												return false ;
-											}
-
-											client . Dispose ( ) ;
-
-											return true ;
-										}
-									} ) ;
 			}
 		}
 

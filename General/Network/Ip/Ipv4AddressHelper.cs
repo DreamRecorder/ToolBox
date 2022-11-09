@@ -23,31 +23,6 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 		private const int NumberOfLabels = 4 ;
 
-		// methods
-		// Parse and canonicalize
-		internal static string ParseCanonicalName ( string str , int start , int end , ref bool isLoopback )
-		{
-			unsafe
-			{
-				byte * numbers = stackalloc byte [ NumberOfLabels ] ;
-				isLoopback = Parse ( str , numbers , start , end ) ;
-
-				return numbers [ 0 ] + "." + numbers [ 1 ] + "." + numbers [ 2 ] + "." + numbers [ 3 ] ;
-			}
-		}
-
-		// Only called from the IPv6Helper, only parse the canonical format
-		internal static int ParseHostNumber ( string str , int start , int end )
-		{
-			unsafe
-			{
-				byte * numbers = stackalloc byte [ NumberOfLabels ] ;
-				ParseCanonical ( str , numbers , start , end ) ;
-
-				return ( numbers [ 0 ] << 24 ) + ( numbers [ 1 ] << 16 ) + ( numbers [ 2 ] << 8 ) + numbers [ 3 ] ;
-			}
-		}
-
 		//
 		// IsValid
 		//
@@ -139,28 +114,28 @@ namespace DreamRecorder . ToolBox . Network . Ip
 				if ( allowIPv6 )
 				{
 					// for ipv4 inside ipv6 the terminator is either ScopeId, prefix or ipv6 terminator
-					if ( ch   == ']'
-						|| ch == '/'
-						|| ch == '%' )
+					if ( ch    == ']'
+						 || ch == '/'
+						 || ch == '%' )
 					{
 						break ;
 					}
 				}
-				else if ( ch  == '/'
-						|| ch == '\\'
-						|| ( notImplicitFile && ( ch == ':' || ch == '?' || ch == '#' ) ) )
+				else if ( ch    == '/'
+						  || ch == '\\'
+						  || ( notImplicitFile && ( ch == ':' || ch == '?' || ch == '#' ) ) )
 				{
 					break ;
 				}
 
-				if ( ch   <= '9'
-					&& ch >= '0' )
+				if ( ch    <= '9'
+					 && ch >= '0' )
 				{
 					if ( ! haveNumber
-						&& ch == '0' )
+						 && ch == '0' )
 					{
-						if ( start + 1            < end
-							&& name [ start + 1 ] == '0' )
+						if ( start + 1             < end
+							 && name [ start + 1 ] == '0' )
 						{
 							// 00 is not allowed as a prefix.
 							return false ;
@@ -180,7 +155,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 				else if ( ch == '.' )
 				{
 					if ( ! haveNumber
-						|| ( number > 0 && firstCharIsZero ) )
+						 || ( number > 0 && firstCharIsZero ) )
 					{
 						// 0 is not allowed to prefix a number.
 						return false ;
@@ -207,184 +182,6 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			}
 
 			return res ;
-		}
-
-		// Parse any canonical or noncanonical IPv4 formats and return a long between 0 and MaxIPv4Value.
-		// Return Invalid (-1) for failures.
-		// If the address has less than three dots, only the rightmost section is assumed to contain the combined value for
-		// the missing sections: 0xFF00FFFF == 0xFF.0x00.0xFF.0xFF == 0xFF.0xFFFF
-		internal static unsafe long ParseNonCanonical ( char * name , int start , ref int end , bool notImplicitFile )
-		{
-			char     ch ;
-			long [ ] parts          = new long[ 4 ] ;
-			long     currentValue   = 0 ;
-			bool     atLeastOneChar = false ;
-
-			// Parse one dotted section at a time
-			int dotCount = 0 ; // Limit 3
-			int current  = start ;
-
-			for ( ; current < end ; current++ )
-			{
-				ch           = name [ current ] ;
-				currentValue = 0 ;
-
-				// Figure out what base this section is in
-				int numberBase = Decimal ;
-
-				if ( ch == '0' )
-				{
-					numberBase = Octal ;
-					current++ ;
-					atLeastOneChar = true ;
-
-					if ( current < end )
-					{
-						ch = name [ current ] ;
-
-						if ( ch   == 'x'
-							|| ch == 'X' )
-						{
-							numberBase = Hex ;
-							current++ ;
-							atLeastOneChar = false ;
-						}
-					}
-				}
-
-				// Parse this section
-				for ( ; current < end ; current++ )
-				{
-					ch = name [ current ] ;
-					int digitValue ;
-
-					if ( ( numberBase == Decimal || numberBase == Hex )
-						&& '0' <= ch
-						&& ch  <= '9' )
-					{
-						digitValue = ch - '0' ;
-					}
-					else if ( numberBase == Octal
-							&& '0'       <= ch
-							&& ch        <= '7' )
-					{
-						digitValue = ch - '0' ;
-					}
-					else if ( numberBase == Hex
-							&& 'a'       <= ch
-							&& ch        <= 'f' )
-					{
-						digitValue = ch + 10 - 'a' ;
-					}
-					else if ( numberBase == Hex
-							&& 'A'       <= ch
-							&& ch        <= 'F' )
-					{
-						digitValue = ch + 10 - 'A' ;
-					}
-					else
-					{
-						break ; // Invalid/terminator
-					}
-
-					currentValue = currentValue * numberBase + digitValue ;
-
-					if ( currentValue > MaxIPv4Value ) // Overflow
-					{
-						return Invalid ;
-					}
-
-					atLeastOneChar = true ;
-				}
-
-				if ( current            < end
-					&& name [ current ] == '.' )
-				{
-					if ( dotCount >= 3      // Max of 3 dots and 4 segments
-						|| ! atLeastOneChar // No empty segmets: 1...1
-						// Only the last segment can be more than 255 (if there are less than 3 dots)
-						|| currentValue > 0xFF )
-					{
-						return Invalid ;
-					}
-
-					parts [ dotCount ] = currentValue ;
-					dotCount++ ;
-					atLeastOneChar = false ;
-
-					continue ;
-				}
-
-				// We don't get here unless We find an invalid character or a terminator
-				break ;
-			}
-
-			// Terminators
-			if ( ! atLeastOneChar )
-			{
-				return Invalid ; // Empty trailing segment: 1.1.1.
-			}
-
-			if ( current >= end )
-			{
-				// end of string, allowed
-			}
-			else if ( ( ch = name [ current ] ) == '/'
-					|| ch                       == '\\'
-					|| ( notImplicitFile && ( ch == ':' || ch == '?' || ch == '#' ) ) )
-			{
-				end = current ;
-			}
-			else
-			{
-				// not a valid terminating character
-				return Invalid ;
-			}
-
-			parts [ dotCount ] = currentValue ;
-
-			// Parsed, reassemble and check for overflows
-			switch ( dotCount )
-			{
-				case 0 : // 0xFFFFFFFF
-
-					if ( parts [ 0 ] > MaxIPv4Value )
-					{
-						return Invalid ;
-					}
-
-					return parts [ 0 ] ;
-				case 1 : // 0xFF.0xFFFFFF
-
-					if ( parts [ 1 ] > 0xffffff )
-					{
-						return Invalid ;
-					}
-
-					return ( parts [ 0 ] << 24 ) | ( parts [ 1 ] & 0xffffff ) ;
-				case 2 : // 0xFF.0xFF.0xFFFF
-
-					if ( parts [ 2 ] > 0xffff )
-					{
-						return Invalid ;
-					}
-
-					return ( parts [ 0 ] << 24 ) | ( ( parts [ 1 ] & 0xff ) << 16 ) | ( parts [ 2 ] & 0xffff ) ;
-				case 3 : // 0xFF.0xFF.0xFF.0xFF
-
-					if ( parts [ 3 ] > 0xff )
-					{
-						return Invalid ;
-					}
-
-					return ( parts [ 0 ]               << 24 )
-							| ( ( parts [ 1 ] & 0xff ) << 16 )
-							| ( ( parts [ 2 ] & 0xff ) << 8 )
-							| ( parts [ 3 ] & 0xff ) ;
-				default :
-
-					return Invalid ;
-			}
 		}
 
 		//
@@ -433,6 +230,209 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			}
 
 			return numbers [ 0 ] == 127 ;
+		}
+
+		// methods
+		// Parse and canonicalize
+		internal static string ParseCanonicalName ( string str , int start , int end , ref bool isLoopback )
+		{
+			unsafe
+			{
+				byte * numbers = stackalloc byte [ NumberOfLabels ] ;
+				isLoopback = Parse ( str , numbers , start , end ) ;
+
+				return numbers [ 0 ] + "." + numbers [ 1 ] + "." + numbers [ 2 ] + "." + numbers [ 3 ] ;
+			}
+		}
+
+		// Only called from the IPv6Helper, only parse the canonical format
+		internal static int ParseHostNumber ( string str , int start , int end )
+		{
+			unsafe
+			{
+				byte * numbers = stackalloc byte [ NumberOfLabels ] ;
+				ParseCanonical ( str , numbers , start , end ) ;
+
+				return ( numbers [ 0 ] << 24 ) + ( numbers [ 1 ] << 16 ) + ( numbers [ 2 ] << 8 ) + numbers [ 3 ] ;
+			}
+		}
+
+		// Parse any canonical or noncanonical IPv4 formats and return a long between 0 and MaxIPv4Value.
+		// Return Invalid (-1) for failures.
+		// If the address has less than three dots, only the rightmost section is assumed to contain the combined value for
+		// the missing sections: 0xFF00FFFF == 0xFF.0x00.0xFF.0xFF == 0xFF.0xFFFF
+		internal static unsafe long ParseNonCanonical ( char * name , int start , ref int end , bool notImplicitFile )
+		{
+			char     ch ;
+			long [ ] parts          = new long[ 4 ] ;
+			long     currentValue   = 0 ;
+			bool     atLeastOneChar = false ;
+
+			// Parse one dotted section at a time
+			int dotCount = 0 ; // Limit 3
+			int current  = start ;
+
+			for ( ; current < end ; current++ )
+			{
+				ch           = name [ current ] ;
+				currentValue = 0 ;
+
+				// Figure out what base this section is in
+				int numberBase = Decimal ;
+
+				if ( ch == '0' )
+				{
+					numberBase = Octal ;
+					current++ ;
+					atLeastOneChar = true ;
+
+					if ( current < end )
+					{
+						ch = name [ current ] ;
+
+						if ( ch    == 'x'
+							 || ch == 'X' )
+						{
+							numberBase = Hex ;
+							current++ ;
+							atLeastOneChar = false ;
+						}
+					}
+				}
+
+				// Parse this section
+				for ( ; current < end ; current++ )
+				{
+					ch = name [ current ] ;
+					int digitValue ;
+
+					if ( ( numberBase == Decimal || numberBase == Hex )
+						 && '0' <= ch
+						 && ch  <= '9' )
+					{
+						digitValue = ch - '0' ;
+					}
+					else if ( numberBase == Octal
+							  && '0'     <= ch
+							  && ch      <= '7' )
+					{
+						digitValue = ch - '0' ;
+					}
+					else if ( numberBase == Hex
+							  && 'a'     <= ch
+							  && ch      <= 'f' )
+					{
+						digitValue = ch + 10 - 'a' ;
+					}
+					else if ( numberBase == Hex
+							  && 'A'     <= ch
+							  && ch      <= 'F' )
+					{
+						digitValue = ch + 10 - 'A' ;
+					}
+					else
+					{
+						break ; // Invalid/terminator
+					}
+
+					currentValue = currentValue * numberBase + digitValue ;
+
+					if ( currentValue > MaxIPv4Value ) // Overflow
+					{
+						return Invalid ;
+					}
+
+					atLeastOneChar = true ;
+				}
+
+				if ( current             < end
+					 && name [ current ] == '.' )
+				{
+					if ( dotCount >= 3       // Max of 3 dots and 4 segments
+						 || ! atLeastOneChar // No empty segmets: 1...1
+						 // Only the last segment can be more than 255 (if there are less than 3 dots)
+						 || currentValue > 0xFF )
+					{
+						return Invalid ;
+					}
+
+					parts [ dotCount ] = currentValue ;
+					dotCount++ ;
+					atLeastOneChar = false ;
+
+					continue ;
+				}
+
+				// We don't get here unless We find an invalid character or a terminator
+				break ;
+			}
+
+			// Terminators
+			if ( ! atLeastOneChar )
+			{
+				return Invalid ; // Empty trailing segment: 1.1.1.
+			}
+
+			if ( current >= end )
+			{
+				// end of string, allowed
+			}
+			else if ( ( ch = name [ current ] ) == '/'
+					  || ch                     == '\\'
+					  || ( notImplicitFile && ( ch == ':' || ch == '?' || ch == '#' ) ) )
+			{
+				end = current ;
+			}
+			else
+			{
+				// not a valid terminating character
+				return Invalid ;
+			}
+
+			parts [ dotCount ] = currentValue ;
+
+			// Parsed, reassemble and check for overflows
+			switch ( dotCount )
+			{
+				case 0 : // 0xFFFFFFFF
+
+					if ( parts [ 0 ] > MaxIPv4Value )
+					{
+						return Invalid ;
+					}
+
+					return parts [ 0 ] ;
+				case 1 : // 0xFF.0xFFFFFF
+
+					if ( parts [ 1 ] > 0xffffff )
+					{
+						return Invalid ;
+					}
+
+					return ( parts [ 0 ] << 24 ) | ( parts [ 1 ] & 0xffffff ) ;
+				case 2 : // 0xFF.0xFF.0xFFFF
+
+					if ( parts [ 2 ] > 0xffff )
+					{
+						return Invalid ;
+					}
+
+					return ( parts [ 0 ] << 24 ) | ( ( parts [ 1 ] & 0xff ) << 16 ) | ( parts [ 2 ] & 0xffff ) ;
+				case 3 : // 0xFF.0xFF.0xFF.0xFF
+
+					if ( parts [ 3 ] > 0xff )
+					{
+						return Invalid ;
+					}
+
+					return ( parts [ 0 ]              << 24 )
+						   | ( ( parts [ 1 ] & 0xff ) << 16 )
+						   | ( ( parts [ 2 ] & 0xff ) << 8 )
+						   | ( parts [ 3 ] & 0xff ) ;
+				default :
+
+					return Invalid ;
+			}
 		}
 
 	}

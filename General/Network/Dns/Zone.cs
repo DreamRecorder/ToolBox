@@ -128,6 +128,12 @@ namespace DreamRecorder . ToolBox . Network . Dns
 		IEnumerator IEnumerable . GetEnumerator ( ) => GetEnumerator ( ) ;
 
 		/// <summary>
+		///     Adds an enumeration of records to the end of the Zone
+		/// </summary>
+		/// <param name="items">Records to be added</param>
+		public void AddRange ( IEnumerable <DnsRecordBase> items ) { _records . AddRange ( items ) ; }
+
+		/// <summary>
 		///     Loads a Zone from a master file
 		/// </summary>
 		/// <param name="name">The name of the zone</param>
@@ -154,10 +160,10 @@ namespace DreamRecorder . ToolBox . Network . Dns
 		private static Zone ParseMasterFile ( DomainName name , StreamReader reader )
 		{
 			List <DnsRecordBase> records = ParseRecords (
-														reader ,
-														name ,
-														0 ,
-														new UnknownRecord (
+														 reader ,
+														 name ,
+														 0 ,
+														 new UnknownRecord (
 																			name ,
 																			RecordType . Invalid ,
 																			RecordClass . INet ,
@@ -169,13 +175,13 @@ namespace DreamRecorder . ToolBox . Network . Dns
 			if ( soa != null )
 			{
 				records . ForEach (
-									x =>
-									{
-										if ( x . TimeToLive == 0 )
-										{
-											x . TimeToLive = soa . NegativeCachingTTL ;
-										}
-									} ) ;
+								   x =>
+								   {
+									   if ( x . TimeToLive == 0 )
+									   {
+										   x . TimeToLive = soa . NegativeCachingTTL ;
+									   }
+								   } ) ;
 			}
 
 			return new Zone ( name , records ) ;
@@ -199,9 +205,9 @@ namespace DreamRecorder . ToolBox . Network . Dns
 															Select (
 																	x
 																		=> x . Groups . Cast <Group> ( ) .
-																				Last ( g => g . Success ) .
-																				Value .
-																				FromMasterfileLabelRepresentation ( ) ) .
+																			   Last ( g => g . Success ) .
+																			   Value .
+																			   FromMasterfileLabelRepresentation ( ) ) .
 															ToArray ( ) ;
 
 					if ( parts [ 0 ] . Equals ( "$origin" , StringComparison . InvariantCultureIgnoreCase ) )
@@ -223,12 +229,12 @@ namespace DreamRecorder . ToolBox . Network . Dns
 
 						// ReSharper disable once AssignNullToNotNullAttribute
 						string path = Path . Combine (
-													new FileInfo ( fileStream . Name ) . DirectoryName ,
-													parts [ 1 ] ) ;
+													  new FileInfo ( fileStream . Name ) . DirectoryName ,
+													  parts [ 1 ] ) ;
 
 						DomainName includeOrigin = ( parts . Length > 2 )
-														? DomainName . ParseFromMasterFile ( parts [ 2 ] )
-														: origin ;
+													   ? DomainName . ParseFromMasterFile ( parts [ 2 ] )
+													   : origin ;
 
 						using StreamReader includeReader = new StreamReader ( path ) ;
 						records . AddRange ( ParseRecords ( includeReader , includeOrigin , ttl , lastRecord ) ) ;
@@ -308,9 +314,9 @@ namespace DreamRecorder . ToolBox . Network . Dns
 								}
 							}
 							else if ( RecordClassHelper . TryParseShortString (
-																				parts [ 1 ] ,
-																				out recordClass ,
-																				false ) )
+																			   parts [ 1 ] ,
+																			   out recordClass ,
+																			   false ) )
 							{
 								// domain, second is record class
 								if ( int . TryParse ( parts [ 2 ] , out recordTtl ) )
@@ -381,7 +387,7 @@ namespace DreamRecorder . ToolBox . Network . Dns
 						lastRecord . TimeToLive  = recordTtl ;
 
 						if ( ( rrData . Length > 0 )
-							&& ( rrData [ 0 ]  == @"\#" ) )
+							 && ( rrData [ 0 ] == @"\#" ) )
 						{
 							lastRecord . ParseUnknownRecordData ( rrData ) ;
 						}
@@ -396,6 +402,14 @@ namespace DreamRecorder . ToolBox . Network . Dns
 			}
 
 			return records ;
+		}
+
+		private static string ReadLineWithoutComment ( StreamReader reader )
+		{
+			string line = reader . ReadLine ( ) ;
+
+			// ReSharper disable once AssignNullToNotNullAttribute
+			return _commentRemoverRegex . Match ( line ) . Groups [ "data" ] . Value ;
 		}
 
 		private static string ReadRecordLine ( StreamReader reader )
@@ -435,14 +449,6 @@ namespace DreamRecorder . ToolBox . Network . Dns
 			return line ;
 		}
 
-		private static string ReadLineWithoutComment ( StreamReader reader )
-		{
-			string line = reader . ReadLine ( ) ;
-
-			// ReSharper disable once AssignNullToNotNullAttribute
-			return _commentRemoverRegex . Match ( line ) . Groups [ "data" ] . Value ;
-		}
-
 		/// <summary>
 		///     Signs a zone
 		/// </summary>
@@ -463,8 +469,8 @@ namespace DreamRecorder . ToolBox . Network . Dns
 			byte [ ]            nsec3Salt       = null ,
 			bool                nsec3OptOut     = false )
 		{
-			if ( ( keys           == null )
-				|| ( keys . Count == 0 ) )
+			if ( ( keys            == null )
+				 || ( keys . Count == 0 ) )
 			{
 				throw new Exception ( "No DNS Keys were provided" ) ;
 			}
@@ -480,10 +486,10 @@ namespace DreamRecorder . ToolBox . Network . Dns
 			}
 
 			if ( keys . Any (
-							x => ( x . Protocol != 3 )
-								|| ( ( nsec3Algorithm != 0 )
-										? ! x . Algorithm . IsCompatibleWithNSec3 ( )
-										: ! x . Algorithm . IsCompatibleWithNSec ( ) ) ) )
+							 x => ( x . Protocol != 3 )
+								  || ( ( nsec3Algorithm != 0 )
+										   ? ! x . Algorithm . IsCompatibleWithNSec3 ( )
+										   : ! x . Algorithm . IsCompatibleWithNSec ( ) ) ) )
 			{
 				throw new Exception ( "At least one invalid DNS key was provided" ) ;
 			}
@@ -498,14 +504,14 @@ namespace DreamRecorder . ToolBox . Network . Dns
 			else
 			{
 				return SignWithNSec3 (
-									inception ,
-									expiration ,
-									zoneSigningKeys ,
-									keySigningKeys ,
-									nsec3Algorithm ,
-									nsec3Iterations ,
-									nsec3Salt ,
-									nsec3OptOut ) ;
+									  inception ,
+									  expiration ,
+									  zoneSigningKeys ,
+									  keySigningKeys ,
+									  nsec3Algorithm ,
+									  nsec3Iterations ,
+									  nsec3Salt ,
+									  nsec3OptOut ) ;
 			}
 		}
 
@@ -517,10 +523,10 @@ namespace DreamRecorder . ToolBox . Network . Dns
 		{
 			SoaRecord soaRecord = _records . OfType <SoaRecord> ( ) . First ( ) ;
 			List <DomainName> subZones = _records .
-										Where ( x => ( x . RecordType == RecordType . Ns ) && ( x . Name != Name ) ) .
-										Select ( x => x . Name ) .
-										Distinct ( ) .
-										ToList ( ) ;
+										 Where ( x => ( x . RecordType == RecordType . Ns ) && ( x . Name != Name ) ) .
+										 Select ( x => x . Name ) .
+										 Distinct ( ) .
+										 ToList ( ) ;
 			List <DnsRecordBase> glueRecords =
 				_records . Where ( x => subZones . Any ( y => x . Name . IsSubDomainOf ( y ) ) ) . ToList ( ) ;
 			List <Tuple <DomainName , List <DnsRecordBase>>> recordsByName = _records . Except ( glueRecords ) .
@@ -532,12 +538,12 @@ namespace DreamRecorder . ToolBox . Network . Dns
 																			x . Key ,
 																			x .
 																				OrderBy (
-																				y
-																					=> y . RecordType
-																							== RecordType . Soa
-																							? - 1
-																							: ( int )y .
-																								RecordType ) .
+																				 y
+																					 => y . RecordType
+																							 == RecordType . Soa
+																							 ? - 1
+																							 : ( int )y .
+																								 RecordType ) .
 																				ToList ( ) ) ) .
 				OrderBy ( x => x . Item1 ) .
 				ToList ( ) ;
@@ -551,7 +557,7 @@ namespace DreamRecorder . ToolBox . Network . Dns
 				DomainName currentName = recordsByName [ i ] . Item1 ;
 
 				foreach ( IGrouping <RecordType , DnsRecordBase> recordsByType in recordsByName [ i ] .
-							Item2 . GroupBy ( x => x . RecordType ) )
+							 Item2 . GroupBy ( x => x . RecordType ) )
 				{
 					List <DnsRecordBase> records = recordsByType . ToList ( ) ;
 
@@ -560,7 +566,7 @@ namespace DreamRecorder . ToolBox . Network . Dns
 
 					// do not sign nameserver delegations for sub zones
 					if ( ( records [ 0 ] . RecordType == RecordType . Ns )
-						&& ( currentName              != Name ) )
+						 && ( currentName             != Name ) )
 					{
 						continue ;
 					}
@@ -594,7 +600,7 @@ namespace DreamRecorder . ToolBox . Network . Dns
 				foreach ( DnsKeyRecord key in zoneSigningKeys )
 				{
 					res . Add (
-								new RrSigRecord (
+							   new RrSigRecord (
 												new List <DnsRecordBase> { nsecRecord , } ,
 												key ,
 												inception ,
@@ -619,20 +625,20 @@ namespace DreamRecorder . ToolBox . Network . Dns
 		{
 			SoaRecord soaRecord = _records . OfType <SoaRecord> ( ) . First ( ) ;
 			List <DnsRecordBase> subZoneNameserver = _records .
-													Where (
+													 Where (
 															x
 																=> ( x . RecordType == RecordType . Ns )
-																	&& ( x . Name   != Name ) ) .
-													ToList ( ) ;
+																   && ( x . Name    != Name ) ) .
+													 ToList ( ) ;
 			List <DomainName> subZones = subZoneNameserver . Select ( x => x . Name ) . Distinct ( ) . ToList ( ) ;
 			List <DnsRecordBase> unsignedRecords =
 				_records . Where ( x => subZones . Any ( y => x . Name . IsSubDomainOf ( y ) ) ) .
-							ToList ( ) ; // glue records
+						   ToList ( ) ; // glue records
 			if ( nsec3OptOut )
 			{
 				unsignedRecords = unsignedRecords .
-								Union (
-										subZoneNameserver . Where (
+								  Union (
+										 subZoneNameserver . Where (
 																	x
 																		=> ! _records . Any (
 																			y
@@ -641,7 +647,7 @@ namespace DreamRecorder . ToolBox . Network . Dns
 																					&& ( y . Name
 																								== x .
 																									Name ) ) ) ) .
-								ToList ( ) ; // delegations without DS record
+								  ToList ( ) ; // delegations without DS record
 			}
 
 			List <Tuple <DomainName , List <DnsRecordBase>>> recordsByName = _records . Except ( unsignedRecords ) .
@@ -653,12 +659,12 @@ namespace DreamRecorder . ToolBox . Network . Dns
 																			x . Key ,
 																			x .
 																				OrderBy (
-																				y
-																					=> y . RecordType
-																							== RecordType . Soa
-																							? - 1
-																							: ( int )y .
-																								RecordType ) .
+																				 y
+																					 => y . RecordType
+																							 == RecordType . Soa
+																							 ? - 1
+																							 : ( int )y .
+																								 RecordType ) .
 																				ToList ( ) ) ) .
 				OrderBy ( x => x . Item1 ) .
 				ToList ( ) ;
@@ -675,14 +681,14 @@ namespace DreamRecorder . ToolBox . Network . Dns
 
 			recordsByName [ 0 ] .
 				Item2 . Add (
-							new NSec3ParamRecord (
-												soaRecord . Name ,
-												soaRecord . RecordClass ,
-												0 ,
-												nsec3Algorithm ,
-												0 ,
-												( ushort )nsec3Iterations ,
-												nsec3Salt ) ) ;
+							 new NSec3ParamRecord (
+												   soaRecord . Name ,
+												   soaRecord . RecordClass ,
+												   0 ,
+												   nsec3Algorithm ,
+												   0 ,
+												   ( ushort )nsec3Iterations ,
+												   nsec3Salt ) ) ;
 
 			HashSet <DomainName> allNames = new HashSet <DomainName> ( ) ;
 
@@ -693,7 +699,7 @@ namespace DreamRecorder . ToolBox . Network . Dns
 				DomainName currentName = recordsByName [ i ] . Item1 ;
 
 				foreach ( IGrouping <RecordType , DnsRecordBase> recordsByType in recordsByName [ i ] .
-							Item2 . GroupBy ( x => x . RecordType ) )
+							 Item2 . GroupBy ( x => x . RecordType ) )
 				{
 					List <DnsRecordBase> records = recordsByType . ToList ( ) ;
 
@@ -702,7 +708,7 @@ namespace DreamRecorder . ToolBox . Network . Dns
 
 					// do not sign nameserver delegations for sub zones
 					if ( ( records [ 0 ] . RecordType == RecordType . Ns )
-						&& ( currentName              != Name ) )
+						 && ( currentName             != Name ) )
 					{
 						continue ;
 					}
@@ -727,16 +733,16 @@ namespace DreamRecorder . ToolBox . Network . Dns
 								Item1 . GetNSec3Hash ( nsec3Algorithm , nsec3Iterations , nsec3Salt ) ;
 				nSec3Records . Add (
 									new NSec3Record (
-													DomainName . ParseFromMasterFile ( hash . ToBase32HexString ( ) )
-													+ Name ,
-													soaRecord . RecordClass ,
-													soaRecord . NegativeCachingTTL ,
-													nsec3Algorithm ,
-													nsec3RecordFlags ,
-													( ushort )nsec3Iterations ,
-													nsec3Salt ,
-													hash ,
-													recordTypes ) ) ;
+													 DomainName . ParseFromMasterFile ( hash . ToBase32HexString ( ) )
+													 + Name ,
+													 soaRecord . RecordClass ,
+													 soaRecord . NegativeCachingTTL ,
+													 nsec3Algorithm ,
+													 nsec3RecordFlags ,
+													 ( ushort )nsec3Iterations ,
+													 nsec3Salt ,
+													 hash ,
+													 recordTypes ) ) ;
 
 				allNames . Add ( currentName ) ;
 				for ( int j = currentName . LabelCount - Name . LabelCount ; j > 0 ; j-- )
@@ -748,17 +754,17 @@ namespace DreamRecorder . ToolBox . Network . Dns
 						hash = possibleNonTerminal . GetNSec3Hash ( nsec3Algorithm , nsec3Iterations , nsec3Salt ) ;
 						nSec3Records . Add (
 											new NSec3Record (
-															DomainName . ParseFromMasterFile (
-															hash . ToBase32HexString ( ) )
-															+ Name ,
-															soaRecord . RecordClass ,
-															soaRecord . NegativeCachingTTL ,
-															nsec3Algorithm ,
-															nsec3RecordFlags ,
-															( ushort )nsec3Iterations ,
-															nsec3Salt ,
-															hash ,
-															new List <RecordType> ( ) ) ) ;
+															 DomainName . ParseFromMasterFile (
+															  hash . ToBase32HexString ( ) )
+															 + Name ,
+															 soaRecord . RecordClass ,
+															 soaRecord . NegativeCachingTTL ,
+															 nsec3Algorithm ,
+															 nsec3RecordFlags ,
+															 ( ushort )nsec3Iterations ,
+															 nsec3Salt ,
+															 hash ,
+															 new List <RecordType> ( ) ) ) ;
 
 						allNames . Add ( possibleNonTerminal ) ;
 					}
@@ -783,7 +789,7 @@ namespace DreamRecorder . ToolBox . Network . Dns
 				foreach ( DnsKeyRecord key in zoneSigningKeys )
 				{
 					res . Add (
-								new RrSigRecord (
+							   new RrSigRecord (
 												new List <DnsRecordBase> { nSec3Record , } ,
 												key ,
 												inception ,
@@ -795,12 +801,6 @@ namespace DreamRecorder . ToolBox . Network . Dns
 
 			return res ;
 		}
-
-		/// <summary>
-		///     Adds an enumeration of records to the end of the Zone
-		/// </summary>
-		/// <param name="items">Records to be added</param>
-		public void AddRange ( IEnumerable <DnsRecordBase> items ) { _records . AddRange ( items ) ; }
 
 	}
 

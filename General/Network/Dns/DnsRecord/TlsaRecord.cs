@@ -160,26 +160,26 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		}
 
 		/// <summary>
+		///     The certificate association data
+		/// </summary>
+		public byte [ ] CertificateAssociationData { get ; private set ; }
+
+		/// <summary>
 		///     The certificate usage
 		/// </summary>
 		public TlsaCertificateUsage CertificateUsage { get ; private set ; }
-
-		/// <summary>
-		///     The selector
-		/// </summary>
-		public TlsaSelector Selector { get ; private set ; }
 
 		/// <summary>
 		///     The matching type
 		/// </summary>
 		public TlsaMatchingType MatchingType { get ; private set ; }
 
-		/// <summary>
-		///     The certificate association data
-		/// </summary>
-		public byte [ ] CertificateAssociationData { get ; private set ; }
-
 		protected internal override int MaximumRecordDataLength => 3 + CertificateAssociationData . Length ;
+
+		/// <summary>
+		///     The selector
+		/// </summary>
+		public TlsaSelector Selector { get ; private set ; }
 
 		internal TlsaRecord ( ) { }
 
@@ -227,6 +227,19 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 			Selector                   = selector ;
 			MatchingType               = matchingType ;
 			CertificateAssociationData = GetCertificateAssocicationData ( selector , matchingType , certificate ) ;
+		}
+
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			messageData [ currentPosition++ ] = ( byte )CertificateUsage ;
+			messageData [ currentPosition++ ] = ( byte )Selector ;
+			messageData [ currentPosition++ ] = ( byte )MatchingType ;
+			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , CertificateAssociationData ) ;
 		}
 
 		internal static byte [ ] GetCertificateAssocicationData (
@@ -301,30 +314,17 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 			Selector         = ( TlsaSelector )byte . Parse ( stringRepresentation [ 1 ] ) ;
 			MatchingType     = ( TlsaMatchingType )byte . Parse ( stringRepresentation [ 2 ] ) ;
 			CertificateAssociationData = string . Join ( string . Empty , stringRepresentation . Skip ( 3 ) ) .
-												FromBase16String ( ) ;
+												  FromBase16String ( ) ;
 		}
 
 		internal override string RecordDataToString ( )
 			=> ( byte )CertificateUsage
-				+ " "
-				+ ( byte )Selector
-				+ " "
-				+ ( byte )MatchingType
-				+ " "
-				+ string . Join ( string . Empty , CertificateAssociationData . ToBase16String ( ) ) ;
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			messageData [ currentPosition++ ] = ( byte )CertificateUsage ;
-			messageData [ currentPosition++ ] = ( byte )Selector ;
-			messageData [ currentPosition++ ] = ( byte )MatchingType ;
-			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , CertificateAssociationData ) ;
-		}
+			   + " "
+			   + ( byte )Selector
+			   + " "
+			   + ( byte )MatchingType
+			   + " "
+			   + string . Join ( string . Empty , CertificateAssociationData . ToBase16String ( ) ) ;
 
 	}
 

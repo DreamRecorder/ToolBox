@@ -17,6 +17,11 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 	{
 
 		/// <summary>
+		///     Clears the record cache
+		/// </summary>
+		void ClearCache ( ) ;
+
+		/// <summary>
 		///     Queries a dns resolver for specified records.
 		/// </summary>
 		/// <typeparam name="T"> Type of records, that should be returned </typeparam>
@@ -49,11 +54,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 			RecordType        recordType  = RecordType . A ,
 			RecordClass       recordClass = RecordClass . INet ,
 			CancellationToken token       = default ( CancellationToken ) ) where T : DnsRecordBase ;
-
-		/// <summary>
-		///     Clears the record cache
-		/// </summary>
-		void ClearCache ( ) ;
 
 	}
 

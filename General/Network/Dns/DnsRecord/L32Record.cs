@@ -18,16 +18,16 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 	{
 
 		/// <summary>
-		///     The preference
-		/// </summary>
-		public ushort Preference { get ; private set ; }
-
-		/// <summary>
 		///     The Locator
 		/// </summary>
 		public uint Locator32 { get ; private set ; }
 
 		protected internal override int MaximumRecordDataLength => 6 ;
+
+		/// <summary>
+		///     The preference
+		/// </summary>
+		public ushort Preference { get ; private set ; }
 
 		internal L32Record ( ) { }
 
@@ -39,13 +39,24 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="preference"> The preference </param>
 		/// <param name="locator32"> The Locator </param>
 		public L32Record ( DomainName name , int timeToLive , ushort preference , uint locator32 ) : base (
-		name ,
-		RecordType . L32 ,
-		RecordClass . INet ,
-		timeToLive )
+		 name ,
+		 RecordType . L32 ,
+		 RecordClass . INet ,
+		 timeToLive )
 		{
 			Preference = preference ;
 			Locator32  = locator32 ;
+		}
+
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , Preference ) ;
+			DnsMessageBase . EncodeUInt ( messageData , ref currentPosition , Locator32 ) ;
 		}
 
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )
@@ -66,17 +77,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		}
 
 		internal override string RecordDataToString ( ) => Preference + " " + new IPAddress ( Locator32 ) ;
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , Preference ) ;
-			DnsMessageBase . EncodeUInt ( messageData , ref currentPosition , Locator32 ) ;
-		}
 
 	}
 

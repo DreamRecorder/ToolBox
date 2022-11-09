@@ -19,11 +19,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . EDns
 	{
 
 		/// <summary>
-		///     Gets or set the sender's UDP payload size
-		/// </summary>
-		public ushort UdpPayloadSize { get => ( ushort )RecordClass ; set => RecordClass = ( RecordClass )value ; }
-
-		/// <summary>
 		///     Gets or sets the high bits of return code (EXTENDED-RCODE)
 		/// </summary>
 		public ReturnCode ExtendedReturnCode
@@ -33,19 +28,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . EDns
 			{
 				int clearedTtl = ( TimeToLive & 0x00ffffff ) ;
 				TimeToLive = ( clearedTtl | ( ( int )value << 20 ) ) ;
-			}
-		}
-
-		/// <summary>
-		///     Gets or set the EDNS version
-		/// </summary>
-		public byte Version
-		{
-			get => ( byte )( ( TimeToLive & 0x00ff0000 ) >> 16 ) ;
-			set
-			{
-				int clearedTtl = ( int )( ( uint )TimeToLive & 0xff00ffff ) ;
-				TimeToLive = clearedTtl | ( value << 16 ) ;
 			}
 		}
 
@@ -74,17 +56,12 @@ namespace DreamRecorder . ToolBox . Network . Dns . EDns
 			}
 		}
 
-		/// <summary>
-		///     Gets or set additional EDNS options
-		/// </summary>
-		public List <EDnsOptionBase> Options { get ; private set ; }
-
 		protected internal override int MaximumRecordDataLength
 		{
 			get
 			{
-				if ( ( Options           == null )
-					|| ( Options . Count == 0 ) )
+				if ( ( Options            == null )
+					 || ( Options . Count == 0 ) )
 				{
 					return 0 ;
 				}
@@ -96,12 +73,54 @@ namespace DreamRecorder . ToolBox . Network . Dns . EDns
 		}
 
 		/// <summary>
+		///     Gets or set additional EDNS options
+		/// </summary>
+		public List <EDnsOptionBase> Options { get ; private set ; }
+
+		/// <summary>
+		///     Gets or set the sender's UDP payload size
+		/// </summary>
+		public ushort UdpPayloadSize { get => ( ushort )RecordClass ; set => RecordClass = ( RecordClass )value ; }
+
+		/// <summary>
+		///     Gets or set the EDNS version
+		/// </summary>
+		public byte Version
+		{
+			get => ( byte )( ( TimeToLive & 0x00ff0000 ) >> 16 ) ;
+			set
+			{
+				int clearedTtl = ( int )( ( uint )TimeToLive & 0xff00ffff ) ;
+				TimeToLive = clearedTtl | ( value << 16 ) ;
+			}
+		}
+
+		/// <summary>
 		///     Creates a new instance of the OptRecord
 		/// </summary>
 		public OptRecord ( ) : base ( DomainName . Root , RecordType . Opt , ( RecordClass )512 , 0 )
 		{
 			UdpPayloadSize = 4096 ;
 			Options        = new List <EDnsOptionBase> ( ) ;
+		}
+
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			if ( ( Options            != null )
+				 && ( Options . Count != 0 ) )
+			{
+				foreach ( EDnsOptionBase option in Options )
+				{
+					DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , ( ushort )option . Type ) ;
+					DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , option . DataLength ) ;
+					option . EncodeData ( messageData , ref currentPosition ) ;
+				}
+			}
 		}
 
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )
@@ -175,36 +194,17 @@ namespace DreamRecorder . ToolBox . Network . Dns . EDns
 			throw new NotSupportedException ( ) ;
 		}
 
-		/// <summary>
-		///     Returns the textual representation of the OptRecord
-		/// </summary>
-		/// <returns> The textual representation </returns>
-		public override string ToString ( ) => RecordDataToString ( ) ;
-
 		internal override string RecordDataToString ( )
 		{
 			string flags = IsDnsSecOk ? "DO" : "" ;
 			return string . Format ( "; EDNS version: {0}; flags: {1}; udp: {2}" , Version , flags , UdpPayloadSize ) ;
 		}
 
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			if ( ( Options           != null )
-				&& ( Options . Count != 0 ) )
-			{
-				foreach ( EDnsOptionBase option in Options )
-				{
-					DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , ( ushort )option . Type ) ;
-					DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , option . DataLength ) ;
-					option . EncodeData ( messageData , ref currentPosition ) ;
-				}
-			}
-		}
+		/// <summary>
+		///     Returns the textual representation of the OptRecord
+		/// </summary>
+		/// <returns> The textual representation </returns>
+		public override string ToString ( ) => RecordDataToString ( ) ;
 
 	}
 

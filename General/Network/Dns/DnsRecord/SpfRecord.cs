@@ -28,10 +28,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="timeToLive"> Seconds the record should be cached at most </param>
 		/// <param name="textData"> Text data of the record </param>
 		public SpfRecord ( DomainName name , int timeToLive , string textData ) : base (
-		name ,
-		RecordType . Spf ,
-		timeToLive ,
-		textData )
+		 name ,
+		 RecordType . Spf ,
+		 timeToLive ,
+		 textData )
 		{
 		}
 
@@ -42,10 +42,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="timeToLive"> Seconds the record should be cached at most </param>
 		/// <param name="textParts"> All parts of the text data </param>
 		public SpfRecord ( DomainName name , int timeToLive , IEnumerable <string> textParts ) : base (
-		name ,
-		RecordType . Spf ,
-		timeToLive ,
-		textParts )
+		 name ,
+		 RecordType . Spf ,
+		 timeToLive ,
+		 textParts )
 		{
 		}
 

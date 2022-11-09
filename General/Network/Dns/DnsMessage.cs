@@ -16,15 +16,6 @@ namespace DreamRecorder . ToolBox . Network . Dns
 	{
 
 		/// <summary>
-		///     Gets or sets the entries in the question section
-		/// </summary>
-		public new List <DnsQuestion> Questions
-		{
-			get => base . Questions ;
-			set => base . Questions = ( value ?? new List <DnsQuestion> ( ) ) ;
-		}
-
-		/// <summary>
 		///     Gets or sets the entries in the answer records section
 		/// </summary>
 		public new List <DnsRecordBase> AnswerRecords
@@ -66,8 +57,8 @@ namespace DreamRecorder . ToolBox . Network . Dns
 					if ( value )
 					{
 						throw new ArgumentOutOfRangeException (
-																nameof ( value ) ,
-																"Setting DO flag is allowed in edns messages only" ) ;
+															   nameof ( value ) ,
+															   "Setting DO flag is allowed in edns messages only" ) ;
 					}
 				}
 				else
@@ -77,19 +68,21 @@ namespace DreamRecorder . ToolBox . Network . Dns
 			}
 		}
 
-		internal override bool IsTcpUsingRequested
-			=> ( Questions . Count > 0 )
-				&& ( ( Questions [ 0 ] . RecordType   == RecordType . Axfr )
-					|| ( Questions [ 0 ] . RecordType == RecordType . Ixfr ) ) ;
-
 		internal override bool IsTcpResendingRequested => IsTruncated ;
 
+		internal override bool IsTcpUsingRequested
+			=> ( Questions . Count > 0 )
+			   && ( ( Questions [ 0 ] . RecordType    == RecordType . Axfr )
+					|| ( Questions [ 0 ] . RecordType == RecordType . Ixfr ) ) ;
+
 		/// <summary>
-		///     Parses a the contents of a byte array as DnsMessage
+		///     Gets or sets the entries in the question section
 		/// </summary>
-		/// <param name="data">Buffer, that contains the message data</param>
-		/// <returns>A new instance of the DnsMessage class</returns>
-		public static DnsMessage Parse ( byte [ ] data ) => Parse <DnsMessage> ( data ) ;
+		public new List <DnsQuestion> Questions
+		{
+			get => base . Questions ;
+			set => base . Questions = ( value ?? new List <DnsQuestion> ( ) ) ;
+		}
 
 		/// <summary>
 		///     Creates a new instance of the DnsMessage as response to the current instance
@@ -130,16 +123,23 @@ namespace DreamRecorder . ToolBox . Network . Dns
 				return false ;
 			}
 
-			if ( ( Questions [ 0 ] . RecordType   != RecordType . Axfr )
-				&& ( Questions [ 0 ] . RecordType != RecordType . Ixfr ) )
+			if ( ( Questions [ 0 ] . RecordType    != RecordType . Axfr )
+				 && ( Questions [ 0 ] . RecordType != RecordType . Ixfr ) )
 			{
 				return false ;
 			}
 
-			return ( AnswerRecords . Count                > 0 )
-					&& ( AnswerRecords [ 0 ] . RecordType == RecordType . Soa )
-					&& ( ( AnswerRecords . Count == 1 ) || ( AnswerRecords [ ^1 ] . RecordType != RecordType . Soa ) ) ;
+			return ( AnswerRecords . Count               > 0 )
+				   && ( AnswerRecords [ 0 ] . RecordType == RecordType . Soa )
+				   && ( ( AnswerRecords . Count == 1 ) || ( AnswerRecords [ ^1 ] . RecordType != RecordType . Soa ) ) ;
 		}
+
+		/// <summary>
+		///     Parses a the contents of a byte array as DnsMessage
+		/// </summary>
+		/// <param name="data">Buffer, that contains the message data</param>
+		/// <returns>A new instance of the DnsMessage class</returns>
+		public static DnsMessage Parse ( byte [ ] data ) => Parse <DnsMessage> ( data ) ;
 
 		#region Header
 

@@ -17,14 +17,14 @@ namespace DreamRecorder . ToolBox . Network . Dns
 	{
 
 		/// <summary>
-		///     Original query, which the client provided
-		/// </summary>
-		public DnsMessageBase Query { get ; private set ; }
-
-		/// <summary>
 		///     Protocol used by the client
 		/// </summary>
 		public ProtocolType ProtocolType { get ; private set ; }
+
+		/// <summary>
+		///     Original query, which the client provided
+		/// </summary>
+		public DnsMessageBase Query { get ; private set ; }
 
 		/// <summary>
 		///     Remote endpoint of the client

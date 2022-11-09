@@ -9,19 +9,6 @@ namespace DreamRecorder . ToolBox . General
 	public static class ExceptionHelper
 	{
 
-		public static bool Success ( this Action action )
-		{
-			try
-			{
-				action ( ) ;
-				return true ;
-			}
-			catch
-			{
-				return false ;
-			}
-		}
-
 		public static T IgnoreException <T> ( this Func <T> func , T onError = default ) where T : class
 		{
 			try
@@ -43,6 +30,19 @@ namespace DreamRecorder . ToolBox . General
 			catch
 			{
 				return onError ;
+			}
+		}
+
+		public static bool Success ( this Action action )
+		{
+			try
+			{
+				action ( ) ;
+				return true ;
+			}
+			catch
+			{
+				return false ;
 			}
 		}
 

@@ -14,13 +14,13 @@ namespace DreamRecorder . ToolBox . General
 
 		public Func <DateTimeOffset ?> Action { get ; set ; }
 
+		private bool IsRunning { get ; set ; }
+
 		public DateTimeOffset ? LastRun { get ; private set ; }
 
 		public DateTimeOffset ? NextRun { get ; set ; }
 
 		public int RunCount { get ; set ; }
-
-		private bool IsRunning { get ; set ; }
 
 		public ScheduledTask (
 			Func <DateTimeOffset ?> action ,
@@ -102,7 +102,7 @@ namespace DreamRecorder . ToolBox . General
 
 		private static ILogger Logger
 			=> _logger ??= StaticServiceProvider . Provider . GetService <ILoggerFactory> ( ) .
-													CreateLogger <ScheduledTask> ( ) ;
+												   CreateLogger <ScheduledTask> ( ) ;
 
 
 		private static ILogger _logger ;

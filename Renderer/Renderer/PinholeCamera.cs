@@ -10,6 +10,9 @@ namespace DreamRecorder . ToolBox . Renderer
 	public class PinholeCamera : Camera
 	{
 
+		protected override Vector2 CalculateProject ( Vector3 point )
+			=> new Vector2 ( point . X / point . Z , point . Y / point . Z ) ;
+
 		protected override Vector3 CalculateProject ( Vector2 point )
 		{
 			float x = ( float )HalfFovTan * point . X / ScreenWidth ;
@@ -17,9 +20,6 @@ namespace DreamRecorder . ToolBox . Renderer
 
 			return x * Right + y * Up + Forward ;
 		}
-
-		protected override Vector2 CalculateProject ( Vector3 point )
-			=> new Vector2 ( point . X / point . Z , point . Y / point . Z ) ;
 
 	}
 

@@ -20,26 +20,26 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 	{
 
 		/// <summary>
-		///     Algorithm of the hash
-		/// </summary>
-		public NSec3HashAlgorithm HashAlgorithm { get ; private set ; }
-
-		/// <summary>
 		///     Flags of the record
 		/// </summary>
 		public byte Flags { get ; private set ; }
+
+		/// <summary>
+		///     Algorithm of the hash
+		/// </summary>
+		public NSec3HashAlgorithm HashAlgorithm { get ; private set ; }
 
 		/// <summary>
 		///     Number of iterations
 		/// </summary>
 		public ushort Iterations { get ; private set ; }
 
+		protected internal override int MaximumRecordDataLength => 5 + Salt . Length ;
+
 		/// <summary>
 		///     Binary data of salt
 		/// </summary>
 		public byte [ ] Salt { get ; private set ; }
-
-		protected internal override int MaximumRecordDataLength => 5 + Salt . Length ;
 
 		internal NSec3ParamRecord ( ) { }
 
@@ -68,6 +68,20 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 			Salt          = salt ?? new byte [ ] { } ;
 		}
 
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			messageData [ currentPosition++ ] = ( byte )HashAlgorithm ;
+			messageData [ currentPosition++ ] = Flags ;
+			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , Iterations ) ;
+			messageData [ currentPosition++ ] = ( byte )Salt . Length ;
+			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , Salt ) ;
+		}
+
 		internal override void ParseRecordData ( byte [ ] resultData , int currentPosition , int length )
 		{
 			HashAlgorithm = ( NSec3HashAlgorithm )resultData [ currentPosition++ ] ;
@@ -88,32 +102,18 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 			Flags         = byte . Parse ( stringRepresentation [ 1 ] ) ;
 			Iterations    = ushort . Parse ( stringRepresentation [ 2 ] ) ;
 			Salt = ( stringRepresentation [ 3 ] == "-" )
-						? new byte [ ] { }
-						: stringRepresentation [ 3 ] . FromBase16String ( ) ;
+					   ? new byte [ ] { }
+					   : stringRepresentation [ 3 ] . FromBase16String ( ) ;
 		}
 
 		internal override string RecordDataToString ( )
 			=> ( byte )HashAlgorithm
-				+ " "
-				+ Flags
-				+ " "
-				+ Iterations
-				+ " "
-				+ ( ( Salt . Length == 0 ) ? "-" : Salt . ToBase16String ( ) ) ;
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			messageData [ currentPosition++ ] = ( byte )HashAlgorithm ;
-			messageData [ currentPosition++ ] = Flags ;
-			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , Iterations ) ;
-			messageData [ currentPosition++ ] = ( byte )Salt . Length ;
-			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , Salt ) ;
-		}
+			   + " "
+			   + Flags
+			   + " "
+			   + Iterations
+			   + " "
+			   + ( ( Salt . Length == 0 ) ? "-" : Salt . ToBase16String ( ) ) ;
 
 	}
 

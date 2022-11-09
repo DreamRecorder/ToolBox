@@ -26,20 +26,6 @@ namespace DreamRecorder . ToolBox . Network . Dns
 		private readonly List <IPAddress> _servers ;
 
 		/// <summary>
-		///     Milliseconds after which a query times out.
-		/// </summary>
-		public int QueryTimeout { get ; }
-
-		/// <summary>
-		///     Gets or set a value indicating whether the response is validated as described in
-		///     <see
-		///         cref="!:http://tools.ietf.org/id/draft-vixie-dnsext-dns0x20-00.txt">
-		///         draft-vixie-dnsext-dns0x20-00
-		///     </see>
-		/// </summary>
-		public bool IsResponseValidationEnabled { get ; set ; }
-
-		/// <summary>
 		///     Gets or set a value indicating whether the query labels are used for additional validation as described in
 		///     <see
 		///         cref="!:http://tools.ietf.org/id/draft-vixie-dnsext-dns0x20-00.txt">
@@ -50,18 +36,32 @@ namespace DreamRecorder . ToolBox . Network . Dns
 		// ReSharper disable once InconsistentNaming
 		public bool Is0x20ValidationEnabled { get ; set ; }
 
-		protected abstract int MaximumQueryMessageSize { get ; }
+		private static bool IsIPv6Enabled { get ; } = IsAnyIPv6Configured ( ) ;
 
-		protected virtual bool IsUdpEnabled { get ; set ; }
+		/// <summary>
+		///     Gets or set a value indicating whether the response is validated as described in
+		///     <see
+		///         cref="!:http://tools.ietf.org/id/draft-vixie-dnsext-dns0x20-00.txt">
+		///         draft-vixie-dnsext-dns0x20-00
+		///     </see>
+		/// </summary>
+		public bool IsResponseValidationEnabled { get ; set ; }
 
 		protected virtual bool IsTcpEnabled { get ; set ; }
 
-		private static bool IsIPv6Enabled { get ; } = IsAnyIPv6Configured ( ) ;
+		protected virtual bool IsUdpEnabled { get ; set ; }
+
+		protected abstract int MaximumQueryMessageSize { get ; }
+
+		/// <summary>
+		///     Milliseconds after which a query times out.
+		/// </summary>
+		public int QueryTimeout { get ; }
 
 		internal DnsClientBase ( IEnumerable <IPAddress> servers , int queryTimeout , int port )
 		{
 			_servers = servers . OrderBy ( s => s . AddressFamily == AddressFamily . InterNetworkV6 ? 0 : 1 ) .
-								ToList ( ) ;
+								 ToList ( ) ;
 			_isAnyServerMulticast = _servers . Any ( s => s . IsMulticast ( ) ) ;
 			QueryTimeout          = queryTimeout ;
 			_port                 = port ;
@@ -71,233 +71,123 @@ namespace DreamRecorder . ToolBox . Network . Dns
 
 		private static readonly IPAddress _ipvMappedNetworkAddress = IPAddress . Parse ( "0:0:0:0:0:FFFF::" ) ;
 
-		protected TMessage SendMessage <TMessage> ( TMessage message ) where TMessage : DnsMessageBase , new ( )
+		private List <DnsClientEndpointInfo> GetEndpointInfos ( )
 		{
-			PrepareMessage (
-							message ,
-							out int messageLength ,
-							out byte [ ] messageData ,
-							out DnsServer . SelectTsigKey tsigKeySelector ,
-							out byte [ ] tsigOriginalMac ) ;
-
-			bool sendByTcp = ( ( messageLength > MaximumQueryMessageSize )
-								|| message . IsTcpUsingRequested
-								|| ! IsUdpEnabled ) ;
-
-			List <DnsClientEndpointInfo> endpointInfos = GetEndpointInfos ( ) ;
-
-			for ( int i = 0 ; i < endpointInfos . Count ; i++ )
+			List <DnsClientEndpointInfo> endpointInfos ;
+			if ( _isAnyServerMulticast )
 			{
-				TcpClient     tcpClient = null ;
-				NetworkStream tcpStream = null ;
+				List <IPAddress> localIPs = NetworkInterface . GetAllNetworkInterfaces ( ) .
+															   Where (
+																	  n
+																		  => n . SupportsMulticast
+																			 && ( n . OperationalStatus
+																						 == OperationalStatus . Up )
+																			 && ( n . NetworkInterfaceType
+																						 != NetworkInterfaceType .
+																							 Loopback ) ) .
+															   SelectMany (
+																		   n
+																			   => n . GetIPProperties ( ) .
+																				   UnicastAddresses .
+																				   Select ( a => a . Address ) ) .
+															   Where (
+																	  a
+																		  => ! IPAddress . IsLoopback ( a )
+																			 && ( ( a . AddressFamily
+																									 == AddressFamily .
+																										 InterNetwork )
+																						 || a . IsIPv6LinkLocal ) ) .
+															   ToList ( ) ;
 
-				try
-				{
-					DnsClientEndpointInfo endpointInfo = endpointInfos [ i ] ;
-
-					IPAddress responderAddress ;
-					byte [ ] resultData = sendByTcp
-											? QueryByTcp (
-														endpointInfo . ServerAddress ,
-														messageData ,
-														messageLength ,
-														ref tcpClient ,
-														ref tcpStream ,
-														out responderAddress )
-											: QueryByUdp (
-														endpointInfo ,
-														messageData ,
-														messageLength ,
-														out responderAddress ) ;
-
-					if ( resultData != null )
-					{
-						TMessage result ;
-
-						try
-						{
-							result = DnsMessageBase . Parse <TMessage> (
-																		resultData ,
-																		tsigKeySelector ,
-																		tsigOriginalMac ) ;
-						}
-						catch ( Exception e )
-						{
-							Trace . TraceError ( "Error on dns query: " + e ) ;
-							continue ;
-						}
-
-						if ( ! ValidateResponse ( message , result ) )
-						{
-							continue ;
-						}
-
-						if ( ( result . ReturnCode == ReturnCode . ServerFailure )
-							&& ( i                 != endpointInfos . Count - 1 ) )
-						{
-							continue ;
-						}
-
-						if ( result . IsTcpResendingRequested )
-						{
-							resultData = QueryByTcp (
-													responderAddress ,
-													messageData ,
-													messageLength ,
-													ref tcpClient ,
-													ref tcpStream ,
-													out responderAddress ) ;
-							if ( resultData != null )
-							{
-								TMessage tcpResult ;
-
-								try
-								{
-									tcpResult = DnsMessageBase . Parse <TMessage> (
-									resultData ,
-									tsigKeySelector ,
-									tsigOriginalMac ) ;
-								}
-								catch ( Exception e )
-								{
-									Trace . TraceError ( "Error on dns query: " + e ) ;
-									continue ;
-								}
-
-								if ( tcpResult . ReturnCode == ReturnCode . ServerFailure )
-								{
-									if ( i != endpointInfos . Count - 1 )
-									{
-										continue ;
-									}
-								}
-								else
-								{
-									result = tcpResult ;
-								}
-							}
-						}
-
-						bool isTcpNextMessageWaiting = result . IsTcpNextMessageWaiting ( false ) ;
-						bool isSucessfullFinished    = true ;
-
-						while ( isTcpNextMessageWaiting )
-						{
-							resultData = QueryByTcp (
-													responderAddress ,
-													null ,
-													0 ,
-													ref tcpClient ,
-													ref tcpStream ,
-													out responderAddress ) ;
-							if ( resultData != null )
-							{
-								TMessage tcpResult ;
-
-								try
-								{
-									tcpResult = DnsMessageBase . Parse <TMessage> (
-									resultData ,
-									tsigKeySelector ,
-									tsigOriginalMac ) ;
-								}
-								catch ( Exception e )
-								{
-									Trace . TraceError ( "Error on dns query: " + e ) ;
-									isSucessfullFinished = false ;
-									break ;
-								}
-
-								if ( tcpResult . ReturnCode == ReturnCode . ServerFailure )
-								{
-									isSucessfullFinished = false ;
-									break ;
-								}
-								else
-								{
-									result . AnswerRecords . AddRange ( tcpResult . AnswerRecords ) ;
-									isTcpNextMessageWaiting = tcpResult . IsTcpNextMessageWaiting ( true ) ;
-								}
-							}
-							else
-							{
-								isSucessfullFinished = false ;
-								break ;
-							}
-						}
-
-						if ( isSucessfullFinished )
-						{
-							return result ;
-						}
-					}
-				}
-				finally
-				{
-					try
-					{
-						tcpStream ? . Dispose ( ) ;
-						tcpClient ? . Close ( ) ;
-					}
-					catch
-					{
-						// ignored
-					}
-				}
+				endpointInfos = _servers . SelectMany (
+													   s =>
+													   {
+														   if ( s . IsMulticast ( ) )
+														   {
+															   return localIPs .
+																	  Where (
+																			 l
+																				 => l . AddressFamily
+																					 == s . AddressFamily ) .
+																	  Select (
+																			  l => new DnsClientEndpointInfo
+																				  {
+																					  IsMulticast   = true ,
+																					  ServerAddress = s ,
+																					  LocalAddress  = l ,
+																				  } ) ;
+														   }
+														   else
+														   {
+															   return new [ ]
+																	  {
+																		  new DnsClientEndpointInfo
+																		  {
+																			  IsMulticast   = false ,
+																			  ServerAddress = s ,
+																			  LocalAddress =
+																				  s . AddressFamily
+																				  == AddressFamily . InterNetwork
+																					  ? IPAddress . Any
+																					  : IPAddress . IPv6Any ,
+																		  } ,
+																	  } ;
+														   }
+													   } ) .
+										   ToList ( ) ;
+			}
+			else
+			{
+				endpointInfos = _servers .
+								Where ( x => IsIPv6Enabled || ( x . AddressFamily == AddressFamily . InterNetwork ) ) .
+								Select (
+										s => new DnsClientEndpointInfo
+											 {
+												 IsMulticast   = false ,
+												 ServerAddress = s ,
+												 LocalAddress =
+													 s . AddressFamily == AddressFamily . InterNetwork
+														 ? IPAddress . Any
+														 : IPAddress . IPv6Any ,
+											 } ) .
+								ToList ( ) ;
 			}
 
-			return null ;
+			return endpointInfos ;
 		}
 
-		protected List <TMessage> SendMessageParallel <TMessage> ( TMessage message )
-			where TMessage : DnsMessageBase , new ( )
+		private static bool IsAnyIPv6Configured ( )
 		{
-			Task <List <TMessage>> result = SendMessageParallelAsync ( message , default ( CancellationToken ) ) ;
-
-			result . Wait ( ) ;
-
-			return result . Result ;
+			return NetworkInterface . GetAllNetworkInterfaces ( ) .
+									  Where (
+											 n
+												 => ( n . OperationalStatus == OperationalStatus . Up )
+													&& ( n . NetworkInterfaceType
+														 != NetworkInterfaceType . Loopback ) ) .
+									  SelectMany (
+												  n
+													  => n . GetIPProperties ( ) .
+															 UnicastAddresses . Select ( a => a . Address ) ) .
+									  Any (
+										   a
+											   => ! IPAddress . IsLoopback ( a )
+												  && ( a . AddressFamily == AddressFamily . InterNetworkV6 )
+												  && ! a . IsIPv6LinkLocal
+												  && ! a . IsIPv6Teredo
+												  && ! a . GetNetworkAddress ( 96 ) .
+														   Equals ( _ipvMappedNetworkAddress ) ) ;
 		}
 
-		private bool ValidateResponse <TMessage> ( TMessage message , TMessage result ) where TMessage : DnsMessageBase
+		private void PrepareAndBindUdpSocket ( DnsClientEndpointInfo endpointInfo , Socket udpClient )
 		{
-			if ( IsResponseValidationEnabled )
+			if ( endpointInfo . IsMulticast )
 			{
-				if ( ( result . ReturnCode   == ReturnCode . NoError )
-					|| ( result . ReturnCode == ReturnCode . NxDomain ) )
-				{
-					if ( message . TransactionId != result . TransactionId )
-					{
-						return false ;
-					}
-
-					if ( ( message . Questions  == null )
-						|| ( result . Questions == null ) )
-					{
-						return false ;
-					}
-
-					if ( ( message . Questions . Count != result . Questions . Count ) )
-					{
-						return false ;
-					}
-
-					for ( int j = 0 ; j < message . Questions . Count ; j++ )
-					{
-						DnsQuestion queryQuestion    = message . Questions [ j ] ;
-						DnsQuestion responseQuestion = result . Questions [ j ] ;
-
-						if ( ( queryQuestion . RecordClass  != responseQuestion . RecordClass )
-							|| ( queryQuestion . RecordType != responseQuestion . RecordType )
-							|| ( ! queryQuestion . Name . Equals ( responseQuestion . Name , false ) ) )
-						{
-							return false ;
-						}
-					}
-				}
+				udpClient . Bind ( new IPEndPoint ( endpointInfo . LocalAddress , 0 ) ) ;
 			}
-
-			return true ;
+			else
+			{
+				udpClient . Connect ( endpointInfo . ServerAddress , _port ) ;
+			}
 		}
 
 		private void PrepareMessage <TMessage> (
@@ -328,69 +218,6 @@ namespace DreamRecorder . ToolBox . Network . Dns
 			{
 				tsigKeySelector = null ;
 				tsigOriginalMac = null ;
-			}
-		}
-
-		private byte [ ] QueryByUdp (
-			DnsClientEndpointInfo endpointInfo ,
-			byte [ ]              messageData ,
-			int                   messageLength ,
-			out IPAddress         responderAddress )
-		{
-			using Socket udpClient = new Socket (
-												endpointInfo . LocalAddress . AddressFamily ,
-												SocketType . Dgram ,
-												ProtocolType . Udp ) ;
-			try
-			{
-				udpClient . ReceiveTimeout = QueryTimeout ;
-
-				PrepareAndBindUdpSocket ( endpointInfo , udpClient ) ;
-
-				EndPoint serverEndpoint = new IPEndPoint ( endpointInfo . ServerAddress , _port ) ;
-
-				udpClient . SendTo ( messageData , messageLength , SocketFlags . None , serverEndpoint ) ;
-
-				if ( endpointInfo . IsMulticast )
-				{
-					serverEndpoint = new IPEndPoint (
-													udpClient . AddressFamily == AddressFamily . InterNetwork
-														? IPAddress . Any
-														: IPAddress . IPv6Any ,
-													_port ) ;
-				}
-
-				byte [ ] buffer = new byte[ 65535 ] ;
-				int length = udpClient . ReceiveFrom (
-													buffer ,
-													0 ,
-													buffer . Length ,
-													SocketFlags . None ,
-													ref serverEndpoint ) ;
-
-				responderAddress = ( ( IPEndPoint )serverEndpoint ) . Address ;
-
-				byte [ ] res = new byte[ length ] ;
-				Buffer . BlockCopy ( buffer , 0 , res , 0 , length ) ;
-				return res ;
-			}
-			catch ( Exception e )
-			{
-				Trace . TraceError ( "Error on dns query: " + e ) ;
-				responderAddress = default ( IPAddress ) ;
-				return null ;
-			}
-		}
-
-		private void PrepareAndBindUdpSocket ( DnsClientEndpointInfo endpointInfo , Socket udpClient )
-		{
-			if ( endpointInfo . IsMulticast )
-			{
-				udpClient . Bind ( new IPEndPoint ( endpointInfo . LocalAddress , 0 ) ) ;
-			}
-			else
-			{
-				udpClient . Connect ( endpointInfo . ServerAddress , _port ) ;
 			}
 		}
 
@@ -458,246 +285,6 @@ namespace DreamRecorder . ToolBox . Network . Dns
 			}
 		}
 
-		private bool TryRead ( TcpClient client , NetworkStream stream , byte [ ] buffer , int length )
-		{
-			int readBytes = 0 ;
-
-			while ( readBytes < length )
-			{
-				if ( ! client . IsConnected ( ) )
-				{
-					return false ;
-				}
-
-				readBytes += stream . Read ( buffer , readBytes , length - readBytes ) ;
-			}
-
-			return true ;
-		}
-
-		protected async Task <TMessage> SendMessageAsync <TMessage> ( TMessage message , CancellationToken token )
-			where TMessage : DnsMessageBase , new ( )
-		{
-			PrepareMessage (
-							message ,
-							out int messageLength ,
-							out byte [ ] messageData ,
-							out DnsServer . SelectTsigKey tsigKeySelector ,
-							out byte [ ] tsigOriginalMac ) ;
-
-			bool sendByTcp = ( ( messageLength > MaximumQueryMessageSize )
-								|| message . IsTcpUsingRequested
-								|| ! IsUdpEnabled ) ;
-
-			List <DnsClientEndpointInfo> endpointInfos = GetEndpointInfos ( ) ;
-
-			for ( int i = 0 ; i < endpointInfos . Count ; i++ )
-			{
-				token . ThrowIfCancellationRequested ( ) ;
-
-				DnsClientEndpointInfo endpointInfo = endpointInfos [ i ] ;
-				QueryResponse         resultData   = null ;
-
-				try
-				{
-					resultData = await ( sendByTcp
-											? QueryByTcpAsync (
-																endpointInfo . ServerAddress ,
-																messageData ,
-																messageLength ,
-																null ,
-																null ,
-																token )
-											: QuerySingleResponseByUdpAsync (
-																			endpointInfo ,
-																			messageData ,
-																			messageLength ,
-																			token ) ) ;
-
-					if ( resultData == null )
-					{
-						continue ;
-					}
-
-					TMessage result ;
-
-					try
-					{
-						result = DnsMessageBase . Parse <TMessage> (
-																	resultData . Buffer ,
-																	tsigKeySelector ,
-																	tsigOriginalMac ) ;
-					}
-					catch ( Exception e )
-					{
-						Trace . TraceError ( "Error on dns query: " + e ) ;
-						continue ;
-					}
-
-					if ( ! ValidateResponse ( message , result ) )
-					{
-						continue ;
-					}
-
-					if ( ( result . ReturnCode   != ReturnCode . NoError )
-						&& ( result . ReturnCode != ReturnCode . NxDomain )
-						&& ( i                   != endpointInfos . Count - 1 ) )
-					{
-						continue ;
-					}
-
-					if ( result . IsTcpResendingRequested )
-					{
-						resultData = await QueryByTcpAsync (
-															resultData . ResponderAddress ,
-															messageData ,
-															messageLength ,
-															resultData . TcpClient ,
-															resultData . TcpStream ,
-															token ) ;
-						if ( resultData != null )
-						{
-							TMessage tcpResult ;
-
-							try
-							{
-								tcpResult = DnsMessageBase . Parse <TMessage> (
-																				resultData . Buffer ,
-																				tsigKeySelector ,
-																				tsigOriginalMac ) ;
-							}
-							catch ( Exception e )
-							{
-								Trace . TraceError ( "Error on dns query: " + e ) ;
-								return null ;
-							}
-
-							if ( tcpResult . ReturnCode == ReturnCode . ServerFailure )
-							{
-								return result ;
-							}
-							else
-							{
-								result = tcpResult ;
-							}
-						}
-					}
-
-					bool isTcpNextMessageWaiting = result . IsTcpNextMessageWaiting ( false ) ;
-					bool isSucessfullFinished    = true ;
-
-					while ( isTcpNextMessageWaiting )
-					{
-						// ReSharper disable once PossibleNullReferenceException
-						resultData = await QueryByTcpAsync (
-															resultData . ResponderAddress ,
-															null ,
-															0 ,
-															resultData . TcpClient ,
-															resultData . TcpStream ,
-															token ) ;
-						if ( resultData != null )
-						{
-							TMessage tcpResult ;
-
-							try
-							{
-								tcpResult = DnsMessageBase . Parse <TMessage> (
-																				resultData . Buffer ,
-																				tsigKeySelector ,
-																				tsigOriginalMac ) ;
-							}
-							catch ( Exception e )
-							{
-								Trace . TraceError ( "Error on dns query: " + e ) ;
-								isSucessfullFinished = false ;
-								break ;
-							}
-
-							if ( tcpResult . ReturnCode == ReturnCode . ServerFailure )
-							{
-								isSucessfullFinished = false ;
-								break ;
-							}
-							else
-							{
-								result . AnswerRecords . AddRange ( tcpResult . AnswerRecords ) ;
-								isTcpNextMessageWaiting = tcpResult . IsTcpNextMessageWaiting ( true ) ;
-							}
-						}
-						else
-						{
-							isSucessfullFinished = false ;
-							break ;
-						}
-					}
-
-					if ( isSucessfullFinished )
-					{
-						return result ;
-					}
-				}
-				finally
-				{
-					if ( resultData != null )
-					{
-						try
-						{
-							resultData . TcpStream ? . Dispose ( ) ;
-							resultData . TcpClient ? . Close ( ) ;
-						}
-						catch
-						{
-							// ignored
-						}
-					}
-				}
-			}
-
-			return null ;
-		}
-
-		private async Task <QueryResponse> QuerySingleResponseByUdpAsync (
-			DnsClientEndpointInfo endpointInfo ,
-			byte [ ]              messageData ,
-			int                   messageLength ,
-			CancellationToken     token )
-		{
-			try
-			{
-				if ( endpointInfo . IsMulticast )
-				{
-					using UdpClient udpClient = new UdpClient ( new IPEndPoint ( endpointInfo . LocalAddress , 0 ) ) ;
-					IPEndPoint      serverEndpoint = new IPEndPoint ( endpointInfo . ServerAddress , _port ) ;
-					await udpClient . SendAsync ( messageData , messageLength , serverEndpoint ) ;
-
-					udpClient . Client . SendTimeout    = QueryTimeout ;
-					udpClient . Client . ReceiveTimeout = QueryTimeout ;
-
-					UdpReceiveResult response = await udpClient . ReceiveAsync ( QueryTimeout , token ) ;
-					return new QueryResponse ( response . Buffer , response . RemoteEndPoint . Address ) ;
-				}
-				else
-				{
-					using UdpClient udpClient = new UdpClient ( endpointInfo . LocalAddress . AddressFamily ) ;
-					udpClient . Connect ( endpointInfo . ServerAddress , _port ) ;
-
-					udpClient . Client . SendTimeout    = QueryTimeout ;
-					udpClient . Client . ReceiveTimeout = QueryTimeout ;
-
-					await udpClient . SendAsync ( messageData , messageLength ) ;
-
-					UdpReceiveResult response = await udpClient . ReceiveAsync ( QueryTimeout , token ) ;
-					return new QueryResponse ( response . Buffer , response . RemoteEndPoint . Address ) ;
-				}
-			}
-			catch ( Exception e )
-			{
-				Trace . TraceError ( "Error on dns query: " + e ) ;
-				return null ;
-			}
-		}
-
 		private async Task <QueryResponse> QueryByTcpAsync (
 			IPAddress         nameServer ,
 			byte [ ]          messageData ,
@@ -750,8 +337,8 @@ namespace DreamRecorder . ToolBox . Network . Dns
 				byte [ ] resultData = new byte[ length ] ;
 
 				return await TryReadAsync ( tcpClient , tcpStream , resultData , length , token )
-							? new QueryResponse ( resultData , nameServer , tcpClient , tcpStream )
-							: null ;
+						   ? new QueryResponse ( resultData , nameServer , tcpClient , tcpStream )
+						   : null ;
 			}
 			catch ( Exception e )
 			{
@@ -760,31 +347,99 @@ namespace DreamRecorder . ToolBox . Network . Dns
 			}
 		}
 
-		private async Task <bool> TryReadAsync (
-			TcpClient         client ,
-			NetworkStream     stream ,
-			byte [ ]          buffer ,
-			int               length ,
-			CancellationToken token )
+		private byte [ ] QueryByUdp (
+			DnsClientEndpointInfo endpointInfo ,
+			byte [ ]              messageData ,
+			int                   messageLength ,
+			out IPAddress         responderAddress )
 		{
-			int readBytes = 0 ;
-
-			while ( readBytes < length )
+			using Socket udpClient = new Socket (
+												 endpointInfo . LocalAddress . AddressFamily ,
+												 SocketType . Dgram ,
+												 ProtocolType . Udp ) ;
+			try
 			{
-				if ( token . IsCancellationRequested
-					|| ! client . IsConnected ( ) )
+				udpClient . ReceiveTimeout = QueryTimeout ;
+
+				PrepareAndBindUdpSocket ( endpointInfo , udpClient ) ;
+
+				EndPoint serverEndpoint = new IPEndPoint ( endpointInfo . ServerAddress , _port ) ;
+
+				udpClient . SendTo ( messageData , messageLength , SocketFlags . None , serverEndpoint ) ;
+
+				if ( endpointInfo . IsMulticast )
 				{
-					return false ;
+					serverEndpoint = new IPEndPoint (
+													 udpClient . AddressFamily == AddressFamily . InterNetwork
+														 ? IPAddress . Any
+														 : IPAddress . IPv6Any ,
+													 _port ) ;
 				}
 
-				readBytes += await stream . ReadAsync ( buffer , readBytes , length - readBytes , token ) ;
-			}
+				byte [ ] buffer = new byte[ 65535 ] ;
+				int length = udpClient . ReceiveFrom (
+													  buffer ,
+													  0 ,
+													  buffer . Length ,
+													  SocketFlags . None ,
+													  ref serverEndpoint ) ;
 
-			return true ;
+				responderAddress = ( ( IPEndPoint )serverEndpoint ) . Address ;
+
+				byte [ ] res = new byte[ length ] ;
+				Buffer . BlockCopy ( buffer , 0 , res , 0 , length ) ;
+				return res ;
+			}
+			catch ( Exception e )
+			{
+				Trace . TraceError ( "Error on dns query: " + e ) ;
+				responderAddress = default ( IPAddress ) ;
+				return null ;
+			}
 		}
 
-		protected async Task <List <TMessage>> SendMessageParallelAsync
-			<TMessage> ( TMessage message , CancellationToken token ) where TMessage : DnsMessageBase , new ( )
+		private async Task <QueryResponse> QuerySingleResponseByUdpAsync (
+			DnsClientEndpointInfo endpointInfo ,
+			byte [ ]              messageData ,
+			int                   messageLength ,
+			CancellationToken     token )
+		{
+			try
+			{
+				if ( endpointInfo . IsMulticast )
+				{
+					using UdpClient udpClient = new UdpClient ( new IPEndPoint ( endpointInfo . LocalAddress , 0 ) ) ;
+					IPEndPoint      serverEndpoint = new IPEndPoint ( endpointInfo . ServerAddress , _port ) ;
+					await udpClient . SendAsync ( messageData , messageLength , serverEndpoint ) ;
+
+					udpClient . Client . SendTimeout    = QueryTimeout ;
+					udpClient . Client . ReceiveTimeout = QueryTimeout ;
+
+					UdpReceiveResult response = await udpClient . ReceiveAsync ( QueryTimeout , token ) ;
+					return new QueryResponse ( response . Buffer , response . RemoteEndPoint . Address ) ;
+				}
+				else
+				{
+					using UdpClient udpClient = new UdpClient ( endpointInfo . LocalAddress . AddressFamily ) ;
+					udpClient . Connect ( endpointInfo . ServerAddress , _port ) ;
+
+					udpClient . Client . SendTimeout    = QueryTimeout ;
+					udpClient . Client . ReceiveTimeout = QueryTimeout ;
+
+					await udpClient . SendAsync ( messageData , messageLength ) ;
+
+					UdpReceiveResult response = await udpClient . ReceiveAsync ( QueryTimeout , token ) ;
+					return new QueryResponse ( response . Buffer , response . RemoteEndPoint . Address ) ;
+				}
+			}
+			catch ( Exception e )
+			{
+				Trace . TraceError ( "Error on dns query: " + e ) ;
+				return null ;
+			}
+		}
+
+		protected TMessage SendMessage <TMessage> ( TMessage message ) where TMessage : DnsMessageBase , new ( )
 		{
 			PrepareMessage (
 							message ,
@@ -793,42 +448,365 @@ namespace DreamRecorder . ToolBox . Network . Dns
 							out DnsServer . SelectTsigKey tsigKeySelector ,
 							out byte [ ] tsigOriginalMac ) ;
 
-			if ( messageLength > MaximumQueryMessageSize )
+			bool sendByTcp = ( ( messageLength > MaximumQueryMessageSize )
+							   || message . IsTcpUsingRequested
+							   || ! IsUdpEnabled ) ;
+
+			List <DnsClientEndpointInfo> endpointInfos = GetEndpointInfos ( ) ;
+
+			for ( int i = 0 ; i < endpointInfos . Count ; i++ )
 			{
-				throw new ArgumentException ( "Message exceeds maximum size" ) ;
+				TcpClient     tcpClient = null ;
+				NetworkStream tcpStream = null ;
+
+				try
+				{
+					DnsClientEndpointInfo endpointInfo = endpointInfos [ i ] ;
+
+					IPAddress responderAddress ;
+					byte [ ] resultData = sendByTcp
+											  ? QueryByTcp (
+															endpointInfo . ServerAddress ,
+															messageData ,
+															messageLength ,
+															ref tcpClient ,
+															ref tcpStream ,
+															out responderAddress )
+											  : QueryByUdp (
+															endpointInfo ,
+															messageData ,
+															messageLength ,
+															out responderAddress ) ;
+
+					if ( resultData != null )
+					{
+						TMessage result ;
+
+						try
+						{
+							result = DnsMessageBase . Parse <TMessage> (
+																		resultData ,
+																		tsigKeySelector ,
+																		tsigOriginalMac ) ;
+						}
+						catch ( Exception e )
+						{
+							Trace . TraceError ( "Error on dns query: " + e ) ;
+							continue ;
+						}
+
+						if ( ! ValidateResponse ( message , result ) )
+						{
+							continue ;
+						}
+
+						if ( ( result . ReturnCode == ReturnCode . ServerFailure )
+							 && ( i                != endpointInfos . Count - 1 ) )
+						{
+							continue ;
+						}
+
+						if ( result . IsTcpResendingRequested )
+						{
+							resultData = QueryByTcp (
+													 responderAddress ,
+													 messageData ,
+													 messageLength ,
+													 ref tcpClient ,
+													 ref tcpStream ,
+													 out responderAddress ) ;
+							if ( resultData != null )
+							{
+								TMessage tcpResult ;
+
+								try
+								{
+									tcpResult = DnsMessageBase . Parse <TMessage> (
+									 resultData ,
+									 tsigKeySelector ,
+									 tsigOriginalMac ) ;
+								}
+								catch ( Exception e )
+								{
+									Trace . TraceError ( "Error on dns query: " + e ) ;
+									continue ;
+								}
+
+								if ( tcpResult . ReturnCode == ReturnCode . ServerFailure )
+								{
+									if ( i != endpointInfos . Count - 1 )
+									{
+										continue ;
+									}
+								}
+								else
+								{
+									result = tcpResult ;
+								}
+							}
+						}
+
+						bool isTcpNextMessageWaiting = result . IsTcpNextMessageWaiting ( false ) ;
+						bool isSucessfullFinished    = true ;
+
+						while ( isTcpNextMessageWaiting )
+						{
+							resultData = QueryByTcp (
+													 responderAddress ,
+													 null ,
+													 0 ,
+													 ref tcpClient ,
+													 ref tcpStream ,
+													 out responderAddress ) ;
+							if ( resultData != null )
+							{
+								TMessage tcpResult ;
+
+								try
+								{
+									tcpResult = DnsMessageBase . Parse <TMessage> (
+									 resultData ,
+									 tsigKeySelector ,
+									 tsigOriginalMac ) ;
+								}
+								catch ( Exception e )
+								{
+									Trace . TraceError ( "Error on dns query: " + e ) ;
+									isSucessfullFinished = false ;
+									break ;
+								}
+
+								if ( tcpResult . ReturnCode == ReturnCode . ServerFailure )
+								{
+									isSucessfullFinished = false ;
+									break ;
+								}
+								else
+								{
+									result . AnswerRecords . AddRange ( tcpResult . AnswerRecords ) ;
+									isTcpNextMessageWaiting = tcpResult . IsTcpNextMessageWaiting ( true ) ;
+								}
+							}
+							else
+							{
+								isSucessfullFinished = false ;
+								break ;
+							}
+						}
+
+						if ( isSucessfullFinished )
+						{
+							return result ;
+						}
+					}
+				}
+				finally
+				{
+					try
+					{
+						tcpStream ? . Dispose ( ) ;
+						tcpClient ? . Close ( ) ;
+					}
+					catch
+					{
+						// ignored
+					}
+				}
 			}
 
-			if ( message . IsTcpUsingRequested )
+			return null ;
+		}
+
+		protected async Task <TMessage> SendMessageAsync <TMessage> ( TMessage message , CancellationToken token )
+			where TMessage : DnsMessageBase , new ( )
+		{
+			PrepareMessage (
+							message ,
+							out int messageLength ,
+							out byte [ ] messageData ,
+							out DnsServer . SelectTsigKey tsigKeySelector ,
+							out byte [ ] tsigOriginalMac ) ;
+
+			bool sendByTcp = ( ( messageLength > MaximumQueryMessageSize )
+							   || message . IsTcpUsingRequested
+							   || ! IsUdpEnabled ) ;
+
+			List <DnsClientEndpointInfo> endpointInfos = GetEndpointInfos ( ) ;
+
+			for ( int i = 0 ; i < endpointInfos . Count ; i++ )
 			{
-				throw new NotSupportedException ( "Using tcp is not supported in parallel mode" ) ;
+				token . ThrowIfCancellationRequested ( ) ;
+
+				DnsClientEndpointInfo endpointInfo = endpointInfos [ i ] ;
+				QueryResponse         resultData   = null ;
+
+				try
+				{
+					resultData = await ( sendByTcp
+											 ? QueryByTcpAsync (
+																endpointInfo . ServerAddress ,
+																messageData ,
+																messageLength ,
+																null ,
+																null ,
+																token )
+											 : QuerySingleResponseByUdpAsync (
+																			  endpointInfo ,
+																			  messageData ,
+																			  messageLength ,
+																			  token ) ) ;
+
+					if ( resultData == null )
+					{
+						continue ;
+					}
+
+					TMessage result ;
+
+					try
+					{
+						result = DnsMessageBase . Parse <TMessage> (
+																	resultData . Buffer ,
+																	tsigKeySelector ,
+																	tsigOriginalMac ) ;
+					}
+					catch ( Exception e )
+					{
+						Trace . TraceError ( "Error on dns query: " + e ) ;
+						continue ;
+					}
+
+					if ( ! ValidateResponse ( message , result ) )
+					{
+						continue ;
+					}
+
+					if ( ( result . ReturnCode    != ReturnCode . NoError )
+						 && ( result . ReturnCode != ReturnCode . NxDomain )
+						 && ( i                   != endpointInfos . Count - 1 ) )
+					{
+						continue ;
+					}
+
+					if ( result . IsTcpResendingRequested )
+					{
+						resultData = await QueryByTcpAsync (
+															resultData . ResponderAddress ,
+															messageData ,
+															messageLength ,
+															resultData . TcpClient ,
+															resultData . TcpStream ,
+															token ) ;
+						if ( resultData != null )
+						{
+							TMessage tcpResult ;
+
+							try
+							{
+								tcpResult = DnsMessageBase . Parse <TMessage> (
+																			   resultData . Buffer ,
+																			   tsigKeySelector ,
+																			   tsigOriginalMac ) ;
+							}
+							catch ( Exception e )
+							{
+								Trace . TraceError ( "Error on dns query: " + e ) ;
+								return null ;
+							}
+
+							if ( tcpResult . ReturnCode == ReturnCode . ServerFailure )
+							{
+								return result ;
+							}
+							else
+							{
+								result = tcpResult ;
+							}
+						}
+					}
+
+					bool isTcpNextMessageWaiting = result . IsTcpNextMessageWaiting ( false ) ;
+					bool isSucessfullFinished    = true ;
+
+					while ( isTcpNextMessageWaiting )
+					{
+						// ReSharper disable once PossibleNullReferenceException
+						resultData = await QueryByTcpAsync (
+															resultData . ResponderAddress ,
+															null ,
+															0 ,
+															resultData . TcpClient ,
+															resultData . TcpStream ,
+															token ) ;
+						if ( resultData != null )
+						{
+							TMessage tcpResult ;
+
+							try
+							{
+								tcpResult = DnsMessageBase . Parse <TMessage> (
+																			   resultData . Buffer ,
+																			   tsigKeySelector ,
+																			   tsigOriginalMac ) ;
+							}
+							catch ( Exception e )
+							{
+								Trace . TraceError ( "Error on dns query: " + e ) ;
+								isSucessfullFinished = false ;
+								break ;
+							}
+
+							if ( tcpResult . ReturnCode == ReturnCode . ServerFailure )
+							{
+								isSucessfullFinished = false ;
+								break ;
+							}
+							else
+							{
+								result . AnswerRecords . AddRange ( tcpResult . AnswerRecords ) ;
+								isTcpNextMessageWaiting = tcpResult . IsTcpNextMessageWaiting ( true ) ;
+							}
+						}
+						else
+						{
+							isSucessfullFinished = false ;
+							break ;
+						}
+					}
+
+					if ( isSucessfullFinished )
+					{
+						return result ;
+					}
+				}
+				finally
+				{
+					if ( resultData != null )
+					{
+						try
+						{
+							resultData . TcpStream ? . Dispose ( ) ;
+							resultData . TcpClient ? . Close ( ) ;
+						}
+						catch
+						{
+							// ignored
+						}
+					}
+				}
 			}
 
-			BlockingCollection <TMessage> results                 = new BlockingCollection <TMessage> ( ) ;
-			CancellationTokenSource       cancellationTokenSource = new CancellationTokenSource ( ) ;
+			return null ;
+		}
 
-			// ReSharper disable once ReturnValueOfPureMethodIsNotUsed
-			GetEndpointInfos ( ) .
-				Select (
-						x => SendMessageParallelAsync (
-														x ,
-														message ,
-														messageData ,
-														messageLength ,
-														tsigKeySelector ,
-														tsigOriginalMac ,
-														results ,
-														CancellationTokenSource .
-															CreateLinkedTokenSource (
-															token ,
-															cancellationTokenSource . Token ) .
-															Token ) ) .
-				ToArray ( ) ;
+		protected List <TMessage> SendMessageParallel <TMessage> ( TMessage message )
+			where TMessage : DnsMessageBase , new ( )
+		{
+			Task <List <TMessage>> result = SendMessageParallelAsync ( message , default ( CancellationToken ) ) ;
 
-			await Task . Delay ( QueryTimeout , token ) ;
+			result . Wait ( ) ;
 
-			cancellationTokenSource . Cancel ( ) ;
-
-			return results . ToList ( ) ;
+			return result . Result ;
 		}
 
 		private async Task SendMessageParallelAsync <TMessage> (
@@ -885,111 +863,133 @@ namespace DreamRecorder . ToolBox . Network . Dns
 			}
 		}
 
-		private List <DnsClientEndpointInfo> GetEndpointInfos ( )
+		protected async Task <List <TMessage>> SendMessageParallelAsync
+			<TMessage> ( TMessage message , CancellationToken token ) where TMessage : DnsMessageBase , new ( )
 		{
-			List <DnsClientEndpointInfo> endpointInfos ;
-			if ( _isAnyServerMulticast )
-			{
-				List <IPAddress> localIPs = NetworkInterface . GetAllNetworkInterfaces ( ) .
-																Where (
-																		n
-																			=> n . SupportsMulticast
-																				&& ( n . OperationalStatus
-																							== OperationalStatus . Up )
-																				&& ( n . NetworkInterfaceType
-																							!= NetworkInterfaceType .
-																								Loopback ) ) .
-																SelectMany (
-																			n
-																				=> n . GetIPProperties ( ) .
-																					UnicastAddresses .
-																					Select ( a => a . Address ) ) .
-																Where (
-																		a
-																			=> ! IPAddress . IsLoopback ( a )
-																				&& ( ( a . AddressFamily
-																										== AddressFamily .
-																											InterNetwork )
-																							|| a . IsIPv6LinkLocal ) ) .
-																ToList ( ) ;
+			PrepareMessage (
+							message ,
+							out int messageLength ,
+							out byte [ ] messageData ,
+							out DnsServer . SelectTsigKey tsigKeySelector ,
+							out byte [ ] tsigOriginalMac ) ;
 
-				endpointInfos = _servers . SelectMany (
-														s =>
-														{
-															if ( s . IsMulticast ( ) )
-															{
-																return localIPs .
-																		Where (
-																				l
-																					=> l . AddressFamily
-																						== s . AddressFamily ) .
-																		Select (
-																				l => new DnsClientEndpointInfo
-																					{
-																						IsMulticast   = true ,
-																						ServerAddress = s ,
-																						LocalAddress  = l ,
-																					} ) ;
-															}
-															else
-															{
-																return new [ ]
-																		{
-																			new DnsClientEndpointInfo
-																			{
-																				IsMulticast   = false ,
-																				ServerAddress = s ,
-																				LocalAddress =
-																					s . AddressFamily
-																					== AddressFamily . InterNetwork
-																						? IPAddress . Any
-																						: IPAddress . IPv6Any ,
-																			} ,
-																		} ;
-															}
-														} ) .
-											ToList ( ) ;
-			}
-			else
+			if ( messageLength > MaximumQueryMessageSize )
 			{
-				endpointInfos = _servers .
-								Where ( x => IsIPv6Enabled || ( x . AddressFamily == AddressFamily . InterNetwork ) ) .
-								Select (
-										s => new DnsClientEndpointInfo
-											{
-												IsMulticast   = false ,
-												ServerAddress = s ,
-												LocalAddress =
-													s . AddressFamily == AddressFamily . InterNetwork
-														? IPAddress . Any
-														: IPAddress . IPv6Any ,
-											} ) .
-								ToList ( ) ;
+				throw new ArgumentException ( "Message exceeds maximum size" ) ;
 			}
 
-			return endpointInfos ;
+			if ( message . IsTcpUsingRequested )
+			{
+				throw new NotSupportedException ( "Using tcp is not supported in parallel mode" ) ;
+			}
+
+			BlockingCollection <TMessage> results                 = new BlockingCollection <TMessage> ( ) ;
+			CancellationTokenSource       cancellationTokenSource = new CancellationTokenSource ( ) ;
+
+			// ReSharper disable once ReturnValueOfPureMethodIsNotUsed
+			GetEndpointInfos ( ) .
+				Select (
+						x => SendMessageParallelAsync (
+													   x ,
+													   message ,
+													   messageData ,
+													   messageLength ,
+													   tsigKeySelector ,
+													   tsigOriginalMac ,
+													   results ,
+													   CancellationTokenSource .
+														   CreateLinkedTokenSource (
+															token ,
+															cancellationTokenSource . Token ) .
+														   Token ) ) .
+				ToArray ( ) ;
+
+			await Task . Delay ( QueryTimeout , token ) ;
+
+			cancellationTokenSource . Cancel ( ) ;
+
+			return results . ToList ( ) ;
 		}
 
-		private static bool IsAnyIPv6Configured ( )
+		private bool TryRead ( TcpClient client , NetworkStream stream , byte [ ] buffer , int length )
 		{
-			return NetworkInterface . GetAllNetworkInterfaces ( ) .
-									Where (
-											n
-												=> ( n . OperationalStatus == OperationalStatus . Up )
-													&& ( n . NetworkInterfaceType
-														!= NetworkInterfaceType . Loopback ) ) .
-									SelectMany (
-												n
-													=> n . GetIPProperties ( ) .
-															UnicastAddresses . Select ( a => a . Address ) ) .
-									Any (
-										a
-											=> ! IPAddress . IsLoopback ( a )
-												&& ( a . AddressFamily == AddressFamily . InterNetworkV6 )
-												&& ! a . IsIPv6LinkLocal
-												&& ! a . IsIPv6Teredo
-												&& ! a . GetNetworkAddress ( 96 ) .
-														Equals ( _ipvMappedNetworkAddress ) ) ;
+			int readBytes = 0 ;
+
+			while ( readBytes < length )
+			{
+				if ( ! client . IsConnected ( ) )
+				{
+					return false ;
+				}
+
+				readBytes += stream . Read ( buffer , readBytes , length - readBytes ) ;
+			}
+
+			return true ;
+		}
+
+		private async Task <bool> TryReadAsync (
+			TcpClient         client ,
+			NetworkStream     stream ,
+			byte [ ]          buffer ,
+			int               length ,
+			CancellationToken token )
+		{
+			int readBytes = 0 ;
+
+			while ( readBytes < length )
+			{
+				if ( token . IsCancellationRequested
+					 || ! client . IsConnected ( ) )
+				{
+					return false ;
+				}
+
+				readBytes += await stream . ReadAsync ( buffer , readBytes , length - readBytes , token ) ;
+			}
+
+			return true ;
+		}
+
+		private bool ValidateResponse <TMessage> ( TMessage message , TMessage result ) where TMessage : DnsMessageBase
+		{
+			if ( IsResponseValidationEnabled )
+			{
+				if ( ( result . ReturnCode    == ReturnCode . NoError )
+					 || ( result . ReturnCode == ReturnCode . NxDomain ) )
+				{
+					if ( message . TransactionId != result . TransactionId )
+					{
+						return false ;
+					}
+
+					if ( ( message . Questions   == null )
+						 || ( result . Questions == null ) )
+					{
+						return false ;
+					}
+
+					if ( ( message . Questions . Count != result . Questions . Count ) )
+					{
+						return false ;
+					}
+
+					for ( int j = 0 ; j < message . Questions . Count ; j++ )
+					{
+						DnsQuestion queryQuestion    = message . Questions [ j ] ;
+						DnsQuestion responseQuestion = result . Questions [ j ] ;
+
+						if ( ( queryQuestion . RecordClass   != responseQuestion . RecordClass )
+							 || ( queryQuestion . RecordType != responseQuestion . RecordType )
+							 || ( ! queryQuestion . Name . Equals ( responseQuestion . Name , false ) ) )
+						{
+							return false ;
+						}
+					}
+				}
+			}
+
+			return true ;
 		}
 
 		private class QueryResponse

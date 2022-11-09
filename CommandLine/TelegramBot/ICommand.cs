@@ -13,19 +13,21 @@ namespace DreamRecorder . ToolBox . TelegramBot
 	public interface ICommand <TUser> where TUser : IUser
 	{
 
-		[NotNull]
-		string Name { get ; }
-
 		string DisplayName { get ; }
-
-		string Introduction { get ; }
 
 		string HelpInformation { get ; }
 
-		TimeSpan Timeout { get ; }
+		string Introduction { get ; }
+
+		[NotNull]
+		string Name { get ; }
 
 		[CanBeNull]
 		CommandPermissionGroup PermissionGroup { get ; }
+
+		TimeSpan Timeout { get ; }
+
+		bool CanBeRouteTarget ( Session <TUser> session ) ;
 
 		bool Process (
 			[NotNull]               Message         message ,
@@ -39,8 +41,6 @@ namespace DreamRecorder . ToolBox . TelegramBot
 			[NotNull] [ItemNotNull] string [ ]      args ,
 			[NotNull]               Session <TUser> session ,
 			[CanBeNull]             object          tag ) ;
-
-		bool CanBeRouteTarget ( Session <TUser> session ) ;
 
 	}
 

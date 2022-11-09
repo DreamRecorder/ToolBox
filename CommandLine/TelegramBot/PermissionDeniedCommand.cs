@@ -18,32 +18,16 @@ namespace DreamRecorder . ToolBox . TelegramBot
 
 		public static PermissionDeniedCommand <TUser> Current { get ; private set ; }
 
-		public override TimeSpan Timeout => TimeSpan . FromMinutes ( 1 ) ;
+		public override string HelpInformation => string . Empty ;
 
 		public override CommandPermissionGroup PermissionGroup => null ;
 
-		public override string HelpInformation => string . Empty ;
+		public override TimeSpan Timeout => TimeSpan . FromMinutes ( 1 ) ;
 
 		public override bool CanBeRouteTarget ( Session <TUser> session ) => false ;
 
-		public override void Process (
-			CallbackQuery   callbackQuery ,
-			string [ ]      args ,
-			Session <TUser> session ,
-			object          tag = null )
-		{
-			if ( tag is ICommand <TUser> command )
-			{
-				session . ReplyText (
-									callbackQuery . Message ,
-									$"Command `{command ? . PermissionGroup ? . DisplayName}{command . DisplayName}` do not have permission to read your personal info." ,
-									ParseMode . Markdown ,
-									replyMarkup : new InlineKeyboardMarkup (
-																			InlineKeyboardButton . WithCallbackData (
-																			"Grant permission" ,
-																			$"RegisterCommandGroup {command . PermissionGroup . Guid}" ) ) ) ;
-			}
-		}
+		[Prepare]
+		public static void Prepare ( ) { Current = new PermissionDeniedCommand <TUser> ( ) ; }
 
 		public override bool Process (
 			Message         message ,
@@ -60,17 +44,33 @@ namespace DreamRecorder . ToolBox . TelegramBot
 															ParseMode . Markdown ,
 															replyToMessageId : message . MessageId ,
 															replyMarkup : new InlineKeyboardMarkup (
-															InlineKeyboardButton . WithCallbackData (
-															"Grant permission" ,
-															$"RegisterCommandGroup {command . PermissionGroup . Guid}" ) ) ) .
-						Wait ( ) ;
+															 InlineKeyboardButton . WithCallbackData (
+															  "Grant permission" ,
+															  $"RegisterCommandGroup {command . PermissionGroup . Guid}" ) ) ) .
+						  Wait ( ) ;
 			}
 
 			return true ;
 		}
 
-		[Prepare]
-		public static void Prepare ( ) { Current = new PermissionDeniedCommand <TUser> ( ) ; }
+		public override void Process (
+			CallbackQuery   callbackQuery ,
+			string [ ]      args ,
+			Session <TUser> session ,
+			object          tag = null )
+		{
+			if ( tag is ICommand <TUser> command )
+			{
+				session . ReplyText (
+									 callbackQuery . Message ,
+									 $"Command `{command ? . PermissionGroup ? . DisplayName}{command . DisplayName}` do not have permission to read your personal info." ,
+									 ParseMode . Markdown ,
+									 replyMarkup : new InlineKeyboardMarkup (
+																			 InlineKeyboardButton . WithCallbackData (
+																			  "Grant permission" ,
+																			  $"RegisterCommandGroup {command . PermissionGroup . Guid}" ) ) ) ;
+			}
+		}
 
 	}
 

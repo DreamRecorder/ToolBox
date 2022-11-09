@@ -34,20 +34,20 @@ namespace DreamRecorder . ToolBox . Network . Dns . EDns
 		public DnssecAlgorithmUnderstoodOption ( List <DnsSecAlgorithm> algorithms ) : this ( )
 			=> Algorithms = algorithms ;
 
+		internal override void EncodeData ( byte [ ] messageData , ref int currentPosition )
+		{
+			foreach ( DnsSecAlgorithm algorithm in Algorithms )
+			{
+				messageData [ currentPosition++ ] = ( byte )algorithm ;
+			}
+		}
+
 		internal override void ParseData ( byte [ ] resultData , int startPosition , int length )
 		{
 			Algorithms = new List <DnsSecAlgorithm> ( length ) ;
 			for ( int i = 0 ; i < length ; i++ )
 			{
 				Algorithms . Add ( ( DnsSecAlgorithm )resultData [ startPosition++ ] ) ;
-			}
-		}
-
-		internal override void EncodeData ( byte [ ] messageData , ref int currentPosition )
-		{
-			foreach ( DnsSecAlgorithm algorithm in Algorithms )
-			{
-				messageData [ currentPosition++ ] = ( byte )algorithm ;
 			}
 		}
 

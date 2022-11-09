@@ -19,11 +19,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 	{
 
 		/// <summary>
-		///     The preference
-		/// </summary>
-		public ushort Preference { get ; private set ; }
-
-		/// <summary>
 		///     The FQDN
 		/// </summary>
 
@@ -31,6 +26,11 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		public DomainName FQDN { get ; private set ; }
 
 		protected internal override int MaximumRecordDataLength => 4 + FQDN . MaximumRecordDataLength ;
+
+		/// <summary>
+		///     The preference
+		/// </summary>
+		public ushort Preference { get ; private set ; }
 
 		internal LPRecord ( ) { }
 
@@ -42,13 +42,24 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="preference"> The preference </param>
 		/// <param name="fqdn"> The FQDN </param>
 		public LPRecord ( DomainName name , int timeToLive , ushort preference , DomainName fqdn ) : base (
-		name ,
-		RecordType . LP ,
-		RecordClass . INet ,
-		timeToLive )
+		 name ,
+		 RecordType . LP ,
+		 RecordClass . INet ,
+		 timeToLive )
 		{
 			Preference = preference ;
 			FQDN       = fqdn ;
+		}
+
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , Preference ) ;
+			DnsMessageBase . EncodeDomainName ( messageData , offset , ref currentPosition , FQDN , null , false ) ;
 		}
 
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )
@@ -69,17 +80,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		}
 
 		internal override string RecordDataToString ( ) => Preference + " " + FQDN ;
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , Preference ) ;
-			DnsMessageBase . EncodeDomainName ( messageData , offset , ref currentPosition , FQDN , null , false ) ;
-		}
 
 	}
 

@@ -9,11 +9,11 @@ namespace DreamRecorder . ToolBox . General
 	public interface ITask
 	{
 
-		TimeSpan Timeout { get ; }
-
 		TaskPriority Priority { get ; }
 
 		TaskStatus Status { get ; }
+
+		TimeSpan Timeout { get ; }
 
 		void Invoke ( ITaskDispatcher dispatcher ) ;
 

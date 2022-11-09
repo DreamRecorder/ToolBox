@@ -131,16 +131,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		}
 
 		/// <summary>
-		///     Type of the certificate data
-		/// </summary>
-		public CertType Type { get ; private set ; }
-
-		/// <summary>
-		///     Key tag
-		/// </summary>
-		public ushort KeyTag { get ; private set ; }
-
-		/// <summary>
 		///     Algorithm of the certificate
 		/// </summary>
 		public DnsSecAlgorithm Algorithm { get ; private set ; }
@@ -150,7 +140,17 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// </summary>
 		public byte [ ] Certificate { get ; private set ; }
 
+		/// <summary>
+		///     Key tag
+		/// </summary>
+		public ushort KeyTag { get ; private set ; }
+
 		protected internal override int MaximumRecordDataLength => 5 + Certificate . Length ;
+
+		/// <summary>
+		///     Type of the certificate data
+		/// </summary>
+		public CertType Type { get ; private set ; }
 
 		internal CertRecord ( ) { }
 
@@ -177,6 +177,19 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 			Certificate = certificate ?? new byte [ ] { } ;
 		}
 
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , ( ushort )Type ) ;
+			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , KeyTag ) ;
+			messageData [ currentPosition++ ] = ( byte )Algorithm ;
+			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , Certificate ) ;
+		}
+
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )
 		{
 			Type        = ( CertType )DnsMessageBase . ParseUShort ( resultData , ref startPosition ) ;
@@ -200,19 +213,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 
 		internal override string RecordDataToString ( )
 			=> ( ushort )Type + " " + KeyTag + " " + ( byte )Algorithm + " " + Certificate . ToBase64String ( ) ;
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , ( ushort )Type ) ;
-			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , KeyTag ) ;
-			messageData [ currentPosition++ ] = ( byte )Algorithm ;
-			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , Certificate ) ;
-		}
 
 	}
 

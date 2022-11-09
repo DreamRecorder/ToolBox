@@ -11,26 +11,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . TSig
 	internal class TSigAlgorithmHelper
 	{
 
-		public static DomainName GetDomainName ( TSigAlgorithm algorithm )
-		{
-			switch ( algorithm )
-			{
-				case TSigAlgorithm . Md5 :
-					return DomainName . Parse ( "hmac-md5.sig-alg.reg.int" ) ;
-				case TSigAlgorithm . Sha1 :
-					return DomainName . Parse ( "hmac-sha1" ) ;
-				case TSigAlgorithm . Sha256 :
-					return DomainName . Parse ( "hmac-sha256" ) ;
-				case TSigAlgorithm . Sha384 :
-					return DomainName . Parse ( "hmac-sha384" ) ;
-				case TSigAlgorithm . Sha512 :
-					return DomainName . Parse ( "hmac-sha512" ) ;
-
-				default :
-					return null ;
-			}
-		}
-
 		public static TSigAlgorithm GetAlgorithmByName ( DomainName name )
 		{
 			switch ( name . ToString ( ) . ToLower ( ) )
@@ -48,6 +28,26 @@ namespace DreamRecorder . ToolBox . Network . Dns . TSig
 
 				default :
 					return TSigAlgorithm . Unknown ;
+			}
+		}
+
+		public static DomainName GetDomainName ( TSigAlgorithm algorithm )
+		{
+			switch ( algorithm )
+			{
+				case TSigAlgorithm . Md5 :
+					return DomainName . Parse ( "hmac-md5.sig-alg.reg.int" ) ;
+				case TSigAlgorithm . Sha1 :
+					return DomainName . Parse ( "hmac-sha1" ) ;
+				case TSigAlgorithm . Sha256 :
+					return DomainName . Parse ( "hmac-sha256" ) ;
+				case TSigAlgorithm . Sha384 :
+					return DomainName . Parse ( "hmac-sha384" ) ;
+				case TSigAlgorithm . Sha512 :
+					return DomainName . Parse ( "hmac-sha512" ) ;
+
+				default :
+					return null ;
 			}
 		}
 

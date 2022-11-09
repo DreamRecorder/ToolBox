@@ -52,8 +52,8 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 			_cache     = new DnsCache ( ) ;
 			_validator =
 				new DnsSecValidator <DnsSecValidatorContext> (
-															this ,
-															resolverHintStore ?? new StaticResolverHintStore ( ) ) ;
+															  this ,
+															  resolverHintStore ?? new StaticResolverHintStore ( ) ) ;
 		}
 
 		/// <summary>
@@ -162,11 +162,11 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 			RecordClass       recordClass = RecordClass . INet ,
 			CancellationToken token       = default ( CancellationToken ) ) where T : DnsRecordBase
 			=> ResolveSecureInternalAsync <T> (
-												name ,
-												recordType ,
-												recordClass ,
-												new DnsSecValidatorContext ( ) ,
-												token ) ;
+											   name ,
+											   recordType ,
+											   recordClass ,
+											   new DnsSecValidatorContext ( ) ,
+											   token ) ;
 
 		/// <summary>
 		///     Clears the record cache
@@ -180,17 +180,17 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 			DnsSecValidatorContext state ,
 			CancellationToken      token )
 			=> _dnsClient . ResolveAsync (
-										name ,
-										RecordType . Ds ,
-										recordClass ,
-										new DnsQueryOptions
-										{
-											IsEDnsEnabled      = true ,
-											IsDnsSecOk         = true ,
-											IsCheckingDisabled = true ,
-											IsRecursionDesired = true ,
-										} ,
-										token ) ;
+										  name ,
+										  RecordType . Ds ,
+										  recordClass ,
+										  new DnsQueryOptions
+										  {
+											  IsEDnsEnabled      = true ,
+											  IsDnsSecOk         = true ,
+											  IsCheckingDisabled = true ,
+											  IsRecursionDesired = true ,
+										  } ,
+										  token ) ;
 
 		Task <DnsSecResult <TRecord>> IInternalDnsSecResolver <DnsSecValidatorContext> . ResolveSecureAsync <TRecord> (
 			DomainName             name ,
@@ -215,26 +215,26 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 			if ( _cache . TryGetRecords ( name , recordType , recordClass , out DnsCacheRecordList <T> cacheResult ) )
 			{
 				return new DnsSecResult <T> (
-											cacheResult . ReturnCode ,
-											cacheResult ,
-											cacheResult . ValidationResult ) ;
+											 cacheResult . ReturnCode ,
+											 cacheResult ,
+											 cacheResult . ValidationResult ) ;
 			}
 
 			DnsMessage msg = await _dnsClient . ResolveAsync (
-															name ,
-															recordType ,
-															recordClass ,
-															new DnsQueryOptions
-															{
-																IsEDnsEnabled      = true ,
-																IsDnsSecOk         = true ,
-																IsCheckingDisabled = true ,
-																IsRecursionDesired = true ,
-															} ,
-															token ) ;
+															  name ,
+															  recordType ,
+															  recordClass ,
+															  new DnsQueryOptions
+															  {
+																  IsEDnsEnabled      = true ,
+																  IsDnsSecOk         = true ,
+																  IsCheckingDisabled = true ,
+																  IsRecursionDesired = true ,
+															  } ,
+															  token ) ;
 
 			if ( ( msg == null )
-				|| ( ( msg . ReturnCode != ReturnCode . NoError ) && ( msg . ReturnCode != ReturnCode . NxDomain ) ) )
+				 || ( ( msg . ReturnCode != ReturnCode . NoError ) && ( msg . ReturnCode != ReturnCode . NxDomain ) ) )
 			{
 				throw new Exception ( "DNS request failed" ) ;
 			}
@@ -242,67 +242,67 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 			DnsSecValidationResult validationResult ;
 
 			CNameRecord cName = msg . AnswerRecords .
-									Where (
-											x
-												=> ( x . RecordType      == RecordType . CName )
+									  Where (
+											 x
+												 => ( x . RecordType     == RecordType . CName )
 													&& ( x . RecordClass == recordClass )
 													&& x . Name . Equals ( name ) ) .
-									OfType <CNameRecord> ( ) .
-									FirstOrDefault ( ) ;
+									  OfType <CNameRecord> ( ) .
+									  FirstOrDefault ( ) ;
 
 			if ( cName != null )
 			{
 				DnsSecValidationResult cNameValidationResult =
 					await _validator . ValidateAsync (
-													name ,
-													RecordType . CName ,
-													recordClass ,
-													msg ,
-													new List <CNameRecord> { cName , } ,
-													state ,
-													token ) ;
-				if ( ( cNameValidationResult   == DnsSecValidationResult . Bogus )
-					|| ( cNameValidationResult == DnsSecValidationResult . Indeterminate ) )
+													  name ,
+													  RecordType . CName ,
+													  recordClass ,
+													  msg ,
+													  new List <CNameRecord> { cName , } ,
+													  state ,
+													  token ) ;
+				if ( ( cNameValidationResult    == DnsSecValidationResult . Bogus )
+					 || ( cNameValidationResult == DnsSecValidationResult . Indeterminate ) )
 				{
 					throw new DnsSecValidationException ( "CNAME record could not be validated" ) ;
 				}
 
 				List <T> records = msg . AnswerRecords .
-										Where (
+										 Where (
 												x
-													=> ( x . RecordType      == recordType )
-														&& ( x . RecordClass == recordClass )
-														&& x . Name . Equals ( cName . CanonicalName ) ) .
-										OfType <T> ( ) .
-										ToList ( ) ;
+													=> ( x . RecordType     == recordType )
+													   && ( x . RecordClass == recordClass )
+													   && x . Name . Equals ( cName . CanonicalName ) ) .
+										 OfType <T> ( ) .
+										 ToList ( ) ;
 				if ( records . Count > 0 )
 				{
 					DnsSecValidationResult recordsValidationResult =
 						await _validator . ValidateAsync (
-														cName . CanonicalName ,
-														recordType ,
-														recordClass ,
-														msg ,
-														records ,
-														state ,
-														token ) ;
-					if ( ( recordsValidationResult   == DnsSecValidationResult . Bogus )
-						|| ( recordsValidationResult == DnsSecValidationResult . Indeterminate ) )
+														  cName . CanonicalName ,
+														  recordType ,
+														  recordClass ,
+														  msg ,
+														  records ,
+														  state ,
+														  token ) ;
+					if ( ( recordsValidationResult    == DnsSecValidationResult . Bogus )
+						 || ( recordsValidationResult == DnsSecValidationResult . Indeterminate ) )
 					{
 						throw new DnsSecValidationException ( "CNAME matching records could not be validated" ) ;
 					}
 
 					validationResult = cNameValidationResult == recordsValidationResult
-											? cNameValidationResult
-											: DnsSecValidationResult . Unsigned ;
+										   ? cNameValidationResult
+										   : DnsSecValidationResult . Unsigned ;
 					_cache . Add (
-								name ,
-								recordType ,
-								recordClass ,
-								records ,
-								msg . ReturnCode ,
-								validationResult ,
-								Math . Min ( cName . TimeToLive , records . Min ( x => x . TimeToLive ) ) ) ;
+								  name ,
+								  recordType ,
+								  recordClass ,
+								  records ,
+								  msg . ReturnCode ,
+								  validationResult ,
+								  Math . Min ( cName . TimeToLive , records . Min ( x => x . TimeToLive ) ) ) ;
 
 					return new DnsSecResult <T> ( msg . ReturnCode , records , validationResult ) ;
 				}
@@ -315,40 +315,40 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 				DnsSecResult <T> cNameResults =
 					await ResolveSecureAsync <T> ( cName . CanonicalName , recordType , recordClass , token ) ;
 				validationResult = cNameValidationResult == cNameResults . ValidationResult
-										? cNameValidationResult
-										: DnsSecValidationResult . Unsigned ;
+									   ? cNameValidationResult
+									   : DnsSecValidationResult . Unsigned ;
 
 				if ( cNameResults . Records . Count > 0 )
 				{
 					_cache . Add (
-								name ,
-								recordType ,
-								recordClass ,
-								cNameResults . Records ,
-								msg . ReturnCode ,
-								validationResult ,
-								Math . Min (
-											cName . TimeToLive ,
-											cNameResults . Records . Min ( x => x . TimeToLive ) ) ) ;
+								  name ,
+								  recordType ,
+								  recordClass ,
+								  cNameResults . Records ,
+								  msg . ReturnCode ,
+								  validationResult ,
+								  Math . Min (
+											  cName . TimeToLive ,
+											  cNameResults . Records . Min ( x => x . TimeToLive ) ) ) ;
 				}
 
 				return new DnsSecResult <T> ( msg . ReturnCode , cNameResults . Records , validationResult ) ;
 			}
 
 			List <T> res = msg . AnswerRecords .
-								Where (
+								 Where (
 										x
-											=> ( x . RecordType      == recordType )
-												&& ( x . RecordClass == recordClass )
-												&& x . Name . Equals ( name ) ) .
-								OfType <T> ( ) .
-								ToList ( ) ;
+											=> ( x . RecordType     == recordType )
+											   && ( x . RecordClass == recordClass )
+											   && x . Name . Equals ( name ) ) .
+								 OfType <T> ( ) .
+								 ToList ( ) ;
 
 			validationResult =
 				await _validator . ValidateAsync ( name , recordType , recordClass , msg , res , state , token ) ;
 
-			if ( ( validationResult   == DnsSecValidationResult . Bogus )
-				|| ( validationResult == DnsSecValidationResult . Indeterminate ) )
+			if ( ( validationResult    == DnsSecValidationResult . Bogus )
+				 || ( validationResult == DnsSecValidationResult . Indeterminate ) )
 			{
 				throw new DnsSecValidationException ( "Response records could not be validated" ) ;
 			}
@@ -356,13 +356,13 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 			if ( res . Count > 0 )
 			{
 				_cache . Add (
-							name ,
-							recordType ,
-							recordClass ,
-							res ,
-							msg . ReturnCode ,
-							validationResult ,
-							res . Min ( x => x . TimeToLive ) ) ;
+							  name ,
+							  recordType ,
+							  recordClass ,
+							  res ,
+							  msg . ReturnCode ,
+							  validationResult ,
+							  res . Min ( x => x . TimeToLive ) ) ;
 			}
 
 			return new DnsSecResult <T> ( msg . ReturnCode , res , validationResult ) ;

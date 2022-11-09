@@ -82,9 +82,9 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		public TSigAlgorithm Algorithm { get ; private set ; }
 
 		/// <summary>
-		///     Date from which the key is valid
+		///     Error field
 		/// </summary>
-		public DateTime Inception { get ; private set ; }
+		public ReturnCode Error { get ; private set ; }
 
 		/// <summary>
 		///     Date to which the key is valid
@@ -92,30 +92,30 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		public DateTime Expiration { get ; private set ; }
 
 		/// <summary>
-		///     Mode of transaction
+		///     Date from which the key is valid
 		/// </summary>
-		public TKeyMode Mode { get ; private set ; }
-
-		/// <summary>
-		///     Error field
-		/// </summary>
-		public ReturnCode Error { get ; private set ; }
+		public DateTime Inception { get ; private set ; }
 
 		/// <summary>
 		///     Binary data of the key
 		/// </summary>
 		public byte [ ] Key { get ; private set ; }
 
+		protected internal override int MaximumRecordDataLength
+			=> 18
+			   + TSigAlgorithmHelper . GetDomainName ( Algorithm ) . MaximumRecordDataLength
+			   + Key . Length
+			   + OtherData . Length ;
+
+		/// <summary>
+		///     Mode of transaction
+		/// </summary>
+		public TKeyMode Mode { get ; private set ; }
+
 		/// <summary>
 		///     Binary other data
 		/// </summary>
 		public byte [ ] OtherData { get ; private set ; }
-
-		protected internal override int MaximumRecordDataLength
-			=> 18
-				+ TSigAlgorithmHelper . GetDomainName ( Algorithm ) . MaximumRecordDataLength
-				+ Key . Length
-				+ OtherData . Length ;
 
 		internal TKeyRecord ( ) { }
 
@@ -149,12 +149,51 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 			OtherData  = otherData ?? new byte [ ] { } ;
 		}
 
+		internal static void EncodeDateTime ( byte [ ] buffer , ref int currentPosition , DateTime value )
+		{
+			int timeStamp =
+				( int )( value . ToUniversalTime ( )
+						 - new DateTime ( 1970 , 1 , 1 , 0 , 0 , 0 , DateTimeKind . Utc ) ) . TotalSeconds ;
+			DnsMessageBase . EncodeInt ( buffer , ref currentPosition , timeStamp ) ;
+		}
+
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			DnsMessageBase . EncodeDomainName (
+											   messageData ,
+											   offset ,
+											   ref currentPosition ,
+											   TSigAlgorithmHelper . GetDomainName ( Algorithm ) ,
+											   null ,
+											   false ) ;
+			EncodeDateTime ( messageData , ref currentPosition , Inception ) ;
+			EncodeDateTime ( messageData , ref currentPosition , Expiration ) ;
+			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , ( ushort )Mode ) ;
+			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , ( ushort )Error ) ;
+			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , ( ushort )Key . Length ) ;
+			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , Key ) ;
+			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , ( ushort )OtherData . Length ) ;
+			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , OtherData ) ;
+		}
+
+		private static DateTime ParseDateTime ( byte [ ] buffer , ref int currentPosition )
+		{
+			int timeStamp = DnsMessageBase . ParseInt ( buffer , ref currentPosition ) ;
+			return new DateTime ( 1970 , 1 , 1 , 0 , 0 , 0 , DateTimeKind . Utc ) . AddSeconds ( timeStamp ) .
+				ToLocalTime ( ) ;
+		}
+
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )
 		{
 			Algorithm = TSigAlgorithmHelper . GetAlgorithmByName (
-																DnsMessageBase . ParseDomainName (
-																resultData ,
-																ref startPosition ) ) ;
+																  DnsMessageBase . ParseDomainName (
+																   resultData ,
+																   ref startPosition ) ) ;
 			Inception  = ParseDateTime ( resultData , ref startPosition ) ;
 			Expiration = ParseDateTime ( resultData , ref startPosition ) ;
 			Mode       = ( TKeyMode )DnsMessageBase . ParseUShort ( resultData ,   ref startPosition ) ;
@@ -172,57 +211,18 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 
 		internal override string RecordDataToString ( )
 			=> TSigAlgorithmHelper . GetDomainName ( Algorithm )
-				+ " "
-				+ ( int )( Inception - new DateTime ( 1970 , 1 , 1 , 0 , 0 , 0 , DateTimeKind . Utc ) ) . TotalSeconds
-				+ " "
-				+ ( int )( Expiration - new DateTime ( 1970 , 1 , 1 , 0 , 0 , 0 , DateTimeKind . Utc ) ) . TotalSeconds
-				+ " "
-				+ ( ushort )Mode
-				+ " "
-				+ ( ushort )Error
-				+ " "
-				+ Key . ToBase64String ( )
-				+ " "
-				+ OtherData . ToBase64String ( ) ;
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			DnsMessageBase . EncodeDomainName (
-												messageData ,
-												offset ,
-												ref currentPosition ,
-												TSigAlgorithmHelper . GetDomainName ( Algorithm ) ,
-												null ,
-												false ) ;
-			EncodeDateTime ( messageData , ref currentPosition , Inception ) ;
-			EncodeDateTime ( messageData , ref currentPosition , Expiration ) ;
-			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , ( ushort )Mode ) ;
-			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , ( ushort )Error ) ;
-			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , ( ushort )Key . Length ) ;
-			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , Key ) ;
-			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , ( ushort )OtherData . Length ) ;
-			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , OtherData ) ;
-		}
-
-		internal static void EncodeDateTime ( byte [ ] buffer , ref int currentPosition , DateTime value )
-		{
-			int timeStamp =
-				( int )( value . ToUniversalTime ( )
-						- new DateTime ( 1970 , 1 , 1 , 0 , 0 , 0 , DateTimeKind . Utc ) ) . TotalSeconds ;
-			DnsMessageBase . EncodeInt ( buffer , ref currentPosition , timeStamp ) ;
-		}
-
-		private static DateTime ParseDateTime ( byte [ ] buffer , ref int currentPosition )
-		{
-			int timeStamp = DnsMessageBase . ParseInt ( buffer , ref currentPosition ) ;
-			return new DateTime ( 1970 , 1 , 1 , 0 , 0 , 0 , DateTimeKind . Utc ) . AddSeconds ( timeStamp ) .
-				ToLocalTime ( ) ;
-		}
+			   + " "
+			   + ( int )( Inception - new DateTime ( 1970 , 1 , 1 , 0 , 0 , 0 , DateTimeKind . Utc ) ) . TotalSeconds
+			   + " "
+			   + ( int )( Expiration - new DateTime ( 1970 , 1 , 1 , 0 , 0 , 0 , DateTimeKind . Utc ) ) . TotalSeconds
+			   + " "
+			   + ( ushort )Mode
+			   + " "
+			   + ( ushort )Error
+			   + " "
+			   + Key . ToBase64String ( )
+			   + " "
+			   + OtherData . ToBase64String ( ) ;
 
 	}
 

@@ -12,11 +12,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 	public abstract class TextRecordBase : DnsRecordBase , ITextRecord
 	{
 
-		/// <summary>
-		///     The single parts of the text data
-		/// </summary>
-		public IEnumerable <string> TextParts { get ; protected set ; }
-
 		protected internal override int MaximumRecordDataLength
 		{
 			get
@@ -25,13 +20,18 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 			}
 		}
 
+		/// <summary>
+		///     The single parts of the text data
+		/// </summary>
+		public IEnumerable <string> TextParts { get ; protected set ; }
+
 		protected TextRecordBase ( ) { }
 
 		protected TextRecordBase ( DomainName name , RecordType recordType , int timeToLive , string textData ) : this (
-		name ,
-		recordType ,
-		timeToLive ,
-		new List <string> { textData ?? string . Empty , } )
+		 name ,
+		 recordType ,
+		 timeToLive ,
+		 new List <string> { textData ?? string . Empty , } )
 		{
 		}
 
@@ -46,6 +46,19 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		///     Text data
 		/// </summary>
 		public string TextData => string . Join ( string . Empty , TextParts ) ;
+
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			foreach ( string part in TextParts )
+			{
+				DnsMessageBase . EncodeTextBlock ( messageData , ref currentPosition , part ) ;
+			}
+		}
 
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )
 		{
@@ -73,21 +86,8 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		internal override string RecordDataToString ( )
 		{
 			return string . Join (
-								" " ,
-								TextParts . Select ( x => "\"" + x . ToMasterfileLabelRepresentation ( ) + "\"" ) ) ;
-		}
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			foreach ( string part in TextParts )
-			{
-				DnsMessageBase . EncodeTextBlock ( messageData , ref currentPosition , part ) ;
-			}
+								  " " ,
+								  TextParts . Select ( x => "\"" + x . ToMasterfileLabelRepresentation ( ) + "\"" ) ) ;
 		}
 
 	}

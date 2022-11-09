@@ -18,34 +18,20 @@ namespace DreamRecorder . ToolBox . TelegramBot
 	public class RegisterCommandGroupCommand <TUser> : TelegramCommand <TUser> where TUser : IUser
 	{
 
-		public IUserServiceProvider <TUser> ServiceProvider
-			=> StaticServiceProvider . Provider . GetService <IUserServiceProvider <TUser>> ( ) ;
-
 		public ICommandProvider <TUser> CommandProvider
 			=> StaticServiceProvider . Provider . GetService <ICommandProvider <TUser>> ( ) ;
-
-		public override TimeSpan Timeout => TimeSpan . FromMinutes ( 1 ) ;
-
-		public override CommandPermissionGroup PermissionGroup => null ;
 
 		public override string HelpInformation
 			=> $"Register command group.{Environment . NewLine}```{Environment . NewLine}/RegisterCommandGroup guid{Environment . NewLine}```{Environment . NewLine}	 `guid`:	the guid of commandGroup" ;
 
+		public override CommandPermissionGroup PermissionGroup => null ;
+
+		public IUserServiceProvider <TUser> ServiceProvider
+			=> StaticServiceProvider . Provider . GetService <IUserServiceProvider <TUser>> ( ) ;
+
+		public override TimeSpan Timeout => TimeSpan . FromMinutes ( 1 ) ;
+
 		public override bool CanBeRouteTarget ( Session <TUser> session ) => ! ( session . User is null ) ;
-
-		public override void Process (
-			CallbackQuery   callbackQuery ,
-			string [ ]      args ,
-			Session <TUser> session ,
-			object          tag = null )
-		{
-			Process ( callbackQuery . Message , args , session , true , tag ) ;
-
-			session . BotClient . EditMessageReplyMarkupAsync (
-																callbackQuery . Message . Chat . Id ,
-																callbackQuery . Message . MessageId ) .
-					Wait ( ) ;
-		}
 
 		public override bool Process (
 			Message         message ,
@@ -59,20 +45,20 @@ namespace DreamRecorder . ToolBox . TelegramBot
 				if ( Guid . TryParse ( args [ 1 ] , out Guid guid ) )
 				{
 					CommandPermissionGroup permissionGroup = CommandProvider . GetCommands ( ) .
-																				FirstOrDefault (
+																			   FirstOrDefault (
 																				command
 																					=> command ? .
 																							PermissionGroup ? . Guid
 																						== guid ) ? .
-																				PermissionGroup ;
+																			   PermissionGroup ;
 
 					if ( permissionGroup != null )
 					{
 						if ( ServiceProvider . CheckCommandPermissionGroup ( session . User , permissionGroup ) )
 						{
 							session . ReplyText (
-												message ,
-												$"You have already bound to {permissionGroup . DisplayName}" ) ;
+												 message ,
+												 $"You have already bound to {permissionGroup . DisplayName}" ) ;
 						}
 						else
 						{
@@ -81,21 +67,21 @@ namespace DreamRecorder . ToolBox . TelegramBot
 								ServiceProvider . BindCommandPermissionGroup ( session . User , permissionGroup ) ;
 
 								session . ReplyText (
-													message ,
-													$"You have successfully bound to {permissionGroup . DisplayName}" ) ;
+													 message ,
+													 $"You have successfully bound to {permissionGroup . DisplayName}" ) ;
 							}
 							else
 							{
 								session . ReplyText (
-													message ,
-													$"Issue the following inline keyboard button to bind to {permissionGroup . DisplayName}." ,
-													replyMarkup : new InlineKeyboardMarkup (
-													new List <InlineKeyboardButton>
-													{
-														InlineKeyboardButton . WithCallbackData (
-														$"Do register {permissionGroup . DisplayName}" ,
-														$"{nameof ( CreateUserCommand <TUser> )} {permissionGroup . Guid}" ) ,
-													} ) ) ;
+													 message ,
+													 $"Issue the following inline keyboard button to bind to {permissionGroup . DisplayName}." ,
+													 replyMarkup : new InlineKeyboardMarkup (
+													  new List <InlineKeyboardButton>
+													  {
+														  InlineKeyboardButton . WithCallbackData (
+														   $"Do register {permissionGroup . DisplayName}" ,
+														   $"{nameof ( CreateUserCommand <TUser> )} {permissionGroup . Guid}" ) ,
+													  } ) ) ;
 							}
 						}
 					}
@@ -115,6 +101,20 @@ namespace DreamRecorder . ToolBox . TelegramBot
 			}
 
 			return true ;
+		}
+
+		public override void Process (
+			CallbackQuery   callbackQuery ,
+			string [ ]      args ,
+			Session <TUser> session ,
+			object          tag = null )
+		{
+			Process ( callbackQuery . Message , args , session , true , tag ) ;
+
+			session . BotClient . EditMessageReplyMarkupAsync (
+															   callbackQuery . Message . Chat . Id ,
+															   callbackQuery . Message . MessageId ) .
+					  Wait ( ) ;
 		}
 
 	}

@@ -11,6 +11,14 @@ namespace DreamRecorder . ToolBox . General ;
 public static class StartStopExtensions
 {
 
+	public static void StartAll ( this IEnumerable <IStartStop> startStops )
+	{
+		foreach ( IStartStop startStop in startStops )
+		{
+			startStop . Start ( ) ;
+		}
+	}
+
 	public static void StartMembers ( [NotNull] this IStartStop startStop )
 	{
 		if ( startStop == null )
@@ -19,13 +27,13 @@ public static class StartStopExtensions
 		}
 
 		List <PropertyInfo> readable = startStop . GetType ( ) .
-													GetProperties ( ) .
-													Where (
-															p
-																=> p . CanRead
-																	&& ( ! p . GetAccessors ( ) .
-																				Any ( m => m . IsStatic ) ) ) .
-													ToList ( ) ;
+												   GetProperties ( ) .
+												   Where (
+														  p
+															  => p . CanRead
+																 && ( ! p . GetAccessors ( ) .
+																			Any ( m => m . IsStatic ) ) ) .
+												   ToList ( ) ;
 
 		foreach ( PropertyInfo propertyInfo in readable )
 		{
@@ -33,6 +41,14 @@ public static class StartStopExtensions
 			{
 				ss . Start ( ) ;
 			}
+		}
+	}
+
+	public static void StopAll ( this IEnumerable <IStartStop> startStops )
+	{
+		foreach ( IStartStop startStop in startStops )
+		{
+			startStop . Stop ( ) ;
 		}
 	}
 
@@ -44,13 +60,13 @@ public static class StartStopExtensions
 		}
 
 		List <PropertyInfo> readable = startStop . GetType ( ) .
-													GetProperties ( ) .
-													Where (
-															p
-																=> p . CanRead
-																	&& ( ! p . GetAccessors ( ) .
-																				Any ( m => m . IsStatic ) ) ) .
-													ToList ( ) ;
+												   GetProperties ( ) .
+												   Where (
+														  p
+															  => p . CanRead
+																 && ( ! p . GetAccessors ( ) .
+																			Any ( m => m . IsStatic ) ) ) .
+												   ToList ( ) ;
 
 		foreach ( PropertyInfo propertyInfo in readable )
 		{
@@ -58,22 +74,6 @@ public static class StartStopExtensions
 			{
 				ss . Stop ( ) ;
 			}
-		}
-	}
-
-	public static void StartAll ( this IEnumerable <IStartStop> startStops )
-	{
-		foreach ( IStartStop startStop in startStops )
-		{
-			startStop . Start ( ) ;
-		}
-	}
-
-	public static void StopAll ( this IEnumerable <IStartStop> startStops )
-	{
-		foreach ( IStartStop startStop in startStops )
-		{
-			startStop . Stop ( ) ;
 		}
 	}
 

@@ -26,8 +26,8 @@ namespace DreamRecorder . ToolBox . Network . Dns . EDns
 			get => _clientCookie ;
 			private set
 			{
-				if ( ( value            == null )
-					|| ( value . Length != 8 ) )
+				if ( ( value             == null )
+					 || ( value . Length != 8 ) )
 				{
 					throw new ArgumentException ( "Client cookie must contain 8 bytes" ) ;
 				}
@@ -36,12 +36,12 @@ namespace DreamRecorder . ToolBox . Network . Dns . EDns
 			}
 		}
 
+		internal override ushort DataLength => ( ushort )( 8 + ServerCookie . Length ) ;
+
 		/// <summary>
 		///     Server cookie
 		/// </summary>
 		public byte [ ] ServerCookie { get ; private set ; }
-
-		internal override ushort DataLength => ( ushort )( 8 + ServerCookie . Length ) ;
 
 		/// <summary>
 		///     Creates a new instance of the ClientCookie class
@@ -59,16 +59,16 @@ namespace DreamRecorder . ToolBox . Network . Dns . EDns
 			ServerCookie = serverCookie ?? new byte [ ] { } ;
 		}
 
-		internal override void ParseData ( byte [ ] resultData , int startPosition , int length )
-		{
-			ClientCookie = DnsMessageBase . ParseByteData ( resultData , ref startPosition , 8 ) ;
-			ServerCookie = DnsMessageBase . ParseByteData ( resultData , ref startPosition , length - 8 ) ;
-		}
-
 		internal override void EncodeData ( byte [ ] messageData , ref int currentPosition )
 		{
 			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , ClientCookie ) ;
 			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , ServerCookie ) ;
+		}
+
+		internal override void ParseData ( byte [ ] resultData , int startPosition , int length )
+		{
+			ClientCookie = DnsMessageBase . ParseByteData ( resultData , ref startPosition , 8 ) ;
+			ServerCookie = DnsMessageBase . ParseByteData ( resultData , ref startPosition , length - 8 ) ;
 		}
 
 	}

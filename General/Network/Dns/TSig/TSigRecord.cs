@@ -27,9 +27,9 @@ namespace DreamRecorder . ToolBox . Network . Dns . TSig
 		public TSigAlgorithm Algorithm { get ; private set ; }
 
 		/// <summary>
-		///     Time when the data was signed
+		///     Error field
 		/// </summary>
-		public DateTime TimeSigned { get ; internal set ; }
+		public ReturnCode Error { get ; internal set ; }
 
 		/// <summary>
 		///     Timespan errors permitted
@@ -37,9 +37,20 @@ namespace DreamRecorder . ToolBox . Network . Dns . TSig
 		public TimeSpan Fudge { get ; private set ; }
 
 		/// <summary>
+		///     Binary data of the key
+		/// </summary>
+		public byte [ ] KeyData { get ; internal set ; }
+
+		/// <summary>
 		///     MAC defined by algorithm
 		/// </summary>
 		public byte [ ] Mac { get ; internal set ; }
+
+		protected internal override int MaximumRecordDataLength
+			=> TSigAlgorithmHelper . GetDomainName ( Algorithm ) . MaximumRecordDataLength
+			   + 18
+			   + TSigAlgorithmHelper . GetHashSize ( Algorithm )
+			   + OtherData . Length ;
 
 		/// <summary>
 		///     Original ID of message
@@ -47,30 +58,19 @@ namespace DreamRecorder . ToolBox . Network . Dns . TSig
 		public ushort OriginalID { get ; private set ; }
 
 		/// <summary>
-		///     Error field
-		/// </summary>
-		public ReturnCode Error { get ; internal set ; }
-
-		/// <summary>
 		///     Binary other data
 		/// </summary>
 		public byte [ ] OtherData { get ; internal set ; }
 
 		/// <summary>
-		///     Binary data of the key
+		///     Time when the data was signed
 		/// </summary>
-		public byte [ ] KeyData { get ; internal set ; }
+		public DateTime TimeSigned { get ; internal set ; }
 
 		/// <summary>
 		///     Result of validation of record
 		/// </summary>
 		public ReturnCode ValidationResult { get ; internal set ; }
-
-		protected internal override int MaximumRecordDataLength
-			=> TSigAlgorithmHelper . GetDomainName ( Algorithm ) . MaximumRecordDataLength
-				+ 18
-				+ TSigAlgorithmHelper . GetHashSize ( Algorithm )
-				+ OtherData . Length ;
 
 		internal TSigRecord ( ) { }
 
@@ -105,46 +105,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . TSig
 			KeyData    = keyData ;
 		}
 
-		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )
-		{
-			Algorithm = TSigAlgorithmHelper . GetAlgorithmByName (
-																DnsMessageBase . ParseDomainName (
-																resultData ,
-																ref startPosition ) ) ;
-			TimeSigned = ParseDateTime ( resultData , ref startPosition ) ;
-			Fudge      = TimeSpan . FromSeconds ( DnsMessageBase . ParseUShort ( resultData , ref startPosition ) ) ;
-			int macSize = DnsMessageBase . ParseUShort ( resultData , ref startPosition ) ;
-			Mac        = DnsMessageBase . ParseByteData ( resultData , ref startPosition , macSize ) ;
-			OriginalID = DnsMessageBase . ParseUShort ( resultData , ref startPosition ) ;
-			Error      = ( ReturnCode )DnsMessageBase . ParseUShort ( resultData , ref startPosition ) ;
-			int otherDataSize = DnsMessageBase . ParseUShort ( resultData , ref startPosition ) ;
-			OtherData = DnsMessageBase . ParseByteData ( resultData , ref startPosition , otherDataSize ) ;
-		}
-
-		internal override void ParseRecordData ( DomainName origin , string [ ] stringRepresentation )
-		{
-			throw new NotSupportedException ( ) ;
-		}
-
-		internal override string RecordDataToString ( )
-			=> TSigAlgorithmHelper . GetDomainName ( Algorithm )
-				+ " "
-				+ ( int )( TimeSigned - new DateTime ( 1970 , 1 , 1 , 0 , 0 , 0 , DateTimeKind . Utc ) ) . TotalSeconds
-				+ " "
-				+ ( ushort )Fudge . TotalSeconds
-				+ " "
-				+ Mac . Length
-				+ " "
-				+ Mac . ToBase64String ( )
-				+ " "
-				+ OriginalID
-				+ " "
-				+ ( ushort )Error
-				+ " "
-				+ OtherData . Length
-				+ " "
-				+ OtherData . ToBase64String ( ) ;
-
 		internal void Encode (
 			byte [ ]                         messageData ,
 			int                              offset ,
@@ -158,15 +118,41 @@ namespace DreamRecorder . ToolBox . Network . Dns . TSig
 			EncodeRecordLength ( messageData , offset , ref currentPosition , domainNames , recordDataOffset ) ;
 		}
 
+		internal static void EncodeDateTime ( byte [ ] buffer , ref int currentPosition , DateTime value )
+		{
+			long timeStamp =
+				( long )( value . ToUniversalTime ( )
+						  - new DateTime ( 1970 , 1 , 1 , 0 , 0 , 0 , DateTimeKind . Utc ) ) . TotalSeconds ;
+
+			if ( BitConverter . IsLittleEndian )
+			{
+				buffer [ currentPosition++ ] = ( byte )( ( timeStamp >> 40 ) & 0xff ) ;
+				buffer [ currentPosition++ ] = ( byte )( ( timeStamp >> 32 ) & 0xff ) ;
+				buffer [ currentPosition++ ] = ( byte )( ( timeStamp >> 24 ) & 0xff ) ;
+				buffer [ currentPosition++ ] = ( byte )( ( timeStamp >> 16 ) & 0xff ) ;
+				buffer [ currentPosition++ ] = ( byte )( ( timeStamp >> 8 )  & 0xff ) ;
+				buffer [ currentPosition++ ] = ( byte )( timeStamp           & 0xff ) ;
+			}
+			else
+			{
+				buffer [ currentPosition++ ] = ( byte )( timeStamp           & 0xff ) ;
+				buffer [ currentPosition++ ] = ( byte )( ( timeStamp >> 8 )  & 0xff ) ;
+				buffer [ currentPosition++ ] = ( byte )( ( timeStamp >> 16 ) & 0xff ) ;
+				buffer [ currentPosition++ ] = ( byte )( ( timeStamp >> 24 ) & 0xff ) ;
+				buffer [ currentPosition++ ] = ( byte )( ( timeStamp >> 32 ) & 0xff ) ;
+				buffer [ currentPosition++ ] = ( byte )( ( timeStamp >> 40 ) & 0xff ) ;
+			}
+		}
+
 		private void EncodeRecordData ( byte [ ] messageData , int offset , ref int currentPosition , byte [ ] mac )
 		{
 			DnsMessageBase . EncodeDomainName (
-												messageData ,
-												offset ,
-												ref currentPosition ,
-												TSigAlgorithmHelper . GetDomainName ( Algorithm ) ,
-												null ,
-												false ) ;
+											   messageData ,
+											   offset ,
+											   ref currentPosition ,
+											   TSigAlgorithmHelper . GetDomainName ( Algorithm ) ,
+											   null ,
+											   false ) ;
 			EncodeDateTime ( messageData , ref currentPosition , TimeSigned ) ;
 			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , ( ushort )Fudge . TotalSeconds ) ;
 			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , ( ushort )mac . Length ) ;
@@ -187,58 +173,72 @@ namespace DreamRecorder . ToolBox . Network . Dns . TSig
 			EncodeRecordData ( messageData , offset , ref currentPosition , Mac ) ;
 		}
 
-		internal static void EncodeDateTime ( byte [ ] buffer , ref int currentPosition , DateTime value )
-		{
-			long timeStamp =
-				( long )( value . ToUniversalTime ( )
-						- new DateTime ( 1970 , 1 , 1 , 0 , 0 , 0 , DateTimeKind . Utc ) ) . TotalSeconds ;
-
-			if ( BitConverter . IsLittleEndian )
-			{
-				buffer [ currentPosition++ ] = ( byte )( ( timeStamp >> 40 ) & 0xff ) ;
-				buffer [ currentPosition++ ] = ( byte )( ( timeStamp >> 32 ) & 0xff ) ;
-				buffer [ currentPosition++ ] = ( byte )( ( timeStamp >> 24 ) & 0xff ) ;
-				buffer [ currentPosition++ ] = ( byte )( ( timeStamp >> 16 ) & 0xff ) ;
-				buffer [ currentPosition++ ] = ( byte )( ( timeStamp >> 8 )  & 0xff ) ;
-				buffer [ currentPosition++ ] = ( byte )( timeStamp           & 0xff ) ;
-			}
-			else
-			{
-				buffer [ currentPosition++ ] = ( byte )( timeStamp           & 0xff ) ;
-				buffer [ currentPosition++ ] = ( byte )( ( timeStamp >> 8 )  & 0xff ) ;
-				buffer [ currentPosition++ ] = ( byte )( ( timeStamp >> 16 ) & 0xff ) ;
-				buffer [ currentPosition++ ] = ( byte )( ( timeStamp >> 24 ) & 0xff ) ;
-				buffer [ currentPosition++ ] = ( byte )( ( timeStamp >> 32 ) & 0xff ) ;
-				buffer [ currentPosition++ ] = ( byte )( ( timeStamp >> 40 ) & 0xff ) ;
-			}
-		}
-
 		private static DateTime ParseDateTime ( byte [ ] buffer , ref int currentPosition )
 		{
 			long timeStamp ;
 
 			if ( BitConverter . IsLittleEndian )
 			{
-				timeStamp = ( ( buffer [ currentPosition++ ] << 40 )
-							| ( buffer [ currentPosition++ ] << 32 )
-							| ( buffer [ currentPosition++ ] << 24 )
-							| ( buffer [ currentPosition++ ] << 16 )
-							| ( buffer [ currentPosition++ ] << 8 )
-							| buffer [ currentPosition++ ] ) ;
+				timeStamp = ( ( buffer [ currentPosition++ ]   << 40 )
+							  | ( buffer [ currentPosition++ ] << 32 )
+							  | ( buffer [ currentPosition++ ] << 24 )
+							  | ( buffer [ currentPosition++ ] << 16 )
+							  | ( buffer [ currentPosition++ ] << 8 )
+							  | buffer [ currentPosition++ ] ) ;
 			}
 			else
 			{
 				timeStamp = ( buffer [ currentPosition++ ]
-							| ( buffer [ currentPosition++ ] << 8 )
-							| ( buffer [ currentPosition++ ] << 16 )
-							| ( buffer [ currentPosition++ ] << 24 )
-							| ( buffer [ currentPosition++ ] << 32 )
-							| ( buffer [ currentPosition++ ] << 40 ) ) ;
+							  | ( buffer [ currentPosition++ ] << 8 )
+							  | ( buffer [ currentPosition++ ] << 16 )
+							  | ( buffer [ currentPosition++ ] << 24 )
+							  | ( buffer [ currentPosition++ ] << 32 )
+							  | ( buffer [ currentPosition++ ] << 40 ) ) ;
 			}
 
 			return new DateTime ( 1970 , 1 , 1 , 0 , 0 , 0 , DateTimeKind . Utc ) . AddSeconds ( timeStamp ) .
 				ToLocalTime ( ) ;
 		}
+
+		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )
+		{
+			Algorithm = TSigAlgorithmHelper . GetAlgorithmByName (
+																  DnsMessageBase . ParseDomainName (
+																   resultData ,
+																   ref startPosition ) ) ;
+			TimeSigned = ParseDateTime ( resultData , ref startPosition ) ;
+			Fudge      = TimeSpan . FromSeconds ( DnsMessageBase . ParseUShort ( resultData , ref startPosition ) ) ;
+			int macSize = DnsMessageBase . ParseUShort ( resultData , ref startPosition ) ;
+			Mac        = DnsMessageBase . ParseByteData ( resultData , ref startPosition , macSize ) ;
+			OriginalID = DnsMessageBase . ParseUShort ( resultData , ref startPosition ) ;
+			Error      = ( ReturnCode )DnsMessageBase . ParseUShort ( resultData , ref startPosition ) ;
+			int otherDataSize = DnsMessageBase . ParseUShort ( resultData , ref startPosition ) ;
+			OtherData = DnsMessageBase . ParseByteData ( resultData , ref startPosition , otherDataSize ) ;
+		}
+
+		internal override void ParseRecordData ( DomainName origin , string [ ] stringRepresentation )
+		{
+			throw new NotSupportedException ( ) ;
+		}
+
+		internal override string RecordDataToString ( )
+			=> TSigAlgorithmHelper . GetDomainName ( Algorithm )
+			   + " "
+			   + ( int )( TimeSigned - new DateTime ( 1970 , 1 , 1 , 0 , 0 , 0 , DateTimeKind . Utc ) ) . TotalSeconds
+			   + " "
+			   + ( ushort )Fudge . TotalSeconds
+			   + " "
+			   + Mac . Length
+			   + " "
+			   + Mac . ToBase64String ( )
+			   + " "
+			   + OriginalID
+			   + " "
+			   + ( ushort )Error
+			   + " "
+			   + OtherData . Length
+			   + " "
+			   + OtherData . ToBase64String ( ) ;
 
 	}
 

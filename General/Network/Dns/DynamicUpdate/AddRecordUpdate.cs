@@ -14,12 +14,12 @@ namespace DreamRecorder . ToolBox . Network . Dns . DynamicUpdate
 	public class AddRecordUpdate : UpdateBase
 	{
 
+		protected internal override int MaximumRecordDataLength => Record . MaximumRecordDataLength ;
+
 		/// <summary>
 		///     Record which should be added
 		/// </summary>
 		public DnsRecordBase Record { get ; }
-
-		protected internal override int MaximumRecordDataLength => Record . MaximumRecordDataLength ;
 
 		internal AddRecordUpdate ( ) { }
 
@@ -34,10 +34,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DynamicUpdate
 																record . TimeToLive )
 			=> Record = record ;
 
-		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length ) { }
-
-		internal override string RecordDataToString ( ) => Record ? . RecordDataToString ( ) ;
-
 		protected internal override void EncodeRecordData (
 			byte [ ]                         messageData ,
 			int                              offset ,
@@ -47,6 +43,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DynamicUpdate
 		{
 			Record . EncodeRecordData ( messageData , offset , ref currentPosition , domainNames , useCanonical ) ;
 		}
+
+		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length ) { }
+
+		internal override string RecordDataToString ( ) => Record ? . RecordDataToString ( ) ;
 
 	}
 

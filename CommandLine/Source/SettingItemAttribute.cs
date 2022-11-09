@@ -13,7 +13,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 	public class SettingItemAttribute : Attribute
 	{
 
-		public int SettingCategory { get ; set ; }
+		public object DefaultValue { get ; set ; }
 
 		public string DisplayName { get ; set ; }
 
@@ -21,7 +21,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 		public bool RestartRequired { get ; set ; }
 
-		public object DefaultValue { get ; set ; }
+		public int SettingCategory { get ; set ; }
 
 		public SettingItemAttribute (
 			int    settingCategory ,

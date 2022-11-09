@@ -104,14 +104,14 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		public SshFpAlgorithm Algorithm { get ; private set ; }
 
 		/// <summary>
-		///     Type of fingerprint
-		/// </summary>
-		public SshFpFingerPrintType FingerPrintType { get ; private set ; }
-
-		/// <summary>
 		///     Binary data of the fingerprint
 		/// </summary>
 		public byte [ ] FingerPrint { get ; private set ; }
+
+		/// <summary>
+		///     Type of fingerprint
+		/// </summary>
+		public SshFpFingerPrintType FingerPrintType { get ; private set ; }
 
 		protected internal override int MaximumRecordDataLength => 2 + FingerPrint . Length ;
 
@@ -137,6 +137,18 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 			FingerPrint     = fingerPrint ?? new byte [ ] { } ;
 		}
 
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			messageData [ currentPosition++ ] = ( byte )Algorithm ;
+			messageData [ currentPosition++ ] = ( byte )FingerPrintType ;
+			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , FingerPrint ) ;
+		}
+
 		internal override void ParseRecordData ( byte [ ] resultData , int currentPosition , int length )
 		{
 			Algorithm       = ( SshFpAlgorithm )resultData [ currentPosition++ ] ;
@@ -158,18 +170,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 
 		internal override string RecordDataToString ( )
 			=> ( byte )Algorithm + " " + ( byte )FingerPrintType + " " + FingerPrint . ToBase16String ( ) ;
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			messageData [ currentPosition++ ] = ( byte )Algorithm ;
-			messageData [ currentPosition++ ] = ( byte )FingerPrintType ;
-			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , FingerPrint ) ;
-		}
 
 	}
 

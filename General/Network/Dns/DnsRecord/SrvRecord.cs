@@ -16,15 +16,7 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 	public class SrvRecord : DnsRecordBase
 	{
 
-		/// <summary>
-		///     Priority of the record
-		/// </summary>
-		public ushort Priority { get ; private set ; }
-
-		/// <summary>
-		///     Relative weight for records with the same priority
-		/// </summary>
-		public ushort Weight { get ; private set ; }
+		protected internal override int MaximumRecordDataLength => Target . MaximumRecordDataLength + 8 ;
 
 		/// <summary>
 		///     The port of the service on the target
@@ -32,11 +24,19 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		public ushort Port { get ; private set ; }
 
 		/// <summary>
+		///     Priority of the record
+		/// </summary>
+		public ushort Priority { get ; private set ; }
+
+		/// <summary>
 		///     Domain name of the target host
 		/// </summary>
 		public DomainName Target { get ; private set ; }
 
-		protected internal override int MaximumRecordDataLength => Target . MaximumRecordDataLength + 8 ;
+		/// <summary>
+		///     Relative weight for records with the same priority
+		/// </summary>
+		public ushort Weight { get ; private set ; }
 
 		internal SrvRecord ( ) { }
 
@@ -63,6 +63,25 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 			Target   = target ?? DomainName . Root ;
 		}
 
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , Priority ) ;
+			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , Weight ) ;
+			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , Port ) ;
+			DnsMessageBase . EncodeDomainName (
+											   messageData ,
+											   offset ,
+											   ref currentPosition ,
+											   Target ,
+											   null ,
+											   useCanonical ) ;
+		}
+
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )
 		{
 			Priority = DnsMessageBase . ParseUShort ( resultData , ref startPosition ) ;
@@ -85,25 +104,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		}
 
 		internal override string RecordDataToString ( ) => Priority + " " + Weight + " " + Port + " " + Target ;
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , Priority ) ;
-			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , Weight ) ;
-			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , Port ) ;
-			DnsMessageBase . EncodeDomainName (
-												messageData ,
-												offset ,
-												ref currentPosition ,
-												Target ,
-												null ,
-												useCanonical ) ;
-		}
 
 	}
 

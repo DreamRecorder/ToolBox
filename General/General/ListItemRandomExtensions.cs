@@ -12,6 +12,42 @@ namespace DreamRecorder . ToolBox . General
 	public static class ListItemRandomExtensions
 	{
 
+		/// <summary>
+		///     Choose item randomly from a list, item may be chosen multiple times.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="list"></param>
+		/// <param name="count"></param>
+		/// <param name="random"></param>
+		/// <returns></returns>
+		public static List <T> RandomChoose <T> ( [NotNull] this IList <T> list , int count , IRandom random = null )
+		{
+			if ( list == null )
+			{
+				throw new ArgumentNullException ( nameof ( list ) ) ;
+			}
+
+			if ( count < 0 )
+			{
+				throw new ArgumentOutOfRangeException ( nameof ( count ) ) ;
+			}
+
+			if ( ! list . Any ( ) )
+			{
+				throw new InvalidOperationException ( "Sequence contains no elements" ) ;
+			}
+
+			List <T> result = new List <T> ( count ) ;
+			random ??= StaticRandom . Current ;
+
+			for ( int i = 0 ; i < count ; i++ )
+			{
+				result . Add ( list . RandomItem ( random ) ) ;
+			}
+
+			return result ;
+		}
+
 		public static T RandomItem <T> ( [NotNull] this IList <T> list , IRandom random = null )
 		{
 			if ( list == null )
@@ -47,42 +83,6 @@ namespace DreamRecorder . ToolBox . General
 			}
 
 			return list [ random . Next ( list . Count ) ] ;
-		}
-
-		/// <summary>
-		///     Choose item randomly from a list, item may be chosen multiple times.
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="list"></param>
-		/// <param name="count"></param>
-		/// <param name="random"></param>
-		/// <returns></returns>
-		public static List <T> RandomChoose <T> ( [NotNull] this IList <T> list , int count , IRandom random = null )
-		{
-			if ( list == null )
-			{
-				throw new ArgumentNullException ( nameof ( list ) ) ;
-			}
-
-			if ( count < 0 )
-			{
-				throw new ArgumentOutOfRangeException ( nameof ( count ) ) ;
-			}
-
-			if ( ! list . Any ( ) )
-			{
-				throw new InvalidOperationException ( "Sequence contains no elements" ) ;
-			}
-
-			List <T> result = new List <T> ( count ) ;
-			random ??= StaticRandom . Current ;
-
-			for ( int i = 0 ; i < count ; i++ )
-			{
-				result . Add ( list . RandomItem ( random ) ) ;
-			}
-
-			return result ;
 		}
 
 		/// <summary>

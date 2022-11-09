@@ -45,16 +45,16 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		}
 
 		/// <summary>
-		///     Subtype of the record
-		/// </summary>
-		public AfsSubType SubType { get ; private set ; }
-
-		/// <summary>
 		///     Hostname of the AFS database
 		/// </summary>
 		public DomainName Hostname { get ; private set ; }
 
 		protected internal override int MaximumRecordDataLength => Hostname . MaximumRecordDataLength + 4 ;
+
+		/// <summary>
+		///     Subtype of the record
+		/// </summary>
+		public AfsSubType SubType { get ; private set ; }
 
 		internal AfsdbRecord ( ) { }
 
@@ -66,13 +66,30 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="subType"> Subtype of the record </param>
 		/// <param name="hostname"> Hostname of the AFS database </param>
 		public AfsdbRecord ( DomainName name , int timeToLive , AfsSubType subType , DomainName hostname ) : base (
-		name ,
-		RecordType . Afsdb ,
-		RecordClass . INet ,
-		timeToLive )
+		 name ,
+		 RecordType . Afsdb ,
+		 RecordClass . INet ,
+		 timeToLive )
 		{
 			SubType  = subType ;
 			Hostname = hostname ?? DomainName . Root ;
+		}
+
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , ( ushort )SubType ) ;
+			DnsMessageBase . EncodeDomainName (
+											   messageData ,
+											   offset ,
+											   ref currentPosition ,
+											   Hostname ,
+											   null ,
+											   useCanonical ) ;
 		}
 
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )
@@ -93,23 +110,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		}
 
 		internal override string RecordDataToString ( ) => ( byte )SubType + " " + Hostname ;
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , ( ushort )SubType ) ;
-			DnsMessageBase . EncodeDomainName (
-												messageData ,
-												offset ,
-												ref currentPosition ,
-												Hostname ,
-												null ,
-												useCanonical ) ;
-		}
 
 	}
 

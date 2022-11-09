@@ -29,6 +29,23 @@ namespace DreamRecorder . ToolBox . Network . Dns . Cache
 			}
 		}
 
+		public void RemoveExpiredItems ( )
+		{
+			DateTime utcNow = DateTime . UtcNow ;
+
+			foreach ( KeyValuePair <DomainName , HashSet <CacheValue>> kvp in _cache )
+			{
+				lock ( kvp . Value )
+				{
+					kvp . Value . RemoveWhere ( x => x . ExpireDateUtc < utcNow ) ;
+					if ( kvp . Value . Count == 0 )
+					{
+						_cache . TryRemove ( kvp . Key , out HashSet <CacheValue> tmp ) ;
+					}
+				}
+			}
+		}
+
 		public bool TryGetAddresses ( DomainName zoneName , out List <IPAddress> addresses )
 		{
 			DateTime utcNow = DateTime . UtcNow ;
@@ -74,37 +91,18 @@ namespace DreamRecorder . ToolBox . Network . Dns . Cache
 			return false ;
 		}
 
-		public void RemoveExpiredItems ( )
-		{
-			DateTime utcNow = DateTime . UtcNow ;
-
-			foreach ( KeyValuePair <DomainName , HashSet <CacheValue>> kvp in _cache )
-			{
-				lock ( kvp . Value )
-				{
-					kvp . Value . RemoveWhere ( x => x . ExpireDateUtc < utcNow ) ;
-					if ( kvp . Value . Count == 0 )
-					{
-						_cache . TryRemove ( kvp . Key , out HashSet <CacheValue> tmp ) ;
-					}
-				}
-			}
-		}
-
 		private class CacheValue
 		{
 
-			public DateTime ExpireDateUtc { get ; }
-
 			public IPAddress Address { get ; }
+
+			public DateTime ExpireDateUtc { get ; }
 
 			public CacheValue ( int timeToLive , IPAddress address )
 			{
 				ExpireDateUtc = DateTime . UtcNow . AddSeconds ( timeToLive ) ;
 				Address       = address ;
 			}
-
-			public override int GetHashCode ( ) => Address . GetHashCode ( ) ;
 
 			public override bool Equals ( object obj )
 			{
@@ -115,6 +113,8 @@ namespace DreamRecorder . ToolBox . Network . Dns . Cache
 
 				return Address . Equals ( second . Address ) ;
 			}
+
+			public override int GetHashCode ( ) => Address . GetHashCode ( ) ;
 
 		}
 

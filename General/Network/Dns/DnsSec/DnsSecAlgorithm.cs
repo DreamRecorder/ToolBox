@@ -149,26 +149,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 	internal static class DnsSecAlgorithmHelper
 	{
 
-		public static bool IsSupported ( this DnsSecAlgorithm algorithm )
-		{
-			switch ( algorithm )
-			{
-				case DnsSecAlgorithm . RsaSha1 :
-				case DnsSecAlgorithm . Dsa :
-				case DnsSecAlgorithm . RsaSha1Nsec3Sha1 :
-				case DnsSecAlgorithm . DsaNsec3Sha1 :
-				case DnsSecAlgorithm . RsaSha256 :
-				case DnsSecAlgorithm . RsaSha512 :
-				case DnsSecAlgorithm . EccGost :
-				case DnsSecAlgorithm . EcDsaP256Sha256 :
-				case DnsSecAlgorithm . EcDsaP384Sha384 :
-					return true ;
-
-				default :
-					return false ;
-			}
-		}
-
 		public static int GetPriority ( this DnsSecAlgorithm algorithm )
 		{
 			switch ( algorithm )
@@ -219,6 +199,26 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 		{
 			switch ( algorithm )
 			{
+				case DnsSecAlgorithm . RsaSha1Nsec3Sha1 :
+				case DnsSecAlgorithm . DsaNsec3Sha1 :
+				case DnsSecAlgorithm . RsaSha256 :
+				case DnsSecAlgorithm . RsaSha512 :
+				case DnsSecAlgorithm . EccGost :
+				case DnsSecAlgorithm . EcDsaP256Sha256 :
+				case DnsSecAlgorithm . EcDsaP384Sha384 :
+					return true ;
+
+				default :
+					return false ;
+			}
+		}
+
+		public static bool IsSupported ( this DnsSecAlgorithm algorithm )
+		{
+			switch ( algorithm )
+			{
+				case DnsSecAlgorithm . RsaSha1 :
+				case DnsSecAlgorithm . Dsa :
 				case DnsSecAlgorithm . RsaSha1Nsec3Sha1 :
 				case DnsSecAlgorithm . DsaNsec3Sha1 :
 				case DnsSecAlgorithm . RsaSha256 :

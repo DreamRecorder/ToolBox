@@ -20,51 +20,34 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 	{
 
 		/// <summary>
-		///     Flags of the key
-		/// </summary>
-		public DnsKeyFlags Flags { get ; private set ; }
-
-		/// <summary>
-		///     Protocol field
-		/// </summary>
-		public byte Protocol { get ; private set ; }
-
-		/// <summary>
 		///     Algorithm of the key
 		/// </summary>
 		public DnsSecAlgorithm Algorithm { get ; private set ; }
 
 		/// <summary>
-		///     Binary data of the public key
+		///     Flags of the key
 		/// </summary>
-		public byte [ ] PublicKey { get ; private set ; }
+		public DnsKeyFlags Flags { get ; private set ; }
 
 		/// <summary>
-		///     Binary data of the private key
-		/// </summary>
-		public byte [ ] PrivateKey { get ; private set ; }
-
-		/// <summary>
-		///     <para>Record holds a DNS zone key</para>
+		///     <para>Key is intended for use as a secure entry point</para>
 		///     <para>
 		///         Defined in
-		///         <see cref="!:http://tools.ietf.org/html/rfc4034">RFC 4034</see>
-		///         and
-		///         <see cref="!:http://tools.ietf.org/html/rfc3757">RFC 3757</see>
+		///         <see cref="!:http://tools.ietf.org/html/rfc5011">RFC 5011</see>
 		///     </para>
 		/// </summary>
-		public bool IsZoneKey
+		public bool IsRevoked
 		{
-			get => ( Flags & DnsKeyFlags . Zone ) == DnsKeyFlags . Zone ;
+			get => ( Flags & DnsKeyFlags . Revoke ) == DnsKeyFlags . Revoke ;
 			set
 			{
 				if ( value )
 				{
-					Flags |= DnsKeyFlags . Zone ;
+					Flags |= DnsKeyFlags . Revoke ;
 				}
 				else
 				{
-					Flags &= ~DnsKeyFlags . Zone ;
+					Flags &= ~DnsKeyFlags . Revoke ;
 				}
 			}
 		}
@@ -95,29 +78,46 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		}
 
 		/// <summary>
-		///     <para>Key is intended for use as a secure entry point</para>
+		///     <para>Record holds a DNS zone key</para>
 		///     <para>
 		///         Defined in
-		///         <see cref="!:http://tools.ietf.org/html/rfc5011">RFC 5011</see>
+		///         <see cref="!:http://tools.ietf.org/html/rfc4034">RFC 4034</see>
+		///         and
+		///         <see cref="!:http://tools.ietf.org/html/rfc3757">RFC 3757</see>
 		///     </para>
 		/// </summary>
-		public bool IsRevoked
+		public bool IsZoneKey
 		{
-			get => ( Flags & DnsKeyFlags . Revoke ) == DnsKeyFlags . Revoke ;
+			get => ( Flags & DnsKeyFlags . Zone ) == DnsKeyFlags . Zone ;
 			set
 			{
 				if ( value )
 				{
-					Flags |= DnsKeyFlags . Revoke ;
+					Flags |= DnsKeyFlags . Zone ;
 				}
 				else
 				{
-					Flags &= ~DnsKeyFlags . Revoke ;
+					Flags &= ~DnsKeyFlags . Zone ;
 				}
 			}
 		}
 
 		protected internal override int MaximumRecordDataLength => 4 + PublicKey . Length ;
+
+		/// <summary>
+		///     Binary data of the private key
+		/// </summary>
+		public byte [ ] PrivateKey { get ; private set ; }
+
+		/// <summary>
+		///     Protocol field
+		/// </summary>
+		public byte Protocol { get ; private set ; }
+
+		/// <summary>
+		///     Binary data of the public key
+		/// </summary>
+		public byte [ ] PublicKey { get ; private set ; }
 
 		internal CDnsKeyRecord ( ) { }
 
@@ -211,6 +211,19 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 			return res ;
 		}
 
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , ( ushort )Flags ) ;
+			messageData [ currentPosition++ ] = Protocol ;
+			messageData [ currentPosition++ ] = ( byte )Algorithm ;
+			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , PublicKey ) ;
+		}
+
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )
 		{
 			Flags     = ( DnsKeyFlags )DnsMessageBase . ParseUShort ( resultData , ref startPosition ) ;
@@ -234,19 +247,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 
 		internal override string RecordDataToString ( )
 			=> ( ushort )Flags + " " + Protocol + " " + ( byte )Algorithm + " " + PublicKey . ToBase64String ( ) ;
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , ( ushort )Flags ) ;
-			messageData [ currentPosition++ ] = Protocol ;
-			messageData [ currentPosition++ ] = ( byte )Algorithm ;
-			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , PublicKey ) ;
-		}
 
 	}
 

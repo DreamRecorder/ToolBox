@@ -54,7 +54,7 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 		/// <param name="servers"> The list of servers to use </param>
 		/// <param name="queryTimeout"> The query timeout in milliseconds </param>
 		public DnsStubResolver ( IEnumerable <IPAddress> servers , int queryTimeout ) : this (
-		new DnsClient ( servers , queryTimeout ) )
+		 new DnsClient ( servers , queryTimeout ) )
 		{
 		}
 
@@ -87,19 +87,19 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 			DnsMessage msg = _dnsClient . Resolve ( name , recordType , recordClass ) ;
 
 			if ( ( msg == null )
-				|| ( ( msg . ReturnCode != ReturnCode . NoError ) && ( msg . ReturnCode != ReturnCode . NxDomain ) ) )
+				 || ( ( msg . ReturnCode != ReturnCode . NoError ) && ( msg . ReturnCode != ReturnCode . NxDomain ) ) )
 			{
 				throw new Exception ( "DNS request failed" ) ;
 			}
 
 			CNameRecord cName = msg . AnswerRecords .
-									Where (
-											x
-												=> ( x . RecordType      == RecordType . CName )
+									  Where (
+											 x
+												 => ( x . RecordType     == RecordType . CName )
 													&& ( x . RecordClass == recordClass )
 													&& x . Name . Equals ( name ) ) .
-									OfType <CNameRecord> ( ) .
-									FirstOrDefault ( ) ;
+									  OfType <CNameRecord> ( ) .
+									  FirstOrDefault ( ) ;
 
 			if ( cName != null )
 			{
@@ -109,13 +109,13 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 				if ( records . Count > 0 )
 				{
 					_cache . Add (
-								name ,
-								recordType ,
-								recordClass ,
-								records ,
-								msg . ReturnCode ,
-								DnsSecValidationResult . Indeterminate ,
-								records . Min ( x => x . TimeToLive ) ) ;
+								  name ,
+								  recordType ,
+								  recordClass ,
+								  records ,
+								  msg . ReturnCode ,
+								  DnsSecValidationResult . Indeterminate ,
+								  records . Min ( x => x . TimeToLive ) ) ;
 					return records ;
 				}
 
@@ -129,13 +129,13 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 				if ( records . Count > 0 )
 				{
 					_cache . Add (
-								name ,
-								recordType ,
-								recordClass ,
-								records ,
-								msg . ReturnCode ,
-								DnsSecValidationResult . Indeterminate ,
-								records . Min ( x => x . TimeToLive ) ) ;
+								  name ,
+								  recordType ,
+								  recordClass ,
+								  records ,
+								  msg . ReturnCode ,
+								  DnsSecValidationResult . Indeterminate ,
+								  records . Min ( x => x . TimeToLive ) ) ;
 				}
 
 				return records ;
@@ -146,13 +146,13 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 			if ( records . Count > 0 )
 			{
 				_cache . Add (
-							name ,
-							recordType ,
-							recordClass ,
-							records ,
-							msg . ReturnCode ,
-							DnsSecValidationResult . Indeterminate ,
-							records . Min ( x => x . TimeToLive ) ) ;
+							  name ,
+							  recordType ,
+							  recordClass ,
+							  records ,
+							  msg . ReturnCode ,
+							  DnsSecValidationResult . Indeterminate ,
+							  records . Min ( x => x . TimeToLive ) ) ;
 			}
 
 			return records ;
@@ -189,40 +189,40 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 			DnsMessage msg = await _dnsClient . ResolveAsync ( name , recordType , recordClass , null , token ) ;
 
 			if ( ( msg == null )
-				|| ( ( msg . ReturnCode != ReturnCode . NoError ) && ( msg . ReturnCode != ReturnCode . NxDomain ) ) )
+				 || ( ( msg . ReturnCode != ReturnCode . NoError ) && ( msg . ReturnCode != ReturnCode . NxDomain ) ) )
 			{
 				throw new Exception ( "DNS request failed" ) ;
 			}
 
 			CNameRecord cName = msg . AnswerRecords .
-									Where (
-											x
-												=> ( x . RecordType      == RecordType . CName )
+									  Where (
+											 x
+												 => ( x . RecordType     == RecordType . CName )
 													&& ( x . RecordClass == recordClass )
 													&& x . Name . Equals ( name ) ) .
-									OfType <CNameRecord> ( ) .
-									FirstOrDefault ( ) ;
+									  OfType <CNameRecord> ( ) .
+									  FirstOrDefault ( ) ;
 
 			if ( cName != null )
 			{
 				records = msg . AnswerRecords .
 								Where (
-										x
-											=> ( x . RecordType      == recordType )
-												&& ( x . RecordClass == recordClass )
-												&& x . Name . Equals ( cName . CanonicalName ) ) .
+									   x
+										   => ( x . RecordType     == recordType )
+											  && ( x . RecordClass == recordClass )
+											  && x . Name . Equals ( cName . CanonicalName ) ) .
 								OfType <T> ( ) .
 								ToList ( ) ;
 				if ( records . Count > 0 )
 				{
 					_cache . Add (
-								name ,
-								recordType ,
-								recordClass ,
-								records ,
-								msg . ReturnCode ,
-								DnsSecValidationResult . Indeterminate ,
-								Math . Min ( cName . TimeToLive , records . Min ( x => x . TimeToLive ) ) ) ;
+								  name ,
+								  recordType ,
+								  recordClass ,
+								  records ,
+								  msg . ReturnCode ,
+								  DnsSecValidationResult . Indeterminate ,
+								  Math . Min ( cName . TimeToLive , records . Min ( x => x . TimeToLive ) ) ) ;
 					return records ;
 				}
 
@@ -236,13 +236,13 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 				if ( records . Count > 0 )
 				{
 					_cache . Add (
-								name ,
-								recordType ,
-								recordClass ,
-								records ,
-								msg . ReturnCode ,
-								DnsSecValidationResult . Indeterminate ,
-								Math . Min ( cName . TimeToLive , records . Min ( x => x . TimeToLive ) ) ) ;
+								  name ,
+								  recordType ,
+								  recordClass ,
+								  records ,
+								  msg . ReturnCode ,
+								  DnsSecValidationResult . Indeterminate ,
+								  Math . Min ( cName . TimeToLive , records . Min ( x => x . TimeToLive ) ) ) ;
 				}
 
 				return records ;
@@ -253,13 +253,13 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 			if ( records . Count > 0 )
 			{
 				_cache . Add (
-							name ,
-							recordType ,
-							recordClass ,
-							records ,
-							msg . ReturnCode ,
-							DnsSecValidationResult . Indeterminate ,
-							records . Min ( x => x . TimeToLive ) ) ;
+							  name ,
+							  recordType ,
+							  recordClass ,
+							  records ,
+							  msg . ReturnCode ,
+							  DnsSecValidationResult . Indeterminate ,
+							  records . Min ( x => x . TimeToLive ) ) ;
 			}
 
 			return records ;

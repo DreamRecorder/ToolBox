@@ -16,22 +16,22 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 	public class UriRecord : DnsRecordBase
 	{
 
+		protected internal override int MaximumRecordDataLength => Target . Length + 4 ;
+
 		/// <summary>
 		///     Priority
 		/// </summary>
 		public ushort Priority { get ; private set ; }
 
 		/// <summary>
-		///     Weight
-		/// </summary>
-		public ushort Weight { get ; private set ; }
-
-		/// <summary>
 		///     Target
 		/// </summary>
 		public string Target { get ; private set ; }
 
-		protected internal override int MaximumRecordDataLength => Target . Length + 4 ;
+		/// <summary>
+		///     Weight
+		/// </summary>
+		public ushort Weight { get ; private set ; }
 
 		internal UriRecord ( ) { }
 
@@ -44,14 +44,26 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="weight"> Weight of the record </param>
 		/// <param name="target"> Target of the record </param>
 		public UriRecord ( DomainName name , int timeToLive , ushort priority , ushort weight , string target ) : base (
-		name ,
-		RecordType . Uri ,
-		RecordClass . INet ,
-		timeToLive )
+		 name ,
+		 RecordType . Uri ,
+		 RecordClass . INet ,
+		 timeToLive )
 		{
 			Priority = priority ;
 			Weight   = weight ;
 			Target   = target ?? string . Empty ;
+		}
+
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , Priority ) ;
+			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , Weight ) ;
+			DnsMessageBase . EncodeTextWithoutLength ( messageData , ref currentPosition , Target ) ;
 		}
 
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )
@@ -74,18 +86,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		}
 
 		internal override string RecordDataToString ( ) => Priority + " " + Weight + " \"" + Target + "\"" ;
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , Priority ) ;
-			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , Weight ) ;
-			DnsMessageBase . EncodeTextWithoutLength ( messageData , ref currentPosition , Target ) ;
-		}
 
 	}
 

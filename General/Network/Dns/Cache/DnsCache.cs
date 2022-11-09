@@ -53,6 +53,19 @@ namespace DreamRecorder . ToolBox . Network . Dns . Cache
 			_cache . TryAdd ( key , new CacheValue ( records , timeToLive ) ) ;
 		}
 
+		public void RemoveExpiredItems ( )
+		{
+			DateTime utcNow = DateTime . UtcNow ;
+
+			foreach ( KeyValuePair <CacheKey , CacheValue> kvp in _cache )
+			{
+				if ( kvp . Value . ExpireDateUtc < utcNow )
+				{
+					_cache . TryRemove ( kvp . Key , out CacheValue tmp ) ;
+				}
+			}
+		}
+
 		public bool TryGetRecords <TRecord> (
 			DomainName         name ,
 			RecordType         recordType ,
@@ -77,13 +90,13 @@ namespace DreamRecorder . ToolBox . Network . Dns . Cache
 
 				records . AddRange (
 									cacheValue . Records . OfType <TRecord> ( ) .
-												Select (
-														x =>
-														{
-															TRecord record = x . Clone <TRecord> ( ) ;
-															record . TimeToLive = ttl ;
-															return record ;
-														} ) ) ;
+												 Select (
+														 x =>
+														 {
+															 TRecord record = x . Clone <TRecord> ( ) ;
+															 record . TimeToLive = ttl ;
+															 return record ;
+														 } ) ) ;
 
 				return true ;
 			}
@@ -116,13 +129,13 @@ namespace DreamRecorder . ToolBox . Network . Dns . Cache
 
 				records . AddRange (
 									cacheValue . Records . OfType <TRecord> ( ) .
-												Select (
-														x =>
-														{
-															TRecord record = x . Clone <TRecord> ( ) ;
-															record . TimeToLive = ttl ;
-															return record ;
-														} ) ) ;
+												 Select (
+														 x =>
+														 {
+															 TRecord record = x . Clone <TRecord> ( ) ;
+															 record . TimeToLive = ttl ;
+															 return record ;
+														 } ) ) ;
 
 				records . ReturnCode       = cacheValue . Records . ReturnCode ;
 				records . ValidationResult = cacheValue . Records . ValidationResult ;
@@ -132,19 +145,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . Cache
 
 			records = null ;
 			return false ;
-		}
-
-		public void RemoveExpiredItems ( )
-		{
-			DateTime utcNow = DateTime . UtcNow ;
-
-			foreach ( KeyValuePair <CacheKey , CacheValue> kvp in _cache )
-			{
-				if ( kvp . Value . ExpireDateUtc < utcNow )
-				{
-					_cache . TryRemove ( kvp . Key , out CacheValue tmp ) ;
-				}
-			}
 		}
 
 		private class CacheKey
@@ -167,9 +167,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . Cache
 				_hashCode = name . GetHashCode ( ) ^ ( 7 * ( int )recordType ) ^ ( 11 * ( int )recordClass ) ;
 			}
 
-
-			public override int GetHashCode ( ) => _hashCode ;
-
 			public override bool Equals ( object obj )
 			{
 				if ( obj is not CacheKey other )
@@ -177,10 +174,13 @@ namespace DreamRecorder . ToolBox . Network . Dns . Cache
 					return false ;
 				}
 
-				return ( _recordType      == other . _recordType )
-						&& ( _recordClass == other . _recordClass )
-						&& ( _name . Equals ( other . _name ) ) ;
+				return ( _recordType     == other . _recordType )
+					   && ( _recordClass == other . _recordClass )
+					   && ( _name . Equals ( other . _name ) ) ;
 			}
+
+
+			public override int GetHashCode ( ) => _hashCode ;
 
 			public override string ToString ( )
 				=> _name + " " + _recordClass . ToShortString ( ) + " " + _recordType . ToShortString ( ) ;

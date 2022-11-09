@@ -795,6 +795,29 @@ namespace DreamRecorder . ToolBox . Network . Dns
 	internal static class RecordTypeHelper
 	{
 
+		public static RecordType ParseShortString ( string s )
+		{
+			if ( string . IsNullOrEmpty ( s ) )
+			{
+				throw new ArgumentOutOfRangeException ( nameof ( s ) ) ;
+			}
+
+			if ( Enum . TryParse ( s , true , out RecordType recordType ) )
+			{
+				return recordType ;
+			}
+
+			if ( s . StartsWith ( "TYPE" , StringComparison . InvariantCultureIgnoreCase ) )
+			{
+				if ( ushort . TryParse ( s . Substring ( 4 ) , out ushort classValue ) )
+				{
+					return ( RecordType )classValue ;
+				}
+			}
+
+			throw new ArgumentOutOfRangeException ( nameof ( s ) ) ;
+		}
+
 		public static string ToShortString ( this RecordType recordType )
 			=> Enum . GetName ( recordType ) ? . ToUpper ( ) ?? "TYPE" + ( int )recordType ;
 
@@ -822,29 +845,6 @@ namespace DreamRecorder . ToolBox . Network . Dns
 
 			recordType = RecordType . Invalid ;
 			return false ;
-		}
-
-		public static RecordType ParseShortString ( string s )
-		{
-			if ( string . IsNullOrEmpty ( s ) )
-			{
-				throw new ArgumentOutOfRangeException ( nameof ( s ) ) ;
-			}
-
-			if ( Enum . TryParse ( s , true , out RecordType recordType ) )
-			{
-				return recordType ;
-			}
-
-			if ( s . StartsWith ( "TYPE" , StringComparison . InvariantCultureIgnoreCase ) )
-			{
-				if ( ushort . TryParse ( s . Substring ( 4 ) , out ushort classValue ) )
-				{
-					return ( RecordType )classValue ;
-				}
-			}
-
-			throw new ArgumentOutOfRangeException ( nameof ( s ) ) ;
 		}
 
 	}

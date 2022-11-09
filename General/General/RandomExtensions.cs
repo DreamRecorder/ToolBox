@@ -16,6 +16,52 @@ namespace DreamRecorder . ToolBox . General
 
 		public static char [ ] AlphabetAndNumbersArray = AlphabetAndNumbers . ToCharArray ( ) ;
 
+		/// <summary>
+		///     Equally likely to return true or false. Uses
+		///     <see cref="Random.Next()" />
+		///     .
+		/// </summary>
+		/// <returns></returns>
+		public static bool NextBoolean ( [NotNull] this IRandom random )
+		{
+			if ( random == null )
+			{
+				throw new ArgumentNullException ( nameof ( random ) ) ;
+			}
+
+			return ( random . Next ( ) & 1 ) == 1 ;
+		}
+
+		public static decimal NextDecimalBetween ( [NotNull] this IRandom random , decimal minValue , decimal maxValue )
+		{
+			if ( random == null )
+			{
+				throw new ArgumentNullException ( nameof ( random ) ) ;
+			}
+
+			if ( ! ( minValue <= maxValue ) )
+			{
+				throw new ArgumentException ( ) ;
+			}
+
+			return minValue + Convert . ToDecimal ( random . NextDouble ( ) ) * ( maxValue - minValue ) ;
+		}
+
+		public static double NextDoubleBetween ( [NotNull] this IRandom random , double minValue , double maxValue )
+		{
+			if ( random == null )
+			{
+				throw new ArgumentNullException ( nameof ( random ) ) ;
+			}
+
+			if ( ! ( minValue <= maxValue ) )
+			{
+				throw new ArgumentException ( ) ;
+			}
+
+			return minValue + random . NextDouble ( ) * ( maxValue - minValue ) ;
+		}
+
 		public static T NextEnum <T> ( [NotNull] this IRandom random ) where T : struct , Enum
 			=> Enum . GetValues <T> ( ) . RandomItem ( random ) ;
 
@@ -47,6 +93,57 @@ namespace DreamRecorder . ToolBox . General
 			double randNormal = mu + sigma * randStdNormal ;
 
 			return randNormal ;
+		}
+
+		public static string NextString ( [NotNull] this IRandom random , int length , char [ ] chars = null )
+		{
+			if ( random == null )
+			{
+				throw new ArgumentNullException ( nameof ( random ) ) ;
+			}
+
+			if ( length < 0 )
+			{
+				throw new ArgumentOutOfRangeException ( nameof ( length ) ) ;
+			}
+
+			return new string ( ( chars ?? AlphabetAndNumbersArray ) . RandomChoose ( length ) . ToArray ( ) ) ;
+		}
+
+
+		/// <summary>
+		///     Generates values from a triangular distribution.
+		/// </summary>
+		/// <remarks>
+		///     See http://en.wikipedia.org/wiki/Triangular_distribution for a description of the triangular probability
+		///     distribution and the algorithm for generating one.
+		/// </remarks>
+		/// <param name="random"></param>
+		/// <param name="a">Minimum</param>
+		/// <param name="b">Maximum</param>
+		/// <param name="c">Mode (most frequent value)</param>
+		/// <returns></returns>
+		public static double NextTriangular ( [NotNull] this IRandom random , double a , double b , double c )
+		{
+			if ( random == null )
+			{
+				throw new ArgumentNullException ( nameof ( random ) ) ;
+			}
+
+			if ( ! ( a <= c && c <= b ) )
+			{
+				throw new ArgumentOutOfRangeException (
+													   $"It should be {nameof ( a )}<={nameof ( c )}<={nameof ( b )}" ) ;
+			}
+
+			double u = random . NextDouble ( ) ;
+
+			if ( u < ( c - a ) / ( b - a ) )
+			{
+				return a + Math . Sqrt ( u * ( b - a ) * ( c - a ) ) ;
+			}
+
+			return b - Math . Sqrt ( ( 1 - u ) * ( b - a ) * ( b - c ) ) ;
 		}
 
 		/// <summary>
@@ -98,58 +195,6 @@ namespace DreamRecorder . ToolBox . General
 			return result ;
 		}
 
-
-		/// <summary>
-		///     Generates values from a triangular distribution.
-		/// </summary>
-		/// <remarks>
-		///     See http://en.wikipedia.org/wiki/Triangular_distribution for a description of the triangular probability
-		///     distribution and the algorithm for generating one.
-		/// </remarks>
-		/// <param name="random"></param>
-		/// <param name="a">Minimum</param>
-		/// <param name="b">Maximum</param>
-		/// <param name="c">Mode (most frequent value)</param>
-		/// <returns></returns>
-		public static double NextTriangular ( [NotNull] this IRandom random , double a , double b , double c )
-		{
-			if ( random == null )
-			{
-				throw new ArgumentNullException ( nameof ( random ) ) ;
-			}
-
-			if ( ! ( a <= c && c <= b ) )
-			{
-				throw new ArgumentOutOfRangeException (
-														$"It should be {nameof ( a )}<={nameof ( c )}<={nameof ( b )}" ) ;
-			}
-
-			double u = random . NextDouble ( ) ;
-
-			if ( u < ( c - a ) / ( b - a ) )
-			{
-				return a + Math . Sqrt ( u * ( b - a ) * ( c - a ) ) ;
-			}
-
-			return b - Math . Sqrt ( ( 1 - u ) * ( b - a ) * ( b - c ) ) ;
-		}
-
-		/// <summary>
-		///     Equally likely to return true or false. Uses
-		///     <see cref="Random.Next()" />
-		///     .
-		/// </summary>
-		/// <returns></returns>
-		public static bool NextBoolean ( [NotNull] this IRandom random )
-		{
-			if ( random == null )
-			{
-				throw new ArgumentNullException ( nameof ( random ) ) ;
-			}
-
-			return ( random . Next ( ) & 1 ) == 1 ;
-		}
-
 		/// <summary>
 		///     Shuffles a list in O(n) time by using the Fisher-Yates/Knuth algorithm.
 		/// </summary>
@@ -173,51 +218,6 @@ namespace DreamRecorder . ToolBox . General
 
 				( list [ j ] , list [ i ] ) = ( list [ i ] , list [ j ] ) ;
 			}
-		}
-
-		public static double NextDoubleBetween ( [NotNull] this IRandom random , double minValue , double maxValue )
-		{
-			if ( random == null )
-			{
-				throw new ArgumentNullException ( nameof ( random ) ) ;
-			}
-
-			if ( ! ( minValue <= maxValue ) )
-			{
-				throw new ArgumentException ( ) ;
-			}
-
-			return minValue + random . NextDouble ( ) * ( maxValue - minValue ) ;
-		}
-
-		public static decimal NextDecimalBetween ( [NotNull] this IRandom random , decimal minValue , decimal maxValue )
-		{
-			if ( random == null )
-			{
-				throw new ArgumentNullException ( nameof ( random ) ) ;
-			}
-
-			if ( ! ( minValue <= maxValue ) )
-			{
-				throw new ArgumentException ( ) ;
-			}
-
-			return minValue + Convert . ToDecimal ( random . NextDouble ( ) ) * ( maxValue - minValue ) ;
-		}
-
-		public static string NextString ( [NotNull] this IRandom random , int length , char [ ] chars = null )
-		{
-			if ( random == null )
-			{
-				throw new ArgumentNullException ( nameof ( random ) ) ;
-			}
-
-			if ( length < 0 )
-			{
-				throw new ArgumentOutOfRangeException ( nameof ( length ) ) ;
-			}
-
-			return new string ( ( chars ?? AlphabetAndNumbersArray ) . RandomChoose ( length ) . ToArray ( ) ) ;
 		}
 
 	}

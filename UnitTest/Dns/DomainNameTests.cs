@@ -15,15 +15,14 @@ namespace DreamRecorder . ToolBox . UnitTest . Dns
 	{
 
 		[TestMethod]
+		public void CompareToTest ( ) { }
+
+		[TestMethod]
 		public void DomainNameTest ( )
 		{
 			DomainName domainName    = new DomainName ( new [ ] { "dreamry" , "org" , } ) ;
 			DomainName subDomainName = new DomainName ( "toolbox.dev" , domainName ) ;
 		}
-
-
-		[TestMethod]
-		public void CompareToTest ( ) { }
 
 		[TestMethod]
 		public void EqualsTest ( )
@@ -38,6 +37,15 @@ namespace DreamRecorder . ToolBox . UnitTest . Dns
 			Assert . IsFalse ( domainName1 . Equals ( subDomainName ) ) ;
 			Assert . IsFalse ( domainName2 . Equals ( subDomainName ) ) ;
 		}
+
+		[TestMethod]
+		public void EqualsTest1 ( ) { }
+
+		[TestMethod]
+		public void EqualsTest2 ( ) { }
+
+		[TestMethod]
+		public void GetHashCodeTest ( ) { }
 
 		[TestMethod]
 		public void GetParentNameTest ( ) { }
@@ -60,9 +68,6 @@ namespace DreamRecorder . ToolBox . UnitTest . Dns
 		public void ParseTest ( ) { }
 
 		[TestMethod]
-		public void TryParseTest ( ) { }
-
-		[TestMethod]
 		public void ToStringTest ( )
 		{
 			DomainName domainName = DomainName . Parse ( "dreamry.org" ) ;
@@ -70,13 +75,7 @@ namespace DreamRecorder . ToolBox . UnitTest . Dns
 		}
 
 		[TestMethod]
-		public void GetHashCodeTest ( ) { }
-
-		[TestMethod]
-		public void EqualsTest1 ( ) { }
-
-		[TestMethod]
-		public void EqualsTest2 ( ) { }
+		public void TryParseTest ( ) { }
 
 	}
 

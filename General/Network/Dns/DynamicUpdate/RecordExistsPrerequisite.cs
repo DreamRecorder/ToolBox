@@ -14,12 +14,12 @@ namespace DreamRecorder . ToolBox . Network . Dns . DynamicUpdate
 	public class RecordExistsPrerequisite : PrerequisiteBase
 	{
 
+		protected internal override int MaximumRecordDataLength => Record ? . MaximumRecordDataLength ?? 0 ;
+
 		/// <summary>
 		///     Record that should exist
 		/// </summary>
 		public DnsRecordBase Record { get ; }
-
-		protected internal override int MaximumRecordDataLength => Record ? . MaximumRecordDataLength ?? 0 ;
 
 		internal RecordExistsPrerequisite ( ) { }
 
@@ -29,10 +29,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DynamicUpdate
 		/// <param name="name"> Name of record that should be checked </param>
 		/// <param name="recordType"> Type of record that should be checked </param>
 		public RecordExistsPrerequisite ( DomainName name , RecordType recordType ) : base (
-		name ,
-		recordType ,
-		RecordClass . Any ,
-		0 )
+		 name ,
+		 recordType ,
+		 RecordClass . Any ,
+		 0 )
 		{
 		}
 
@@ -41,13 +41,11 @@ namespace DreamRecorder . ToolBox . Network . Dns . DynamicUpdate
 		/// </summary>
 		/// <param name="record"> tecord that should be checked </param>
 		public RecordExistsPrerequisite ( DnsRecordBase record ) : base (
-																		record . Name ,
-																		record . RecordType ,
-																		record . RecordClass ,
-																		0 )
+																		 record . Name ,
+																		 record . RecordType ,
+																		 record . RecordClass ,
+																		 0 )
 			=> Record = record ;
-
-		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length ) { }
 
 		protected internal override void EncodeRecordData (
 			byte [ ]                         messageData ,
@@ -58,6 +56,8 @@ namespace DreamRecorder . ToolBox . Network . Dns . DynamicUpdate
 		{
 			Record ? . EncodeRecordData ( messageData , offset , ref currentPosition , domainNames , useCanonical ) ;
 		}
+
+		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length ) { }
 
 	}
 

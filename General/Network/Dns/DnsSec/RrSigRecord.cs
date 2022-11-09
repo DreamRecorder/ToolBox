@@ -23,26 +23,33 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 	{
 
 		/// <summary>
-		///     <see cref="RecordType">Record type</see>
-		///     that is covered by this record
-		/// </summary>
-		public RecordType TypeCovered { get ; private set ; }
-
-		/// <summary>
 		///     <see cref="DnsSecAlgorithm">Algorithm</see>
 		///     that is used for signature
 		/// </summary>
 		public DnsSecAlgorithm Algorithm { get ; private set ; }
 
 		/// <summary>
+		///     Key tag
+		/// </summary>
+		public ushort KeyTag { get ; private set ; }
+
+		/// <summary>
 		///     Label count of original record that is covered by this record
 		/// </summary>
 		public byte Labels { get ; private set ; }
+
+		protected internal override int MaximumRecordDataLength
+			=> 20 + SignersName . MaximumRecordDataLength + Signature . Length ;
 
 		/// <summary>
 		///     Original time to live value of original record that is covered by this record
 		/// </summary>
 		public int OriginalTimeToLive { get ; private set ; }
+
+		/// <summary>
+		///     Binary data of the signature
+		/// </summary>
+		public byte [ ] Signature { get ; internal set ; }
 
 		/// <summary>
 		///     Signature is valid until this date
@@ -55,22 +62,15 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 		public DateTime SignatureInception { get ; private set ; }
 
 		/// <summary>
-		///     Key tag
-		/// </summary>
-		public ushort KeyTag { get ; private set ; }
-
-		/// <summary>
 		///     Domain name of generator of the signature
 		/// </summary>
 		public DomainName SignersName { get ; private set ; }
 
 		/// <summary>
-		///     Binary data of the signature
+		///     <see cref="RecordType">Record type</see>
+		///     that is covered by this record
 		/// </summary>
-		public byte [ ] Signature { get ; internal set ; }
-
-		protected internal override int MaximumRecordDataLength
-			=> 20 + SignersName . MaximumRecordDataLength + Signature . Length ;
+		public RecordType TypeCovered { get ; private set ; }
 
 		internal RrSigRecord ( ) { }
 
@@ -125,16 +125,16 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 			DnsKeyRecord         key ,
 			DateTime             inception ,
 			DateTime             expiration ) : base (
-													records [ 0 ] . Name ,
-													RecordType . RrSig ,
-													records [ 0 ] . RecordClass ,
-													records [ 0 ] . TimeToLive )
+													  records [ 0 ] . Name ,
+													  RecordType . RrSig ,
+													  records [ 0 ] . RecordClass ,
+													  records [ 0 ] . TimeToLive )
 		{
 			TypeCovered = records [ 0 ] . RecordType ;
 			Algorithm   = key . Algorithm ;
 			Labels = ( byte )( records [ 0 ] . Name . Labels [ 0 ] == DomainName . Asterisk . Labels [ 0 ]
-									? records [ 0 ] . Name . LabelCount - 1
-									: records [ 0 ] . Name . LabelCount ) ;
+								   ? records [ 0 ] . Name . LabelCount - 1
+								   : records [ 0 ] . Name . LabelCount ) ;
 			OriginalTimeToLive  = records [ 0 ] . TimeToLive ;
 			SignatureExpiration = expiration ;
 			SignatureInception  = inception ;
@@ -145,6 +145,101 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 			EncodeSigningBuffer ( records , out byte [ ] signBuffer , out int signBufferLength ) ;
 
 			Signature = key . Sign ( signBuffer , signBufferLength ) ;
+		}
+
+		internal static void EncodeDateTime ( byte [ ] buffer , ref int currentPosition , DateTime value )
+		{
+			int timeStamp =
+				( int )( value . ToUniversalTime ( )
+						 - new DateTime ( 1970 , 1 , 1 , 0 , 0 , 0 , DateTimeKind . Utc ) ) . TotalSeconds ;
+			DnsMessageBase . EncodeInt ( buffer , ref currentPosition , timeStamp ) ;
+		}
+
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			EncodeRecordData ( messageData , offset , ref currentPosition , domainNames , useCanonical , true ) ;
+		}
+
+		internal void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical ,
+			bool                             encodeSignature )
+		{
+			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , ( ushort )TypeCovered ) ;
+			messageData [ currentPosition++ ] = ( byte )Algorithm ;
+			messageData [ currentPosition++ ] = Labels ;
+			DnsMessageBase . EncodeInt ( messageData , ref currentPosition , OriginalTimeToLive ) ;
+			EncodeDateTime ( messageData , ref currentPosition , SignatureExpiration ) ;
+			EncodeDateTime ( messageData , ref currentPosition , SignatureInception ) ;
+			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , KeyTag ) ;
+			DnsMessageBase . EncodeDomainName (
+											   messageData ,
+											   offset ,
+											   ref currentPosition ,
+											   SignersName ,
+											   null ,
+											   useCanonical ) ;
+
+			if ( encodeSignature )
+			{
+				DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , Signature ) ;
+			}
+		}
+
+		private void EncodeSigningBuffer <T> ( List <T> records , out byte [ ] messageData , out int length )
+			where T : DnsRecordBase
+		{
+			messageData =
+				new byte[ 2
+						  + MaximumRecordDataLength
+						  - Signature . Length
+						  + records . Sum ( x => x . MaximumLength ) ] ;
+			length = 0 ;
+			EncodeRecordData ( messageData , 0 , ref length , null , true , false ) ;
+			foreach ( T record in records . OrderBy ( x => x ) )
+			{
+				if ( record . Name . LabelCount == Labels )
+				{
+					DnsMessageBase . EncodeDomainName ( messageData , 0 , ref length , record . Name , null , true ) ;
+				}
+				else if ( record . Name . LabelCount > Labels )
+				{
+					DnsMessageBase . EncodeDomainName (
+													   messageData ,
+													   0 ,
+													   ref length ,
+													   DomainName . Asterisk
+													   + record . Name . GetParentName (
+														record . Name . LabelCount - Labels ) ,
+													   null ,
+													   true ) ;
+				}
+				else
+				{
+					throw new Exception ( "Encoding of records with less labels than RrSigRecord is not allowed" ) ;
+				}
+
+				DnsMessageBase . EncodeUShort ( messageData , ref length , ( ushort )record . RecordType ) ;
+				DnsMessageBase . EncodeUShort ( messageData , ref length , ( ushort )record . RecordClass ) ;
+				DnsMessageBase . EncodeInt ( messageData , ref length , OriginalTimeToLive ) ;
+
+				record . EncodeRecordBody ( messageData , 0 , ref length , null , true ) ;
+			}
+		}
+
+		private static DateTime ParseDateTime ( byte [ ] buffer , ref int currentPosition )
+		{
+			int timeStamp = DnsMessageBase . ParseInt ( buffer , ref currentPosition ) ;
+			return new DateTime ( 1970 , 1 , 1 , 0 , 0 , 0 , DateTimeKind . Utc ) . AddSeconds ( timeStamp ) .
+				ToLocalTime ( ) ;
 		}
 
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )
@@ -177,10 +272,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 			Labels             = byte . Parse ( stringRepresentation [ 2 ] ) ;
 			OriginalTimeToLive = int . Parse ( stringRepresentation [ 3 ] ) ;
 			SignatureExpiration = DateTime . ParseExact (
-														stringRepresentation [ 4 ] ,
-														"yyyyMMddHHmmss" ,
-														CultureInfo . InvariantCulture ,
-														DateTimeStyles . AssumeUniversal ) ;
+														 stringRepresentation [ 4 ] ,
+														 "yyyyMMddHHmmss" ,
+														 CultureInfo . InvariantCulture ,
+														 DateTimeStyles . AssumeUniversal ) ;
 			SignatureInception = DateTime . ParseExact (
 														stringRepresentation [ 5 ] ,
 														"yyyyMMddHHmmss" ,
@@ -193,76 +288,22 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 
 		internal override string RecordDataToString ( )
 			=> TypeCovered . ToShortString ( )
-				+ " "
-				+ ( byte )Algorithm
-				+ " "
-				+ Labels
-				+ " "
-				+ OriginalTimeToLive
-				+ " "
-				+ SignatureExpiration . ToUniversalTime ( ) . ToString ( "yyyyMMddHHmmss" )
-				+ " "
-				+ SignatureInception . ToUniversalTime ( ) . ToString ( "yyyyMMddHHmmss" )
-				+ " "
-				+ KeyTag
-				+ " "
-				+ SignersName
-				+ " "
-				+ Signature . ToBase64String ( ) ;
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			EncodeRecordData ( messageData , offset , ref currentPosition , domainNames , useCanonical , true ) ;
-		}
-
-		internal void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical ,
-			bool                             encodeSignature )
-		{
-			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , ( ushort )TypeCovered ) ;
-			messageData [ currentPosition++ ] = ( byte )Algorithm ;
-			messageData [ currentPosition++ ] = Labels ;
-			DnsMessageBase . EncodeInt ( messageData , ref currentPosition , OriginalTimeToLive ) ;
-			EncodeDateTime ( messageData , ref currentPosition , SignatureExpiration ) ;
-			EncodeDateTime ( messageData , ref currentPosition , SignatureInception ) ;
-			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , KeyTag ) ;
-			DnsMessageBase . EncodeDomainName (
-												messageData ,
-												offset ,
-												ref currentPosition ,
-												SignersName ,
-												null ,
-												useCanonical ) ;
-
-			if ( encodeSignature )
-			{
-				DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , Signature ) ;
-			}
-		}
-
-		internal static void EncodeDateTime ( byte [ ] buffer , ref int currentPosition , DateTime value )
-		{
-			int timeStamp =
-				( int )( value . ToUniversalTime ( )
-						- new DateTime ( 1970 , 1 , 1 , 0 , 0 , 0 , DateTimeKind . Utc ) ) . TotalSeconds ;
-			DnsMessageBase . EncodeInt ( buffer , ref currentPosition , timeStamp ) ;
-		}
-
-		private static DateTime ParseDateTime ( byte [ ] buffer , ref int currentPosition )
-		{
-			int timeStamp = DnsMessageBase . ParseInt ( buffer , ref currentPosition ) ;
-			return new DateTime ( 1970 , 1 , 1 , 0 , 0 , 0 , DateTimeKind . Utc ) . AddSeconds ( timeStamp ) .
-				ToLocalTime ( ) ;
-		}
+			   + " "
+			   + ( byte )Algorithm
+			   + " "
+			   + Labels
+			   + " "
+			   + OriginalTimeToLive
+			   + " "
+			   + SignatureExpiration . ToUniversalTime ( ) . ToString ( "yyyyMMddHHmmss" )
+			   + " "
+			   + SignatureInception . ToUniversalTime ( ) . ToString ( "yyyyMMddHHmmss" )
+			   + " "
+			   + KeyTag
+			   + " "
+			   + SignersName
+			   + " "
+			   + Signature . ToBase64String ( ) ;
 
 		internal bool Verify <T> ( List <T> coveredRecords , IEnumerable <DnsKeyRecord> dnsKeys )
 			where T : DnsRecordBase
@@ -270,53 +311,12 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 			EncodeSigningBuffer ( coveredRecords , out byte [ ] messageData , out int length ) ;
 
 			return dnsKeys .
-					Where (
-							x => x . IsZoneKey
-								&& ( x . Protocol == 3 )
-								&& x . Algorithm . IsSupported ( )
-								&& ( KeyTag == x . CalculateKeyTag ( ) ) ) .
-					Any ( x => x . Verify ( messageData , length , Signature ) ) ;
-		}
-
-		private void EncodeSigningBuffer <T> ( List <T> records , out byte [ ] messageData , out int length )
-			where T : DnsRecordBase
-		{
-			messageData =
-				new byte[ 2
-						+ MaximumRecordDataLength
-						- Signature . Length
-						+ records . Sum ( x => x . MaximumLength ) ] ;
-			length = 0 ;
-			EncodeRecordData ( messageData , 0 , ref length , null , true , false ) ;
-			foreach ( T record in records . OrderBy ( x => x ) )
-			{
-				if ( record . Name . LabelCount == Labels )
-				{
-					DnsMessageBase . EncodeDomainName ( messageData , 0 , ref length , record . Name , null , true ) ;
-				}
-				else if ( record . Name . LabelCount > Labels )
-				{
-					DnsMessageBase . EncodeDomainName (
-														messageData ,
-														0 ,
-														ref length ,
-														DomainName . Asterisk
-														+ record . Name . GetParentName (
-														record . Name . LabelCount - Labels ) ,
-														null ,
-														true ) ;
-				}
-				else
-				{
-					throw new Exception ( "Encoding of records with less labels than RrSigRecord is not allowed" ) ;
-				}
-
-				DnsMessageBase . EncodeUShort ( messageData , ref length , ( ushort )record . RecordType ) ;
-				DnsMessageBase . EncodeUShort ( messageData , ref length , ( ushort )record . RecordClass ) ;
-				DnsMessageBase . EncodeInt ( messageData , ref length , OriginalTimeToLive ) ;
-
-				record . EncodeRecordBody ( messageData , 0 , ref length , null , true ) ;
-			}
+				   Where (
+						  x => x . IsZoneKey
+							   && ( x . Protocol == 3 )
+							   && x . Algorithm . IsSupported ( )
+							   && ( KeyTag == x . CalculateKeyTag ( ) ) ) .
+				   Any ( x => x . Verify ( messageData , length , Signature ) ) ;
 		}
 
 	}

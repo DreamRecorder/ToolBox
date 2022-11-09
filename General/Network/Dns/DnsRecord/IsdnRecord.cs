@@ -21,12 +21,12 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// </summary>
 		public string IsdnAddress { get ; private set ; }
 
+		protected internal override int MaximumRecordDataLength => 2 + IsdnAddress . Length + SubAddress . Length ;
+
 		/// <summary>
 		///     Sub address
 		/// </summary>
 		public string SubAddress { get ; private set ; }
-
-		protected internal override int MaximumRecordDataLength => 2 + IsdnAddress . Length + SubAddress . Length ;
 
 		internal IsdnRecord ( ) { }
 
@@ -37,10 +37,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="timeToLive"> Seconds the record should be cached at most </param>
 		/// <param name="isdnAddress"> ISDN number </param>
 		public IsdnRecord ( DomainName name , int timeToLive , string isdnAddress ) : this (
-		name ,
-		timeToLive ,
-		isdnAddress ,
-		string . Empty )
+		 name ,
+		 timeToLive ,
+		 isdnAddress ,
+		 string . Empty )
 		{
 		}
 
@@ -52,13 +52,24 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="isdnAddress"> ISDN number </param>
 		/// <param name="subAddress"> Sub address </param>
 		public IsdnRecord ( DomainName name , int timeToLive , string isdnAddress , string subAddress ) : base (
-		name ,
-		RecordType . Isdn ,
-		RecordClass . INet ,
-		timeToLive )
+		 name ,
+		 RecordType . Isdn ,
+		 RecordClass . INet ,
+		 timeToLive )
 		{
 			IsdnAddress = isdnAddress ?? string . Empty ;
 			SubAddress  = subAddress  ?? string . Empty ;
+		}
+
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			DnsMessageBase . EncodeTextBlock ( messageData , ref currentPosition , IsdnAddress ) ;
+			DnsMessageBase . EncodeTextBlock ( messageData , ref currentPosition , SubAddress ) ;
 		}
 
 		internal override void ParseRecordData ( byte [ ] resultData , int currentPosition , int length )
@@ -67,8 +78,8 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 
 			IsdnAddress = DnsMessageBase . ParseText ( resultData , ref currentPosition ) ;
 			SubAddress = ( currentPosition < endPosition )
-							? DnsMessageBase . ParseText ( resultData , ref currentPosition )
-							: string . Empty ;
+							 ? DnsMessageBase . ParseText ( resultData , ref currentPosition )
+							 : string . Empty ;
 		}
 
 		internal override void ParseRecordData ( DomainName origin , string [ ] stringRepresentation )
@@ -88,20 +99,9 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 
 		internal override string RecordDataToString ( )
 			=> IsdnAddress . ToMasterfileLabelRepresentation ( )
-				+ ( string . IsNullOrEmpty ( SubAddress )
-						? string . Empty
-						: " " + SubAddress . ToMasterfileLabelRepresentation ( ) ) ;
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			DnsMessageBase . EncodeTextBlock ( messageData , ref currentPosition , IsdnAddress ) ;
-			DnsMessageBase . EncodeTextBlock ( messageData , ref currentPosition , SubAddress ) ;
-		}
+			   + ( string . IsNullOrEmpty ( SubAddress )
+					   ? string . Empty
+					   : " " + SubAddress . ToMasterfileLabelRepresentation ( ) ) ;
 
 	}
 

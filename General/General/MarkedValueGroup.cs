@@ -10,9 +10,6 @@ namespace DreamRecorder . ToolBox . General
 		where TValue : IEquatable <TValue>
 	{
 
-		public Dictionary <TValue , MarkedValue <TValue , TMark>> Values { get ; } =
-			new Dictionary <TValue , MarkedValue <TValue , TMark>> ( ) ;
-
 		public MarkedValue <TValue , TMark> this [ TValue value ]
 		{
 			get
@@ -33,6 +30,9 @@ namespace DreamRecorder . ToolBox . General
 				return markedValue ;
 			}
 		}
+
+		public Dictionary <TValue , MarkedValue <TValue , TMark>> Values { get ; } =
+			new Dictionary <TValue , MarkedValue <TValue , TMark>> ( ) ;
 
 		IEnumerator <MarkedValue <TValue , TMark>> IEnumerable <MarkedValue <TValue , TMark>> . GetEnumerator ( )
 			=> Values . Values . GetEnumerator ( ) ;

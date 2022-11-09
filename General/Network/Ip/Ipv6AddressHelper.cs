@@ -22,23 +22,6 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 		private const string Separator = ":" ;
 
-		// methods
-
-		internal static string ParseCanonicalName ( string str , int start , ref bool isLoopback , ref string scopeId )
-		{
-			unsafe
-			{
-				ushort * numbers = stackalloc ushort [ NumberOfLabels ] ;
-
-				// optimized zeroing of 8 shorts = 2 longs
-				( ( long * )numbers ) [ 0 ] = 0L ;
-				( ( long * )numbers ) [ 1 ] = 0L ;
-				isLoopback                  = Parse ( str , numbers , start , ref scopeId ) ;
-
-				return '[' + CreateCanonicalName ( numbers ) + ']' ;
-			}
-		}
-
 		internal static unsafe string CreateCanonicalName ( ushort * numbers )
 		{
 			// RFC 5952 Sections 4 & 5 - Compressed, lower case, with possible embedded IPv4 addresses.
@@ -55,13 +38,13 @@ namespace DreamRecorder . ToolBox . Network . Ip
 				{
 					// Write the remaining digits as an IPv4 address
 					builder . Append (
-									string . Format (
-													CultureInfo . InvariantCulture ,
-													EmbeddedIPv4Format ,
-													numbers [ i ] >> 8 ,
-													numbers [ i ] & 0xFF ,
-													numbers [ i + 1 ] >> 8 ,
-													numbers [ i + 1 ] & 0xFF ) ) ;
+									  string . Format (
+													   CultureInfo . InvariantCulture ,
+													   EmbeddedIPv4Format ,
+													   numbers [ i ] >> 8 ,
+													   numbers [ i ] & 0xFF ,
+													   numbers [ i + 1 ] >> 8 ,
+													   numbers [ i + 1 ] & 0xFF ) ) ;
 
 					break ;
 				}
@@ -73,8 +56,8 @@ namespace DreamRecorder . ToolBox . Network . Ip
 					builder . Append ( Separator ) ;
 				}
 
-				if ( range . Key     <= i
-					&& range . Value == NumberOfLabels - 1 )
+				if ( range . Key      <= i
+					 && range . Value == NumberOfLabels - 1 )
 				{
 					// Remainder compressed; 1::
 					builder . Append ( Separator ) ;
@@ -83,7 +66,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 				}
 
 				if ( range . Key <= i
-					&& i         <= range . Value )
+					 && i        <= range . Value )
 				{
 					continue ; // Compressed
 				}
@@ -94,10 +77,10 @@ namespace DreamRecorder . ToolBox . Network . Ip
 				}
 
 				builder . Append (
-								string . Format (
-												CultureInfo . InvariantCulture ,
-												CanonicalNumberFormat ,
-												numbers [ i ] ) ) ;
+								  string . Format (
+												   CultureInfo . InvariantCulture ,
+												   CanonicalNumberFormat ,
+												   numbers [ i ] ) ) ;
 			}
 
 			return builder . ToString ( ) ;
@@ -136,48 +119,11 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			if ( longestSequenceLength >= 2 )
 			{
 				return new KeyValuePair <int , int> (
-													longestSequenceStart ,
-													longestSequenceStart + longestSequenceLength - 1 ) ;
+													 longestSequenceStart ,
+													 longestSequenceStart + longestSequenceLength - 1 ) ;
 			}
 
 			return new KeyValuePair <int , int> ( - 1 , - 1 ) ; // No compression
-		}
-
-		// Returns true if the IPv6 address should be formated with an embedded IPv4 address:
-		// ::192.168.1.1
-		private static unsafe bool ShouldHaveIpv4Embedded ( ushort * numbers )
-		{
-			// 0:0 : 0:0 : x:x : x.x.x.x
-			if ( numbers [ 0 ]   == 0
-				&& numbers [ 1 ] == 0
-				&& numbers [ 2 ] == 0
-				&& numbers [ 3 ] == 0
-				&& numbers [ 6 ] != 0 )
-			{
-				// RFC 5952 Section 5 - 0:0 : 0:0 : 0:[0 | FFFF] : x.x.x.x
-				if ( numbers [ 4 ] == 0
-					&& ( numbers [ 5 ] == 0 || numbers [ 5 ] == 0xFFFF ) )
-				{
-					return true ;
-				}
-
-				// SIIT - 0:0 : 0:0 : FFFF:0 : x.x.x.x
-
-				if ( numbers [ 4 ]   == 0xFFFF
-					&& numbers [ 5 ] == 0 )
-				{
-					return true ;
-				}
-			}
-
-			// ISATAP
-			if ( numbers [ 4 ]   == 0
-				&& numbers [ 5 ] == 0x5EFE )
-			{
-				return true ;
-			}
-
-			return false ;
 		}
 
 		//
@@ -285,8 +231,8 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 						case ':' :
 						{
-							if ( i                > 0
-								&& name [ i - 1 ] == ':' )
+							if ( i                 > 0
+								 && name [ i - 1 ] == ':' )
 							{
 								if ( haveCompressor )
 								{
@@ -374,8 +320,10 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			int expectedSequenceCount = 8 + ( havePrefix ? 1 : 0 ) ;
 
 			if ( ! expectingNumber
-				&& sequenceLength <= 4
-				&& ( haveCompressor ? sequenceCount < expectedSequenceCount : sequenceCount == expectedSequenceCount ) )
+				 && sequenceLength <= 4
+				 && ( haveCompressor
+						  ? sequenceCount < expectedSequenceCount
+						  : sequenceCount == expectedSequenceCount ) )
 			{
 				if ( i == end + 1 )
 				{
@@ -546,7 +494,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 							++i ;
 						}
 						else if ( compressorIndex < 0
-								&& index          < 6 )
+								  && index        < 6 )
 						{
 							//
 							// no point checking for IPv4 address if we don't
@@ -563,12 +511,12 @@ namespace DreamRecorder . ToolBox . Network . Ip
 						//
 
 						for ( int j = i ;
-							address [ j ]    != ']'
-							&& address [ j ] != ':'
-							&& address [ j ] != '%'
-							&& address [ j ] != '/'
-							&& j             < i + 4 ;
-							++j )
+							  address [ j ]    != ']'
+							  && address [ j ] != ':'
+							  && address [ j ] != '%'
+							  && address [ j ] != '/'
+							  && j             < i + 4 ;
+							  ++j )
 						{
 							if ( address [ j ] == '.' )
 							{
@@ -675,15 +623,69 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			//  0:0:0:0:0:FFFF:127.0.0.1    == 0:0:0:0:0:FFFF:7F00:0001
 			//
 
-			return numbers [ 0 ]     == 0
-					&& numbers [ 1 ] == 0
-					&& numbers [ 2 ] == 0
-					&& numbers [ 3 ] == 0
-					&& numbers [ 4 ] == 0
-					&& ( ( numbers [ 5 ] == 0 && numbers [ 6 ] == 0 && numbers [ 7 ] == 1 )
-						|| ( numbers [ 6 ]   == 0x7F00
-							&& numbers [ 7 ] == 0x0001
-							&& ( numbers [ 5 ] == 0 || numbers [ 5 ] == 0xFFFF ) ) ) ;
+			return numbers [ 0 ]    == 0
+				   && numbers [ 1 ] == 0
+				   && numbers [ 2 ] == 0
+				   && numbers [ 3 ] == 0
+				   && numbers [ 4 ] == 0
+				   && ( ( numbers [ 5 ] == 0 && numbers [ 6 ] == 0 && numbers [ 7 ] == 1 )
+						|| ( numbers [ 6 ]    == 0x7F00
+							 && numbers [ 7 ] == 0x0001
+							 && ( numbers [ 5 ] == 0 || numbers [ 5 ] == 0xFFFF ) ) ) ;
+		}
+
+		// methods
+
+		internal static string ParseCanonicalName ( string str , int start , ref bool isLoopback , ref string scopeId )
+		{
+			unsafe
+			{
+				ushort * numbers = stackalloc ushort [ NumberOfLabels ] ;
+
+				// optimized zeroing of 8 shorts = 2 longs
+				( ( long * )numbers ) [ 0 ] = 0L ;
+				( ( long * )numbers ) [ 1 ] = 0L ;
+				isLoopback                  = Parse ( str , numbers , start , ref scopeId ) ;
+
+				return '[' + CreateCanonicalName ( numbers ) + ']' ;
+			}
+		}
+
+		// Returns true if the IPv6 address should be formated with an embedded IPv4 address:
+		// ::192.168.1.1
+		private static unsafe bool ShouldHaveIpv4Embedded ( ushort * numbers )
+		{
+			// 0:0 : 0:0 : x:x : x.x.x.x
+			if ( numbers [ 0 ]    == 0
+				 && numbers [ 1 ] == 0
+				 && numbers [ 2 ] == 0
+				 && numbers [ 3 ] == 0
+				 && numbers [ 6 ] != 0 )
+			{
+				// RFC 5952 Section 5 - 0:0 : 0:0 : 0:[0 | FFFF] : x.x.x.x
+				if ( numbers [ 4 ] == 0
+					 && ( numbers [ 5 ] == 0 || numbers [ 5 ] == 0xFFFF ) )
+				{
+					return true ;
+				}
+
+				// SIIT - 0:0 : 0:0 : FFFF:0 : x.x.x.x
+
+				if ( numbers [ 4 ]    == 0xFFFF
+					 && numbers [ 5 ] == 0 )
+				{
+					return true ;
+				}
+			}
+
+			// ISATAP
+			if ( numbers [ 4 ]    == 0
+				 && numbers [ 5 ] == 0x5EFE )
+			{
+				return true ;
+			}
+
+			return false ;
 		}
 
 	}

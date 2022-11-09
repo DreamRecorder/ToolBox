@@ -21,6 +21,14 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 	{
 
 		/// <summary>
+		///     Flags of the record
+		/// </summary>
+		public string Flags { get ; private set ; }
+
+		protected internal override int MaximumRecordDataLength
+			=> Flags . Length + Services . Length + RegExp . Length + Replacement . MaximumRecordDataLength + 13 ;
+
+		/// <summary>
 		///     Order of the record
 		/// </summary>
 		public ushort Order { get ; private set ; }
@@ -29,16 +37,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		///     Preference of record with same order
 		/// </summary>
 		public ushort Preference { get ; private set ; }
-
-		/// <summary>
-		///     Flags of the record
-		/// </summary>
-		public string Flags { get ; private set ; }
-
-		/// <summary>
-		///     Available services
-		/// </summary>
-		public string Services { get ; private set ; }
 
 		/// <summary>
 		///     Substitution expression that is applied to the original string
@@ -50,8 +48,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// </summary>
 		public DomainName Replacement { get ; private set ; }
 
-		protected internal override int MaximumRecordDataLength
-			=> Flags . Length + Services . Length + RegExp . Length + Replacement . MaximumRecordDataLength + 13 ;
+		/// <summary>
+		///     Available services
+		/// </summary>
+		public string Services { get ; private set ; }
 
 		internal NaptrRecord ( ) { }
 
@@ -84,6 +84,27 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 			Replacement = replacement ?? DomainName . Root ;
 		}
 
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , Order ) ;
+			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , Preference ) ;
+			DnsMessageBase . EncodeTextBlock ( messageData , ref currentPosition , Flags ) ;
+			DnsMessageBase . EncodeTextBlock ( messageData , ref currentPosition , Services ) ;
+			DnsMessageBase . EncodeTextBlock ( messageData , ref currentPosition , RegExp ) ;
+			DnsMessageBase . EncodeDomainName (
+											   messageData ,
+											   offset ,
+											   ref currentPosition ,
+											   Replacement ,
+											   null ,
+											   useCanonical ) ;
+		}
+
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )
 		{
 			Order       = DnsMessageBase . ParseUShort ( resultData , ref startPosition ) ;
@@ -111,40 +132,19 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 
 		internal override string RecordDataToString ( )
 			=> Order
-				+ " "
-				+ Preference
-				+ " \""
-				+ Flags . ToMasterfileLabelRepresentation ( )
-				+ "\""
-				+ " \""
-				+ Services . ToMasterfileLabelRepresentation ( )
-				+ "\""
-				+ " \""
-				+ RegExp . ToMasterfileLabelRepresentation ( )
-				+ "\""
-				+ " "
-				+ Replacement ;
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , Order ) ;
-			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , Preference ) ;
-			DnsMessageBase . EncodeTextBlock ( messageData , ref currentPosition , Flags ) ;
-			DnsMessageBase . EncodeTextBlock ( messageData , ref currentPosition , Services ) ;
-			DnsMessageBase . EncodeTextBlock ( messageData , ref currentPosition , RegExp ) ;
-			DnsMessageBase . EncodeDomainName (
-												messageData ,
-												offset ,
-												ref currentPosition ,
-												Replacement ,
-												null ,
-												useCanonical ) ;
-		}
+			   + " "
+			   + Preference
+			   + " \""
+			   + Flags . ToMasterfileLabelRepresentation ( )
+			   + "\""
+			   + " \""
+			   + Services . ToMasterfileLabelRepresentation ( )
+			   + "\""
+			   + " \""
+			   + RegExp . ToMasterfileLabelRepresentation ( )
+			   + "\""
+			   + " "
+			   + Replacement ;
 
 	}
 

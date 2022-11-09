@@ -15,6 +15,12 @@ namespace DreamRecorder . ToolBox . Network . Ip
 	public abstract class IpAddress : Address
 	{
 
+		/// <summary>
+		///     Returns the reverse lookup address of an IPAddress
+		/// </summary>
+		/// <returns> A string with the reverse lookup address </returns>
+		public abstract string GetReverseLookupAddress ( ) ;
+
 		public static explicit operator IpAddress ( [NotNull] string address )
 		{
 			if ( address == null )
@@ -48,12 +54,6 @@ namespace DreamRecorder . ToolBox . Network . Ip
 				}
 			}
 		}
-
-		/// <summary>
-		///     Returns the reverse lookup address of an IPAddress
-		/// </summary>
-		/// <returns> A string with the reverse lookup address </returns>
-		public abstract string GetReverseLookupAddress ( ) ;
 
 	}
 

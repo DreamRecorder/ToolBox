@@ -14,23 +14,18 @@ namespace DreamRecorder . ToolBox . UnitTest
 	public class ExceptionHelperTests
 	{
 
-		[TestMethod]
-		public void SuccessTest ( ) { }
-
-		public object ErrorObject ( ) => throw new Exception ( ) ;
-
-		public object PassObject ( ) => new object ( ) ;
-
-		[TestMethod]
-		public void IgnoreExceptionTestObject ( )
-		{
-			Assert . IsNull ( ExceptionHelper . IgnoreException ( ErrorObject ) ) ;
-			Assert . IsNotNull ( ExceptionHelper . IgnoreException ( PassObject ) ) ;
-		}
+		public DateTime ErrorDateTime ( ) => throw new Exception ( ) ;
 
 		public int ErrorInt ( ) => throw new Exception ( ) ;
 
-		public int PassInt ( ) => default ;
+		public object ErrorObject ( ) => throw new Exception ( ) ;
+
+		[TestMethod]
+		public void IgnoreExceptionTestDateTime ( )
+		{
+			Assert . IsNull ( ExceptionHelper . IgnoreException ( ErrorDateTime ) ) ;
+			Assert . AreEqual ( ExceptionHelper . IgnoreException ( PassDateTime ) , default ( DateTime ) ) ;
+		}
 
 		[TestMethod]
 		public void IgnoreExceptionTestInt32 ( )
@@ -39,16 +34,21 @@ namespace DreamRecorder . ToolBox . UnitTest
 			Assert . AreEqual ( ExceptionHelper . IgnoreException ( PassInt ) , default ( int ) ) ;
 		}
 
-		public DateTime ErrorDateTime ( ) => throw new Exception ( ) ;
+		[TestMethod]
+		public void IgnoreExceptionTestObject ( )
+		{
+			Assert . IsNull ( ExceptionHelper . IgnoreException ( ErrorObject ) ) ;
+			Assert . IsNotNull ( ExceptionHelper . IgnoreException ( PassObject ) ) ;
+		}
 
 		public DateTime PassDateTime ( ) => default ;
 
+		public int PassInt ( ) => default ;
+
+		public object PassObject ( ) => new object ( ) ;
+
 		[TestMethod]
-		public void IgnoreExceptionTestDateTime ( )
-		{
-			Assert . IsNull ( ExceptionHelper . IgnoreException ( ErrorDateTime ) ) ;
-			Assert . AreEqual ( ExceptionHelper . IgnoreException ( PassDateTime ) , default ( DateTime ) ) ;
-		}
+		public void SuccessTest ( ) { }
 
 		[TestMethod]
 		public void XmlNameMismatchTest ( ) { }

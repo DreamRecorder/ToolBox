@@ -25,22 +25,22 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 	{
 
 		/// <summary>
+		///     Binary data of the generator of the key
+		/// </summary>
+		public byte [ ] Generator { get ; private set ; }
+
+		protected override int MaximumPublicKeyLength
+			=> 3 + Prime . Length + Generator . Length + PublicValue . Length ;
+
+		/// <summary>
 		///     Binary data of the prime of the key
 		/// </summary>
 		public byte [ ] Prime { get ; private set ; }
 
 		/// <summary>
-		///     Binary data of the generator of the key
-		/// </summary>
-		public byte [ ] Generator { get ; private set ; }
-
-		/// <summary>
 		///     Binary data of the public value
 		/// </summary>
 		public byte [ ] PublicValue { get ; private set ; }
-
-		protected override int MaximumPublicKeyLength
-			=> 3 + Prime . Length + Generator . Length + PublicValue . Length ;
 
 		internal DiffieHellmanKeyRecord ( ) { }
 
@@ -64,16 +64,30 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 			byte [ ]     prime ,
 			byte [ ]     generator ,
 			byte [ ]     publicValue ) : base (
-												name ,
-												recordClass ,
-												timeToLive ,
-												flags ,
-												protocol ,
-												DnsSecAlgorithm . DiffieHellman )
+											   name ,
+											   recordClass ,
+											   timeToLive ,
+											   flags ,
+											   protocol ,
+											   DnsSecAlgorithm . DiffieHellman )
 		{
 			Prime       = prime       ?? new byte [ ] { } ;
 			Generator   = generator   ?? new byte [ ] { } ;
 			PublicValue = publicValue ?? new byte [ ] { } ;
+		}
+
+		protected override void EncodePublicKey (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames )
+		{
+			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , ( ushort )Prime . Length ) ;
+			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , Prime ) ;
+			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , ( ushort )Generator . Length ) ;
+			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , Generator ) ;
+			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , ( ushort )PublicValue . Length ) ;
+			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , PublicValue ) ;
 		}
 
 		protected override void ParsePublicKey ( byte [ ] resultData , int startPosition , int length )
@@ -99,20 +113,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 			EncodePublicKey ( publicKey , 0 , ref currentPosition , null ) ;
 
 			return publicKey . ToBase64String ( ) ;
-		}
-
-		protected override void EncodePublicKey (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames )
-		{
-			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , ( ushort )Prime . Length ) ;
-			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , Prime ) ;
-			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , ( ushort )Generator . Length ) ;
-			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , Generator ) ;
-			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , ( ushort )PublicValue . Length ) ;
-			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , PublicValue ) ;
 		}
 
 	}

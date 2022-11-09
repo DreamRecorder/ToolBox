@@ -70,6 +70,20 @@ namespace DreamRecorder . ToolBox . Network . Dns
 
 		public WaitHandle AsyncWaitHandle => _waitHandle ?? ( _waitHandle = new ManualResetEvent ( IsCompleted ) ) ;
 
+		public DnsClientAsyncState <TMessage> CreateTcpCloneWithoutCallback ( )
+			=> new DnsClientAsyncState <TMessage>
+			   {
+				   EndpointInfos     = EndpointInfos ,
+				   EndpointInfoIndex = EndpointInfoIndex ,
+				   Query             = Query ,
+				   QueryData         = QueryData ,
+				   QueryLength       = QueryLength ,
+				   TSigKeySelector   = TSigKeySelector ,
+				   TSigOriginalMac   = TSigOriginalMac ,
+				   Responses         = Responses ,
+				   _timeOutUtcTicks  = _timeOutUtcTicks ,
+			   } ;
+
 		internal void SetCompleted ( )
 		{
 			QueryData = null ;
@@ -91,20 +105,6 @@ namespace DreamRecorder . ToolBox . Network . Dns
 				UserCallback ( this ) ;
 			}
 		}
-
-		public DnsClientAsyncState <TMessage> CreateTcpCloneWithoutCallback ( )
-			=> new DnsClientAsyncState <TMessage>
-				{
-					EndpointInfos     = EndpointInfos ,
-					EndpointInfoIndex = EndpointInfoIndex ,
-					Query             = Query ,
-					QueryData         = QueryData ,
-					QueryLength       = QueryLength ,
-					TSigKeySelector   = TSigKeySelector ,
-					TSigOriginalMac   = TSigOriginalMac ,
-					Responses         = Responses ,
-					_timeOutUtcTicks  = _timeOutUtcTicks ,
-				} ;
 
 	}
 

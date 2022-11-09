@@ -80,7 +80,7 @@ namespace DreamRecorder . ToolBox . General
 			while ( inPos < offset + length )
 			{
 				res [ outPos++ ] = ( byte )( ( _base16ReverseAlphabet [ inData [ inPos++ ] ] << 4 )
-											+ _base16ReverseAlphabet [ inData [ inPos++ ] ] ) ;
+											 + _base16ReverseAlphabet [ inData [ inPos++ ] ] ) ;
 			}
 
 			return res ;
@@ -301,12 +301,12 @@ namespace DreamRecorder . ToolBox . General
 
 				res [ outPos++ ] = ( byte )( ( buffer [ 0 ] << 3 ) | ( ( buffer [ 1 ] >> 2 ) & 0x07 ) ) ;
 				res [ outPos++ ] = ( byte )( ( ( buffer [ 1 ] >> 6 ) & 0xc0 )
-											| ( buffer [ 2 ] << 1 )
-											| ( ( buffer [ 3 ] >> 4 ) & 0x01 ) ) ;
+											 | ( buffer [ 2 ] << 1 )
+											 | ( ( buffer [ 3 ] >> 4 ) & 0x01 ) ) ;
 				res [ outPos++ ] = ( byte )( ( ( buffer [ 3 ] << 4 ) & 0xf0 ) | ( ( buffer [ 4 ] >> 1 ) & 0x0f ) ) ;
 				res [ outPos++ ] = ( byte )( ( ( buffer [ 4 ] << 7 ) & 0x80 )
-											| ( buffer [ 5 ] << 2 )
-											| ( ( buffer [ 6 ] >> 3 ) & 0x03 ) ) ;
+											 | ( buffer [ 5 ] << 2 )
+											 | ( ( buffer [ 6 ] >> 3 ) & 0x03 ) ) ;
 				res [ outPos++ ] = ( byte )( ( ( buffer [ 6 ] << 5 ) & 0xe0 ) | buffer [ 7 ] ) ;
 			}
 
@@ -325,27 +325,27 @@ namespace DreamRecorder . ToolBox . General
 					case 2 :
 						res [ outPos++ ] = ( byte )( ( buffer [ 0 ] << 3 ) | ( ( buffer [ 1 ] >> 2 ) & 0x07 ) ) ;
 						res [ outPos ] = ( byte )( ( ( buffer [ 1 ] >> 6 ) & 0xc0 )
-													| ( buffer [ 2 ] << 1 )
-													| ( ( buffer [ 3 ] >> 4 ) & 0x01 ) ) ;
+												   | ( buffer [ 2 ] << 1 )
+												   | ( ( buffer [ 3 ] >> 4 ) & 0x01 ) ) ;
 						break ;
 					case 3 :
 						res [ outPos++ ] = ( byte )( ( buffer [ 0 ] << 3 ) | ( ( buffer [ 1 ] >> 2 ) & 0x07 ) ) ;
 						res [ outPos++ ] = ( byte )( ( ( buffer [ 1 ] >> 6 ) & 0xc0 )
-													| ( buffer [ 2 ] << 1 )
-													| ( ( buffer [ 3 ] >> 4 ) & 0x01 ) ) ;
+													 | ( buffer [ 2 ] << 1 )
+													 | ( ( buffer [ 3 ] >> 4 ) & 0x01 ) ) ;
 						res [ outPos ] =
 							( byte )( ( ( buffer [ 3 ] << 4 ) & 0xf0 ) | ( ( buffer [ 4 ] >> 1 ) & 0x0f ) ) ;
 						break ;
 					case 4 :
 						res [ outPos++ ] = ( byte )( ( buffer [ 0 ] << 3 ) | ( ( buffer [ 1 ] >> 2 ) & 0x07 ) ) ;
 						res [ outPos++ ] = ( byte )( ( ( buffer [ 1 ] >> 6 ) & 0xc0 )
-													| ( buffer [ 2 ] << 1 )
-													| ( ( buffer [ 3 ] >> 4 ) & 0x01 ) ) ;
+													 | ( buffer [ 2 ] << 1 )
+													 | ( ( buffer [ 3 ] >> 4 ) & 0x01 ) ) ;
 						res [ outPos++ ] =
 							( byte )( ( ( buffer [ 3 ] << 4 ) & 0xf0 ) | ( ( buffer [ 4 ] >> 1 ) & 0x0f ) ) ;
 						res [ outPos ] = ( byte )( ( ( buffer [ 4 ] << 7 ) & 0x80 )
-													| ( buffer [ 5 ] << 2 )
-													| ( ( buffer [ 6 ] >> 3 ) & 0x03 ) ) ;
+												   | ( buffer [ 5 ] << 2 )
+												   | ( ( buffer [ 6 ] >> 3 ) & 0x03 ) ) ;
 						break ;
 				}
 			}

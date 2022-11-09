@@ -38,9 +38,9 @@ namespace DreamRecorder . ToolBox . Network . Dns
 			set => _additionalRecords = ( value ?? new List <DnsRecordBase> ( ) ) ;
 		}
 
-		internal abstract bool IsTcpUsingRequested { get ; }
-
 		internal abstract bool IsTcpResendingRequested { get ; }
+
+		internal abstract bool IsTcpUsingRequested { get ; }
 
 		internal abstract bool IsTcpNextMessageWaiting ( bool isSubsequentResponseMessage ) ;
 
@@ -112,8 +112,8 @@ namespace DreamRecorder . ToolBox . Network . Dns
 					if ( ednsOptions == null )
 					{
 						throw new ArgumentOutOfRangeException (
-																nameof ( value ) ,
-																"ReturnCodes greater than 15 only allowed in edns messages" ) ;
+															   nameof ( value ) ,
+															   "ReturnCodes greater than 15 only allowed in edns messages" ) ;
 					}
 					else
 					{
@@ -179,8 +179,8 @@ namespace DreamRecorder . ToolBox . Network . Dns
 			get
 			{
 				return ( OptRecord )_additionalRecords ? . Find (
-																record
-																	=> ( record . RecordType == RecordType . Opt ) ) ;
+																 record
+																	 => ( record . RecordType == RecordType . Opt ) ) ;
 			}
 			set
 			{
@@ -295,18 +295,18 @@ namespace DreamRecorder . ToolBox . Network . Dns
 		{
 			byte [ ] keyData ;
 			if ( ( TSigOptions . Algorithm == TSigAlgorithm . Unknown )
-				|| ( tsigKeySelector == null )
-				|| ( ( keyData = tsigKeySelector ( TSigOptions . Algorithm , TSigOptions . Name ) ) == null ) )
+				 || ( tsigKeySelector == null )
+				 || ( ( keyData = tsigKeySelector ( TSigOptions . Algorithm , TSigOptions . Name ) ) == null ) )
 			{
 				return ReturnCode . BadKey ;
 			}
-			else if ( ( ( TSigOptions . TimeSigned  - TSigOptions . Fudge ) > DateTime . Now )
-					|| ( ( TSigOptions . TimeSigned + TSigOptions . Fudge ) < DateTime . Now ) )
+			else if ( ( ( TSigOptions . TimeSigned    - TSigOptions . Fudge ) > DateTime . Now )
+					  || ( ( TSigOptions . TimeSigned + TSigOptions . Fudge ) < DateTime . Now ) )
 			{
 				return ReturnCode . BadTime ;
 			}
-			else if ( ( TSigOptions . Mac           == null )
-					|| ( TSigOptions . Mac . Length == 0 ) )
+			else if ( ( TSigOptions . Mac             == null )
+					  || ( TSigOptions . Mac . Length == 0 ) )
 			{
 				return ReturnCode . BadSig ;
 			}
@@ -328,8 +328,8 @@ namespace DreamRecorder . ToolBox . Network . Dns
 				int currentPosition = 0 ;
 
 				// original mac if neccessary
-				if ( ( originalMac            != null )
-					&& ( originalMac . Length > 0 ) )
+				if ( ( originalMac             != null )
+					 && ( originalMac . Length > 0 ) )
 				{
 					EncodeUShort ( validationBuffer , ref currentPosition , ( ushort )originalMac . Length ) ;
 					EncodeByteArray ( validationBuffer , ref currentPosition , originalMac ) ;
@@ -353,12 +353,12 @@ namespace DreamRecorder . ToolBox . Network . Dns
 				EncodeUShort ( validationBuffer , ref currentPosition , ( ushort )TSigOptions . RecordClass ) ;
 				EncodeInt ( validationBuffer , ref currentPosition , ( ushort )TSigOptions . TimeToLive ) ;
 				EncodeDomainName (
-								validationBuffer ,
-								0 ,
-								ref currentPosition ,
-								TSigAlgorithmHelper . GetDomainName ( TSigOptions . Algorithm ) ,
-								null ,
-								false ) ;
+								  validationBuffer ,
+								  0 ,
+								  ref currentPosition ,
+								  TSigAlgorithmHelper . GetDomainName ( TSigOptions . Algorithm ) ,
+								  null ,
+								  false ) ;
 				TSigRecord . EncodeDateTime ( validationBuffer , ref currentPosition , TSigOptions . TimeSigned ) ;
 				EncodeUShort ( validationBuffer , ref currentPosition , ( ushort )TSigOptions . Fudge . TotalSeconds ) ;
 				EncodeUShort ( validationBuffer , ref currentPosition , ( ushort )TSigOptions . Error ) ;
@@ -369,9 +369,9 @@ namespace DreamRecorder . ToolBox . Network . Dns
 				KeyedHashAlgorithm hashAlgorithm = TSigAlgorithmHelper . GetHashAlgorithm ( TSigOptions . Algorithm ) ;
 				hashAlgorithm . Key = keyData ;
 				return ( hashAlgorithm . ComputeHash ( validationBuffer , 0 , currentPosition ) .
-										SequenceEqual ( TSigOptions . Mac ) )
-							? ReturnCode . NoError
-							: ReturnCode . BadSig ;
+										 SequenceEqual ( TSigOptions . Mac ) )
+						   ? ReturnCode . NoError
+						   : ReturnCode . BadSig ;
 			}
 		}
 
@@ -423,13 +423,12 @@ namespace DreamRecorder . ToolBox . Network . Dns
 			for ( int i = 0 ; i < recordCount ; i++ )
 			{
 				DnsQuestion question = new DnsQuestion
-										{
-											Name = ParseDomainName ( resultData , ref currentPosition ) ,
-											RecordType =
-												( RecordType )ParseUShort ( resultData , ref currentPosition ) ,
-											RecordClass =
-												( RecordClass )ParseUShort ( resultData , ref currentPosition ) ,
-										} ;
+									   {
+										   Name       = ParseDomainName ( resultData , ref currentPosition ) ,
+										   RecordType = ( RecordType )ParseUShort ( resultData , ref currentPosition ) ,
+										   RecordClass =
+											   ( RecordClass )ParseUShort ( resultData , ref currentPosition ) ,
+									   } ;
 
 				Questions . Add ( question ) ;
 			}
@@ -527,12 +526,12 @@ namespace DreamRecorder . ToolBox . Network . Dns
 			if ( BitConverter . IsLittleEndian )
 			{
 				res = ( ( ulong )ParseUInt ( resultData , ref currentPosition ) << 32 )
-					| ParseUInt ( resultData , ref currentPosition ) ;
+					  | ParseUInt ( resultData , ref currentPosition ) ;
 			}
 			else
 			{
 				res = ParseUInt ( resultData , ref currentPosition )
-					| ( ( ulong )ParseUInt ( resultData , ref currentPosition ) << 32 ) ;
+					  | ( ( ulong )ParseUInt ( resultData , ref currentPosition ) << 32 ) ;
 			}
 
 			return res ;
@@ -768,45 +767,45 @@ namespace DreamRecorder . ToolBox . Network . Dns
 				{
 					TSigRecord . EncodeDateTime ( messageData , ref tsigVariablesPosition , TSigOptions . TimeSigned ) ;
 					EncodeUShort (
-								messageData ,
-								ref tsigVariablesPosition ,
-								( ushort )TSigOptions . Fudge . TotalSeconds ) ;
+								  messageData ,
+								  ref tsigVariablesPosition ,
+								  ( ushort )TSigOptions . Fudge . TotalSeconds ) ;
 				}
 				else
 				{
 					EncodeDomainName (
-									messageData ,
-									offset ,
-									ref tsigVariablesPosition ,
-									TSigOptions . Name ,
-									null ,
-									false ) ;
+									  messageData ,
+									  offset ,
+									  ref tsigVariablesPosition ,
+									  TSigOptions . Name ,
+									  null ,
+									  false ) ;
 					EncodeUShort ( messageData , ref tsigVariablesPosition , ( ushort )TSigOptions . RecordClass ) ;
 					EncodeInt ( messageData , ref tsigVariablesPosition , ( ushort )TSigOptions . TimeToLive ) ;
 					EncodeDomainName (
-									messageData ,
-									offset ,
-									ref tsigVariablesPosition ,
-									TSigAlgorithmHelper . GetDomainName ( TSigOptions . Algorithm ) ,
-									null ,
-									false ) ;
+									  messageData ,
+									  offset ,
+									  ref tsigVariablesPosition ,
+									  TSigAlgorithmHelper . GetDomainName ( TSigOptions . Algorithm ) ,
+									  null ,
+									  false ) ;
 					TSigRecord . EncodeDateTime ( messageData , ref tsigVariablesPosition , TSigOptions . TimeSigned ) ;
 					EncodeUShort (
-								messageData ,
-								ref tsigVariablesPosition ,
-								( ushort )TSigOptions . Fudge . TotalSeconds ) ;
+								  messageData ,
+								  ref tsigVariablesPosition ,
+								  ( ushort )TSigOptions . Fudge . TotalSeconds ) ;
 					EncodeUShort ( messageData , ref tsigVariablesPosition , ( ushort )TSigOptions . Error ) ;
 					EncodeUShort (
-								messageData ,
-								ref tsigVariablesPosition ,
-								( ushort )TSigOptions . OtherData . Length ) ;
+								  messageData ,
+								  ref tsigVariablesPosition ,
+								  ( ushort )TSigOptions . OtherData . Length ) ;
 					EncodeByteArray ( messageData , ref tsigVariablesPosition , TSigOptions . OtherData ) ;
 				}
 
 				KeyedHashAlgorithm hashAlgorithm = TSigAlgorithmHelper . GetHashAlgorithm ( TSigOptions . Algorithm ) ;
-				if ( ( hashAlgorithm                    != null )
-					&& ( TSigOptions . KeyData          != null )
-					&& ( TSigOptions . KeyData . Length > 0 ) )
+				if ( ( hashAlgorithm                     != null )
+					 && ( TSigOptions . KeyData          != null )
+					 && ( TSigOptions . KeyData . Length > 0 ) )
 				{
 					hashAlgorithm . Key = TSigOptions . KeyData ;
 					newTSigMac = hashAlgorithm . ComputeHash ( messageData , messageOffset , tsigVariablesPosition ) ;
@@ -951,12 +950,12 @@ namespace DreamRecorder . ToolBox . Network . Dns
 			EncodeByteArray ( messageData , ref currentPosition , Encoding . ASCII . GetBytes ( label ) ) ;
 
 			EncodeDomainName (
-							messageData ,
-							offset ,
-							ref currentPosition ,
-							name . GetParentName ( ) ,
-							domainNames ,
-							useCanonical ) ;
+							  messageData ,
+							  offset ,
+							  ref currentPosition ,
+							  name . GetParentName ( ) ,
+							  domainNames ,
+							  useCanonical ) ;
 		}
 
 		internal static void EncodeTextBlock ( byte [ ] messageData , ref int currentPosition , string text )
@@ -994,8 +993,8 @@ namespace DreamRecorder . ToolBox . Network . Dns
 			byte [ ] data ,
 			int      length )
 		{
-			if ( ( data     != null )
-				&& ( length > 0 ) )
+			if ( ( data      != null )
+				 && ( length > 0 ) )
 			{
 				Buffer . BlockCopy ( data , 0 , messageData , currentPosition , length ) ;
 				currentPosition += length ;

@@ -24,12 +24,12 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 	public class KeyRecord : KeyRecordBase
 	{
 
+		protected override int MaximumPublicKeyLength => PublicKey . Length ;
+
 		/// <summary>
 		///     Binary data of the public key
 		/// </summary>
 		public byte [ ] PublicKey { get ; private set ; }
-
-		protected override int MaximumPublicKeyLength => PublicKey . Length ;
 
 		internal KeyRecord ( ) { }
 
@@ -55,6 +55,15 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 			PublicKey = publicKey ?? new byte [ ] { } ;
 		}
 
+		protected override void EncodePublicKey (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames )
+		{
+			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , PublicKey ) ;
+		}
+
 		protected override void ParsePublicKey ( byte [ ] resultData , int startPosition , int length )
 		{
 			PublicKey = DnsMessageBase . ParseByteData ( resultData , ref startPosition , length ) ;
@@ -71,15 +80,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 		}
 
 		protected override string PublicKeyToString ( ) => PublicKey . ToBase64String ( ) ;
-
-		protected override void EncodePublicKey (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames )
-		{
-			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , PublicKey ) ;
-		}
 
 	}
 

@@ -22,18 +22,9 @@ namespace DreamRecorder . ToolBox . Network . Dns . DynamicUpdate
 
 		private List <UpdateBase> _updates ;
 
-		/// <summary>
-		///     Gets or sets the zone name
-		/// </summary>
-		public DomainName ZoneName
-		{
-			get => Questions . Count > 0 ? Questions [ 0 ] . Name : null ;
-			set
-				=> Questions = new List <DnsQuestion>
-								{
-									new DnsQuestion ( value , RecordType . Soa , RecordClass . INet ) ,
-								} ;
-		}
+		internal override bool IsTcpResendingRequested => false ;
+
+		internal override bool IsTcpUsingRequested => false ;
 
 		/// <summary>
 		///     Gets or sets the entries in the prerequisites section
@@ -53,21 +44,23 @@ namespace DreamRecorder . ToolBox . Network . Dns . DynamicUpdate
 			set => _updates = value ;
 		}
 
-		internal override bool IsTcpUsingRequested => false ;
-
-		internal override bool IsTcpResendingRequested => false ;
+		/// <summary>
+		///     Gets or sets the zone name
+		/// </summary>
+		public DomainName ZoneName
+		{
+			get => Questions . Count > 0 ? Questions [ 0 ] . Name : null ;
+			set
+				=> Questions = new List <DnsQuestion>
+							   {
+								   new DnsQuestion ( value , RecordType . Soa , RecordClass . INet ) ,
+							   } ;
+		}
 
 		/// <summary>
 		///     Creates a new instance of the DnsUpdateMessage class
 		/// </summary>
 		public DnsUpdateMessage ( ) => OperationCode = OperationCode . Update ;
-
-		/// <summary>
-		///     Parses a the contents of a byte array as DnsUpdateMessage
-		/// </summary>
-		/// <param name="data">Buffer, that contains the message data</param>
-		/// <returns>A new instance of the DnsUpdateMessage class</returns>
-		public static DnsUpdateMessage Parse ( byte [ ] data ) => Parse <DnsUpdateMessage> ( data ) ;
 
 		/// <summary>
 		///     Creates a new instance of the DnsUpdateMessage as response to the current instance
@@ -76,13 +69,13 @@ namespace DreamRecorder . ToolBox . Network . Dns . DynamicUpdate
 		public DnsUpdateMessage CreateResponseInstance ( )
 		{
 			DnsUpdateMessage result = new DnsUpdateMessage
-									{
-										TransactionId = TransactionId ,
-										IsEDnsEnabled = IsEDnsEnabled ,
-										IsQuery       = false ,
-										OperationCode = OperationCode ,
-										Questions     = new List <DnsQuestion> ( Questions ) ,
-									} ;
+									  {
+										  TransactionId = TransactionId ,
+										  IsEDnsEnabled = IsEDnsEnabled ,
+										  IsQuery       = false ,
+										  OperationCode = OperationCode ,
+										  Questions     = new List <DnsQuestion> ( Questions ) ,
+									  } ;
 
 			if ( IsEDnsEnabled )
 			{
@@ -93,103 +86,117 @@ namespace DreamRecorder . ToolBox . Network . Dns . DynamicUpdate
 			return result ;
 		}
 
+		protected override void FinishParsing ( )
+		{
+			Prequisites = AnswerRecords . ConvertAll <PrerequisiteBase> (
+																		 record =>
+																		 {
+																			 if ( ( record . RecordClass
+																							  == RecordClass . Any )
+																				  && ( record . RecordDataLength
+																							  == 0 ) )
+																			 {
+																				 return new RecordExistsPrerequisite (
+																				  record . Name ,
+																				  record . RecordType ) ;
+																			 }
+																			 else if ( record . RecordClass
+																				  == RecordClass . Any )
+																			 {
+																				 return new RecordExistsPrerequisite (
+																				  record ) ;
+																			 }
+																			 else if ( ( record . RecordClass
+																							  == RecordClass .
+																								  None )
+																				  && ( record . RecordDataLength
+																							  == 0 ) )
+																			 {
+																				 return new
+																					 RecordNotExistsPrerequisite (
+																					  record . Name ,
+																					  record . RecordType ) ;
+																			 }
+																			 else if ( ( record . RecordClass
+																							  == RecordClass . Any )
+																				  && ( record . RecordType
+																							  == RecordType .
+																								  Any ) )
+																			 {
+																				 return new NameIsInUsePrerequisite (
+																				  record . Name ) ;
+																			 }
+																			 else if ( ( record . RecordClass
+																							  == RecordClass .
+																								  None )
+																				  && ( record . RecordType
+																							  == RecordType .
+																								  Any ) )
+																			 {
+																				 return new NameIsNotInUsePrerequisite (
+																				  record . Name ) ;
+																			 }
+																			 else
+																			 {
+																				 return null ;
+																			 }
+																		 } ) .
+										  Where ( prequisite => ( prequisite != null ) ) .
+										  ToList ( ) ;
+
+			Updates = AuthorityRecords . ConvertAll <UpdateBase> (
+																  record =>
+																  {
+																	  if ( record . TimeToLive != 0 )
+																	  {
+																		  return new AddRecordUpdate ( record ) ;
+																	  }
+																	  else if ( ( record . RecordType
+																							   == RecordType . Any )
+																				   && ( record . RecordClass
+																							   == RecordClass . Any )
+																				   && ( record . RecordDataLength
+																							   == 0 ) )
+																	  {
+																		  return new DeleteAllRecordsUpdate (
+																		   record . Name ) ;
+																	  }
+																	  else if ( ( record . RecordClass
+																							   == RecordClass . Any )
+																				   && ( record . RecordDataLength
+																							   == 0 ) )
+																	  {
+																		  return new DeleteRecordUpdate (
+																		   record . Name ,
+																		   record . RecordType ) ;
+																	  }
+																	  else if ( record . RecordClass
+																				   == RecordClass . None )
+																	  {
+																		  return new DeleteRecordUpdate ( record ) ;
+																	  }
+																	  else
+																	  {
+																		  return null ;
+																	  }
+																  } ) .
+										 Where ( update => ( update != null ) ) .
+										 ToList ( ) ;
+		}
+
 		internal override bool IsTcpNextMessageWaiting ( bool isSubsequentResponseMessage ) => false ;
+
+		/// <summary>
+		///     Parses a the contents of a byte array as DnsUpdateMessage
+		/// </summary>
+		/// <param name="data">Buffer, that contains the message data</param>
+		/// <returns>A new instance of the DnsUpdateMessage class</returns>
+		public static DnsUpdateMessage Parse ( byte [ ] data ) => Parse <DnsUpdateMessage> ( data ) ;
 
 		protected override void PrepareEncoding ( )
 		{
 			AnswerRecords    = Prequisites ? . Cast <DnsRecordBase> ( ) . ToList ( ) ?? new List <DnsRecordBase> ( ) ;
 			AuthorityRecords = Updates ? . Cast <DnsRecordBase> ( ) . ToList ( )     ?? new List <DnsRecordBase> ( ) ;
-		}
-
-		protected override void FinishParsing ( )
-		{
-			Prequisites = AnswerRecords . ConvertAll <PrerequisiteBase> (
-																		record =>
-																		{
-																			if ( ( record . RecordClass
-																								== RecordClass . Any )
-																					&& ( record . RecordDataLength
-																								== 0 ) )
-																			{
-																				return new RecordExistsPrerequisite (
-																				record . Name ,
-																				record . RecordType ) ;
-																			}
-																			else if ( record . RecordClass
-																				== RecordClass . Any )
-																			{
-																				return new RecordExistsPrerequisite (
-																				record ) ;
-																			}
-																			else if ( ( record . RecordClass
-																							== RecordClass . None )
-																				&& ( record . RecordDataLength
-																							== 0 ) )
-																			{
-																				return new RecordNotExistsPrerequisite (
-																				record . Name ,
-																				record . RecordType ) ;
-																			}
-																			else if ( ( record . RecordClass
-																							== RecordClass . Any )
-																				&& ( record . RecordType
-																							== RecordType . Any ) )
-																			{
-																				return new NameIsInUsePrerequisite (
-																				record . Name ) ;
-																			}
-																			else if ( ( record . RecordClass
-																							== RecordClass . None )
-																				&& ( record . RecordType
-																							== RecordType . Any ) )
-																			{
-																				return new NameIsNotInUsePrerequisite (
-																				record . Name ) ;
-																			}
-																			else
-																			{
-																				return null ;
-																			}
-																		} ) .
-										Where ( prequisite => ( prequisite != null ) ) .
-										ToList ( ) ;
-
-			Updates = AuthorityRecords . ConvertAll <UpdateBase> (
-																record =>
-																{
-																	if ( record . TimeToLive != 0 )
-																	{
-																		return new AddRecordUpdate ( record ) ;
-																	}
-																	else if ( ( record . RecordType
-																					== RecordType . Any )
-																			&& ( record . RecordClass
-																						== RecordClass . Any )
-																			&& ( record . RecordDataLength == 0 ) )
-																	{
-																		return new DeleteAllRecordsUpdate (
-																		record . Name ) ;
-																	}
-																	else if ( ( record . RecordClass
-																					== RecordClass . Any )
-																			&& ( record . RecordDataLength == 0 ) )
-																	{
-																		return new DeleteRecordUpdate (
-																		record . Name ,
-																		record . RecordType ) ;
-																	}
-																	else if ( record . RecordClass
-																			== RecordClass . None )
-																	{
-																		return new DeleteRecordUpdate ( record ) ;
-																	}
-																	else
-																	{
-																		return null ;
-																	}
-																} ) .
-										Where ( update => ( update != null ) ) .
-										ToList ( ) ;
 		}
 
 	}

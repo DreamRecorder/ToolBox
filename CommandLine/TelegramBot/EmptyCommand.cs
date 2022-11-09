@@ -11,15 +11,17 @@ namespace DreamRecorder . ToolBox . TelegramBot
 	public class EmptyCommand <TUser> : TelegramCommand <TUser> where TUser : IUser
 	{
 
-		public override TimeSpan Timeout => TimeSpan . MaxValue ;
-
-		public override CommandPermissionGroup PermissionGroup => null ;
-
 		public static EmptyCommand <TUser> Current { get ; private set ; }
 
 		public override string HelpInformation => string . Empty ;
 
+		public override CommandPermissionGroup PermissionGroup => null ;
+
+		public override TimeSpan Timeout => TimeSpan . MaxValue ;
+
 		public EmptyCommand ( ) => Current = this ;
+
+		public override bool CanBeRouteTarget ( Session <TUser> session ) => false ;
 
 		public override bool Process (
 			Message         message ,
@@ -47,8 +49,6 @@ namespace DreamRecorder . ToolBox . TelegramBot
 			object          tag = null )
 		{
 		}
-
-		public override bool CanBeRouteTarget ( Session <TUser> session ) => false ;
 
 	}
 

@@ -47,16 +47,16 @@ namespace DreamRecorder . ToolBox . Network . Ip
 				}
 
 				if ( result == Ipv4AddressHelper . Invalid
-					|| end  != address . Length )
+					 || end != address . Length )
 				{
 					throw new FormatException ( ) ;
 				}
 
 				// IPv4AddressHelper always returns IP address in a format that we need to reverse.
-				result = ( ( result  & 0x000000FF ) << 24 )
-						| ( ( result & 0x0000FF00 ) << 8 )
-						| ( ( result & 0x00FF0000 ) >> 8 )
-						| ( ( result & 0xFF000000 ) >> 24 ) ;
+				result = ( ( result   & 0x000000FF ) << 24 )
+						 | ( ( result & 0x0000FF00 ) << 8 )
+						 | ( ( result & 0x00FF0000 ) >> 8 )
+						 | ( ( result & 0xFF000000 ) >> 24 ) ;
 
 				byte [ ] addressBytes = new byte[ 4 ] ;
 
@@ -73,20 +73,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			}
 		}
 
-		public static explicit operator Ipv4Address ( [NotNull] string address )
-		{
-			if ( address == null )
-			{
-				throw new ArgumentNullException ( nameof ( address ) ) ;
-			}
-
-			return new Ipv4Address ( address ) ;
-		}
-
 		public override object Clone ( ) => throw new NotImplementedException ( ) ;
-
-		public override string ToString ( )
-			=> $"{AddressBytes . Span [ 0 ]}.{AddressBytes . Span [ 1 ]}.{AddressBytes . Span [ 2 ]}.{AddressBytes . Span [ 3 ]}" ;
 
 		public override string GetReverseLookupAddress ( )
 		{
@@ -102,6 +89,19 @@ namespace DreamRecorder . ToolBox . Network . Ip
 
 			return res . ToString ( ) ;
 		}
+
+		public static explicit operator Ipv4Address ( [NotNull] string address )
+		{
+			if ( address == null )
+			{
+				throw new ArgumentNullException ( nameof ( address ) ) ;
+			}
+
+			return new Ipv4Address ( address ) ;
+		}
+
+		public override string ToString ( )
+			=> $"{AddressBytes . Span [ 0 ]}.{AddressBytes . Span [ 1 ]}.{AddressBytes . Span [ 2 ]}.{AddressBytes . Span [ 3 ]}" ;
 
 	}
 

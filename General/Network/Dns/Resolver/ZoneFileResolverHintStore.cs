@@ -24,19 +24,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 		public ZoneFileResolverHintStore ( string fileName ) => _fileName = fileName ;
 
 		/// <summary>
-		///     Saves the hints to the local file
-		/// </summary>
-		/// <param name="zone">The zone to save</param>
-		protected override void Save ( Zone zone )
-		{
-			using StreamWriter writer = new StreamWriter ( _fileName ) ;
-			foreach ( DnsRecordBase record in zone )
-			{
-				writer . WriteLine ( record . ToString ( ) ) ;
-			}
-		}
-
-		/// <summary>
 		///     Loads the hints from the local file
 		/// </summary>
 		/// <returns></returns>
@@ -48,6 +35,19 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 			}
 
 			return Zone . ParseMasterFile ( DomainName . Root , _fileName ) ;
+		}
+
+		/// <summary>
+		///     Saves the hints to the local file
+		/// </summary>
+		/// <param name="zone">The zone to save</param>
+		protected override void Save ( Zone zone )
+		{
+			using StreamWriter writer = new StreamWriter ( _fileName ) ;
+			foreach ( DnsRecordBase record in zone )
+			{
+				writer . WriteLine ( record . ToString ( ) ) ;
+			}
 		}
 
 	}

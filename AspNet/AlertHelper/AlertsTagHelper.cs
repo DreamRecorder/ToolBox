@@ -19,6 +19,8 @@ namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 		[ViewContext]
 		public ViewContext ViewContext { get ; set ; }
 
+		private void ClearAlerts ( ) { ViewContext . HttpContext . Session . Remove ( Constants . Alerts ) ; }
+
 		public List <Alert> GetAlerts ( )
 		{
 			XmlSerializer formatter = new XmlSerializer ( typeof ( AlertGroup ) ) ;
@@ -36,8 +38,6 @@ namespace DreamRecorder . ToolBox . AspNet . AlertHelper
 
 			return alerts ;
 		}
-
-		private void ClearAlerts ( ) { ViewContext . HttpContext . Session . Remove ( Constants . Alerts ) ; }
 
 		public override void Process ( TagHelperContext context , TagHelperOutput output )
 		{

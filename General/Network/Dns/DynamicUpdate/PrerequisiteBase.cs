@@ -24,12 +24,12 @@ namespace DreamRecorder . ToolBox . Network . Dns . DynamicUpdate
 		{
 		}
 
-		internal override string RecordDataToString ( ) => null ;
-
 		internal override void ParseRecordData ( DomainName origin , string [ ] stringRepresentation )
 		{
 			throw new NotSupportedException ( ) ;
 		}
+
+		internal override string RecordDataToString ( ) => null ;
 
 	}
 

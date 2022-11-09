@@ -9,9 +9,9 @@ namespace DreamRecorder . ToolBox . General
 	public class PriorityQueue <T> : IEnumerable <T> , IReadOnlyCollection <T>
 	{
 
-		private LinkedList <T> Items { get ; }
-
 		public Comparison <T> Comparison { get ; }
+
+		private LinkedList <T> Items { get ; }
 
 		public PriorityQueue ( Comparison <T> comparison = null )
 		{
@@ -54,6 +54,14 @@ namespace DreamRecorder . ToolBox . General
 			}
 		}
 
+		public bool IsEmpty ( )
+		{
+			lock ( Items )
+			{
+				return ! Items . Any ( ) ;
+			}
+		}
+
 		public bool TryDequeue ( out T result )
 		{
 			lock ( Items )
@@ -87,14 +95,6 @@ namespace DreamRecorder . ToolBox . General
 				}
 
 				return true ;
-			}
-		}
-
-		public bool IsEmpty ( )
-		{
-			lock ( Items )
-			{
-				return ! Items . Any ( ) ;
 			}
 		}
 

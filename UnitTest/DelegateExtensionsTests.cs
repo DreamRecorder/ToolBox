@@ -16,11 +16,6 @@ namespace DreamRecorder . ToolBox . UnitTest
 	public class DelegateExtensionsTests
 	{
 
-		private void StubHandler ( object sender , object e )
-		{
-			Console . WriteLine ( ( sender as Type ) ? . AssemblyQualifiedName ) ;
-		}
-
 		[TestMethod]
 		public void ConvertToTest ( )
 		{
@@ -28,9 +23,14 @@ namespace DreamRecorder . ToolBox . UnitTest
 
 			action . ConvertTo <EventHandler> ( ) . Invoke ( typeof ( EventHandler ) , null ) ;
 			action . ConvertTo <NotifyCollectionChangedEventHandler> ( ) .
-					Invoke ( typeof ( NotifyCollectionChangedEventHandler ) , null ) ;
+					 Invoke ( typeof ( NotifyCollectionChangedEventHandler ) , null ) ;
 			action . ConvertTo <PropertyChangedEventHandler> ( ) .
-					Invoke ( typeof ( PropertyChangedEventHandler ) , null ) ;
+					 Invoke ( typeof ( PropertyChangedEventHandler ) , null ) ;
+		}
+
+		private void StubHandler ( object sender , object e )
+		{
+			Console . WriteLine ( ( sender as Type ) ? . AssemblyQualifiedName ) ;
 		}
 
 	}

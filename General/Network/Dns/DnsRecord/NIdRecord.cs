@@ -16,17 +16,17 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 	public class NIdRecord : DnsRecordBase
 	{
 
-		/// <summary>
-		///     The preference
-		/// </summary>
-		public ushort Preference { get ; private set ; }
+		protected internal override int MaximumRecordDataLength => 10 ;
 
 		/// <summary>
 		///     The Node ID
 		/// </summary>
 		public ulong NodeID { get ; private set ; }
 
-		protected internal override int MaximumRecordDataLength => 10 ;
+		/// <summary>
+		///     The preference
+		/// </summary>
+		public ushort Preference { get ; private set ; }
 
 		internal NIdRecord ( ) { }
 
@@ -38,13 +38,24 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="preference"> The preference </param>
 		/// <param name="nodeID"> The Node ID </param>
 		public NIdRecord ( DomainName name , int timeToLive , ushort preference , ulong nodeID ) : base (
-		name ,
-		RecordType . NId ,
-		RecordClass . INet ,
-		timeToLive )
+		 name ,
+		 RecordType . NId ,
+		 RecordClass . INet ,
+		 timeToLive )
 		{
 			Preference = preference ;
 			NodeID     = nodeID ;
+		}
+
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , Preference ) ;
+			DnsMessageBase . EncodeULong ( messageData , ref currentPosition , NodeID ) ;
 		}
 
 		internal override void ParseRecordData ( byte [ ] resultData , int startPosition , int length )
@@ -85,25 +96,14 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		{
 			string nodeID = NodeID . ToString ( "x16" ) ;
 			return Preference
-					+ " "
-					+ nodeID . Substring ( 0 , 4 )
-					+ ":"
-					+ nodeID . Substring ( 4 , 4 )
-					+ ":"
-					+ nodeID . Substring ( 8 , 4 )
-					+ ":"
-					+ nodeID . Substring ( 12 ) ;
-		}
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , Preference ) ;
-			DnsMessageBase . EncodeULong ( messageData , ref currentPosition , NodeID ) ;
+				   + " "
+				   + nodeID . Substring ( 0 , 4 )
+				   + ":"
+				   + nodeID . Substring ( 4 , 4 )
+				   + ":"
+				   + nodeID . Substring ( 8 , 4 )
+				   + ":"
+				   + nodeID . Substring ( 12 ) ;
 		}
 
 	}

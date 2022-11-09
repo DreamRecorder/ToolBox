@@ -19,14 +19,14 @@ namespace DreamRecorder . ToolBox . AspNet . Example . Controllers
 
 		public HomeController ( ILogger <HomeController> logger ) => _logger = logger ;
 
-		public IActionResult Index ( ) => View ( ) ;
-
-		public IActionResult Privacy ( ) => View ( ) ;
-
 		[ResponseCache ( Duration = 0 , Location = ResponseCacheLocation . None , NoStore = true )]
 		public IActionResult Error ( )
 			=> View (
-					new ErrorViewModel { RequestId = Activity . Current ? . Id ?? HttpContext . TraceIdentifier , } ) ;
+					 new ErrorViewModel { RequestId = Activity . Current ? . Id ?? HttpContext . TraceIdentifier , } ) ;
+
+		public IActionResult Index ( ) => View ( ) ;
+
+		public IActionResult Privacy ( ) => View ( ) ;
 
 	}
 

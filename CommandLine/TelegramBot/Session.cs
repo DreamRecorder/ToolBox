@@ -17,22 +17,22 @@ namespace DreamRecorder . ToolBox . TelegramBot
 	public class Session <TUser> where TUser : IUser
 	{
 
-		[CanBeNull]
-		public TUser User { get ; set ; }
+		public ITelegramBotClient BotClient { get ; set ; }
+
+		public DateTime LastAccessTime { get ; set ; }
 
 		[CanBeNull]
 		public ChatId PrivateChatId { get ; set ; }
 
+		public Dictionary <string , object> Properties { get ; set ; } = new Dictionary <string , object> ( ) ;
+
 		[CanBeNull]
 		public ICommand <TUser> RouteBind { get ; set ; }
 
-		public DateTime LastAccessTime { get ; set ; }
-
 		public TimeSpan TimeToLive { get ; set ; }
 
-		public Dictionary <string , object> Properties { get ; set ; } = new Dictionary <string , object> ( ) ;
-
-		public ITelegramBotClient BotClient { get ; set ; }
+		[CanBeNull]
+		public TUser User { get ; set ; }
 
 		public void ReplyText (
 			[CanBeNull] Message message ,
@@ -44,17 +44,17 @@ namespace DreamRecorder . ToolBox . TelegramBot
 			CancellationToken   cancellationToken     = default )
 		{
 			BotClient . SendTextMessageAsync (
-											PrivateChatId ,
-											text ,
-											parseMode ,
-											default ,
-											disableWebPagePreview ,
-											disableNotification ,
-											default ,
-											message ? . MessageId ?? default ,
-											true ,
-											replyMarkup ,
-											cancellationToken ) .
+											  PrivateChatId ,
+											  text ,
+											  parseMode ,
+											  default ,
+											  disableWebPagePreview ,
+											  disableNotification ,
+											  default ,
+											  message ? . MessageId ?? default ,
+											  true ,
+											  replyMarkup ,
+											  cancellationToken ) .
 						Wait ( cancellationToken ) ;
 		}
 

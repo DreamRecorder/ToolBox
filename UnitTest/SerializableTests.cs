@@ -39,8 +39,8 @@ namespace DreamRecorder . ToolBox . UnitTest
 			string result = new XmlTestStub ( ) . Serialize ( new [ ] { typeof ( XmlTestStub ) , } ) ;
 			Console . WriteLine ( result ) ;
 			Assert . AreEqual (
-								result ,
-								result . Deserialize <XmlTestStub> ( new [ ] { typeof ( XmlTestStub ) , } ) .
+							   result ,
+							   result . Deserialize <XmlTestStub> ( new [ ] { typeof ( XmlTestStub ) , } ) .
 										Serialize ( new [ ] { typeof ( XmlTestStub ) , } ) ) ;
 		}
 

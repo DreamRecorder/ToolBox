@@ -20,6 +20,9 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 	public class NSecRecord : DnsRecordBase
 	{
 
+		protected internal override int MaximumRecordDataLength
+			=> 2 + NextDomainName . MaximumRecordDataLength + GetMaximumTypeBitmapLength ( Types ) ;
+
 		/// <summary>
 		///     Name of next owner
 		/// </summary>
@@ -29,9 +32,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 		///     Record types of the next owner
 		/// </summary>
 		public List <RecordType> Types { get ; private set ; }
-
-		protected internal override int MaximumRecordDataLength
-			=> 2 + NextDomainName . MaximumRecordDataLength + GetMaximumTypeBitmapLength ( Types ) ;
 
 		internal NSecRecord ( ) { }
 
@@ -52,8 +52,8 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 		{
 			NextDomainName = nextDomainName ?? DomainName . Root ;
 
-			if ( ( types           == null )
-				|| ( types . Count == 0 ) )
+			if ( ( types            == null )
+				 || ( types . Count == 0 ) )
 			{
 				Types = new List <RecordType> ( ) ;
 			}
@@ -61,78 +61,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 			{
 				Types = types . Distinct ( ) . OrderBy ( x => x ) . ToList ( ) ;
 			}
-		}
-
-		internal override void ParseRecordData ( byte [ ] resultData , int currentPosition , int length )
-		{
-			int endPosition = currentPosition + length ;
-
-			NextDomainName = DnsMessageBase . ParseDomainName ( resultData , ref currentPosition ) ;
-
-			Types = ParseTypeBitMap ( resultData , ref currentPosition , endPosition ) ;
-		}
-
-		internal static List <RecordType> ParseTypeBitMap (
-			byte [ ] resultData ,
-			ref int  currentPosition ,
-			int      endPosition )
-		{
-			List <RecordType> types = new List <RecordType> ( ) ;
-			while ( currentPosition < endPosition )
-			{
-				byte windowNumber = resultData [ currentPosition++ ] ;
-				byte windowLength = resultData [ currentPosition++ ] ;
-
-				for ( int i = 0 ; i < windowLength ; i++ )
-				{
-					byte bitmap = resultData [ currentPosition++ ] ;
-
-					for ( int bit = 0 ; bit < 8 ; bit++ )
-					{
-						if ( ( bitmap & ( 1 << Math . Abs ( bit - 7 ) ) ) != 0 )
-						{
-							types . Add ( ( RecordType )( windowNumber * 256 + i * 8 + bit ) ) ;
-						}
-					}
-				}
-			}
-
-			return types ;
-		}
-
-		internal override void ParseRecordData ( DomainName origin , string [ ] stringRepresentation )
-		{
-			if ( stringRepresentation . Length < 2 )
-			{
-				throw new FormatException ( ) ;
-			}
-
-			NextDomainName = ParseDomainName ( origin , stringRepresentation [ 0 ] ) ;
-			Types = stringRepresentation . Skip ( 1 ) . Select ( RecordTypeHelper . ParseShortString ) . ToList ( ) ;
-		}
-
-		internal override string RecordDataToString ( )
-			=> NextDomainName + " " + string . Join ( " " , Types . Select ( RecordTypeHelper . ToShortString ) ) ;
-
-		internal static int GetMaximumTypeBitmapLength ( List <RecordType> types )
-		{
-			int res = 0 ;
-
-			int    windowEnd = 255 ;
-			ushort lastType  = 0 ;
-
-			foreach ( ushort type in types . Select ( t => ( ushort )t ) )
-			{
-				if ( type > windowEnd )
-				{
-					res       += 3 + lastType % 256 / 8 ;
-					windowEnd =  ( type / 256 + 1 ) * 256 - 1 ;
-				}
-
-				lastType = type ;
-			}
-
-			return res + 3 + lastType % 256 / 8 ;
 		}
 
 		protected internal override void EncodeRecordData (
@@ -143,12 +71,12 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 			bool                             useCanonical )
 		{
 			DnsMessageBase . EncodeDomainName (
-												messageData ,
-												offset ,
-												ref currentPosition ,
-												NextDomainName ,
-												null ,
-												useCanonical ) ;
+											   messageData ,
+											   offset ,
+											   ref currentPosition ,
+											   NextDomainName ,
+											   null ,
+											   useCanonical ) ;
 			EncodeTypeBitmap ( messageData , ref currentPosition , Types ) ;
 		}
 
@@ -170,10 +98,10 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 						messageData [ currentPosition++ ] = ( byte )( windowEnd / 256 ) ;
 						messageData [ currentPosition++ ] = ( byte )windowLength ;
 						DnsMessageBase . EncodeByteArray (
-														messageData ,
-														ref currentPosition ,
-														windowData ,
-														windowLength ) ;
+														  messageData ,
+														  ref currentPosition ,
+														  windowData ,
+														  windowLength ) ;
 					}
 
 					windowEnd    = ( type / 256 + 1 ) * 256 - 1 ;
@@ -204,9 +132,81 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 			}
 		}
 
+		internal static int GetMaximumTypeBitmapLength ( List <RecordType> types )
+		{
+			int res = 0 ;
+
+			int    windowEnd = 255 ;
+			ushort lastType  = 0 ;
+
+			foreach ( ushort type in types . Select ( t => ( ushort )t ) )
+			{
+				if ( type > windowEnd )
+				{
+					res       += 3 + lastType % 256 / 8 ;
+					windowEnd =  ( type / 256 + 1 ) * 256 - 1 ;
+				}
+
+				lastType = type ;
+			}
+
+			return res + 3 + lastType % 256 / 8 ;
+		}
+
 		internal bool IsCovering ( DomainName name , DomainName zone )
-			=> ( ( name . CompareTo ( Name )     > 0 ) && ( name . CompareTo ( NextDomainName ) < 0 ) ) // within zone
-				|| ( ( name . CompareTo ( Name ) > 0 ) && NextDomainName . Equals ( zone ) ) ;          // behind zone
+			=> ( ( name . CompareTo ( Name )    > 0 ) && ( name . CompareTo ( NextDomainName ) < 0 ) ) // within zone
+			   || ( ( name . CompareTo ( Name ) > 0 ) && NextDomainName . Equals ( zone ) ) ;          // behind zone
+
+		internal override void ParseRecordData ( byte [ ] resultData , int currentPosition , int length )
+		{
+			int endPosition = currentPosition + length ;
+
+			NextDomainName = DnsMessageBase . ParseDomainName ( resultData , ref currentPosition ) ;
+
+			Types = ParseTypeBitMap ( resultData , ref currentPosition , endPosition ) ;
+		}
+
+		internal override void ParseRecordData ( DomainName origin , string [ ] stringRepresentation )
+		{
+			if ( stringRepresentation . Length < 2 )
+			{
+				throw new FormatException ( ) ;
+			}
+
+			NextDomainName = ParseDomainName ( origin , stringRepresentation [ 0 ] ) ;
+			Types = stringRepresentation . Skip ( 1 ) . Select ( RecordTypeHelper . ParseShortString ) . ToList ( ) ;
+		}
+
+		internal static List <RecordType> ParseTypeBitMap (
+			byte [ ] resultData ,
+			ref int  currentPosition ,
+			int      endPosition )
+		{
+			List <RecordType> types = new List <RecordType> ( ) ;
+			while ( currentPosition < endPosition )
+			{
+				byte windowNumber = resultData [ currentPosition++ ] ;
+				byte windowLength = resultData [ currentPosition++ ] ;
+
+				for ( int i = 0 ; i < windowLength ; i++ )
+				{
+					byte bitmap = resultData [ currentPosition++ ] ;
+
+					for ( int bit = 0 ; bit < 8 ; bit++ )
+					{
+						if ( ( bitmap & ( 1 << Math . Abs ( bit - 7 ) ) ) != 0 )
+						{
+							types . Add ( ( RecordType )( windowNumber * 256 + i * 8 + bit ) ) ;
+						}
+					}
+				}
+			}
+
+			return types ;
+		}
+
+		internal override string RecordDataToString ( )
+			=> NextDomainName + " " + string . Join ( " " , Types . Select ( RecordTypeHelper . ToShortString ) ) ;
 
 	}
 

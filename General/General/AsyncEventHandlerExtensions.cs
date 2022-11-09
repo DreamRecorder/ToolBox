@@ -19,9 +19,9 @@ namespace DreamRecorder . ToolBox . General
 			}
 
 			return Task . WhenAll (
-									eventHandler . GetInvocationList ( ) .
-													Cast <AsyncEventHandler <T>> ( ) .
-													Select ( x => x . Invoke ( sender , eventArgs ) ) ) ;
+								   eventHandler . GetInvocationList ( ) .
+												  Cast <AsyncEventHandler <T>> ( ) .
+												  Select ( x => x . Invoke ( sender , eventArgs ) ) ) ;
 		}
 
 	}

@@ -12,18 +12,18 @@ namespace DreamRecorder . ToolBox . Network . Dns . EDns
 	public abstract class EDnsOptionBase
 	{
 
+		internal abstract ushort DataLength { get ; }
+
 		/// <summary>
 		///     Type of the option
 		/// </summary>
 		public EDnsOptionType Type { get ; internal set ; }
 
-		internal abstract ushort DataLength { get ; }
-
 		internal EDnsOptionBase ( EDnsOptionType optionType ) => Type = optionType ;
 
-		internal abstract void ParseData ( byte [ ] resultData , int startPosition , int length ) ;
-
 		internal abstract void EncodeData ( byte [ ] messageData , ref int currentPosition ) ;
+
+		internal abstract void ParseData ( byte [ ] resultData , int startPosition , int length ) ;
 
 	}
 

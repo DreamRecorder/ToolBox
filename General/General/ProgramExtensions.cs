@@ -16,10 +16,10 @@ namespace DreamRecorder . ToolBox . General
 		public static string GetProgramName ( )
 		{
 			return Assembly . GetEntryAssembly ( ) ? . GetProgramName ( )
-					?? AppDomain . CurrentDomain . GetAssemblies ( ) .
-									Select ( ass => ass . GetProgramName ( ) ) .
-									FirstOrDefault ( name => name != null )
-					?? Assembly . GetEntryAssembly ( ) ? . GetDisplayName ( ) ;
+				   ?? AppDomain . CurrentDomain . GetAssemblies ( ) .
+								  Select ( ass => ass . GetProgramName ( ) ) .
+								  FirstOrDefault ( name => name != null )
+				   ?? Assembly . GetEntryAssembly ( ) ? . GetDisplayName ( ) ;
 		}
 
 	}

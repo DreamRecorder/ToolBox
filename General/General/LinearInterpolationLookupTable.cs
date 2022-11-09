@@ -15,11 +15,11 @@ namespace DreamRecorder . ToolBox . General
 	public class LinearInterpolationLookupTable : ISelfSerializable
 	{
 
+		public double this [ double x ] => Find ( x ) ;
+
 		public ReadOnlyCollection <PointF> Points { get ; }
 
 		private List <PointF> PointsList { get ; }
-
-		public double this [ double x ] => Find ( x ) ;
 
 		public LinearInterpolationLookupTable ( )
 		{
@@ -49,16 +49,16 @@ namespace DreamRecorder . ToolBox . General
 			if ( element . Name != nameof ( LinearInterpolationLookupTable ) )
 			{
 				throw new ArgumentException (
-											ExceptionMessages . XmlNameMismatch (
-											nameof ( element ) ,
-											typeof ( LinearInterpolationLookupTable ) ) ) ;
+											 ExceptionMessages . XmlNameMismatch (
+											  nameof ( element ) ,
+											  typeof ( LinearInterpolationLookupTable ) ) ) ;
 			}
 
 			foreach ( XElement pointData in element . Elements ( ) )
 			{
 				PointF point = new PointF (
-											pointData . ReadNecessaryValue <float> ( nameof ( point . X ) ) ,
-											pointData . ReadNecessaryValue <float> ( nameof ( point . Y ) ) ) ;
+										   pointData . ReadNecessaryValue <float> ( nameof ( point . X ) ) ,
+										   pointData . ReadNecessaryValue <float> ( nameof ( point . Y ) ) ) ;
 
 				PointsList . Add ( point ) ;
 			}
@@ -81,6 +81,29 @@ namespace DreamRecorder . ToolBox . General
 			}
 
 			return result ;
+		}
+
+		public void AddPoint ( PointF point )
+		{
+			PointsList . Add ( point ) ;
+			Sort ( ) ;
+		}
+
+		public double Find ( double x )
+		{
+			for ( int i = 0 ; i < Points . Count - 1 ; i++ )
+			{
+				if ( Points [ i ] . X <= x
+					 && x             < Points [ i + 1 ] . X )
+				{
+					return ( Points [ i + 1 ] . Y - Points [ i ] . Y )
+						   * ( x                  - Points [ i ] . X )
+						   / ( Points [ i + 1 ] . X - Points [ i ] . X )
+						   + Points [ i ] . Y ;
+				}
+			}
+
+			return 0 ;
 		}
 
 		/// <summary>
@@ -137,30 +160,7 @@ namespace DreamRecorder . ToolBox . General
 			slope      = sCo / ssX ;
 		}
 
-		public void AddPoint ( PointF point )
-		{
-			PointsList . Add ( point ) ;
-			Sort ( ) ;
-		}
-
 		public void Sort ( ) { PointsList . Sort ( ( left , right ) => left . X . CompareTo ( right . X ) ) ; }
-
-		public double Find ( double x )
-		{
-			for ( int i = 0 ; i < Points . Count - 1 ; i++ )
-			{
-				if ( Points [ i ] . X <= x
-					&& x              < Points [ i + 1 ] . X )
-				{
-					return ( Points [ i + 1 ] . Y - Points [ i ] . Y )
-							* ( x                 - Points [ i ] . X )
-							/ ( Points [ i + 1 ] . X - Points [ i ] . X )
-							+ Points [ i ] . Y ;
-				}
-			}
-
-			return 0 ;
-		}
 
 	}
 

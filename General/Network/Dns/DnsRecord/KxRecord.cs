@@ -17,16 +17,16 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 	{
 
 		/// <summary>
-		///     Preference of the record
-		/// </summary>
-		public ushort Preference { get ; private set ; }
-
-		/// <summary>
 		///     Domain name of the exchange host
 		/// </summary>
 		public DomainName Exchanger { get ; private set ; }
 
 		protected internal override int MaximumRecordDataLength => Exchanger . MaximumRecordDataLength + 4 ;
+
+		/// <summary>
+		///     Preference of the record
+		/// </summary>
+		public ushort Preference { get ; private set ; }
 
 		internal KxRecord ( ) { }
 
@@ -38,13 +38,30 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		/// <param name="preference"> Preference of the record </param>
 		/// <param name="exchanger"> Domain name of the exchange host </param>
 		public KxRecord ( DomainName name , int timeToLive , ushort preference , DomainName exchanger ) : base (
-		name ,
-		RecordType . Kx ,
-		RecordClass . INet ,
-		timeToLive )
+		 name ,
+		 RecordType . Kx ,
+		 RecordClass . INet ,
+		 timeToLive )
 		{
 			Preference = preference ;
 			Exchanger  = exchanger ?? DomainName . Root ;
+		}
+
+		protected internal override void EncodeRecordData (
+			byte [ ]                         messageData ,
+			int                              offset ,
+			ref int                          currentPosition ,
+			Dictionary <DomainName , ushort> domainNames ,
+			bool                             useCanonical )
+		{
+			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , Preference ) ;
+			DnsMessageBase . EncodeDomainName (
+											   messageData ,
+											   offset ,
+											   ref currentPosition ,
+											   Exchanger ,
+											   domainNames ,
+											   useCanonical ) ;
 		}
 
 		internal override void ParseRecordData ( DomainName origin , string [ ] stringRepresentation )
@@ -65,23 +82,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsRecord
 		}
 
 		internal override string RecordDataToString ( ) => Preference + " " + Exchanger ;
-
-		protected internal override void EncodeRecordData (
-			byte [ ]                         messageData ,
-			int                              offset ,
-			ref int                          currentPosition ,
-			Dictionary <DomainName , ushort> domainNames ,
-			bool                             useCanonical )
-		{
-			DnsMessageBase . EncodeUShort ( messageData , ref currentPosition , Preference ) ;
-			DnsMessageBase . EncodeDomainName (
-												messageData ,
-												offset ,
-												ref currentPosition ,
-												Exchanger ,
-												domainNames ,
-												useCanonical ) ;
-		}
 
 	}
 

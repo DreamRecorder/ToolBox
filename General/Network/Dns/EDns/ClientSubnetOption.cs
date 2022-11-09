@@ -19,14 +19,16 @@ namespace DreamRecorder . ToolBox . Network . Dns . EDns
 	{
 
 		/// <summary>
+		///     The address
+		/// </summary>
+		public IPAddress Address { get ; private set ; }
+
+		internal override ushort DataLength => ( ushort )( 4 + GetAddressLength ( ) ) ;
+
+		/// <summary>
 		///     The address family
 		/// </summary>
 		public AddressFamily Family => Address . AddressFamily ;
-
-		/// <summary>
-		///     The source subnet mask
-		/// </summary>
-		public byte SourceNetmask { get ; private set ; }
 
 		/// <summary>
 		///     The scope subnet mask
@@ -34,11 +36,9 @@ namespace DreamRecorder . ToolBox . Network . Dns . EDns
 		public byte ScopeNetmask { get ; private set ; }
 
 		/// <summary>
-		///     The address
+		///     The source subnet mask
 		/// </summary>
-		public IPAddress Address { get ; private set ; }
-
-		internal override ushort DataLength => ( ushort )( 4 + GetAddressLength ( ) ) ;
+		public byte SourceNetmask { get ; private set ; }
 
 		internal ClientSubnetOption ( ) : base ( EDnsOptionType . ClientSubnet ) { }
 
@@ -62,6 +62,21 @@ namespace DreamRecorder . ToolBox . Network . Dns . EDns
 			Address       = address ;
 		}
 
+		internal override void EncodeData ( byte [ ] messageData , ref int currentPosition )
+		{
+			DnsMessageBase . EncodeUShort (
+										   messageData ,
+										   ref currentPosition ,
+										   ( ushort )( Family == AddressFamily . InterNetwork ? 1 : 2 ) ) ;
+			messageData [ currentPosition++ ] = SourceNetmask ;
+			messageData [ currentPosition++ ] = ScopeNetmask ;
+
+			byte [ ] data = Address . GetAddressBytes ( ) ;
+			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , data , GetAddressLength ( ) ) ;
+		}
+
+		private int GetAddressLength ( ) => ( int )Math . Ceiling ( SourceNetmask / 8d ) ;
+
 		internal override void ParseData ( byte [ ] resultData , int startPosition , int length )
 		{
 			ushort family = DnsMessageBase . ParseUShort ( resultData , ref startPosition ) ;
@@ -73,21 +88,6 @@ namespace DreamRecorder . ToolBox . Network . Dns . EDns
 
 			Address = new IPAddress ( addressData ) ;
 		}
-
-		internal override void EncodeData ( byte [ ] messageData , ref int currentPosition )
-		{
-			DnsMessageBase . EncodeUShort (
-											messageData ,
-											ref currentPosition ,
-											( ushort )( Family == AddressFamily . InterNetwork ? 1 : 2 ) ) ;
-			messageData [ currentPosition++ ] = SourceNetmask ;
-			messageData [ currentPosition++ ] = ScopeNetmask ;
-
-			byte [ ] data = Address . GetAddressBytes ( ) ;
-			DnsMessageBase . EncodeByteArray ( messageData , ref currentPosition , data , GetAddressLength ( ) ) ;
-		}
-
-		private int GetAddressLength ( ) => ( int )Math . Ceiling ( SourceNetmask / 8d ) ;
 
 	}
 

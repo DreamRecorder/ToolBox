@@ -47,10 +47,10 @@ namespace DreamRecorder . ToolBox . UnitTest
 			foreach ( (string Perferred , string NoOmitHextets , string Compressed) data in Ipv6ToStringTestData )
 			{
 				Assert . AreEqual (
-									data . NoOmitHextets ,
-									new Ipv6Address ( data . Perferred ) . ToString (
+								   data . NoOmitHextets ,
+								   new Ipv6Address ( data . Perferred ) . ToString (
 									Ipv6Address . AddressStyle . NoOmitHextets ) ,
-									true ) ;
+								   true ) ;
 			}
 		}
 
