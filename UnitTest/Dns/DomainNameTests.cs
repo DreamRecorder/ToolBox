@@ -2,6 +2,7 @@
 using System . Collections ;
 using System . Collections . Generic ;
 using System . Linq ;
+using System . Text . Json ;
 
 using DreamRecorder . ToolBox . Network . Dns ;
 
@@ -65,17 +66,21 @@ namespace DreamRecorder . ToolBox . UnitTest . Dns
 		public void IsSubDomainOfTest ( ) { }
 
 		[TestMethod]
-		public void ParseTest ( ) { }
+		public void JsonTest ( )
+		{
+			DomainName domainName = DomainName . Parse ( "dreamry.org" ) ;
+
+			string     jsonString = JsonSerializer . Serialize ( domainName ) ;
+			DomainName result     = JsonSerializer . Deserialize <DomainName> ( jsonString ) ;
+			Assert . AreEqual ( domainName , result ) ;
+		}
 
 		[TestMethod]
 		public void ToStringTest ( )
 		{
 			DomainName domainName = DomainName . Parse ( "dreamry.org" ) ;
-			Assert . AreEqual ( domainName . ToString ( ) , "dreamry.org." ) ;
+			Assert . AreEqual ( "dreamry.org." , domainName . ToString ( ) ) ;
 		}
-
-		[TestMethod]
-		public void TryParseTest ( ) { }
 
 	}
 

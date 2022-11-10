@@ -4,6 +4,7 @@ using System . Collections . Generic ;
 using System . Diagnostics . CodeAnalysis ;
 using System . Globalization ;
 using System . Linq ;
+using System . Text . Json . Serialization ;
 using System . Text . RegularExpressions ;
 
 using DreamRecorder . ToolBox . General ;
@@ -18,7 +19,8 @@ namespace DreamRecorder . ToolBox . Network . Dns
 	/// <summary>
 	///     Represents a domain name
 	/// </summary>
-	public class DomainName : IEquatable <DomainName> , IComparable <DomainName>
+	[JsonConverter ( typeof ( CreateFromStringJsonConverter <DomainName> ) )]
+	public class DomainName : IEquatable <DomainName> , IComparable <DomainName> , ICreateFrom <DomainName , string>
 	{
 
 		private int ? _hashCode ;
@@ -89,6 +91,10 @@ namespace DreamRecorder . ToolBox . Network . Dns
 			return LabelCount . CompareTo ( other . LabelCount ) ;
 		}
 
+		string IToT <string> . ToT ( ) => ToString ( ) ;
+
+		public static DomainName CreateFrom ( string value ) => Parse ( value ) ;
+
 		/// <summary>
 		///     Checks, whether this name is equal to an other name (case insensitive)
 		/// </summary>
@@ -124,7 +130,7 @@ namespace DreamRecorder . ToolBox . Network . Dns
 		/// <returns>true, if the names are equal</returns>
 		public bool Equals ( DomainName other , bool ignoreCase )
 		{
-			if ( ReferenceEquals ( other , null ) )
+			if ( other is null )
 			{
 				return false ;
 			}
@@ -316,7 +322,7 @@ namespace DreamRecorder . ToolBox . Network . Dns
 				return true ;
 			}
 
-			if ( ReferenceEquals ( name1 , null ) )
+			if ( name1 is null )
 			{
 				return false ;
 			}
