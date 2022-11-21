@@ -29,7 +29,10 @@ namespace DreamRecorder . ToolBox . General
 				throw new ArgumentException ( "Value cannot be null or whitespace." , nameof ( searchPattern ) ) ;
 			}
 
-			string [ ] fileNames = Directory . GetFiles ( pluginDirectoryPath , searchPattern ) ;
+			string [ ] fileNames = Directory . GetFiles (
+														 pluginDirectoryPath ,
+														 searchPattern ,
+														 SearchOption . AllDirectories ) ;
 
 			foreach ( string fileName in fileNames )
 			{
