@@ -14,6 +14,11 @@ using Microsoft . Extensions . Logging ;
 namespace DreamRecorder . ToolBox . General
 {
 
+	public class PluginAttribute:Attribute
+	{
+
+	}
+
 	public class PluginHelper
 	{
 
