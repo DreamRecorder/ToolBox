@@ -46,6 +46,7 @@ namespace DreamRecorder . ToolBox . TelegramBot
 			BotClient . SendTextMessageAsync (
 											  PrivateChatId ,
 											  text ,
+											  default ,
 											  parseMode ,
 											  default ,
 											  disableWebPagePreview ,

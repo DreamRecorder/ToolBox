@@ -4,6 +4,8 @@ using System . Collections . Generic ;
 using System . Linq ;
 using System . Threading . Tasks ;
 
+using JetBrains . Annotations ;
+
 using Microsoft . AspNetCore . Razor . TagHelpers ;
 
 namespace DreamRecorder . ToolBox . AspNet . General
@@ -11,6 +13,7 @@ namespace DreamRecorder . ToolBox . AspNet . General
 
 	[HtmlTargetElement ( Stylesheet )]
 	[HtmlTargetElement ( Script )]
+	[PublicAPI]
 	public class ExternalAssetTagHelper : TagHelper
 	{
 
@@ -31,7 +34,7 @@ namespace DreamRecorder . ToolBox . AspNet . General
 		public override async Task ProcessAsync ( TagHelperContext context , TagHelperOutput output )
 		{
 			if ( PackageName == null
-				 || FileName == null )
+			     || FileName == null )
 			{
 				return ;
 			}

@@ -39,14 +39,15 @@ namespace DreamRecorder . ToolBox . TelegramBot
 			if ( tag is ICommand <TUser> command )
 			{
 				session . BotClient . SendTextMessageAsync (
-															session . PrivateChatId ,
-															$"Command `{command . DisplayName}` do not have permission to read your personal info." ,
-															ParseMode . Markdown ,
-															replyToMessageId : message . MessageId ,
-															replyMarkup : new InlineKeyboardMarkup (
-															 InlineKeyboardButton . WithCallbackData (
-															  "Grant permission" ,
-															  $"RegisterCommandGroup {command . PermissionGroup . Guid}" ) ) ) .
+														    session . PrivateChatId ,
+														    $"Command `{command . DisplayName}` do not have permission to read your personal info." ,
+														    null ,
+														    ParseMode . Markdown ,
+														    replyToMessageId : message . MessageId ,
+														    replyMarkup : new InlineKeyboardMarkup (
+														     InlineKeyboardButton . WithCallbackData (
+														      "Grant permission" ,
+														      $"RegisterCommandGroup {command . PermissionGroup . Guid}" ) ) ) .
 						  Wait ( ) ;
 			}
 
@@ -66,9 +67,9 @@ namespace DreamRecorder . ToolBox . TelegramBot
 									 $"Command `{command ? . PermissionGroup ? . DisplayName}{command . DisplayName}` do not have permission to read your personal info." ,
 									 ParseMode . Markdown ,
 									 replyMarkup : new InlineKeyboardMarkup (
-																			 InlineKeyboardButton . WithCallbackData (
-																			  "Grant permission" ,
-																			  $"RegisterCommandGroup {command . PermissionGroup . Guid}" ) ) ) ;
+																		     InlineKeyboardButton . WithCallbackData (
+																		      "Grant permission" ,
+																		      $"RegisterCommandGroup {command . PermissionGroup . Guid}" ) ) ) ;
 			}
 		}
 

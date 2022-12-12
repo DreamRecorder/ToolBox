@@ -6,8 +6,6 @@ using System . Linq ;
 using System . Net . Http ;
 using System . Threading . Tasks ;
 
-using DreamRecorder . ToolBox . General ;
-
 using JetBrains . Annotations ;
 
 using Newtonsoft . Json ;
@@ -42,9 +40,11 @@ namespace DreamRecorder . ToolBox . AspNet . General
 				CdnjsVersions apiQuery = JsonConvert . DeserializeObject <CdnjsVersions> (
 				 await CurrentClient . GetStringAsync (
 													   $"https://api.cdnjs.com/libraries/{packageName}?fields=versions" ) ) ;
-				version = apiQuery . versions . Max (
-													 ( ComparisonExtensions . Select <string , SemVersion> (
-														  str => SemVersion . Parse ( str ) ) ) . ToComparer ( ) ) ;
+
+				version = apiQuery . versions . Select ( str => SemVersion . Parse ( str ) ) .
+									 Where ( ver => ver . IsRelease ) .
+									 Max ( ) .
+									 ToString ( ) ;
 
 				if ( string . IsNullOrWhiteSpace ( version ) )
 				{

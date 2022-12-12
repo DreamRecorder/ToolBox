@@ -16,7 +16,11 @@ namespace DreamRecorder . ToolBox . AspNet . CommonComponent
 	public class CommonFooterTagHelper : TagHelper
 	{
 
+		private static string CommonFooter { get ; set ; } = null ;
+
 		private HttpClient HttpClient { get ; }
+
+		private static DateTimeOffset ? LastUpdate { get ; set ; } = null ;
 
 		public CommonFooterTagHelper ( HttpClient httpClient ) => HttpClient = httpClient ;
 
@@ -24,9 +28,29 @@ namespace DreamRecorder . ToolBox . AspNet . CommonComponent
 		{
 			output . TagName = @"div" ;
 			output . TagMode = TagMode . StartTagAndEndTag ;
-			output . Content . SetHtmlContent (
-											   await HttpClient . GetStringAsync (
-												$"{ConstantUrls . WebResource}CommonFooter.html" ) ) ;
+
+			if ( LastUpdate is DateTimeOffset lastUpdate
+			     && lastUpdate > DateTimeOffset . Now - TimeSpan . FromHours ( 1 ) )
+			{
+				output . Content . SetHtmlContent ( CommonFooter ) ;
+			}
+			else
+			{
+				try
+				{
+					output . Content . SetHtmlContent (
+													   CommonFooter =
+														   await HttpClient . GetStringAsync (
+														    $"{ConstantUrls . WebResource}CommonFooter.html" ) ) ;
+				}
+				catch ( Exception )
+				{
+				}
+				finally
+				{
+					LastUpdate = DateTimeOffset . Now ;
+				}
+			}
 		}
 
 	}
