@@ -13,6 +13,19 @@ namespace DreamRecorder . ToolBox . AspNet . General ;
 public static class RazorPageBaseViewBagExtensions
 {
 
+	public static void AddStyleSheet ( this RazorPageBase page , StyleSheetInfo styleSheetInfo )
+	{
+		if ( page . ViewBag . AdditionalStyleSheet is not IList <StyleSheetInfo> list )
+		{
+			list = page . ViewBag . AdditionalStyleSheet = new List <StyleSheetInfo> ( ) ;
+		}
+
+		if ( styleSheetInfo != null )
+		{
+			list . Add ( styleSheetInfo ) ;
+		}
+	}
+
 	public static void AddStyleSheet (
 		this RazorPageBase page ,
 		string             packageName ,
