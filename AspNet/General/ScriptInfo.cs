@@ -5,10 +5,10 @@ using System . Linq ;
 
 namespace DreamRecorder . ToolBox . AspNet . General ;
 
-public class StyleSheetInfo : ExternalAssetInfoBase
+public sealed class ScriptInfo : ExternalAssetInfoBase
 {
 
-	public StyleSheetInfo ( string packageName , string fileName , string version = null ) : base ( packageName , fileName , version )
+	public ScriptInfo ( string packageName , string fileName , string version = null ) : base ( packageName , fileName , version )
 	{
 	}
 

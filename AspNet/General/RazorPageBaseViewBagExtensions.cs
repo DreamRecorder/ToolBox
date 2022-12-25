@@ -13,6 +13,28 @@ namespace DreamRecorder . ToolBox . AspNet . General ;
 public static class RazorPageBaseViewBagExtensions
 {
 
+	public static void AddScript ( this RazorPageBase page , ScriptInfo scriptInfo )
+	{
+		if ( page . ViewBag . AdditionalScript is not IList <ScriptInfo> list )
+		{
+			list = page . ViewBag . AdditionalScript = new List <ScriptInfo> ( ) ;
+		}
+
+		if ( scriptInfo != null )
+		{
+			list . Add ( scriptInfo ) ;
+		}
+	}
+
+	public static void AddScript (
+		this RazorPageBase page ,
+		string             packageName ,
+		string             fileName ,
+		string             version = null )
+	{
+		page . AddScript ( new ScriptInfo ( packageName , fileName , version ) ) ;
+	}
+
 	public static void AddStyleSheet ( this RazorPageBase page , StyleSheetInfo styleSheetInfo )
 	{
 		if ( page . ViewBag . AdditionalStyleSheet is not IList <StyleSheetInfo> list )
@@ -32,12 +54,8 @@ public static class RazorPageBaseViewBagExtensions
 		string             fileName ,
 		string             version = null )
 	{
-		if ( page . ViewBag . AdditionalStyleSheet is not IList <StyleSheetInfo> list )
-		{
-			list = page . ViewBag . AdditionalStyleSheet = new List <StyleSheetInfo> ( ) ;
-		}
-
-		list . Add ( new StyleSheetInfo ( packageName , fileName , version ) ) ;
+		page . AddStyleSheet ( new StyleSheetInfo ( packageName , fileName , version ) ) ;
 	}
 
 }
+

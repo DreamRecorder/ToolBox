@@ -27,7 +27,7 @@ namespace DreamRecorder . ToolBox . General
 
 			byte [ ] bytes = new byte[ size ] ;
 
-			IntPtr buffer = Marshal . AllocHGlobal ( size ) ;
+			nint buffer = Marshal . AllocHGlobal ( size ) ;
 
 			try
 			{
@@ -47,7 +47,7 @@ namespace DreamRecorder . ToolBox . General
 
 			byte [ ] destination = new byte[ size * value . Count ] ;
 
-			IntPtr buffer = Marshal . AllocHGlobal ( size ) ;
+			nint buffer = Marshal . AllocHGlobal ( size ) ;
 
 			IEnumerator <T> e = value . GetEnumerator ( ) ;
 
@@ -78,7 +78,7 @@ namespace DreamRecorder . ToolBox . General
 		public static T CastToStruct <T> ( this byte [ ] bytes ) where T : struct
 		{
 			int    size   = Marshal . SizeOf <T> ( ) ;
-			IntPtr buffer = Marshal . AllocHGlobal ( size ) ;
+			nint buffer = Marshal . AllocHGlobal ( size ) ;
 
 			try
 			{
@@ -103,7 +103,7 @@ namespace DreamRecorder . ToolBox . General
 
 			int length = bytes . Length / size ;
 
-			IntPtr buffer = Marshal . AllocHGlobal ( bytes . Length ) ;
+			nint buffer = Marshal . AllocHGlobal ( bytes . Length ) ;
 			try
 			{
 				List <T> result = new List <T> ( length ) ;
