@@ -19,8 +19,7 @@ public class AdditionalStyleSheetTagHelper : TagHelper
 
 	public IWebAssetProvider WebAssetProvider { get ; }
 
-	public AdditionalStyleSheetTagHelper ( IWebAssetProvider webAssetProvider )
-		=> WebAssetProvider = webAssetProvider ;
+	public AdditionalStyleSheetTagHelper ( IWebAssetProvider webAssetProvider ) => WebAssetProvider = webAssetProvider ;
 
 	public override async Task ProcessAsync ( TagHelperContext context , TagHelperOutput output )
 	{

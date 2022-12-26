@@ -3,14 +3,11 @@ using System . Collections ;
 using System . Collections . Generic ;
 using System . Linq ;
 
-namespace DreamRecorder . ToolBox . AspNet . General
+namespace DreamRecorder . ToolBox . AspNet . General ;
+
+public static class ConstantUrls
 {
 
-	public static class ConstantUrls
-	{
-
-		public const string WebResource = @"https://webresources.dreamry.org/" ;
-
-	}
+	public const string WebResource = @"https://webresources.dreamry.org/" ;
 
 }

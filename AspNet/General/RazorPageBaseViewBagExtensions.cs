@@ -27,12 +27,14 @@ public static class RazorPageBaseViewBagExtensions
 	}
 
 	public static void AddScript (
-		this RazorPageBase page ,
-		string             packageName ,
-		string             fileName ,
-		string             version = null )
+		this RazorPageBase      page ,
+		string                  packageName ,
+		string                  fileName ,
+		string                  version = null ,
+		bool                    isDefer = false ,
+		ScriptInfo . ScriptType type    = ScriptInfo . ScriptType . Default )
 	{
-		page . AddScript ( new ScriptInfo ( packageName , fileName , version ) ) ;
+		page . AddScript ( new ScriptInfo ( packageName , fileName , version , isDefer , type ) ) ;
 	}
 
 	public static void AddStyleSheet ( this RazorPageBase page , StyleSheetInfo styleSheetInfo )
@@ -58,4 +60,3 @@ public static class RazorPageBaseViewBagExtensions
 	}
 
 }
-

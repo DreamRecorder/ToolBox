@@ -8,7 +8,10 @@ namespace DreamRecorder . ToolBox . AspNet . General ;
 public class StyleSheetInfo : ExternalAssetInfoBase
 {
 
-	public StyleSheetInfo ( string packageName , string fileName , string version = null ) : base ( packageName , fileName , version )
+	public StyleSheetInfo ( string packageName , string fileName , string version = null ) : base (
+	 packageName ,
+	 fileName ,
+	 version )
 	{
 	}
 

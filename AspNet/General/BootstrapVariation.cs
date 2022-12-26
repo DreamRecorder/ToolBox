@@ -3,28 +3,25 @@ using System . Collections ;
 using System . Collections . Generic ;
 using System . Linq ;
 
-namespace DreamRecorder . ToolBox . AspNet . General
+namespace DreamRecorder . ToolBox . AspNet . General ;
+
+public enum BootstrapVariation : byte
 {
 
-	public enum BootstrapVariation : byte
-	{
+	Primary ,
 
-		Primary ,
+	Secondary ,
 
-		Secondary ,
+	Success ,
 
-		Success ,
+	Danger ,
 
-		Danger ,
+	Warning ,
 
-		Warning ,
+	Info ,
 
-		Info ,
+	Light ,
 
-		Light ,
-
-		Dark ,
-
-	}
+	Dark ,
 
 }
