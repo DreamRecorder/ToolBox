@@ -88,7 +88,7 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 		public virtual bool ThrowOnUnexpectedArg => false ;
 
-		public virtual bool WaitForExit { get ; }
+		public virtual bool WaitForExit => true ;
 
 		public virtual bool WriteLicenseFile => true ;
 
@@ -225,14 +225,12 @@ namespace DreamRecorder . ToolBox . CommandLine
 			Logger . LogInformation ( "Generating License File." ) ;
 			FileStream licenseFile = File . Open ( LicenseFilePath , FileMode . Create ) ;
 
-			using ( StreamWriter writer = new StreamWriter ( licenseFile ) )
+			using StreamWriter writer = new StreamWriter ( licenseFile ) ;
+			writer . WriteLine ( License ) ;
+			if ( CheckLicense )
 			{
-				writer . WriteLine ( License ) ;
-				if ( CheckLicense )
-				{
-					writer . WriteLine ( ) ;
-					writer . WriteLine ( AcceptLicenseGuide ) ;
-				}
+				writer . WriteLine ( ) ;
+				writer . WriteLine ( AcceptLicenseGuide ) ;
 			}
 		}
 
@@ -294,7 +292,15 @@ namespace DreamRecorder . ToolBox . CommandLine
 				{
 					Logger . LogInformation ( "Setting file doesn't exists, generating new." ) ;
 					Setting = SettingBase <TSetting , TSettingCategory> . GenerateNew ( ) ;
-					SaveSettingFile ( ) ;
+
+					try
+					{
+						SaveSettingFile ( ) ;
+					}
+					catch ( Exception e )
+					{
+						Logger . LogError ( e , "Save Setting File Failed" ) ;
+					}
 				}
 
 				StaticServiceProvider . ServiceCollection . AddSingleton <ISettingProvider> ( Setting ) ;
@@ -567,11 +573,8 @@ namespace DreamRecorder . ToolBox . CommandLine
 
 		public void SaveSettingFile ( )
 		{
-			string       config      = Setting ? . Save ( ) ;
-			FileStream   settingFile = File . OpenWrite ( SettingFilePath ) ;
-			StreamWriter writer      = new StreamWriter ( settingFile ) ;
-			writer . Write ( config ) ;
-			writer . Dispose ( ) ;
+			string config = Setting ? . Save ( ) ;
+			File . WriteAllText ( SettingFilePath , config ? . ReplaceLineEndings ( ) ) ;
 		}
 
 		public abstract void ShowCopyright ( ) ;
