@@ -40,9 +40,9 @@ public class CdnjsWebAssetProvider : IWebAssetProvider
 			 await CurrentClient . GetStringAsync (
 												   $"https://api.cdnjs.com/libraries/{packageName}?fields=versions" ) ) ;
 
-			version = apiQuery . versions . Select ( str => SemVersion . Parse ( str ) ) .
+			version = apiQuery . versions . Select ( str => SemVersion . Parse ( str , SemVersionStyles . Any ) ) .
 								 Where ( ver => ver . IsRelease ) .
-								 Max ( ) .
+								 Max ( SemVersion . SortOrderComparer ) .
 								 ToString ( ) ;
 
 			if ( string . IsNullOrWhiteSpace ( version ) )
