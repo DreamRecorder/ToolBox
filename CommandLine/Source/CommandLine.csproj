@@ -5,8 +5,8 @@
 	<ItemGroup>
 		<PackageReference Include="JetBrains.Annotations" Version="2023.2.0" />
 		<PackageReference Include="Microsoft.Extensions.CommandLineUtils" Version="1.1.1" />
-		<PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0-preview.3.23174.8" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0-preview.3.23174.8" />
+		<PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
 		<PackageReference Include="FIGlet.Net" Version="1.1.2" />
 	</ItemGroup>
 
