@@ -109,12 +109,15 @@ namespace DreamRecorder . ToolBox . TelegramBot
 			Session <TUser> session ,
 			object          tag = null )
 		{
-			Process ( callbackQuery . Message , args , session , true , tag ) ;
+			if ( callbackQuery . Message != null )
+			{
+				Process ( callbackQuery . Message , args , session , true , tag ) ;
 
-			session . BotClient . EditMessageReplyMarkupAsync (
-															   callbackQuery . Message . Chat . Id ,
-															   callbackQuery . Message . MessageId ) .
-					  Wait ( ) ;
+				session . BotClient . EditMessageReplyMarkupAsync (
+																   callbackQuery . Message . Chat . Id ,
+																   callbackQuery . Message . MessageId ) .
+						  Wait ( ) ;
+			}
 		}
 
 	}

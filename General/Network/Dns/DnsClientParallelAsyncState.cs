@@ -24,7 +24,7 @@ namespace DreamRecorder . ToolBox . Network . Dns
 
 		public bool CompletedSynchronously => false ;
 
-		public WaitHandle AsyncWaitHandle => _waitHandle ?? ( _waitHandle = new ManualResetEvent ( IsCompleted ) ) ;
+		public WaitHandle AsyncWaitHandle => _waitHandle ??= new ManualResetEvent ( IsCompleted ) ;
 
 		internal void SetCompleted ( )
 		{

@@ -6,7 +6,7 @@ using System . Linq ;
 namespace DreamRecorder . ToolBox . TelegramBot
 {
 
-	public interface ITelegramIdUserProvider <TUser> where TUser : IUser
+	public interface ITelegramIdUserProvider <out TUser> where TUser : IUser
 	{
 
 		TUser GetUser ( long telegramId ) ;

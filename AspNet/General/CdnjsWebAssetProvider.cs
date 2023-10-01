@@ -22,7 +22,6 @@ public class CdnjsWebAssetProvider : IWebAssetProvider
 	public static ConcurrentDictionary <string , string> PackageVersions { get ; set ; } =
 		new ConcurrentDictionary <string , string> ( ) ;
 
-
 	public async Task <string> GetPackageVersion ( [NotNull] string packageName )
 	{
 		if ( packageName == null )
