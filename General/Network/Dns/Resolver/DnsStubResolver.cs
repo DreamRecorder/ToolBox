@@ -94,10 +94,9 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 
 			CNameRecord cName = msg . AnswerRecords .
 									  Where (
-											 x
-												 => ( x . RecordType     == RecordType . CName )
-													&& ( x . RecordClass == recordClass )
-													&& x . Name . Equals ( name ) ) .
+											 x => ( x . RecordType     == RecordType . CName )
+												  && ( x . RecordClass == recordClass )
+												  && x . Name . Equals ( name ) ) .
 									  OfType <CNameRecord> ( ) .
 									  FirstOrDefault ( ) ;
 
@@ -196,10 +195,9 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 
 			CNameRecord cName = msg . AnswerRecords .
 									  Where (
-											 x
-												 => ( x . RecordType     == RecordType . CName )
-													&& ( x . RecordClass == recordClass )
-													&& x . Name . Equals ( name ) ) .
+											 x => ( x . RecordType     == RecordType . CName )
+												  && ( x . RecordClass == recordClass )
+												  && x . Name . Equals ( name ) ) .
 									  OfType <CNameRecord> ( ) .
 									  FirstOrDefault ( ) ;
 
@@ -207,10 +205,9 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 			{
 				records = msg . AnswerRecords .
 								Where (
-									   x
-										   => ( x . RecordType     == recordType )
-											  && ( x . RecordClass == recordClass )
-											  && x . Name . Equals ( cName . CanonicalName ) ) .
+									   x => ( x . RecordType     == recordType )
+											&& ( x . RecordClass == recordClass )
+											&& x . Name . Equals ( cName . CanonicalName ) ) .
 								OfType <T> ( ) .
 								ToList ( ) ;
 				if ( records . Count > 0 )

@@ -30,7 +30,7 @@ namespace DreamRecorder . ToolBox . AspNet . CommonComponent
 			output . TagMode = TagMode . StartTagAndEndTag ;
 
 			if ( LastUpdate is DateTimeOffset lastUpdate
-			     && lastUpdate > DateTimeOffset . Now - TimeSpan . FromHours ( 1 ) )
+				 && lastUpdate > DateTimeOffset . Now - TimeSpan . FromHours ( 1 ) )
 			{
 				output . Content . SetHtmlContent ( CommonFooter ) ;
 			}
@@ -41,7 +41,7 @@ namespace DreamRecorder . ToolBox . AspNet . CommonComponent
 					output . Content . SetHtmlContent (
 													   CommonFooter =
 														   await HttpClient . GetStringAsync (
-														    $"{ConstantUrls . WebResource}CommonFooter.html" ) ) ;
+															$"{ConstantUrls . WebResource}CommonFooter.html" ) ) ;
 				}
 				catch ( Exception )
 				{

@@ -47,7 +47,7 @@ namespace DreamRecorder . ToolBox . Network . Dns
 			get
 			{
 				OptRecord ednsOptions = EDnsOptions ;
-				return ( ednsOptions != null ) && ednsOptions . IsDnsSecOk ;
+				return ednsOptions is { IsDnsSecOk: true } ;
 			}
 			set
 			{
@@ -71,9 +71,7 @@ namespace DreamRecorder . ToolBox . Network . Dns
 		internal override bool IsTcpResendingRequested => IsTruncated ;
 
 		internal override bool IsTcpUsingRequested
-			=> ( Questions . Count > 0 )
-			   && ( ( Questions [ 0 ] . RecordType    == RecordType . Axfr )
-					|| ( Questions [ 0 ] . RecordType == RecordType . Ixfr ) ) ;
+			=> ( Questions . Count > 0 ) && Questions [ 0 ] . RecordType is RecordType . Axfr or RecordType . Ixfr ;
 
 		/// <summary>
 		///     Gets or sets the entries in the question section

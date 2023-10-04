@@ -114,22 +114,19 @@ namespace DreamRecorder . ToolBox . Network . Ip
 				if ( allowIPv6 )
 				{
 					// for ipv4 inside ipv6 the terminator is either ScopeId, prefix or ipv6 terminator
-					if ( ch    == ']'
-						 || ch == '/'
-						 || ch == '%' )
+					if ( ch is ']' or '/' or '%' )
 					{
 						break ;
 					}
 				}
 				else if ( ch    == '/'
 						  || ch == '\\'
-						  || ( notImplicitFile && ( ch == ':' || ch == '?' || ch == '#' ) ) )
+						  || ( notImplicitFile && ch is ':' or '?' or '#' ) )
 				{
 					break ;
 				}
 
-				if ( ch    <= '9'
-					 && ch >= '0' )
+				if ( ch is <= '9' and >= '0' )
 				{
 					if ( ! haveNumber
 						 && ch == '0' )
@@ -290,8 +287,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 					{
 						ch = name [ current ] ;
 
-						if ( ch    == 'x'
-							 || ch == 'X' )
+						if ( ch is 'x' or 'X' )
 						{
 							numberBase = Hex ;
 							current++ ;
@@ -306,27 +302,23 @@ namespace DreamRecorder . ToolBox . Network . Ip
 					ch = name [ current ] ;
 					int digitValue ;
 
-					if ( ( numberBase == Decimal || numberBase == Hex )
-						 && '0' <= ch
-						 && ch  <= '9' )
+					if ( numberBase is Decimal or Hex
+						 && ch is >= '0' and <= '9' )
 					{
 						digitValue = ch - '0' ;
 					}
 					else if ( numberBase == Octal
-							  && '0'     <= ch
-							  && ch      <= '7' )
+							  && ch is >= '0' and <= '7' )
 					{
 						digitValue = ch - '0' ;
 					}
 					else if ( numberBase == Hex
-							  && 'a'     <= ch
-							  && ch      <= 'f' )
+							  && ch is >= 'a' and <= 'f' )
 					{
 						digitValue = ch + 10 - 'a' ;
 					}
 					else if ( numberBase == Hex
-							  && 'A'     <= ch
-							  && ch      <= 'F' )
+							  && ch is >= 'A' and <= 'F' )
 					{
 						digitValue = ch + 10 - 'A' ;
 					}
@@ -379,7 +371,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			}
 			else if ( ( ch = name [ current ] ) == '/'
 					  || ch                     == '\\'
-					  || ( notImplicitFile && ( ch == ':' || ch == '?' || ch == '#' ) ) )
+					  || ( notImplicitFile && ch is ':' or '?' or '#' ) )
 			{
 				end = current ;
 			}

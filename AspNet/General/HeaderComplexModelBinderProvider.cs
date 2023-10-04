@@ -26,9 +26,8 @@ public class HeaderComplexModelBinderProvider : IModelBinderProvider
 			{
 				object headerAttribute =
 					metadata . Attributes . Attributes . FirstOrDefault (
-																		 a
-																			 => a . GetType ( )
-																				 == typeof ( FromHeaderAttribute ) ) ;
+																		 a => a . GetType ( )
+																			  == typeof ( FromHeaderAttribute ) ) ;
 
 				if ( headerAttribute != null )
 				{

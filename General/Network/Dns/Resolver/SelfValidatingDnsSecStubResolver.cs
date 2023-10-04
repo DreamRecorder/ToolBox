@@ -243,10 +243,9 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 
 			CNameRecord cName = msg . AnswerRecords .
 									  Where (
-											 x
-												 => ( x . RecordType     == RecordType . CName )
-													&& ( x . RecordClass == recordClass )
-													&& x . Name . Equals ( name ) ) .
+											 x => ( x . RecordType     == RecordType . CName )
+												  && ( x . RecordClass == recordClass )
+												  && x . Name . Equals ( name ) ) .
 									  OfType <CNameRecord> ( ) .
 									  FirstOrDefault ( ) ;
 
@@ -261,18 +260,16 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 													  new List <CNameRecord> { cName , } ,
 													  state ,
 													  token ) ;
-				if ( ( cNameValidationResult    == DnsSecValidationResult . Bogus )
-					 || ( cNameValidationResult == DnsSecValidationResult . Indeterminate ) )
+				if ( cNameValidationResult is DnsSecValidationResult . Bogus or DnsSecValidationResult . Indeterminate )
 				{
 					throw new DnsSecValidationException ( "CNAME record could not be validated" ) ;
 				}
 
 				List <T> records = msg . AnswerRecords .
 										 Where (
-												x
-													=> ( x . RecordType     == recordType )
-													   && ( x . RecordClass == recordClass )
-													   && x . Name . Equals ( cName . CanonicalName ) ) .
+												x => ( x . RecordType     == recordType )
+													 && ( x . RecordClass == recordClass )
+													 && x . Name . Equals ( cName . CanonicalName ) ) .
 										 OfType <T> ( ) .
 										 ToList ( ) ;
 				if ( records . Count > 0 )
@@ -286,8 +283,8 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 														  records ,
 														  state ,
 														  token ) ;
-					if ( ( recordsValidationResult    == DnsSecValidationResult . Bogus )
-						 || ( recordsValidationResult == DnsSecValidationResult . Indeterminate ) )
+					if ( recordsValidationResult is DnsSecValidationResult . Bogus
+						 or DnsSecValidationResult . Indeterminate )
 					{
 						throw new DnsSecValidationException ( "CNAME matching records could not be validated" ) ;
 					}
@@ -337,18 +334,16 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 
 			List <T> res = msg . AnswerRecords .
 								 Where (
-										x
-											=> ( x . RecordType     == recordType )
-											   && ( x . RecordClass == recordClass )
-											   && x . Name . Equals ( name ) ) .
+										x => ( x . RecordType     == recordType )
+											 && ( x . RecordClass == recordClass )
+											 && x . Name . Equals ( name ) ) .
 								 OfType <T> ( ) .
 								 ToList ( ) ;
 
 			validationResult =
 				await _validator . ValidateAsync ( name , recordType , recordClass , msg , res , state , token ) ;
 
-			if ( ( validationResult    == DnsSecValidationResult . Bogus )
-				 || ( validationResult == DnsSecValidationResult . Indeterminate ) )
+			if ( validationResult is DnsSecValidationResult . Bogus or DnsSecValidationResult . Indeterminate )
 			{
 				throw new DnsSecValidationException ( "Response records could not be validated" ) ;
 			}

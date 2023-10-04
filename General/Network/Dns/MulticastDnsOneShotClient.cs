@@ -40,15 +40,13 @@ namespace DreamRecorder . ToolBox . Network . Dns
 			{
 				maximumMessageSize = NetworkInterface . GetAllNetworkInterfaces ( ) .
 														Where (
-															   n
-																   => n . SupportsMulticast
-																	  && ( n . NetworkInterfaceType
-																		   != NetworkInterfaceType . Loopback )
-																	  && ( n . OperationalStatus
-																		   == OperationalStatus . Up )
-																	  && ( n . Supports (
-																			  NetworkInterfaceComponent .
-																				  IPv4 ) ) ) .
+															   n => n . SupportsMulticast
+																	&& ( n . NetworkInterfaceType
+																		 != NetworkInterfaceType . Loopback )
+																	&& ( n . OperationalStatus
+																		 == OperationalStatus . Up )
+																	&& ( n . Supports (
+																			NetworkInterfaceComponent . IPv4 ) ) ) .
 														Select ( n => n . GetIPProperties ( ) ) .
 														Min (
 															 p => Math . Min (

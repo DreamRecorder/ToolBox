@@ -71,14 +71,13 @@ namespace DreamRecorder . ToolBox . Network . Dns . Resolver
 			IEnumerable <DomainName> nameServers = zone . OfType <NsRecord> ( ) .
 														  Where ( x => x . Name == DomainName . Root ) .
 														  Select ( x => x . NameServer ) ;
-			RootServers = zone .
-						  Where ( x => x . RecordType == RecordType . A || x . RecordType == RecordType . Aaaa ) .
-						  Join (
-								nameServers ,
-								x => x . Name ,
-								x => x ,
-								( x , y ) => ( ( IAddressRecord )x ) . Address ) .
-						  ToList ( ) ;
+			RootServers = zone . Where ( x => x . RecordType is RecordType . A or RecordType . Aaaa ) .
+								 Join (
+									   nameServers ,
+									   x => x . Name ,
+									   x => x ,
+									   ( x , y ) => ( ( IAddressRecord )x ) . Address ) .
+								 ToList ( ) ;
 			RootKeys = zone . OfType <DnsKeyRecord> ( ) .
 							  Where ( x => ( x . Name == DomainName . Root ) && x . IsSecureEntryPoint ) .
 							  Select ( x => new DsRecord ( x , x . TimeToLive , DnsSecDigestType . Sha256 ) ) .

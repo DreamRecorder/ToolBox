@@ -44,7 +44,7 @@ namespace DreamRecorder . ToolBox . Network . Dns
 			get
 			{
 				OptRecord ednsOptions = EDnsOptions ;
-				return ( ednsOptions != null ) && ednsOptions . IsDnsSecOk ;
+				return ednsOptions is { IsDnsSecOk: true } ;
 			}
 			set
 			{

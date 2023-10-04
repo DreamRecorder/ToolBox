@@ -78,25 +78,22 @@ namespace DreamRecorder . ToolBox . Network . Dns
 			{
 				List <IPAddress> localIPs = NetworkInterface . GetAllNetworkInterfaces ( ) .
 															   Where (
-																	  n
-																		  => n . SupportsMulticast
-																			 && ( n . OperationalStatus
-																						 == OperationalStatus . Up )
-																			 && ( n . NetworkInterfaceType
-																						 != NetworkInterfaceType .
-																							 Loopback ) ) .
+																	  n => n . SupportsMulticast
+																		   && ( n . OperationalStatus
+																					  == OperationalStatus . Up )
+																		   && ( n . NetworkInterfaceType
+																					  != NetworkInterfaceType .
+																						  Loopback ) ) .
 															   SelectMany (
-																		   n
-																			   => n . GetIPProperties ( ) .
-																				   UnicastAddresses .
-																				   Select ( a => a . Address ) ) .
+																		   n => n . GetIPProperties ( ) .
+																			   UnicastAddresses .
+																			   Select ( a => a . Address ) ) .
 															   Where (
-																	  a
-																		  => ! IPAddress . IsLoopback ( a )
-																			 && ( ( a . AddressFamily
-																									 == AddressFamily .
-																										 InterNetwork )
-																						 || a . IsIPv6LinkLocal ) ) .
+																	  a => ! IPAddress . IsLoopback ( a )
+																		   && ( ( a . AddressFamily
+																								  == AddressFamily .
+																									  InterNetwork )
+																					  || a . IsIPv6LinkLocal ) ) .
 															   ToList ( ) ;
 
 				endpointInfos = _servers . SelectMany (
@@ -106,9 +103,8 @@ namespace DreamRecorder . ToolBox . Network . Dns
 														   {
 															   return localIPs .
 																	  Where (
-																			 l
-																				 => l . AddressFamily
-																					 == s . AddressFamily ) .
+																			 l => l . AddressFamily
+																				 == s . AddressFamily ) .
 																	  Select (
 																			  l => new DnsClientEndpointInfo
 																				  {
@@ -160,22 +156,18 @@ namespace DreamRecorder . ToolBox . Network . Dns
 		{
 			return NetworkInterface . GetAllNetworkInterfaces ( ) .
 									  Where (
-											 n
-												 => ( n . OperationalStatus == OperationalStatus . Up )
-													&& ( n . NetworkInterfaceType
-														 != NetworkInterfaceType . Loopback ) ) .
+											 n => ( n . OperationalStatus       == OperationalStatus . Up )
+												  && ( n . NetworkInterfaceType != NetworkInterfaceType . Loopback ) ) .
 									  SelectMany (
-												  n
-													  => n . GetIPProperties ( ) .
-															 UnicastAddresses . Select ( a => a . Address ) ) .
+												  n => n . GetIPProperties ( ) .
+														   UnicastAddresses . Select ( a => a . Address ) ) .
 									  Any (
-										   a
-											   => ! IPAddress . IsLoopback ( a )
-												  && ( a . AddressFamily == AddressFamily . InterNetworkV6 )
-												  && ! a . IsIPv6LinkLocal
-												  && ! a . IsIPv6Teredo
-												  && ! a . GetNetworkAddress ( 96 ) .
-														   Equals ( _ipvMappedNetworkAddress ) ) ;
+										   a => ! IPAddress . IsLoopback ( a )
+												&& ( a . AddressFamily == AddressFamily . InterNetworkV6 )
+												&& ! a . IsIPv6LinkLocal
+												&& ! a . IsIPv6Teredo
+												&& ! a . GetNetworkAddress ( 96 ) .
+														 Equals ( _ipvMappedNetworkAddress ) ) ;
 		}
 
 		private void PrepareAndBindUdpSocket ( DnsClientEndpointInfo endpointInfo , Socket udpClient )
@@ -955,8 +947,7 @@ namespace DreamRecorder . ToolBox . Network . Dns
 		{
 			if ( IsResponseValidationEnabled )
 			{
-				if ( ( result . ReturnCode    == ReturnCode . NoError )
-					 || ( result . ReturnCode == ReturnCode . NxDomain ) )
+				if ( result . ReturnCode is ReturnCode . NoError or ReturnCode . NxDomain )
 				{
 					if ( message . TransactionId != result . TransactionId )
 					{

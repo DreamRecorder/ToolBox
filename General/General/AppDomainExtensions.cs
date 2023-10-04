@@ -29,15 +29,13 @@ namespace DreamRecorder . ToolBox . General
 			return AppDomain . CurrentDomain . GetAssemblies ( ) .
 							   SelectMany ( assembly => assembly . GetTypes ( ) ) .
 							   SelectMany (
-										   type
-											   => type . GetProperties ( ) .
-														 Select (
-																 prop
-																	 => ( prop ,
-																			prop .
-																				GetCustomAttribute <
-																					TAttribute> ( ) ) ) .
-														 Where ( prop => prop . Item2 != null ) ) .
+										   type => type . GetProperties ( ) .
+														  Select (
+																  prop => ( prop ,
+																			  prop .
+																				  GetCustomAttribute <
+																					  TAttribute> ( ) ) ) .
+														  Where ( prop => prop . Item2 != null ) ) .
 							   Distinct ( ) .
 							   Where ( predicate . Invoke ) .
 							   ToList ( ) ;

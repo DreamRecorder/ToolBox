@@ -153,9 +153,8 @@ namespace DreamRecorder . ToolBox . General
 
 			List <PropertyInfo> result = type . GetProperties ( ) .
 												Where (
-													   prop
-														   => prop . GetCustomAttribute <IgnoreAttribute> ( )
-															  == null ) .
+													   prop => prop . GetCustomAttribute <IgnoreAttribute> ( )
+															   == null ) .
 												ToList ( ) ;
 
 			Comparison <PropertyInfo> comp = ( x , y )
@@ -208,8 +207,7 @@ namespace DreamRecorder . ToolBox . General
 
 			return type . GetSortedProperties ( ) .
 						  Select (
-								  prop
-									  => ( (PropertyInfo PropertyInfo , TAttribute Attribute) )
+								  prop => ( (PropertyInfo PropertyInfo , TAttribute Attribute) )
 									  ( prop , prop . GetCustomAttribute <TAttribute> ( true ) ) ) .
 						  ToList ( ) ;
 		}

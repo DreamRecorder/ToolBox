@@ -49,10 +49,9 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 			List <RrSigRecord> rrSigRecords = msg . AnswerRecords . OfType <RrSigRecord> ( ) .
 													Union ( msg . AuthorityRecords . OfType <RrSigRecord> ( ) ) .
 													Where (
-														   x
-															   => name . IsEqualOrSubDomainOf ( x . SignersName )
-																  && ( x . SignatureInception  <= DateTime . Now )
-																  && ( x . SignatureExpiration >= DateTime . Now ) ) .
+														   x => name . IsEqualOrSubDomainOf ( x . SignersName )
+																&& ( x . SignatureInception  <= DateTime . Now )
+																&& ( x . SignatureExpiration >= DateTime . Now ) ) .
 													ToList ( ) ;
 
 			if ( rrSigRecords . Count == 0 )
@@ -371,11 +370,9 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 				List <RrSigRecord> rrSigRecords = msg . AnswerRecords . OfType <RrSigRecord> ( ) .
 														Union ( msg . AuthorityRecords . OfType <RrSigRecord> ( ) ) .
 														Where (
-															   x
-																   => name . IsEqualOrSubDomainOf ( x . SignersName )
-																	  && ( x . SignatureInception <= DateTime . Now )
-																	  && ( x . SignatureExpiration
-																		   >= DateTime . Now ) ) .
+															   x => name . IsEqualOrSubDomainOf ( x . SignersName )
+																	&& ( x . SignatureInception  <= DateTime . Now )
+																	&& ( x . SignatureExpiration >= DateTime . Now ) ) .
 														ToList ( ) ;
 
 				if ( rrSigRecords . Count != 0 )
@@ -421,9 +418,8 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 			DnsSecValidationResult res = DnsSecValidationResult . Bogus ;
 
 			foreach ( RrSigRecord record in rrSigRecords . Where (
-																  x
-																	  => x . Name . Equals ( name )
-																		 && ( x . TypeCovered == recordType ) ) )
+																  x => x . Name . Equals ( name )
+																	   && ( x . TypeCovered == recordType ) ) )
 			{
 				res = await VerifyAsync ( record , resultRecords , recordClass , state , token ) ;
 				if ( res == DnsSecValidationResult . Signed )
@@ -481,8 +477,8 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 																		 state ,
 																		 token ) ;
 
-					if ( ( dsRecordResults . ValidationResult    == DnsSecValidationResult . Bogus )
-						 || ( dsRecordResults . ValidationResult == DnsSecValidationResult . Indeterminate ) )
+					if ( dsRecordResults . ValidationResult is DnsSecValidationResult . Bogus
+						 or DnsSecValidationResult . Indeterminate )
 					{
 						throw new DnsSecValidationException ( "DS records could not be retrieved" ) ;
 					}
@@ -514,8 +510,8 @@ namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
 																		 state ,
 																		 token ) ;
 
-				if ( ( dnsKeyRecordResults . ValidationResult    == DnsSecValidationResult . Bogus )
-					 || ( dnsKeyRecordResults . ValidationResult == DnsSecValidationResult . Indeterminate ) )
+				if ( dnsKeyRecordResults . ValidationResult is DnsSecValidationResult . Bogus
+					 or DnsSecValidationResult . Indeterminate )
 				{
 					throw new DnsSecValidationException ( "DNSKEY records could not be retrieved" ) ;
 				}

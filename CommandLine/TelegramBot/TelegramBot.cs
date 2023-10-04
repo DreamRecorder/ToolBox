@@ -224,13 +224,12 @@ namespace DreamRecorder . ToolBox . TelegramBot
 
 						TaskDispatcher . Dispatch (
 												   new OnetimeTask (
-																	( )
-																		=> routeTarget . Process (
-																		 message ,
-																		 args ?? new string [ ] { } ,
-																		 currentSession ,
-																		 isExactlyMatched ,
-																		 tag ) ,
+																	( ) => routeTarget . Process (
+																	 message ,
+																	 args ?? new string [ ] { } ,
+																	 currentSession ,
+																	 isExactlyMatched ,
+																	 tag ) ,
 																	routeTarget . Timeout ) ) ;
 					}
 				}
@@ -299,12 +298,11 @@ namespace DreamRecorder . ToolBox . TelegramBot
 
 						TaskDispatcher . Dispatch (
 												   new OnetimeTask (
-																	( )
-																		=> routeTarget . Process (
-																		 callbackQuery ,
-																		 args ,
-																		 currentSession ,
-																		 tag ) ,
+																	( ) => routeTarget . Process (
+																	 callbackQuery ,
+																	 args ,
+																	 currentSession ,
+																	 tag ) ,
 																	routeTarget . Timeout ) ) ;
 					}
 				}

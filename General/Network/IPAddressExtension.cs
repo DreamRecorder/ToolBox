@@ -33,40 +33,32 @@ namespace DreamRecorder . ToolBox . Network
 		{
 			if ( ipAddress == null )
 			{
-				throw new ArgumentNullException ( "ipAddress" ) ;
+				throw new ArgumentNullException ( nameof ( ipAddress ) ) ;
 			}
 
 			IPInterfaceProperties interfaceProperty = NetworkInterface . GetAllNetworkInterfaces ( ) .
 																		 Select ( n => n . GetIPProperties ( ) ) .
 																		 FirstOrDefault (
-																		  p
-																			  => p . UnicastAddresses . Any (
-																			   a
-																				   => a . Address . Equals (
-																					ipAddress ) ) ) ;
+																		  p => p . UnicastAddresses . Any (
+																		   a => a . Address . Equals (
+																			ipAddress ) ) ) ;
 
 			if ( interfaceProperty != null )
 			{
 				if ( ipAddress . AddressFamily == AddressFamily . InterNetwork )
 				{
 					IPv4InterfaceProperties property = interfaceProperty . GetIPv4Properties ( ) ;
-					if ( property != null )
-					{
-						return property . Index ;
-					}
+					return property . Index ;
 				}
 				else
 				{
 					IPv6InterfaceProperties property = interfaceProperty . GetIPv6Properties ( ) ;
-					if ( property != null )
-					{
-						return property . Index ;
-					}
+					return property . Index ;
 				}
 			}
 
 			throw new ArgumentOutOfRangeException (
-												   "ipAddress" ,
+												   nameof ( ipAddress ) ,
 												   "The given ip address is not configured on the local system" ) ;
 		}
 
@@ -80,7 +72,7 @@ namespace DreamRecorder . ToolBox . Network
 		{
 			if ( ipAddress == null )
 			{
-				throw new ArgumentNullException ( "ipAddress" ) ;
+				throw new ArgumentNullException ( nameof ( ipAddress ) ) ;
 			}
 
 			if ( netmask == null )
@@ -91,7 +83,7 @@ namespace DreamRecorder . ToolBox . Network
 			if ( ipAddress . AddressFamily != netmask . AddressFamily )
 			{
 				throw new ArgumentOutOfRangeException (
-													   "netmask" ,
+													   nameof ( netmask ) ,
 													   "Protocoll version of ipAddress and netmask do not match" ) ;
 			}
 
@@ -117,21 +109,23 @@ namespace DreamRecorder . ToolBox . Network
 		{
 			if ( ipAddress == null )
 			{
-				throw new ArgumentNullException ( "ipAddress" ) ;
+				throw new ArgumentNullException ( nameof ( ipAddress ) ) ;
 			}
 
 			if ( ( ipAddress . AddressFamily == AddressFamily . InterNetwork )
-				 && ( ( netmask < 0 ) || ( netmask > 32 ) ) )
+				 && netmask is < 0 or > 32 )
 			{
-				throw new ArgumentException ( "Netmask have to be in range of 0 to 32 on IPv4 addresses" , "netmask" ) ;
+				throw new ArgumentException (
+											 "Netmask have to be in range of 0 to 32 on IPv4 addresses" ,
+											 nameof ( netmask ) ) ;
 			}
 
 			if ( ( ipAddress . AddressFamily == AddressFamily . InterNetworkV6 )
-				 && ( ( netmask < 0 ) || ( netmask > 128 ) ) )
+				 && netmask is < 0 or > 128 )
 			{
 				throw new ArgumentException (
 											 "Netmask have to be in range of 0 to 128 on IPv6 addresses" ,
-											 "netmask" ) ;
+											 nameof ( netmask ) ) ;
 			}
 
 			byte [ ] ipAddressBytes = ipAddress . GetAddressBytes ( ) ;
@@ -165,7 +159,7 @@ namespace DreamRecorder . ToolBox . Network
 		{
 			if ( ipAddress == null )
 			{
-				throw new ArgumentNullException ( "ipAddress" ) ;
+				throw new ArgumentNullException ( nameof ( ipAddress ) ) ;
 			}
 
 			StringBuilder res = new StringBuilder ( ) ;
@@ -259,7 +253,7 @@ namespace DreamRecorder . ToolBox . Network
 		{
 			if ( ipAddress == null )
 			{
-				throw new ArgumentNullException ( "ipAddress" ) ;
+				throw new ArgumentNullException ( nameof ( ipAddress ) ) ;
 			}
 
 			if ( ipAddress . AddressFamily == AddressFamily . InterNetwork )
@@ -281,7 +275,7 @@ namespace DreamRecorder . ToolBox . Network
 		{
 			if ( ipAddress == null )
 			{
-				throw new ArgumentNullException ( "ipAddress" ) ;
+				throw new ArgumentNullException ( nameof ( ipAddress ) ) ;
 			}
 
 			byte [ ] addressBytes = ipAddress . GetAddressBytes ( ) ;

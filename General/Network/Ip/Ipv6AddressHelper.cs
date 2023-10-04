@@ -308,7 +308,7 @@ namespace DreamRecorder . ToolBox . Network . Ip
 			// if the last token was a prefix, check number of digits
 			//
 
-			if ( havePrefix && ( sequenceLength < 1 || sequenceLength > 2 ) )
+			if ( havePrefix && sequenceLength is < 1 or > 2 )
 			{
 				return false ;
 			}

@@ -29,10 +29,9 @@ public static class StartStopExtensions
 		List <PropertyInfo> readable = startStop . GetType ( ) .
 												   GetProperties ( ) .
 												   Where (
-														  p
-															  => p . CanRead
-																 && ( ! p . GetAccessors ( ) .
-																			Any ( m => m . IsStatic ) ) ) .
+														  p => p . CanRead
+															   && ( ! p . GetAccessors ( ) .
+																		  Any ( m => m . IsStatic ) ) ) .
 												   ToList ( ) ;
 
 		foreach ( PropertyInfo propertyInfo in readable )
@@ -62,10 +61,9 @@ public static class StartStopExtensions
 		List <PropertyInfo> readable = startStop . GetType ( ) .
 												   GetProperties ( ) .
 												   Where (
-														  p
-															  => p . CanRead
-																 && ( ! p . GetAccessors ( ) .
-																			Any ( m => m . IsStatic ) ) ) .
+														  p => p . CanRead
+															   && ( ! p . GetAccessors ( ) .
+																		  Any ( m => m . IsStatic ) ) ) .
 												   ToList ( ) ;
 
 		foreach ( PropertyInfo propertyInfo in readable )

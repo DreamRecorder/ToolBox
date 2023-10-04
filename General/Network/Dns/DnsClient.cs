@@ -99,9 +99,8 @@ namespace DreamRecorder . ToolBox . Network . Dns
 									if ( ! nic . GetIPProperties ( ) .
 												 UnicastAddresses .
 												 Any (
-													  x
-														  => x . Address . GetNetworkAddress ( 10 ) .
-																 Equals ( IPAddress . Parse ( "fec0::" ) ) ) )
+													  x => x . Address . GetNetworkAddress ( 10 ) .
+															   Equals ( IPAddress . Parse ( "fec0::" ) ) ) )
 									{
 										continue ;
 									}

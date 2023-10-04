@@ -33,7 +33,7 @@ public class ExternalAssetTagHelper : TagHelper
 	public override async Task ProcessAsync ( TagHelperContext context , TagHelperOutput output )
 	{
 		if ( PackageName == null
-		     || FileName == null )
+			 || FileName == null )
 		{
 			return ;
 		}

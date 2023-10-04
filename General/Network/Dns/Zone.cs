@@ -203,11 +203,10 @@ namespace DreamRecorder . ToolBox . Network . Dns
 				{
 					string [ ] parts = _lineSplitterRegex . Matches ( line ) .
 															Select (
-																	x
-																		=> x . Groups . Cast <Group> ( ) .
-																			   Last ( g => g . Success ) .
-																			   Value .
-																			   FromMasterfileLabelRepresentation ( ) ) .
+																	x => x . Groups . Cast <Group> ( ) .
+																			 Last ( g => g . Success ) .
+																			 Value .
+																			 FromMasterfileLabelRepresentation ( ) ) .
 															ToArray ( ) ;
 
 					if ( parts [ 0 ] . Equals ( "$origin" , StringComparison . InvariantCultureIgnoreCase ) )
@@ -536,14 +535,10 @@ namespace DreamRecorder . ToolBox . Network . Dns
 				Select (
 						x => new Tuple <DomainName , List <DnsRecordBase>> (
 																			x . Key ,
-																			x .
-																				OrderBy (
-																				 y
-																					 => y . RecordType
-																							 == RecordType . Soa
-																							 ? - 1
-																							 : ( int )y .
-																								 RecordType ) .
+																			x . OrderBy (
+																				 y => y . RecordType == RecordType . Soa
+																					 ? - 1
+																					 : ( int )y . RecordType ) .
 																				ToList ( ) ) ) .
 				OrderBy ( x => x . Item1 ) .
 				ToList ( ) ;
@@ -626,9 +621,8 @@ namespace DreamRecorder . ToolBox . Network . Dns
 			SoaRecord soaRecord = _records . OfType <SoaRecord> ( ) . First ( ) ;
 			List <DnsRecordBase> subZoneNameserver = _records .
 													 Where (
-															x
-																=> ( x . RecordType == RecordType . Ns )
-																   && ( x . Name    != Name ) ) .
+															x => ( x . RecordType == RecordType . Ns )
+																 && ( x . Name    != Name ) ) .
 													 ToList ( ) ;
 			List <DomainName> subZones = subZoneNameserver . Select ( x => x . Name ) . Distinct ( ) . ToList ( ) ;
 			List <DnsRecordBase> unsignedRecords =
@@ -639,14 +633,9 @@ namespace DreamRecorder . ToolBox . Network . Dns
 				unsignedRecords = unsignedRecords .
 								  Union (
 										 subZoneNameserver . Where (
-																	x
-																		=> ! _records . Any (
-																			y
-																				=> ( y . RecordType
-																								== RecordType . Ds )
-																					&& ( y . Name
-																								== x .
-																									Name ) ) ) ) .
+																	x => ! _records . Any (
+																		  y => ( y . RecordType == RecordType . Ds )
+																			   && ( y . Name    == x . Name ) ) ) ) .
 								  ToList ( ) ; // delegations without DS record
 			}
 
@@ -657,14 +646,10 @@ namespace DreamRecorder . ToolBox . Network . Dns
 				Select (
 						x => new Tuple <DomainName , List <DnsRecordBase>> (
 																			x . Key ,
-																			x .
-																				OrderBy (
-																				 y
-																					 => y . RecordType
-																							 == RecordType . Soa
-																							 ? - 1
-																							 : ( int )y .
-																								 RecordType ) .
+																			x . OrderBy (
+																				 y => y . RecordType == RecordType . Soa
+																					 ? - 1
+																					 : ( int )y . RecordType ) .
 																				ToList ( ) ) ) .
 				OrderBy ( x => x . Item1 ) .
 				ToList ( ) ;

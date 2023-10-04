@@ -179,8 +179,8 @@ namespace DreamRecorder . ToolBox . Network . Dns
 			get
 			{
 				return ( OptRecord )_additionalRecords ? . Find (
-																 record
-																	 => ( record . RecordType == RecordType . Opt ) ) ;
+																 record => ( record . RecordType
+																			 == RecordType . Opt ) ) ;
 			}
 			set
 			{
@@ -328,8 +328,7 @@ namespace DreamRecorder . ToolBox . Network . Dns
 				int currentPosition = 0 ;
 
 				// original mac if neccessary
-				if ( ( originalMac             != null )
-					 && ( originalMac . Length > 0 ) )
+				if ( originalMac is { Length: > 0 } )
 				{
 					EncodeUShort ( validationBuffer , ref currentPosition , ( ushort )originalMac . Length ) ;
 					EncodeByteArray ( validationBuffer , ref currentPosition , originalMac ) ;
@@ -803,9 +802,8 @@ namespace DreamRecorder . ToolBox . Network . Dns
 				}
 
 				KeyedHashAlgorithm hashAlgorithm = TSigAlgorithmHelper . GetHashAlgorithm ( TSigOptions . Algorithm ) ;
-				if ( ( hashAlgorithm                     != null )
-					 && ( TSigOptions . KeyData          != null )
-					 && ( TSigOptions . KeyData . Length > 0 ) )
+				if ( ( hashAlgorithm != null )
+					 && TSigOptions . KeyData is { Length: > 0 } )
 				{
 					hashAlgorithm . Key = TSigOptions . KeyData ;
 					newTSigMac = hashAlgorithm . ComputeHash ( messageData , messageOffset , tsigVariablesPosition ) ;

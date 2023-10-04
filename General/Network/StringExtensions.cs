@@ -26,14 +26,11 @@ namespace DreamRecorder . ToolBox . Network
 				char current = s [ i ] ;
 
 				if ( ! isLower
-					 && current >= 'A'
-					 && current <= 'Z' )
+					 && current is >= 'A' and <= 'Z' )
 				{
 					current = ( char )( current + 0x20 ) ;
 				}
-				else if ( isLower
-						  && current >= 'a'
-						  && current <= 'z' )
+				else if ( isLower && current is >= 'a' and <= 'z' )
 				{
 					current = ( char )( current - 0x20 ) ;
 				}

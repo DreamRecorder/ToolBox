@@ -46,7 +46,7 @@ public class Ipv4Address : IpAddress
 			}
 
 			if ( result == Ipv4AddressHelper . Invalid
-			     || end != address . Length )
+				 || end != address . Length )
 			{
 				throw new FormatException ( ) ;
 			}

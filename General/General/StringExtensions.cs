@@ -44,9 +44,8 @@ namespace DreamRecorder . ToolBox . General
 
 			return new string (
 							   normalizedInput . Where (
-														c
-															=> CharUnicodeInfo . GetUnicodeCategory ( c )
-															   != UnicodeCategory . NonSpacingMark ) .
+														c => CharUnicodeInfo . GetUnicodeCategory ( c )
+															 != UnicodeCategory . NonSpacingMark ) .
 												 ToArray ( ) ) . Normalize ( NormalizationForm . FormC ) ;
 		}
 

@@ -61,13 +61,11 @@ namespace DreamRecorder . ToolBox . Network
 			{
 				int value = t ;
 
-				if ( value    >= 0x30
-					 && value <= 0x39 )
+				if ( value is >= 0x30 and <= 0x39 )
 				{
 					value -= 0x30 ;
 				}
-				else if ( value    >= 0x41
-						  && value <= 0x46 )
+				else if ( value is >= 0x41 and <= 0x46 )
 				{
 					value -= 0x37 ;
 				}
