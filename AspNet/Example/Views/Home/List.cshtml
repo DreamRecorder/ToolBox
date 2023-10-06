@@ -1,0 +1,41 @@
+﻿@using DreamRecorder.ToolBox.AspNet.CommonComponent.Models;
+@using DreamRecorder.ToolBox.AspNet.Example.Models;
+
+
+@model ListModel
+
+@{
+	ViewBag.Title = "Example List";
+	Layout = "_Layout";
+	PageNavigationModel pageNavigatorModel = new PageNavigationModel { Action = "List" , CurrentPage = Model.CurrentPage , LastPage = Model.LastPage , ItemPerPage = Model.AcquiredCount , };
+	PageTitleModel pageTitleModel = new PageTitleModel { Title = $"Item <small class=\"text-muted\">{Model.StartIndex} to {Model.StartIndex + Model.ActualCount}</small>" , Buttons = PageTitleModel.AddButtons , };
+
+}
+
+<partial name="__TitleWithButton" model="pageTitleModel "/>
+
+<br/>
+
+<partial name="__PageNavigator" model="pageNavigatorModel "/>
+
+<br/>
+
+<table class="table">
+	<thead>
+	<tr>
+		<th scope="col">Content</th>
+
+	</tr>
+	</thead>
+	<tbody>
+	@foreach ( Guid guid in Model.Items )
+	{
+		<tr>
+			<td>@( guid )</td>
+		</tr>
+	}
+	</tbody>
+</table>
+<br/>
+
+<partial name="__PageNavigator" model="pageNavigatorModel "/>

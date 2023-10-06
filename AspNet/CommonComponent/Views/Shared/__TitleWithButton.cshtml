@@ -1,0 +1,31 @@
+﻿@using DreamRecorder.ToolBox.General;
+@using DreamRecorder.ToolBox.CommandLine;
+@using DreamRecorder.ToolBox.AspNet.CommonComponent;
+@using Microsoft.Extensions.Primitives;
+@using System.Net.Sockets;
+@using DreamRecorder.ToolBox.AspNet.General;
+@using DreamRecorder.ToolBox.AspNet.CommonComponent.Models;
+
+@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, DreamRecorder.Sayings.TagHelperProvider
+@addTagHelper *, DreamRecorder.ToolBox.AspNet.CommonComponent
+
+@model PageTitleModel
+
+<div class="row">
+	<div class="col">
+		<h2>@( Html.Raw ( Model.Title ) )</h2>
+	</div>
+	<div class="col-auto">
+		<div class="text-end align-self-center">
+
+			@foreach ( IconButtonModel buttonModel in Model.Buttons )
+			{
+				<a class="btn btn-@( buttonModel.BootstrapVariation.ToCssClassPostfix ( ) ) action-btn" asp-controller="@(buttonModel.Controller ?? Model.Controller)" asp-action="@(buttonModel.Action)" asp-route-guid="@( buttonModel.IncludeGuid ? Model.Guid : null )">
+					<i class="bi bi-@( buttonModel.Icon )"></i>
+				</a>
+			}
+
+		</div>
+	</div>
+</div>

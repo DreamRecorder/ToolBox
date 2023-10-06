@@ -5,23 +5,10 @@ using System . Linq ;
 
 namespace DreamRecorder . ToolBox . AspNet . General ;
 
-public enum BootstrapVariation : byte
+public static class BootstrapVariationExtensions
 {
 
-	Primary ,
-
-	Secondary ,
-
-	Success ,
-
-	Danger ,
-
-	Warning ,
-
-	Info ,
-
-	Light ,
-
-	Dark ,
+	public static string ToCssClassPostfix ( this BootstrapVariation variation )
+		=> variation . ToString ( ) . ToLower ( ) ;
 
 }
