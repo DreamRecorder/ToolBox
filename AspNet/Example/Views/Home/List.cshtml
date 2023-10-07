@@ -8,11 +8,18 @@
 	ViewBag.Title = "Example List";
 	Layout = "_Layout";
 	PageNavigationModel pageNavigatorModel = new PageNavigationModel { Action = "List" , CurrentPage = Model.CurrentPage , LastPage = Model.LastPage , ItemPerPage = Model.AcquiredCount , };
-	PageTitleModel pageTitleModel = new PageTitleModel { Title = $"Item <small class=\"text-muted\">{Model.StartIndex} to {Model.StartIndex + Model.ActualCount}</small>" , Buttons = PageTitleModel.AddButtons , };
+	PageTitleModel pageTitleModelEmpty = new PageTitleModel { Title = $"Item <small class=\"text-muted\">{Model.StartIndex} to {Model.StartIndex + Model.ActualCount}</small>", };
+
+	PageTitleModel pageTitleModelAdd = new PageTitleModel { Title = $"Item <small class=\"text-muted\">{Model.StartIndex} to {Model.StartIndex + Model.ActualCount}</small>", Buttons = PageTitleModel.AddButtons, };
+	PageTitleModel pageTitleModelAddDelete = new PageTitleModel { Title = $"Item <small class=\"text-muted\">{Model.StartIndex} to {Model.StartIndex + Model.ActualCount}</small>", Buttons = PageTitleModel.AddAndDeleteButtons, };
+	PageTitleModel pageTitleModelAddRestore = new PageTitleModel { Title = $"Item <small class=\"text-muted\">{Model.StartIndex} to {Model.StartIndex + Model.ActualCount}</small>", Buttons = PageTitleModel.AddAndRestoreButtons, };
 
 }
 
-<partial name="__TitleWithButton" model="pageTitleModel "/>
+<partial name="__TitleWithButton" model="pageTitleModelEmpty"/>
+<partial name="__TitleWithButton" model="pageTitleModelAdd" />
+<partial name="__TitleWithButton" model="pageTitleModelAddDelete" />
+<partial name="__TitleWithButton" model="pageTitleModelAddRestore" />
 
 <br/>
 
