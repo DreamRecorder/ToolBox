@@ -49,7 +49,7 @@ namespace DreamRecorder . ToolBox . General
 												 ToArray ( ) ) . Normalize ( NormalizationForm . FormC ) ;
 		}
 
-		public static string [ ] SplitByCamelCase ( [NotNull] string value )
+		public static string [ ] SplitByCamelCase ( [NotNull] this string value )
 		{
 			if ( value == null )
 			{
