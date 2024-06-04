@@ -7,8 +7,8 @@
 @using DreamRecorder.ToolBox.AspNet.CommonComponent.Models;
 
 @addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
-@addTagHelper *, DreamRecorder.Sayings.TagHelperProvider
-@addTagHelper *, DreamRecorder.ToolBox.AspNet.CommonComponent
+@addTagHelper *,DreamRecorder.Sayings.TagHelperProvider
+@addTagHelper *,DreamRecorder.ToolBox.AspNet.CommonComponent
 
 @model PageNavigationModel
 @{
@@ -20,7 +20,6 @@
 	int left = Math.Max(1, Model.CurrentPage - (Model.PageCount / 2));
 	int right = Math.Min(Model.LastPage, left + Model.PageCount - 1);
 	left = Math.Max(1, right - Model.PageCount + 1);
-
 }
 
 <nav aria-label="Page Navigation">
