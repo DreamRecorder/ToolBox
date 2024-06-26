@@ -1,65 +1,66 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
-using System . Threading . Tasks ;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-using JetBrains . Annotations ;
+using JetBrains.Annotations;
 
-using Microsoft . AspNetCore . Razor . TagHelpers ;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace DreamRecorder . ToolBox . AspNet . General ;
+namespace DreamRecorder.ToolBox.AspNet.General;
 
-[HtmlTargetElement ( Stylesheet )]
-[HtmlTargetElement ( Script )]
+[HtmlTargetElement(Stylesheet)]
+[HtmlTargetElement(Script)]
 [PublicAPI]
 public class ExternalAssetTagHelper : TagHelper
 {
 
-	public string FileName { get ; set ; }
+	public string FileName { get; set; }
 
-	public string PackageName { get ; set ; }
+	public string PackageName { get; set; }
 
-	public string Version { get ; set ; }
+	public string Version { get; set; }
 
-	public IWebAssetProvider WebAssetProvider { get ; }
+	public IWebAssetProvider WebAssetProvider { get; }
 
-	public ExternalAssetTagHelper ( IWebAssetProvider webAssetProvider ) => WebAssetProvider = webAssetProvider ;
+	public ExternalAssetTagHelper(IWebAssetProvider webAssetProvider) => WebAssetProvider = webAssetProvider;
 
-	public const string Stylesheet = "stylesheet" ;
+	public const string Stylesheet = "stylesheet";
 
-	public const string Script = "script" ;
+	public const string Script = "script";
 
-	public override async Task ProcessAsync ( TagHelperContext context , TagHelperOutput output )
+	public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
 	{
-		if ( PackageName == null
-			 || FileName == null )
+		if (PackageName == null
+			 || FileName == null)
 		{
-			return ;
+			return;
 		}
 
-		string uri = await WebAssetProvider . GetFileUrl ( PackageName , FileName , Version ) ;
+		string uri = await WebAssetProvider.GetFileUrl(PackageName, FileName, Version);
 
-		switch ( context . TagName )
+		switch (context.TagName)
 		{
-			case Stylesheet :
-			{
-				output . TagName = "link" ;
-				output . TagMode = TagMode . SelfClosing ;
-				output . Attributes . SetAttribute ( "rel" ,  Stylesheet ) ;
-				output . Attributes . SetAttribute ( "href" , uri ) ;
-				break ;
-			}
-			case Script :
-			{
-				output . TagName = Script ;
-				output . TagMode = TagMode . StartTagAndEndTag ;
-				output . Attributes . SetAttribute ( "src" , uri ) ;
-				break ;
-			}
+			case Stylesheet:
+				{
+					output.TagName = "link";
+					output.TagMode = TagMode.SelfClosing;
+					output.Attributes.SetAttribute("rel", Stylesheet);
+					output.Attributes.SetAttribute("href", uri);
+					break;
+				}
+			case Script:
+				{
+					output.TagName = Script;
+					output.TagMode = TagMode.StartTagAndEndTag;
+					output.Attributes.SetAttribute("src", uri);
+					break;
+				}
 		}
 
-		output . Attributes . SetAttribute ( "crossorigin" , "anonymous" ) ;
+		output.Attributes.SetAttribute("crossorigin", "anonymous");
+		output.Attributes.SetAttribute("referrerpolicy", "no-referrer");
 	}
 
 }
