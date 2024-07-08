@@ -1,172 +1,242 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Concurrent ;
-using System . Collections . Generic ;
-using System . Linq ;
-using System . Threading ;
-using System . Threading . Tasks ;
+﻿using System;
+using System.Collections;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
-using Microsoft . Extensions . DependencyInjection ;
-using Microsoft . Extensions . Logging ;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
-namespace DreamRecorder . ToolBox . General
+namespace DreamRecorder.ToolBox.General
 {
 
 	public class TaskDispatcher : ITaskDispatcher
 	{
 
-		private LinkedList <(Task RunningTask , ITask Task)> RunningTasks { get ; } =
-			new LinkedList <(Task RunningTask , ITask Task)> ( ) ;
+		private LinkedList<(Task RunningTask, ITask Task)> RunningTasks { get; } =
+			new LinkedList<(Task RunningTask, ITask Task)>();
 
-		private Thread RunningThread { get ; set ; }
+		private Thread RunningThread { get; set; }
 
-		public ConcurrentQueue <ITask> [ ] TaskQueues { get ; }
+		public ConcurrentQueue<ITask>[] TaskQueues { get; }
 
-		public void Dispatch ( ITask task )
+		public int ConcurrentTaskLimit { get; set; } = int.MaxValue;
+
+		public void Dispatch(ITask task)
 		{
-			if ( task == null )
+			if (task == null)
 			{
-				throw new ArgumentNullException ( nameof ( task ) ) ;
+				throw new ArgumentNullException(nameof(task));
 			}
 
-			TaskQueues [ ( int )task . Priority ] . Enqueue ( task ) ;
+			TaskQueues[(int)task.Priority].Enqueue(task);
 		}
 
-		public bool IsRunning { get ; private set ; }
+		public bool IsRunning { get; private set; }
 
-		public void Start ( )
+		public void Start()
 		{
-			lock ( this )
+			lock (this)
 			{
-				if ( ! IsRunning )
+				if (!IsRunning)
 				{
-					IsRunning     = true ;
-					RunningThread = new Thread ( Execute ) ;
-					RunningThread . Start ( ) ;
+					IsRunning = true;
+					RunningThread = new Thread(Execute);
+					RunningThread.Start();
 				}
 			}
 		}
 
-		public void Stop ( )
+		public void StopAndWaitQueuedTask()
 		{
-			lock ( this )
+			lock (this)
 			{
-				IsRunning = false ;
+				Stop();
 
-				RunningThread ? . Join ( ) ;
+				List<ITask> readyTasks = TaskQueues.SelectMany(queue => queue.Where(task => task.Status == TaskStatus.Ready)).ToList();
 
-				lock ( RunningTasks )
+				lock (RunningTasks)
 				{
-					Task . WaitAll ( RunningTasks . Select ( taskPair => taskPair . RunningTask ) . ToArray ( ) ) ;
-
-					RunningTasks . Clear ( ) ;
-				}
-			}
-		}
-
-		private void Execute ( )
-		{
-			while ( IsRunning )
-			{
-				foreach ( ConcurrentQueue <ITask> taskQueue in TaskQueues )
-				{
-					if ( taskQueue . TryDequeue ( out ITask task ) )
+					foreach (ITask task in readyTasks)
 					{
-						if ( task . Status == TaskStatus . Ready
-							 && RunningTasks . All ( taskPair => taskPair . Task != task ) )
+						while (true)
 						{
-							Task runningTask = Task . Run (
-														   ( ) =>
-														   {
-															   try
-															   {
-																   task . Invoke ( this ) ;
-															   }
-															   catch ( Exception e )
-															   {
-																   Logger . LogWarning (
-																	e ,
-																	"Task {0} throw unhandled exception." ,
-																	task . GetType ( ) . Name ) ;
-															   }
-														   } ) ;
-
-							lock ( RunningTasks )
+							if (RunningTasks.Count < ConcurrentTaskLimit)
 							{
-								RunningTasks . AddLast ( ( runningTask , task ) ) ;
+								RunTask(task);
+								break;
 							}
-						}
-
-						if ( task . Status != TaskStatus . Finished )
-						{
-							TaskQueues [ ( int )task . Priority ] . Enqueue ( task ) ;
+							else
+							{
+								CleanRunningTask();
+								Thread.Yield();
+							}
 						}
 					}
 				}
 
-				lock ( RunningTasks )
+				IsRunning = false;
+				RunningThread?.Join();
+
+			}
+		}
+
+		public void Stop()
+		{
+			lock (this)
+			{
+				IsRunning = false;
+
+				RunningThread?.Join();
+
+				lock (RunningTasks)
 				{
-					LinkedListNode <(Task RunningTask , ITask task)> currentNode = RunningTasks . First ;
+					Task.WaitAll(RunningTasks.Select(taskPair => taskPair.RunningTask).ToArray());
 
-					while ( currentNode != null )
+					RunningTasks.Clear();
+				}
+			}
+		}
+
+		private void Execute()
+		{
+			while (IsRunning)
+			{
+				int enqueuedCount = 0;
+				int feasibleCount = 0;
+
+				lock (RunningTasks)
+				{
+					feasibleCount = ConcurrentTaskLimit - RunningTasks.Count;
+				}
+
+				if (feasibleCount > 0)
+				{
+					foreach (ConcurrentQueue<ITask> taskQueue in TaskQueues)
 					{
-						LinkedListNode <(Task RunningTask , ITask task)> nextNode = currentNode . Next ;
-
-						Task task = currentNode . Value . RunningTask ;
-
-						switch ( task . Status )
+						while (taskQueue.TryDequeue(out ITask task))
 						{
-							case System . Threading . Tasks . TaskStatus . Canceled :
-							case System . Threading . Tasks . TaskStatus . Faulted :
-							case System . Threading . Tasks . TaskStatus . RanToCompletion :
+							if (task.Status == TaskStatus.Ready && feasibleCount - enqueuedCount > 0)
 							{
-								RunningTasks . Remove ( currentNode ) ;
-								break ;
+								RunTask(task);
+								enqueuedCount++;
 							}
 
-							case System . Threading . Tasks . TaskStatus . Created :
-							case System . Threading . Tasks . TaskStatus . WaitingForActivation :
+							if (task.Status != TaskStatus.Finished)
 							{
-								task . Start ( ) ;
-								break ;
+								TaskQueues[(int)task.Priority].Enqueue(task);
+							}
+
+							if (feasibleCount == enqueuedCount)
+							{
+								break;
 							}
 						}
-
-						currentNode = nextNode ;
 					}
 				}
 
-				Thread . Yield ( ) ;
-				Thread . Sleep ( 1 ) ;
+				CleanRunningTask();
+
+				if (enqueuedCount == 0)
+				{
+					Thread.Yield();
+				}
 			}
+		}
+
+		void RunTask(ITask task)
+		{
+			lock (RunningTasks)
+			{
+				if (RunningTasks.All(taskPair => taskPair.Task != task))
+				{
+					Task runningTask = Task.Run(
+												   () =>
+												   {
+													   try
+													   {
+														   task.Invoke(this);
+													   }
+													   catch (Exception e)
+													   {
+														   Logger.LogWarning(
+															e,
+															"Task {0} throw unhandled exception.",
+															task.GetType().Name);
+													   }
+												   });
+
+					RunningTasks.AddLast((runningTask, task));
+				}
+			}
+		}
+
+		void CleanRunningTask()
+		{
+
+			lock (RunningTasks)
+			{
+				LinkedListNode<(Task RunningTask, ITask task)> currentNode = RunningTasks.First;
+
+				while (currentNode != null)
+				{
+					LinkedListNode<(Task RunningTask, ITask task)> nextNode = currentNode.Next;
+
+					Task task = currentNode.Value.RunningTask;
+
+					switch (task.Status)
+					{
+						case System.Threading.Tasks.TaskStatus.Canceled:
+						case System.Threading.Tasks.TaskStatus.Faulted:
+						case System.Threading.Tasks.TaskStatus.RanToCompletion:
+							{
+								RunningTasks.Remove(currentNode);
+								break;
+							}
+
+						case System.Threading.Tasks.TaskStatus.Created:
+						case System.Threading.Tasks.TaskStatus.WaitingForActivation:
+							{
+								task.Start();
+								break;
+							}
+					}
+
+					currentNode = nextNode;
+				}
+			}
+
 		}
 
 		[Prepare]
-		public static void Prepare ( )
+		public static void Prepare()
 		{
-			StaticServiceProvider . ServiceCollection . AddSingleton <ITaskDispatcher , TaskDispatcher> ( ) ;
+			StaticServiceProvider.ServiceCollection.AddSingleton<ITaskDispatcher, TaskDispatcher>();
 		}
 
 		#region Logger
 
 		private static ILogger Logger
-			=> _logger ??= StaticServiceProvider . Provider . GetService <ILoggerFactory> ( ) .
-												   CreateLogger <ScheduledTask> ( ) ;
+			=> _logger ??= StaticServiceProvider.Provider.GetService<ILoggerFactory>().
+												   CreateLogger<ScheduledTask>();
 
-		private static ILogger _logger ;
+		private static ILogger _logger;
 
-		public TaskDispatcher ( )
+		#endregion
+
+		public TaskDispatcher()
 		{
-			int queueCount = Enum . GetValues ( typeof ( TaskPriority ) ) . Cast <int> ( ) . Max ( ) + 1 ;
+			int queueCount = Enum.GetValues(typeof(TaskPriority)).Cast<int>().Max() + 1;
 
-			TaskQueues = new ConcurrentQueue <ITask>[ queueCount ] ;
-			for ( int i = 0 ; i < queueCount ; i++ )
+			TaskQueues = new ConcurrentQueue<ITask>[queueCount];
+			for (int i = 0; i < queueCount; i++)
 			{
-				TaskQueues [ i ] = new ConcurrentQueue <ITask> ( ) ;
+				TaskQueues[i] = new ConcurrentQueue<ITask>();
 			}
 		}
 
-		#endregion
 
 	}
 
