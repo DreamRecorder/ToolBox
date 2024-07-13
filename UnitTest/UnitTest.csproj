@@ -6,6 +6,10 @@
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
 		<PackageReference Include="MSTest.TestAdapter" Version="3.4.3" />
 		<PackageReference Include="MSTest.TestFramework" Version="3.4.3" />
+		<PackageReference Include="coverlet.collector" Version="6.0.2">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -21,6 +25,10 @@
 		<ProjectReference Include="..\General\Network\Network.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+	</ItemGroup>
+
 	<PropertyGroup Label="Globals">
 		<SccAuxPath>SAK</SccAuxPath>
 		<SccLocalPath>SAK</SccLocalPath>
@@ -31,6 +39,7 @@
 	<PropertyGroup>
 		<AssemblyName>DreamRecorder.ToolBox.UnitTest</AssemblyName>
 		<IsPackable>false</IsPackable>
+		<IsTestProject>true</IsTestProject>
 		<RootNamespace>DreamRecorder.ToolBox.UnitTest</RootNamespace>
 	</PropertyGroup>
 
