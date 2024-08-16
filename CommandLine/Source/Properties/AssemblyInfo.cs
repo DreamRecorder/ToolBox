@@ -1,13 +1,13 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
-using System . Reflection ;
-using System . Runtime . InteropServices ;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
 
-using DreamRecorder . ToolBox . General ;
+using DreamRecorder.ToolBox.General;
 
-using JetBrains . Annotations ;
+using JetBrains.Annotations;
 
 [assembly : AssemblyTrademark ( "Dream Recorder Toolbox" )]
 [assembly : ComVisible ( true )]

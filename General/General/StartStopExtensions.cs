@@ -1,12 +1,12 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
-using System . Reflection ;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
-using JetBrains . Annotations ;
+using JetBrains.Annotations;
 
-namespace DreamRecorder . ToolBox . General ;
+namespace DreamRecorder.ToolBox.General;
 
 public static class StartStopExtensions
 {
@@ -15,7 +15,7 @@ public static class StartStopExtensions
 	{
 		foreach ( IStartStop startStop in startStops )
 		{
-			startStop . Start ( ) ;
+			startStop.Start ( );
 		}
 	}
 
@@ -23,22 +23,21 @@ public static class StartStopExtensions
 	{
 		if ( startStop == null )
 		{
-			throw new ArgumentNullException ( nameof ( startStop ) ) ;
+			throw new ArgumentNullException ( nameof ( startStop ) );
 		}
 
-		List <PropertyInfo> readable = startStop . GetType ( ) .
-												   GetProperties ( ) .
-												   Where (
-														  p => p . CanRead
-															   && ( ! p . GetAccessors ( ) .
-																		  Any ( m => m . IsStatic ) ) ) .
-												   ToList ( ) ;
+		List <PropertyInfo> readable = startStop.GetType ( ).
+												 GetProperties ( ).
+												 Where (
+														p => p.CanRead
+															 && ( ! p.GetAccessors ( ).Any ( m => m.IsStatic ) ) ).
+												 ToList ( );
 
 		foreach ( PropertyInfo propertyInfo in readable )
 		{
-			if ( ExceptionHelper . IgnoreException ( ( ) => propertyInfo . GetValue ( startStop ) ) is IStartStop ss )
+			if ( ExceptionHelper.IgnoreException ( ( ) => propertyInfo.GetValue ( startStop ) ) is IStartStop ss )
 			{
-				ss . Start ( ) ;
+				ss.Start ( );
 			}
 		}
 	}
@@ -47,7 +46,7 @@ public static class StartStopExtensions
 	{
 		foreach ( IStartStop startStop in startStops )
 		{
-			startStop . Stop ( ) ;
+			startStop.Stop ( );
 		}
 	}
 
@@ -55,22 +54,21 @@ public static class StartStopExtensions
 	{
 		if ( startStop == null )
 		{
-			throw new ArgumentNullException ( nameof ( startStop ) ) ;
+			throw new ArgumentNullException ( nameof ( startStop ) );
 		}
 
-		List <PropertyInfo> readable = startStop . GetType ( ) .
-												   GetProperties ( ) .
-												   Where (
-														  p => p . CanRead
-															   && ( ! p . GetAccessors ( ) .
-																		  Any ( m => m . IsStatic ) ) ) .
-												   ToList ( ) ;
+		List <PropertyInfo> readable = startStop.GetType ( ).
+												 GetProperties ( ).
+												 Where (
+														p => p.CanRead
+															 && ( ! p.GetAccessors ( ).Any ( m => m.IsStatic ) ) ).
+												 ToList ( );
 
 		foreach ( PropertyInfo propertyInfo in readable )
 		{
-			if ( ExceptionHelper . IgnoreException ( ( ) => propertyInfo . GetValue ( startStop ) ) is IStartStop ss )
+			if ( ExceptionHelper.IgnoreException ( ( ) => propertyInfo.GetValue ( startStop ) ) is IStartStop ss )
 			{
-				ss . Stop ( ) ;
+				ss.Stop ( );
 			}
 		}
 	}

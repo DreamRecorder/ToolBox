@@ -1,16 +1,13 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace DreamRecorder . ToolBox . AspNet . AlertHelper
+namespace DreamRecorder.ToolBox.AspNet.AlertHelper;
+
+public static class Constants
 {
 
-	public static class Constants
-	{
-
-		public const string Alerts = nameof ( Alerts ) ;
-
-	}
+	public const string Alerts = nameof ( Alerts );
 
 }

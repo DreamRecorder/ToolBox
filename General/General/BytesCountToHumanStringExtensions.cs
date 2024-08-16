@@ -3,53 +3,46 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DreamRecorder.ToolBox.General
+namespace DreamRecorder.ToolBox.General;
+
+public static class BytesCountToHumanStringExtensions
 {
 
-    public static class BytesCountToHumanStringExtensions
-    {
+	private static readonly string [ ] Suffixes =
+	{
+		"B" , "KiB" , "MiB" , "GiB" , "TiB" , "PiB" , "EiB" , "ZiB" , "YiB" ,
+	};
 
-        private static readonly string[] Suffixes =
-        {
-            "B" , "KiB" , "MiB" , "GiB" , "TiB" , "PiB" , "EiB" , "ZiB" , "YiB" ,
-        };
+	public static string BytesCountToHumanString ( this long bytesCount )
+	{
+		if ( bytesCount == 0 )
+		{
+			return $"0{Suffixes.First ( )}";
+		}
 
-        public static string BytesCountToHumanString(this long bytesCount)
-        {
-            if (bytesCount == 0)
-            {
-                return $"0{Suffixes.First()}";
-            }
+		long bytes = Math.Abs ( bytesCount );
 
-            long bytes = Math.Abs(bytesCount);
+		int place = Math.Min ( Convert.ToInt32 ( Math.Floor ( Math.Log ( bytes , 1024 ) ) ) , Suffixes.Length - 1 );
 
-            int place = Math.Min(
-                                    Convert.ToInt32(Math.Floor(Math.Log(bytes, 1024))),
-                                    Suffixes.Length - 1);
+		double num = Math.Round ( bytes / Math.Pow ( 1024 , place ) , 1 );
 
-            double num = Math.Round(bytes / Math.Pow(1024, place), 1);
+		return $"{Math.Sign ( bytesCount ) * num}{Suffixes [ place ]}";
+	}
 
-            return $"{Math.Sign(bytesCount) * num}{Suffixes[place]}";
-        }
+	public static string BytesCountToHumanString ( this ulong bytesCount )
+	{
+		if ( bytesCount == 0 )
+		{
+			return $"0{Suffixes.First ( )}";
+		}
 
-        public static string BytesCountToHumanString(this ulong bytesCount)
-        {
-            if (bytesCount == 0)
-            {
-                return $"0{Suffixes.First()}";
-            }
+		long bytes = ( long )bytesCount;
 
-            long bytes = (long)bytesCount;
+		int place = Math.Min ( Convert.ToInt32 ( Math.Floor ( Math.Log ( bytes , 1024 ) ) ) , Suffixes.Length - 1 );
 
-            int place = Math.Min(
-                                    Convert.ToInt32(Math.Floor(Math.Log(bytes, 1024))),
-                                    Suffixes.Length - 1);
+		double num = Math.Round ( bytes / Math.Pow ( 1024 , place ) , 1 );
 
-            double num = Math.Round(bytes / Math.Pow(1024, place), 1);
-
-            return $"{num}{Suffixes[place]}";
-        }
-
-    }
+		return $"{num}{Suffixes [ place ]}";
+	}
 
 }

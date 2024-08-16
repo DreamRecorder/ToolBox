@@ -1,39 +1,32 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
-using JetBrains . Annotations ;
+using JetBrains.Annotations;
 
-namespace DreamRecorder . ToolBox . General
+namespace DreamRecorder.ToolBox.General;
+
+[PublicAPI]
+public static class EventRandomExtensions
 {
 
-	[PublicAPI]
-	public static class EventRandomExtensions
+	public static bool InvokeEvent ( this IRandom random , NormalValue possibility )
 	{
-
-		public static bool InvokeEvent ( this IRandom random , NormalValue possibility )
+		if ( random == null )
 		{
-			if ( random == null )
-			{
-				throw new ArgumentNullException ( nameof ( random ) ) ;
-			}
-
-			return random . NextNormalValue ( ) <= possibility ;
+			throw new ArgumentNullException ( nameof ( random ) );
 		}
 
-		public static NormalValue NextNormalValue ( this IRandom random )
-			=> random . Next ( NormalValue . MaxValue + 1 ) ;
-
-		public static NormalValue NextNormalValue (
-			this IRandom random ,
-			NormalValue  lowerBound ,
-			NormalValue  higherBound )
-			=> random . Next ( lowerBound , higherBound + 1 ) ;
-
-		public static NormalValue NextNormalValue ( this IRandom random , NormalValue lowerBound )
-			=> random . Next ( lowerBound , NormalValue . MaxValue + 1 ) ;
-
+		return random.NextNormalValue ( ) <= possibility;
 	}
+
+	public static NormalValue NextNormalValue ( this IRandom random ) => random.Next ( NormalValue.MaxValue + 1 );
+
+	public static NormalValue NextNormalValue ( this IRandom random , NormalValue lowerBound , NormalValue higherBound )
+		=> random.Next ( lowerBound , higherBound + 1 );
+
+	public static NormalValue NextNormalValue ( this IRandom random , NormalValue lowerBound )
+		=> random.Next ( lowerBound , NormalValue.MaxValue + 1 );
 
 }

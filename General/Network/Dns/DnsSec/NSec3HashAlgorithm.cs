@@ -1,55 +1,52 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
+namespace DreamRecorder.ToolBox.Network.Dns.DnsSec;
+
+/// <summary>
+///     DNSSEC algorithm type
+/// </summary>
+public enum NSec3HashAlgorithm : byte
 {
 
 	/// <summary>
-	///     DNSSEC algorithm type
+	///     <para>RSA MD5</para>
+	///     <para>
+	///         Defined in
+	///         <see cref="!:http://tools.ietf.org/html/rfc5155">RFC 5155</see>
+	///     </para>
 	/// </summary>
-	public enum NSec3HashAlgorithm : byte
+	Sha1 = 1 ,
+
+}
+
+internal static class NSec3HashAlgorithmHelper
+{
+
+	public static int GetPriority ( this NSec3HashAlgorithm algorithm )
 	{
+		switch ( algorithm )
+		{
+			case NSec3HashAlgorithm.Sha1 :
+				return 1;
 
-		/// <summary>
-		///     <para>RSA MD5</para>
-		///     <para>
-		///         Defined in
-		///         <see cref="!:http://tools.ietf.org/html/rfc5155">RFC 5155</see>
-		///     </para>
-		/// </summary>
-		Sha1 = 1 ,
-
+			default :
+				throw new NotSupportedException ( );
+		}
 	}
 
-	internal static class NSec3HashAlgorithmHelper
+	public static bool IsSupported ( this NSec3HashAlgorithm algorithm )
 	{
-
-		public static int GetPriority ( this NSec3HashAlgorithm algorithm )
+		switch ( algorithm )
 		{
-			switch ( algorithm )
-			{
-				case NSec3HashAlgorithm . Sha1 :
-					return 1 ;
+			case NSec3HashAlgorithm.Sha1 :
+				return true;
 
-				default :
-					throw new NotSupportedException ( ) ;
-			}
+			default :
+				return false;
 		}
-
-		public static bool IsSupported ( this NSec3HashAlgorithm algorithm )
-		{
-			switch ( algorithm )
-			{
-				case NSec3HashAlgorithm . Sha1 :
-					return true ;
-
-				default :
-					return false ;
-			}
-		}
-
 	}
 
 }

@@ -1,55 +1,52 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
-using Telegram . Bot . Types ;
+using Telegram.Bot.Types;
 
-namespace DreamRecorder . ToolBox . TelegramBot
+namespace DreamRecorder.ToolBox.TelegramBot;
+
+public class EmptyCommand <TUser> : TelegramCommand <TUser> where TUser : IUser
 {
 
-	public class EmptyCommand <TUser> : TelegramCommand <TUser> where TUser : IUser
+	public static EmptyCommand <TUser> Current { get; private set; }
+
+	public override string HelpInformation => string.Empty;
+
+	public override CommandPermissionGroup PermissionGroup => null;
+
+	public override TimeSpan Timeout => TimeSpan.MaxValue;
+
+	public EmptyCommand ( ) => Current = this;
+
+	public override bool CanBeRouteTarget ( Session <TUser> session ) => false;
+
+	public override bool Process (
+		Message         message ,
+		string [ ]      args ,
+		Session <TUser> session ,
+		bool            isExactlyMatched ,
+		object          tag = null )
 	{
-
-		public static EmptyCommand <TUser> Current { get ; private set ; }
-
-		public override string HelpInformation => string . Empty ;
-
-		public override CommandPermissionGroup PermissionGroup => null ;
-
-		public override TimeSpan Timeout => TimeSpan . MaxValue ;
-
-		public EmptyCommand ( ) => Current = this ;
-
-		public override bool CanBeRouteTarget ( Session <TUser> session ) => false ;
-
-		public override bool Process (
-			Message         message ,
-			string [ ]      args ,
-			Session <TUser> session ,
-			bool            isExactlyMatched ,
-			object          tag = null )
+		if ( isExactlyMatched )
 		{
-			if ( isExactlyMatched )
-			{
-				session . ReplyText ( message , "This command does nothing." ) ;
-			}
-			else
-			{
-				session . ReplyText ( message , "This message can't be routed to a proper command." ) ;
-			}
-
-			return true ;
+			session.ReplyText ( message , "This command does nothing." );
+		}
+		else
+		{
+			session.ReplyText ( message , "This message can't be routed to a proper command." );
 		}
 
-		public override void Process (
-			CallbackQuery   callbackQuery ,
-			string [ ]      args ,
-			Session <TUser> session ,
-			object          tag = null )
-		{
-		}
+		return true;
+	}
 
+	public override void Process (
+		CallbackQuery   callbackQuery ,
+		string [ ]      args ,
+		Session <TUser> session ,
+		object          tag = null )
+	{
 	}
 
 }

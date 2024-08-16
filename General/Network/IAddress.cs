@@ -1,16 +1,13 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace DreamRecorder . ToolBox . Network
+namespace DreamRecorder.ToolBox.Network;
+
+public interface IAddress
 {
 
-	public interface IAddress
-	{
-
-		Memory <byte> AddressBytes { get ; }
-
-	}
+	Memory <byte> AddressBytes { get; }
 
 }

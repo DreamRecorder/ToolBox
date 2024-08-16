@@ -1,306 +1,302 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
-using System . Net ;
-using System . Net . NetworkInformation ;
-using System . Net . Sockets ;
-using System . Text ;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
+using System.Text;
 
-using DreamRecorder . ToolBox . Network . Dns ;
+using DreamRecorder.ToolBox.Network.Dns;
 
-namespace DreamRecorder . ToolBox . Network
+namespace DreamRecorder.ToolBox.Network;
+
+/// <summary>
+///     Extension class for the
+///     <see cref="IPAddress" />
+///     class
+/// </summary>
+public static class IPAddressExtension
 {
 
+	private static readonly IPAddress _ipv4MulticastNetworkAddress = IPAddress.Parse ( "224.0.0.0" );
+
+	private static readonly IPAddress _ipv6MulticastNetworkAddress = IPAddress.Parse ( "FF00::" );
+
 	/// <summary>
-	///     Extension class for the
-	///     <see cref="IPAddress" />
-	///     class
+	///     Returns the index for the interface which has the ip address assigned
 	/// </summary>
-	public static class IPAddressExtension
+	/// <param name="ipAddress"> The ip address to look for </param>
+	/// <returns> The index for the interface which has the ip address assigned </returns>
+	public static int GetInterfaceIndex ( this IPAddress ipAddress )
 	{
-
-		private static readonly IPAddress _ipv4MulticastNetworkAddress = IPAddress . Parse ( "224.0.0.0" ) ;
-
-		private static readonly IPAddress _ipv6MulticastNetworkAddress = IPAddress . Parse ( "FF00::" ) ;
-
-		/// <summary>
-		///     Returns the index for the interface which has the ip address assigned
-		/// </summary>
-		/// <param name="ipAddress"> The ip address to look for </param>
-		/// <returns> The index for the interface which has the ip address assigned </returns>
-		public static int GetInterfaceIndex ( this IPAddress ipAddress )
+		if ( ipAddress == null )
 		{
-			if ( ipAddress == null )
+			throw new ArgumentNullException ( nameof ( ipAddress ) );
+		}
+
+		IPInterfaceProperties interfaceProperty = NetworkInterface.GetAllNetworkInterfaces ( ).
+																   Select ( n => n.GetIPProperties ( ) ).
+																   FirstOrDefault (
+																	p => p.UnicastAddresses.Any (
+																	 a => a.Address.Equals ( ipAddress ) ) );
+
+		if ( interfaceProperty != null )
+		{
+			if ( ipAddress.AddressFamily == AddressFamily.InterNetwork )
 			{
-				throw new ArgumentNullException ( nameof ( ipAddress ) ) ;
+				IPv4InterfaceProperties property = interfaceProperty.GetIPv4Properties ( );
+				return property.Index;
 			}
-
-			IPInterfaceProperties interfaceProperty = NetworkInterface . GetAllNetworkInterfaces ( ) .
-																		 Select ( n => n . GetIPProperties ( ) ) .
-																		 FirstOrDefault (
-																		  p => p . UnicastAddresses . Any (
-																		   a => a . Address . Equals (
-																			ipAddress ) ) ) ;
-
-			if ( interfaceProperty != null )
+			else
 			{
-				if ( ipAddress . AddressFamily == AddressFamily . InterNetwork )
-				{
-					IPv4InterfaceProperties property = interfaceProperty . GetIPv4Properties ( ) ;
-					return property . Index ;
-				}
-				else
-				{
-					IPv6InterfaceProperties property = interfaceProperty . GetIPv6Properties ( ) ;
-					return property . Index ;
-				}
+				IPv6InterfaceProperties property = interfaceProperty.GetIPv6Properties ( );
+				return property.Index;
 			}
+		}
 
+		throw new ArgumentOutOfRangeException (
+											   nameof ( ipAddress ) ,
+											   "The given ip address is not configured on the local system" );
+	}
+
+	/// <summary>
+	///     Gets the network address for a specified IPAddress and netmask
+	/// </summary>
+	/// <param name="ipAddress"> IPAddress, for that the network address should be returned </param>
+	/// <param name="netmask"> Netmask, that should be used </param>
+	/// <returns> New instance of IPAddress with the network address assigend </returns>
+	public static IPAddress GetNetworkAddress ( this IPAddress ipAddress , IPAddress netmask )
+	{
+		if ( ipAddress == null )
+		{
+			throw new ArgumentNullException ( nameof ( ipAddress ) );
+		}
+
+		if ( netmask == null )
+		{
+			throw new ArgumentNullException ( "netMask" );
+		}
+
+		if ( ipAddress.AddressFamily != netmask.AddressFamily )
+		{
 			throw new ArgumentOutOfRangeException (
-												   nameof ( ipAddress ) ,
-												   "The given ip address is not configured on the local system" ) ;
+												   nameof ( netmask ) ,
+												   "Protocoll version of ipAddress and netmask do not match" );
 		}
 
-		/// <summary>
-		///     Gets the network address for a specified IPAddress and netmask
-		/// </summary>
-		/// <param name="ipAddress"> IPAddress, for that the network address should be returned </param>
-		/// <param name="netmask"> Netmask, that should be used </param>
-		/// <returns> New instance of IPAddress with the network address assigend </returns>
-		public static IPAddress GetNetworkAddress ( this IPAddress ipAddress , IPAddress netmask )
+		byte [ ] resultBytes    = ipAddress.GetAddressBytes ( );
+		byte [ ] ipAddressBytes = ipAddress.GetAddressBytes ( );
+		byte [ ] netmaskBytes   = netmask.GetAddressBytes ( );
+
+		for ( int i = 0 ; i < netmaskBytes.Length ; i++ )
 		{
-			if ( ipAddress == null )
-			{
-				throw new ArgumentNullException ( nameof ( ipAddress ) ) ;
-			}
-
-			if ( netmask == null )
-			{
-				throw new ArgumentNullException ( "netMask" ) ;
-			}
-
-			if ( ipAddress . AddressFamily != netmask . AddressFamily )
-			{
-				throw new ArgumentOutOfRangeException (
-													   nameof ( netmask ) ,
-													   "Protocoll version of ipAddress and netmask do not match" ) ;
-			}
-
-			byte [ ] resultBytes    = ipAddress . GetAddressBytes ( ) ;
-			byte [ ] ipAddressBytes = ipAddress . GetAddressBytes ( ) ;
-			byte [ ] netmaskBytes   = netmask . GetAddressBytes ( ) ;
-
-			for ( int i = 0 ; i < netmaskBytes . Length ; i++ )
-			{
-				resultBytes [ i ] = ( byte )( ipAddressBytes [ i ] & netmaskBytes [ i ] ) ;
-			}
-
-			return new IPAddress ( resultBytes ) ;
+			resultBytes [ i ] = ( byte )( ipAddressBytes [ i ] & netmaskBytes [ i ] );
 		}
 
-		/// <summary>
-		///     Gets the network address for a specified IPAddress and netmask
-		/// </summary>
-		/// <param name="ipAddress"> IPAddress, for that the network address should be returned </param>
-		/// <param name="netmask"> Netmask in CIDR format </param>
-		/// <returns> New instance of IPAddress with the network address assigend </returns>
-		public static IPAddress GetNetworkAddress ( this IPAddress ipAddress , int netmask )
+		return new IPAddress ( resultBytes );
+	}
+
+	/// <summary>
+	///     Gets the network address for a specified IPAddress and netmask
+	/// </summary>
+	/// <param name="ipAddress"> IPAddress, for that the network address should be returned </param>
+	/// <param name="netmask"> Netmask in CIDR format </param>
+	/// <returns> New instance of IPAddress with the network address assigend </returns>
+	public static IPAddress GetNetworkAddress ( this IPAddress ipAddress , int netmask )
+	{
+		if ( ipAddress == null )
 		{
-			if ( ipAddress == null )
-			{
-				throw new ArgumentNullException ( nameof ( ipAddress ) ) ;
-			}
-
-			if ( ( ipAddress . AddressFamily == AddressFamily . InterNetwork )
-				 && netmask is < 0 or > 32 )
-			{
-				throw new ArgumentException (
-											 "Netmask have to be in range of 0 to 32 on IPv4 addresses" ,
-											 nameof ( netmask ) ) ;
-			}
-
-			if ( ( ipAddress . AddressFamily == AddressFamily . InterNetworkV6 )
-				 && netmask is < 0 or > 128 )
-			{
-				throw new ArgumentException (
-											 "Netmask have to be in range of 0 to 128 on IPv6 addresses" ,
-											 nameof ( netmask ) ) ;
-			}
-
-			byte [ ] ipAddressBytes = ipAddress . GetAddressBytes ( ) ;
-
-			for ( int i = 0 ; i < ipAddressBytes . Length ; i++ )
-			{
-				if ( netmask >= 8 )
-				{
-					netmask -= 8 ;
-				}
-				else
-				{
-					if ( BitConverter . IsLittleEndian )
-					{
-						ipAddressBytes [ i ] &= ReverseBitOrder ( ( byte )~( 255 << netmask ) ) ;
-					}
-
-					netmask = 0 ;
-				}
-			}
-
-			return new IPAddress ( ipAddressBytes ) ;
+			throw new ArgumentNullException ( nameof ( ipAddress ) );
 		}
 
-		/// <summary>
-		///     Returns the reverse lookup address of an IPAddress
-		/// </summary>
-		/// <param name="ipAddress"> Instance of the IPAddress, that should be used </param>
-		/// <returns> A string with the reverse lookup address </returns>
-		public static string GetReverseLookupAddress ( this IPAddress ipAddress )
+		if ( ( ipAddress.AddressFamily == AddressFamily.InterNetwork )
+			 && netmask is < 0 or > 32 )
 		{
-			if ( ipAddress == null )
+			throw new ArgumentException (
+										 "Netmask have to be in range of 0 to 32 on IPv4 addresses" ,
+										 nameof ( netmask ) );
+		}
+
+		if ( ( ipAddress.AddressFamily == AddressFamily.InterNetworkV6 )
+			 && netmask is < 0 or > 128 )
+		{
+			throw new ArgumentException (
+										 "Netmask have to be in range of 0 to 128 on IPv6 addresses" ,
+										 nameof ( netmask ) );
+		}
+
+		byte [ ] ipAddressBytes = ipAddress.GetAddressBytes ( );
+
+		for ( int i = 0 ; i < ipAddressBytes.Length ; i++ )
+		{
+			if ( netmask >= 8 )
 			{
-				throw new ArgumentNullException ( nameof ( ipAddress ) ) ;
-			}
-
-			StringBuilder res = new StringBuilder ( ) ;
-
-			byte [ ] addressBytes = ipAddress . GetAddressBytes ( ) ;
-
-			if ( ipAddress . AddressFamily == AddressFamily . InterNetwork )
-			{
-				for ( int i = addressBytes . Length - 1 ; i >= 0 ; i-- )
-				{
-					res . Append ( addressBytes [ i ] ) ;
-					res . Append ( "." ) ;
-				}
-
-				res . Append ( "in-addr.arpa" ) ;
+				netmask -= 8;
 			}
 			else
 			{
-				for ( int i = addressBytes . Length - 1 ; i >= 0 ; i-- )
+				if ( BitConverter.IsLittleEndian )
 				{
-					string hex = addressBytes [ i ] . ToString ( "x2" ) ;
-					res . Append ( hex [ 1 ] ) ;
-					res . Append ( "." ) ;
-					res . Append ( hex [ 0 ] ) ;
-					res . Append ( "." ) ;
+					ipAddressBytes [ i ] &= ReverseBitOrder ( ( byte )~( 255 << netmask ) );
 				}
 
-				res . Append ( "ip6.arpa" ) ;
+				netmask = 0;
 			}
-
-			return res . ToString ( ) ;
 		}
 
-		/// <summary>
-		///     Returns the reverse lookup DomainName of an IPAddress
-		/// </summary>
-		/// <param name="ipAddress"> Instance of the IPAddress, that should be used </param>
-		/// <returns> A DomainName with the reverse lookup address </returns>
-		public static DomainName GetReverseLookupDomain ( this IPAddress ipAddress )
+		return new IPAddress ( ipAddressBytes );
+	}
+
+	/// <summary>
+	///     Returns the reverse lookup address of an IPAddress
+	/// </summary>
+	/// <param name="ipAddress"> Instance of the IPAddress, that should be used </param>
+	/// <returns> A string with the reverse lookup address </returns>
+	public static string GetReverseLookupAddress ( this IPAddress ipAddress )
+	{
+		if ( ipAddress == null )
 		{
-			if ( ipAddress == null )
-			{
-				throw new ArgumentNullException ( nameof ( ipAddress ) ) ;
-			}
-
-			byte [ ] addressBytes = ipAddress . GetAddressBytes ( ) ;
-
-			if ( ipAddress . AddressFamily == AddressFamily . InterNetwork )
-			{
-				string [ ] labels = new string[ addressBytes . Length + 2 ] ;
-
-				int labelPos = 0 ;
-
-				for ( int i = addressBytes . Length - 1 ; i >= 0 ; i-- )
-				{
-					labels [ labelPos++ ] = addressBytes [ i ] . ToString ( ) ;
-				}
-
-				labels [ labelPos++ ] = "in-addr" ;
-				labels [ labelPos ]   = "arpa" ;
-
-				return new DomainName ( labels ) ;
-			}
-			else
-			{
-				string [ ] labels = new string[ addressBytes . Length * 2 + 2 ] ;
-
-				int labelPos = 0 ;
-
-				for ( int i = addressBytes . Length - 1 ; i >= 0 ; i-- )
-				{
-					string hex = addressBytes [ i ] . ToString ( "x2" ) ;
-
-					labels [ labelPos++ ] = hex [ 1 ] . ToString ( ) ;
-					labels [ labelPos++ ] = hex [ 0 ] . ToString ( ) ;
-				}
-
-				labels [ labelPos++ ] = "ip6" ;
-				labels [ labelPos ]   = "arpa" ;
-
-				return new DomainName ( labels ) ;
-			}
+			throw new ArgumentNullException ( nameof ( ipAddress ) );
 		}
 
-		/// <summary>
-		///     Returns a value indicating whether a ip address is a multicast address
-		/// </summary>
-		/// <param name="ipAddress"> Instance of the IPAddress, that should be used </param>
-		/// <returns> true, if the given address is a multicast address; otherwise, false </returns>
-		public static bool IsMulticast ( this IPAddress ipAddress )
+		StringBuilder res = new StringBuilder ( );
+
+		byte [ ] addressBytes = ipAddress.GetAddressBytes ( );
+
+		if ( ipAddress.AddressFamily == AddressFamily.InterNetwork )
 		{
-			if ( ipAddress == null )
+			for ( int i = addressBytes.Length - 1 ; i >= 0 ; i-- )
 			{
-				throw new ArgumentNullException ( nameof ( ipAddress ) ) ;
+				res.Append ( addressBytes [ i ] );
+				res.Append ( "." );
 			}
 
-			if ( ipAddress . AddressFamily == AddressFamily . InterNetwork )
-			{
-				return ipAddress . GetNetworkAddress ( 4 ) . Equals ( _ipv4MulticastNetworkAddress ) ;
-			}
-			else
-			{
-				return ipAddress . GetNetworkAddress ( 8 ) . Equals ( _ipv6MulticastNetworkAddress ) ;
-			}
+			res.Append ( "in-addr.arpa" );
 		}
-
-		/// <summary>
-		///     Reverses the order of the bytes of an IPAddress
-		/// </summary>
-		/// <param name="ipAddress"> Instance of the IPAddress, that should be reversed </param>
-		/// <returns> New instance of IPAddress with reversed address </returns>
-		public static IPAddress Reverse ( this IPAddress ipAddress )
+		else
 		{
-			if ( ipAddress == null )
+			for ( int i = addressBytes.Length - 1 ; i >= 0 ; i-- )
 			{
-				throw new ArgumentNullException ( nameof ( ipAddress ) ) ;
+				string hex = addressBytes [ i ].ToString ( "x2" );
+				res.Append ( hex [ 1 ] );
+				res.Append ( "." );
+				res.Append ( hex [ 0 ] );
+				res.Append ( "." );
 			}
 
-			byte [ ] addressBytes = ipAddress . GetAddressBytes ( ) ;
-			byte [ ] res          = new byte[ addressBytes . Length ] ;
-
-			for ( int i = 0 ; i < res . Length ; i++ )
-			{
-				res [ i ] = addressBytes [ addressBytes . Length - i - 1 ] ;
-			}
-
-			return new IPAddress ( res ) ;
+			res.Append ( "ip6.arpa" );
 		}
 
-		private static byte ReverseBitOrder ( byte value )
+		return res.ToString ( );
+	}
+
+	/// <summary>
+	///     Returns the reverse lookup DomainName of an IPAddress
+	/// </summary>
+	/// <param name="ipAddress"> Instance of the IPAddress, that should be used </param>
+	/// <returns> A DomainName with the reverse lookup address </returns>
+	public static DomainName GetReverseLookupDomain ( this IPAddress ipAddress )
+	{
+		if ( ipAddress == null )
 		{
-			byte result = 0 ;
-
-			for ( int i = 0 ; i < 8 ; i++ )
-			{
-				result |= ( byte )( ( ( ( 1 << i ) & value ) >> i ) << ( 7 - i ) ) ;
-			}
-
-			return result ;
+			throw new ArgumentNullException ( nameof ( ipAddress ) );
 		}
 
+		byte [ ] addressBytes = ipAddress.GetAddressBytes ( );
+
+		if ( ipAddress.AddressFamily == AddressFamily.InterNetwork )
+		{
+			string [ ] labels = new string[ addressBytes.Length + 2 ];
+
+			int labelPos = 0;
+
+			for ( int i = addressBytes.Length - 1 ; i >= 0 ; i-- )
+			{
+				labels [ labelPos++ ] = addressBytes [ i ].ToString ( );
+			}
+
+			labels [ labelPos++ ] = "in-addr";
+			labels [ labelPos ]   = "arpa";
+
+			return new DomainName ( labels );
+		}
+		else
+		{
+			string [ ] labels = new string[ addressBytes.Length * 2 + 2 ];
+
+			int labelPos = 0;
+
+			for ( int i = addressBytes.Length - 1 ; i >= 0 ; i-- )
+			{
+				string hex = addressBytes [ i ].ToString ( "x2" );
+
+				labels [ labelPos++ ] = hex [ 1 ].ToString ( );
+				labels [ labelPos++ ] = hex [ 0 ].ToString ( );
+			}
+
+			labels [ labelPos++ ] = "ip6";
+			labels [ labelPos ]   = "arpa";
+
+			return new DomainName ( labels );
+		}
+	}
+
+	/// <summary>
+	///     Returns a value indicating whether a ip address is a multicast address
+	/// </summary>
+	/// <param name="ipAddress"> Instance of the IPAddress, that should be used </param>
+	/// <returns> true, if the given address is a multicast address; otherwise, false </returns>
+	public static bool IsMulticast ( this IPAddress ipAddress )
+	{
+		if ( ipAddress == null )
+		{
+			throw new ArgumentNullException ( nameof ( ipAddress ) );
+		}
+
+		if ( ipAddress.AddressFamily == AddressFamily.InterNetwork )
+		{
+			return ipAddress.GetNetworkAddress ( 4 ).Equals ( _ipv4MulticastNetworkAddress );
+		}
+		else
+		{
+			return ipAddress.GetNetworkAddress ( 8 ).Equals ( _ipv6MulticastNetworkAddress );
+		}
+	}
+
+	/// <summary>
+	///     Reverses the order of the bytes of an IPAddress
+	/// </summary>
+	/// <param name="ipAddress"> Instance of the IPAddress, that should be reversed </param>
+	/// <returns> New instance of IPAddress with reversed address </returns>
+	public static IPAddress Reverse ( this IPAddress ipAddress )
+	{
+		if ( ipAddress == null )
+		{
+			throw new ArgumentNullException ( nameof ( ipAddress ) );
+		}
+
+		byte [ ] addressBytes = ipAddress.GetAddressBytes ( );
+		byte [ ] res          = new byte[ addressBytes.Length ];
+
+		for ( int i = 0 ; i < res.Length ; i++ )
+		{
+			res [ i ] = addressBytes [ addressBytes.Length - i - 1 ];
+		}
+
+		return new IPAddress ( res );
+	}
+
+	private static byte ReverseBitOrder ( byte value )
+	{
+		byte result = 0;
+
+		for ( int i = 0 ; i < 8 ; i++ )
+		{
+			result |= ( byte )( ( ( ( 1 << i ) & value ) >> i ) << ( 7 - i ) );
+		}
+
+		return result;
 	}
 
 }

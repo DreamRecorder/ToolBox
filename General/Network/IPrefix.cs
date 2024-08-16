@@ -1,16 +1,13 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace DreamRecorder . ToolBox . Network
+namespace DreamRecorder.ToolBox.Network;
+
+public interface IPrefix <TAddress> where TAddress : IAddress
 {
 
-	public interface IPrefix <TAddress> where TAddress : IAddress
-	{
-
-		bool Contains ( TAddress address ) ;
-
-	}
+	bool Contains ( TAddress address );
 
 }

@@ -1,16 +1,13 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace DreamRecorder . ToolBox . TelegramBot
+namespace DreamRecorder.ToolBox.TelegramBot;
+
+public interface ITelegramIdUserProvider <out TUser> where TUser : IUser
 {
 
-	public interface ITelegramIdUserProvider <out TUser> where TUser : IUser
-	{
-
-		TUser GetUser ( long telegramId ) ;
-
-	}
+	TUser GetUser ( long telegramId );
 
 }

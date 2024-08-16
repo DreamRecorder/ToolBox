@@ -1,21 +1,18 @@
-using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
-using System . Net ;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 
-namespace DreamRecorder . ToolBox . Network . Dns
+namespace DreamRecorder.ToolBox.Network.Dns;
+
+internal class DnsClientEndpointInfo
 {
 
-	internal class DnsClientEndpointInfo
-	{
+	public bool IsMulticast;
 
-		public bool IsMulticast ;
+	public IPAddress LocalAddress;
 
-		public IPAddress LocalAddress ;
-
-		public IPAddress ServerAddress ;
-
-	}
+	public IPAddress ServerAddress;
 
 }

@@ -19,27 +19,26 @@ public class AdditionalStyleSheetTagHelper : TagHelper
 
 	public IWebAssetProvider WebAssetProvider { get; }
 
-	public AdditionalStyleSheetTagHelper(IWebAssetProvider webAssetProvider) => WebAssetProvider = webAssetProvider;
+	public AdditionalStyleSheetTagHelper ( IWebAssetProvider webAssetProvider ) => WebAssetProvider = webAssetProvider;
 
-	public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+	public override async Task ProcessAsync ( TagHelperContext context , TagHelperOutput output )
 	{
 		output.TagName = null;
 
-		if (ViewBag?.AdditionalStyleSheet is IList<StyleSheetInfo> list)
+		if ( ViewBag?.AdditionalStyleSheet is IList <StyleSheetInfo> list )
 		{
-			foreach (StyleSheetInfo info in list)
+			foreach ( StyleSheetInfo info in list )
 			{
-				string uri =
-					await WebAssetProvider.GetFileUrl(info.PackageName, info.FileName, info.Version);
+				string uri = await WebAssetProvider.GetFileUrl ( info.PackageName , info.FileName , info.Version );
 
-				TagBuilder link = new TagBuilder("link");
-				link.Attributes.Add("rel", ExternalAssetTagHelper.Stylesheet);
-				link.Attributes.Add("href", uri);
-				link.Attributes.Add("crossorigin", "anonymous");
-				link.Attributes.Add("referrerpolicy", "no-referrer");
+				TagBuilder link = new TagBuilder ( "link" );
+				link.Attributes.Add ( "rel" ,            ExternalAssetTagHelper.Stylesheet );
+				link.Attributes.Add ( "href" ,           uri );
+				link.Attributes.Add ( "crossorigin" ,    "anonymous" );
+				link.Attributes.Add ( "referrerpolicy" , "no-referrer" );
 				link.TagRenderMode = TagRenderMode.SelfClosing;
 
-				output.Content.AppendHtml(link);
+				output.Content.AppendHtml ( link );
 			}
 		}
 	}

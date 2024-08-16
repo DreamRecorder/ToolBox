@@ -1,22 +1,19 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace DreamRecorder . ToolBox . General
+namespace DreamRecorder.ToolBox.General;
+
+public enum TaskStatus
 {
 
-	public enum TaskStatus
-	{
+	Ready ,
 
-		Ready ,
+	Waiting ,
 
-		Waiting ,
+	Running ,
 
-		Running ,
-
-		Finished ,
-
-	}
+	Finished ,
 
 }

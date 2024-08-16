@@ -1,81 +1,76 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
-using System . Runtime . Serialization ;
-using System . Xml . Linq ;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
+using System.Xml.Linq;
 
-using DreamRecorder . ToolBox . General ;
+using DreamRecorder.ToolBox.General;
 
-using Microsoft . VisualStudio . TestTools . UnitTesting ;
+namespace DreamRecorder.ToolBox.UnitTest;
 
-namespace DreamRecorder . ToolBox . UnitTest
+[TestClass]
+public class SerializableTests
 {
 
-	[TestClass]
-	public class SerializableTests
+	[TestMethod]
+	public void DataContractSerializableTest ( )
+	{
+		string result = new DataContractTestStub ( ).Serialize ( );
+		Console.WriteLine ( result );
+		Assert.AreEqual ( result , result.Deserialize <DataContractTestStub> ( ).Serialize ( ) );
+	}
+
+	[TestMethod]
+	public void SelfSerializableTest ( )
+	{
+		string result = new SelfSerializableTestStub ( ).Serialize ( );
+		Console.WriteLine ( result );
+
+		Assert.AreEqual ( result , result.Deserialize <SelfSerializableTestStub> ( ).Serialize ( ) );
+	}
+
+	[TestMethod]
+	public void XmlSerializableTest ( )
+	{
+		string result = new XmlTestStub ( ).Serialize ( new [ ] { typeof ( XmlTestStub ) , } );
+		Console.WriteLine ( result );
+		Assert.AreEqual (
+						 result ,
+						 result.Deserialize <XmlTestStub> ( new [ ] { typeof ( XmlTestStub ) , } ).
+								Serialize ( new [ ] { typeof ( XmlTestStub ) , } ) );
+	}
+
+	[DataContract]
+	public class DataContractTestStub
 	{
 
-		[TestMethod]
-		public void DataContractSerializableTest ( )
+		[DataMember]
+		public string Name { get; set; } = "DataContractTest";
+
+	}
+
+	public class SelfSerializableTestStub : ISelfSerializable
+	{
+
+		public SelfSerializableTestStub ( ) { }
+
+		public SelfSerializableTestStub ( XElement element ) { }
+
+		public XElement ToXElement ( )
 		{
-			string result = new DataContractTestStub ( ) . Serialize ( ) ;
-			Console . WriteLine ( result ) ;
-			Assert . AreEqual ( result , result . Deserialize <DataContractTestStub> ( ) . Serialize ( ) ) ;
+			XElement element = new XElement ( nameof ( SelfSerializableTestStub ) );
+			element.SetAttributeValue ( "Name" , "SelfSerializableTest" );
+
+			return element;
 		}
 
-		[TestMethod]
-		public void SelfSerializableTest ( )
-		{
-			string result = new SelfSerializableTestStub ( ) . Serialize ( ) ;
-			Console . WriteLine ( result ) ;
+	}
 
-			Assert . AreEqual ( result , result . Deserialize <SelfSerializableTestStub> ( ) . Serialize ( ) ) ;
-		}
+	public class XmlTestStub
+	{
 
-		[TestMethod]
-		public void XmlSerializableTest ( )
-		{
-			string result = new XmlTestStub ( ) . Serialize ( new [ ] { typeof ( XmlTestStub ) , } ) ;
-			Console . WriteLine ( result ) ;
-			Assert . AreEqual (
-							   result ,
-							   result . Deserialize <XmlTestStub> ( new [ ] { typeof ( XmlTestStub ) , } ) .
-										Serialize ( new [ ] { typeof ( XmlTestStub ) , } ) ) ;
-		}
-
-		[DataContract]
-		public class DataContractTestStub
-		{
-
-			[DataMember]
-			public string Name { get ; set ; } = "DataContractTest" ;
-
-		}
-
-		public class SelfSerializableTestStub : ISelfSerializable
-		{
-
-			public SelfSerializableTestStub ( ) { }
-
-			public SelfSerializableTestStub ( XElement element ) { }
-
-			public XElement ToXElement ( )
-			{
-				XElement element = new XElement ( nameof ( SelfSerializableTestStub ) ) ;
-				element . SetAttributeValue ( "Name" , "SelfSerializableTest" ) ;
-
-				return element ;
-			}
-
-		}
-
-		public class XmlTestStub
-		{
-
-			public string Name { get ; set ; } = "Xml" ;
-
-		}
+		public string Name { get; set; } = "Xml";
 
 	}
 

@@ -1,16 +1,13 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace DreamRecorder . ToolBox . CommandLine . Example
+namespace DreamRecorder.ToolBox.CommandLine.Example;
+
+public enum ProgramSettingCatalog
 {
 
-	public enum ProgramSettingCatalog
-	{
-
-		General = 0 ,
-
-	}
+	General = 0 ,
 
 }

@@ -1,98 +1,95 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
-using DreamRecorder . ToolBox . Network . Dns . EDns ;
+using DreamRecorder.ToolBox.Network.Dns.EDns;
 
-namespace DreamRecorder . ToolBox . Network . Dns
+namespace DreamRecorder.ToolBox.Network.Dns;
+
+/// <summary>
+///     Provides options to be used in
+///     <see cref="DnsClient">DNS client</see>
+///     for resolving queries
+/// </summary>
+public class DnsQueryOptions
 {
 
 	/// <summary>
-	///     Provides options to be used in
-	///     <see cref="DnsClient">DNS client</see>
-	///     for resolving queries
+	///     Gets or set the OptRecord for the EDNS options
 	/// </summary>
-	public class DnsQueryOptions
+	public OptRecord EDnsOptions { get; set; }
+
+	/// <summary>
+	///     <para>Gets or sets the checking disabled (CD) flag</para>
+	///     <para>
+	///         Defined in
+	///         <see cref="!:http://tools.ietf.org/html/rfc4035">RFC 4035</see>
+	///     </para>
+	/// </summary>
+	public bool IsCheckingDisabled { get; set; }
+
+	/// <summary>
+	///     <para>Gets or sets the DNSSEC answer OK (DO) flag</para>
+	///     <para>
+	///         Defined in
+	///         <see cref="!:http://tools.ietf.org/html/rfc4035">RFC 4035</see>
+	///         and
+	///         <see cref="!:http://tools.ietf.org/html/rfc3225">RFC 3225</see>
+	///     </para>
+	/// </summary>
+	public bool IsDnsSecOk
 	{
-
-		/// <summary>
-		///     Gets or set the OptRecord for the EDNS options
-		/// </summary>
-		public OptRecord EDnsOptions { get ; set ; }
-
-		/// <summary>
-		///     <para>Gets or sets the checking disabled (CD) flag</para>
-		///     <para>
-		///         Defined in
-		///         <see cref="!:http://tools.ietf.org/html/rfc4035">RFC 4035</see>
-		///     </para>
-		/// </summary>
-		public bool IsCheckingDisabled { get ; set ; }
-
-		/// <summary>
-		///     <para>Gets or sets the DNSSEC answer OK (DO) flag</para>
-		///     <para>
-		///         Defined in
-		///         <see cref="!:http://tools.ietf.org/html/rfc4035">RFC 4035</see>
-		///         and
-		///         <see cref="!:http://tools.ietf.org/html/rfc3225">RFC 3225</see>
-		///     </para>
-		/// </summary>
-		public bool IsDnsSecOk
+		get
 		{
-			get
+			OptRecord ednsOptions = EDnsOptions;
+			return ednsOptions is { IsDnsSecOk: true , };
+		}
+		set
+		{
+			OptRecord ednsOptions = EDnsOptions;
+			if ( ednsOptions == null )
 			{
-				OptRecord ednsOptions = EDnsOptions ;
-				return ednsOptions is { IsDnsSecOk: true } ;
+				if ( value )
+				{
+					throw new ArgumentOutOfRangeException (
+														   nameof ( value ) ,
+														   "Setting DO flag is allowed in edns messages only" );
+				}
 			}
-			set
+			else
 			{
-				OptRecord ednsOptions = EDnsOptions ;
-				if ( ednsOptions == null )
-				{
-					if ( value )
-					{
-						throw new ArgumentOutOfRangeException (
-															   nameof ( value ) ,
-															   "Setting DO flag is allowed in edns messages only" ) ;
-					}
-				}
-				else
-				{
-					ednsOptions . IsDnsSecOk = value ;
-				}
+				ednsOptions.IsDnsSecOk = value;
 			}
 		}
-
-		/// <summary>
-		///     Enables or disables EDNS
-		/// </summary>
-		public bool IsEDnsEnabled
-		{
-			get => ( EDnsOptions != null ) ;
-			set
-			{
-				if ( value && ( EDnsOptions == null ) )
-				{
-					EDnsOptions = new OptRecord ( ) ;
-				}
-				else if ( ! value )
-				{
-					EDnsOptions = null ;
-				}
-			}
-		}
-
-		/// <summary>
-		///     <para>Gets or sets the recursion desired (RD) flag</para>
-		///     <para>
-		///         Defined in
-		///         <see cref="!:http://tools.ietf.org/html/rfc1035">RFC 1035</see>
-		///     </para>
-		/// </summary>
-		public bool IsRecursionDesired { get ; set ; }
-
 	}
+
+	/// <summary>
+	///     Enables or disables EDNS
+	/// </summary>
+	public bool IsEDnsEnabled
+	{
+		get => ( EDnsOptions != null );
+		set
+		{
+			if ( value && ( EDnsOptions == null ) )
+			{
+				EDnsOptions = new OptRecord ( );
+			}
+			else if ( ! value )
+			{
+				EDnsOptions = null;
+			}
+		}
+	}
+
+	/// <summary>
+	///     <para>Gets or sets the recursion desired (RD) flag</para>
+	///     <para>
+	///         Defined in
+	///         <see cref="!:http://tools.ietf.org/html/rfc1035">RFC 1035</see>
+	///     </para>
+	/// </summary>
+	public bool IsRecursionDesired { get; set; }
 
 }

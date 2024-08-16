@@ -1,103 +1,100 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace DreamRecorder . ToolBox . General
+namespace DreamRecorder.ToolBox.General;
+
+public class PriorityQueue <T> : IEnumerable <T> , IReadOnlyCollection <T>
 {
 
-	public class PriorityQueue <T> : IEnumerable <T> , IReadOnlyCollection <T>
+	public Comparison <T> Comparison { get; }
+
+	private LinkedList <T> Items { get; }
+
+	public PriorityQueue ( Comparison <T> comparison = null )
 	{
+		Items      = new LinkedList <T> ( );
+		Comparison = comparison ?? Comparer <T>.Default.Compare;
+	}
 
-		public Comparison <T> Comparison { get ; }
-
-		private LinkedList <T> Items { get ; }
-
-		public PriorityQueue ( Comparison <T> comparison = null )
+	public IEnumerator <T> GetEnumerator ( )
+	{
+		lock ( Items )
 		{
-			Items      = new LinkedList <T> ( ) ;
-			Comparison = comparison ?? Comparer <T> . Default . Compare ;
+			return Items.GetEnumerator ( );
 		}
+	}
 
-		public IEnumerator <T> GetEnumerator ( )
+	IEnumerator IEnumerable.GetEnumerator ( )
+	{
+		lock ( Items )
+		{
+			return GetEnumerator ( );
+		}
+	}
+
+	public int Count
+	{
+		get
 		{
 			lock ( Items )
 			{
-				return Items . GetEnumerator ( ) ;
+				return Items.Count;
 			}
 		}
+	}
 
-		IEnumerator IEnumerable . GetEnumerator ( )
+	public void Enqueue ( T item )
+	{
+		lock ( Items )
 		{
-			lock ( Items )
-			{
-				return GetEnumerator ( ) ;
-			}
+			Items.AddLast ( item );
 		}
+	}
 
-		public int Count
+	public bool IsEmpty ( )
+	{
+		lock ( Items )
 		{
-			get
+			return ! Items.Any ( );
+		}
+	}
+
+	public bool TryDequeue ( out T result )
+	{
+		lock ( Items )
+		{
+			TryPeak ( out result );
+
+			return Items.Remove ( result );
+		}
+	}
+
+	public bool TryPeak ( out T result )
+	{
+		lock ( Items )
+		{
+			if ( Items.Any ( ) )
 			{
-				lock ( Items )
+				result = Items.First ( );
+			}
+			else
+			{
+				result = default;
+				return false;
+			}
+
+			foreach ( T item in Items )
+			{
+				if ( Comparison ( result , item ) > 0 )
 				{
-					return Items . Count ;
+					result = item;
 				}
 			}
+
+			return true;
 		}
-
-		public void Enqueue ( T item )
-		{
-			lock ( Items )
-			{
-				Items . AddLast ( item ) ;
-			}
-		}
-
-		public bool IsEmpty ( )
-		{
-			lock ( Items )
-			{
-				return ! Items . Any ( ) ;
-			}
-		}
-
-		public bool TryDequeue ( out T result )
-		{
-			lock ( Items )
-			{
-				TryPeak ( out result ) ;
-
-				return Items . Remove ( result ) ;
-			}
-		}
-
-		public bool TryPeak ( out T result )
-		{
-			lock ( Items )
-			{
-				if ( Items . Any ( ) )
-				{
-					result = Items . First ( ) ;
-				}
-				else
-				{
-					result = default ;
-					return false ;
-				}
-
-				foreach ( T item in Items )
-				{
-					if ( Comparison ( result , item ) > 0 )
-					{
-						result = item ;
-					}
-				}
-
-				return true ;
-			}
-		}
-
 	}
 
 }

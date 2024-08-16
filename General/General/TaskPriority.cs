@@ -1,24 +1,21 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace DreamRecorder . ToolBox . General
+namespace DreamRecorder.ToolBox.General;
+
+public enum TaskPriority
 {
 
-	public enum TaskPriority
-	{
+	Realtime ,
 
-		Realtime ,
+	High ,
 
-		High ,
+	Normal ,
 
-		Normal ,
+	Low ,
 
-		Low ,
-
-		Background ,
-
-	}
+	Background ,
 
 }

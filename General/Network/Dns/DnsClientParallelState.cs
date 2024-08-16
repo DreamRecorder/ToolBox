@@ -1,20 +1,17 @@
-using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace DreamRecorder . ToolBox . Network . Dns
+namespace DreamRecorder.ToolBox.Network.Dns;
+
+internal class DnsClientParallelState <TMessage> where TMessage : DnsMessageBase
 {
 
-	internal class DnsClientParallelState <TMessage> where TMessage : DnsMessageBase
-	{
+	internal object Lock = new object ( );
 
-		internal object Lock = new object ( ) ;
+	internal DnsClientParallelAsyncState <TMessage> ParallelMessageAsyncState;
 
-		internal DnsClientParallelAsyncState <TMessage> ParallelMessageAsyncState ;
-
-		internal IAsyncResult SingleMessageAsyncResult ;
-
-	}
+	internal IAsyncResult SingleMessageAsyncResult;
 
 }

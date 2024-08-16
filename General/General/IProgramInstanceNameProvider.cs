@@ -1,19 +1,16 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
-using JetBrains . Annotations ;
+using JetBrains.Annotations;
 
-namespace DreamRecorder . ToolBox . General
+namespace DreamRecorder.ToolBox.General;
+
+[PublicAPI]
+public interface IProgramInstanceNameProvider
 {
 
-	[PublicAPI]
-	public interface IProgramInstanceNameProvider
-	{
-
-		string GetInstanceName ( ) ;
-
-	}
+	string GetInstanceName ( );
 
 }

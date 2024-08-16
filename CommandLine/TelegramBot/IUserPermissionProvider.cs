@@ -1,18 +1,15 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
-using JetBrains . Annotations ;
+using JetBrains.Annotations;
 
-namespace DreamRecorder . ToolBox . TelegramBot
+namespace DreamRecorder.ToolBox.TelegramBot;
+
+public interface IUserPermissionProvider <in TUser> where TUser : IUser
 {
 
-	public interface IUserPermissionProvider <in TUser> where TUser : IUser
-	{
-
-		bool IsAllowedToInvoke ( [CanBeNull] TUser user , [CanBeNull] CommandPermissionGroup commandPermissionGroup ) ;
-
-	}
+	bool IsAllowedToInvoke ( [CanBeNull] TUser user , [CanBeNull] CommandPermissionGroup commandPermissionGroup );
 
 }

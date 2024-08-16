@@ -1,28 +1,25 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
-using Microsoft . Extensions . DependencyInjection ;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace DreamRecorder . ToolBox . General
+namespace DreamRecorder.ToolBox.General;
+
+public static class StaticServiceProvider
 {
 
-	public static class StaticServiceProvider
+	public static IServiceProvider Provider { get; private set; }
+
+	public static IServiceCollection ServiceCollection { get; set; } = new ServiceCollection ( );
+
+	public static void Update ( )
 	{
-
-		public static IServiceProvider Provider { get ; private set ; }
-
-		public static IServiceCollection ServiceCollection { get ; set ; } = new ServiceCollection ( ) ;
-
-		public static void Update ( )
+		lock ( ServiceCollection )
 		{
-			lock ( ServiceCollection )
-			{
-				Provider = ServiceCollection . BuildServiceProvider ( true ) ;
-			}
+			Provider = ServiceCollection.BuildServiceProvider ( true );
 		}
-
 	}
 
 }

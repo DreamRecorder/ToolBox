@@ -1,42 +1,39 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
-using System . Net ;
-using System . Net . Sockets ;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 
-namespace DreamRecorder . ToolBox . Network . Dns
+namespace DreamRecorder.ToolBox.Network.Dns;
+
+/// <summary>
+///     Event arguments of
+///     <see cref="DnsServer.ClientConnected" />
+///     event.
+/// </summary>
+public class ClientConnectedEventArgs : EventArgs
 {
 
 	/// <summary>
-	///     Event arguments of
-	///     <see cref="DnsServer.ClientConnected" />
-	///     event.
+	///     Protocol used by the client
 	/// </summary>
-	public class ClientConnectedEventArgs : EventArgs
+	public ProtocolType ProtocolType { get; private set; }
+
+	/// <summary>
+	///     If true, the client connection will be refused
+	/// </summary>
+	public bool RefuseConnect { get; set; }
+
+	/// <summary>
+	///     Remote endpoint of the client
+	/// </summary>
+	public IPEndPoint RemoteEndpoint { get; private set; }
+
+	internal ClientConnectedEventArgs ( ProtocolType protocolType , IPEndPoint remoteEndpoint )
 	{
-
-		/// <summary>
-		///     Protocol used by the client
-		/// </summary>
-		public ProtocolType ProtocolType { get ; private set ; }
-
-		/// <summary>
-		///     If true, the client connection will be refused
-		/// </summary>
-		public bool RefuseConnect { get ; set ; }
-
-		/// <summary>
-		///     Remote endpoint of the client
-		/// </summary>
-		public IPEndPoint RemoteEndpoint { get ; private set ; }
-
-		internal ClientConnectedEventArgs ( ProtocolType protocolType , IPEndPoint remoteEndpoint )
-		{
-			ProtocolType   = protocolType ;
-			RemoteEndpoint = remoteEndpoint ;
-		}
-
+		ProtocolType   = protocolType;
+		RemoteEndpoint = remoteEndpoint;
 	}
 
 }

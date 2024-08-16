@@ -1,47 +1,47 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace DreamRecorder . ToolBox . General ;
+namespace DreamRecorder.ToolBox.General;
 
 public interface IStatefulStartStop : IStartStop
 {
 
-	bool IsRunningStatus { get ; protected set ; }
+	bool IsRunningStatus { get; protected set; }
 
-	bool IStartStop . IsRunning => IsRunningStatus ;
+	bool IStartStop.IsRunning => IsRunningStatus;
 
-	void IStartStop . Start ( )
+	void IStartStop.Start ( )
 	{
 		lock ( this )
 		{
 			if ( IsRunning )
 			{
-				return ;
+				return;
 			}
 
-			IsRunningStatus = true ;
-			StartOverride ( ) ;
+			IsRunningStatus = true;
+			StartOverride ( );
 		}
 	}
 
-	void IStartStop . Stop ( )
+	void IStartStop.Stop ( )
 	{
 		lock ( this )
 		{
 			if ( ! IsRunning )
 			{
-				return ;
+				return;
 			}
 
-			IsRunningStatus = false ;
-			StopOverride ( ) ;
+			IsRunningStatus = false;
+			StopOverride ( );
 		}
 	}
 
-	void StartOverride ( ) ;
+	void StartOverride ( );
 
-	void StopOverride ( ) ;
+	void StopOverride ( );
 
 }

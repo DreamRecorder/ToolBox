@@ -1,12 +1,12 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
-using System . Runtime . InteropServices ;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
 
-using DreamRecorder . ToolBox . General ;
+using DreamRecorder.ToolBox.General;
 
-using JetBrains . Annotations ;
+using JetBrains.Annotations;
 
 [assembly : Prepare]
 [assembly : ComVisible ( true )]

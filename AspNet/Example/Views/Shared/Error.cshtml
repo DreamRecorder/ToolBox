@@ -1,12 +1,16 @@
-﻿@model DreamRecorder.ToolBox.AspNet.Example.Models.ErrorViewModel
+﻿@using System
+@using System.Collections
+@using System.Collections.Generic
+@using System.Linq
+@model DreamRecorder.ToolBox.AspNet.Example.Models.ErrorViewModel
 @{
-	ViewData [ "Title" ] = "Error" ;
+	ViewData [ "Title" ] = "Error";
 }
 
 <h1 class="text-danger">Error.</h1>
 <h2 class="text-danger">An error occurred while processing your request.</h2>
 
-@if ( Model . ShowRequestId )
+@if ( Model.ShowRequestId )
 {
 	<p>
 		<strong>Request ID:</strong> <code>@Model.RequestId</code>

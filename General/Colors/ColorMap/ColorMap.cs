@@ -1,18 +1,15 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace DreamRecorder . ToolBox . Colors . ColorMap
+namespace DreamRecorder.ToolBox.Colors.ColorMap;
+
+public abstract class ColorMap
 {
 
-	public abstract class ColorMap
-	{
+	public HdrColor Map ( double value ) => MapOverride ( value );
 
-		public HdrColor Map ( double value ) => MapOverride ( value ) ;
-
-		protected abstract HdrColor MapOverride ( double value ) ;
-
-	}
+	protected abstract HdrColor MapOverride ( double value );
 
 }

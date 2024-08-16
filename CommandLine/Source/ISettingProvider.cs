@@ -1,18 +1,15 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace DreamRecorder . ToolBox . CommandLine
+namespace DreamRecorder.ToolBox.CommandLine;
+
+public interface ISettingProvider
 {
 
-	public interface ISettingProvider
-	{
+	T GetValue <T> ( string name , T defaultValue = default );
 
-		T GetValue <T> ( string name , T defaultValue = default ) ;
-
-		string Save ( ) ;
-
-	}
+	string Save ( );
 
 }

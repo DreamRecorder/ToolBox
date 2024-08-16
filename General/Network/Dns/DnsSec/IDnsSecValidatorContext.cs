@@ -1,18 +1,15 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace DreamRecorder . ToolBox . Network . Dns . DnsSec
+namespace DreamRecorder.ToolBox.Network.Dns.DnsSec;
+
+internal interface IDnsSecValidatorContext
 {
 
-	internal interface IDnsSecValidatorContext
-	{
+	void AddResolvedDomainInValidation ( DomainName name , RecordType recordType );
 
-		void AddResolvedDomainInValidation ( DomainName name , RecordType recordType ) ;
-
-		bool HasDomainAlreadyBeenResolvedInValidation ( DomainName name , RecordType recordType ) ;
-
-	}
+	bool HasDomainAlreadyBeenResolvedInValidation ( DomainName name , RecordType recordType );
 
 }

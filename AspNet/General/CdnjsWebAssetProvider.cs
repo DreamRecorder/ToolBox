@@ -1,57 +1,57 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Concurrent ;
-using System . Collections . Generic ;
-using System . Linq ;
-using System . Net . Http ;
-using System . Threading . Tasks ;
+﻿using System;
+using System.Collections;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 
-using JetBrains . Annotations ;
+using JetBrains.Annotations;
 
-using Newtonsoft . Json ;
+using Newtonsoft.Json;
 
-using Semver ;
+using Semver;
 
-namespace DreamRecorder . ToolBox . AspNet . General ;
+namespace DreamRecorder.ToolBox.AspNet.General;
 
 public class CdnjsWebAssetProvider : IWebAssetProvider
 {
 
-	private HttpClient CurrentClient { get ; } = new HttpClient ( ) ;
+	private HttpClient CurrentClient { get; } = new HttpClient ( );
 
-	public static ConcurrentDictionary <string , string> PackageVersions { get ; set ; } =
-		new ConcurrentDictionary <string , string> ( ) ;
+	public static ConcurrentDictionary <string , string> PackageVersions { get; set; } =
+		new ConcurrentDictionary <string , string> ( );
 
 	public async Task <string> GetPackageVersion ( [NotNull] string packageName )
 	{
 		if ( packageName == null )
 		{
-			throw new ArgumentNullException ( nameof ( packageName ) ) ;
+			throw new ArgumentNullException ( nameof ( packageName ) );
 		}
 
-		if ( PackageVersions . TryGetValue ( packageName , out string version ) )
+		if ( PackageVersions.TryGetValue ( packageName , out string version ) )
 		{
-			return version ;
+			return version;
 		}
 		else
 		{
-			CdnjsVersions apiQuery = JsonConvert . DeserializeObject <CdnjsVersions> (
-			 await CurrentClient . GetStringAsync (
-												   $"https://api.cdnjs.com/libraries/{packageName}?fields=versions" ) ) ;
+			CdnjsVersions apiQuery = JsonConvert.DeserializeObject <CdnjsVersions> (
+			 await CurrentClient.GetStringAsync (
+												 $"https://api.cdnjs.com/libraries/{packageName}?fields=versions" ) );
 
-			version = apiQuery . versions . Select ( str => SemVersion . Parse ( str , SemVersionStyles . Any ) ) .
-								 Where ( ver => ver . IsRelease ) .
-								 Max ( SemVersion . SortOrderComparer ) .
-								 ToString ( ) ;
+			version = apiQuery.versions.Select ( str => SemVersion.Parse ( str , SemVersionStyles.Any ) ).
+							   Where ( ver => ver.IsRelease ).
+							   Max ( SemVersion.SortOrderComparer ).
+							   ToString ( );
 
-			if ( string . IsNullOrWhiteSpace ( version ) )
+			if ( string.IsNullOrWhiteSpace ( version ) )
 			{
-				throw new Exception ( "Parse API error" ) ;
+				throw new Exception ( "Parse API error" );
 			}
 
-			PackageVersions . TryAdd ( packageName , version ) ;
+			PackageVersions.TryAdd ( packageName , version );
 
-			return version ;
+			return version;
 		}
 	}
 
@@ -59,30 +59,30 @@ public class CdnjsWebAssetProvider : IWebAssetProvider
 	{
 		if ( packageName == null )
 		{
-			throw new ArgumentNullException ( nameof ( packageName ) ) ;
+			throw new ArgumentNullException ( nameof ( packageName ) );
 		}
 
 		if ( fileName == null )
 		{
-			throw new ArgumentNullException ( nameof ( fileName ) ) ;
+			throw new ArgumentNullException ( nameof ( fileName ) );
 		}
 
-		version ??= await GetPackageVersion ( packageName ) ;
+		version ??= await GetPackageVersion ( packageName );
 
 		if ( version is not null )
 		{
-			return $"https://cdnjs.cloudflare.com/ajax/libs/{packageName}/{version}/{fileName}" ;
+			return $"https://cdnjs.cloudflare.com/ajax/libs/{packageName}/{version}/{fileName}";
 		}
 
-		throw new Exception ( ) ;
+		throw new Exception ( );
 	}
 
-	public async Task ClearCache ( ) => PackageVersions . Clear ( ) ;
+	public async Task ClearCache ( ) => PackageVersions.Clear ( );
 
 	public class CdnjsVersions
 	{
 
-		public string [ ] versions { get ; set ; }
+		public string [ ] versions { get; set; }
 
 	}
 

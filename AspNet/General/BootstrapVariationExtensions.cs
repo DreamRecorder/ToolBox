@@ -1,14 +1,13 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace DreamRecorder . ToolBox . AspNet . General ;
+namespace DreamRecorder.ToolBox.AspNet.General;
 
 public static class BootstrapVariationExtensions
 {
 
-	public static string ToCssClassPostfix ( this BootstrapVariation variation )
-		=> variation . ToString ( ) . ToLower ( ) ;
+	public static string ToCssClassPostfix ( this BootstrapVariation variation ) => variation.ToString ( ).ToLower ( );
 
 }

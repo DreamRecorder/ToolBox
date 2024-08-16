@@ -1,8 +1,10 @@
-﻿@using DreamRecorder.ToolBox.General;
-@using DreamRecorder.ToolBox.AspNet.General;
-@using DreamRecorder.ToolBox.CommandLine;
-
+﻿@using System
+@using System.Collections
+@using System.Collections.Generic
+@using System.Linq
+@using DreamRecorder.ToolBox.AspNet.General
+@using DreamRecorder.ToolBox.General
 <a class="navbar-brand" asp-controller="Home" asp-action="Index">
-	<img src="@( ConstantUrls . WebResource )DreamryLogo.svg" width="30" height="30" class="d-inline-block align-top" alt="Dream Recovery Logo"/>
-	@( ProgramBase . Current . GetType ( ) . Assembly . GetDisplayName ( ) )
+	<img src="@( ConstantUrls.WebResource )DreamryLogo.svg" width="30" height="30" class="d-inline-block align-top" alt="Dream Recovery Logo"/>
+	@( ProgramBase.Current.GetType ( ).Assembly.GetDisplayName ( ) )
 </a>

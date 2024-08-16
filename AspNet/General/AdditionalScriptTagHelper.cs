@@ -19,41 +19,40 @@ public class AdditionalScriptTagHelper : TagHelper
 
 	public IWebAssetProvider WebAssetProvider { get; }
 
-	public AdditionalScriptTagHelper(IWebAssetProvider webAssetProvider) => WebAssetProvider = webAssetProvider;
+	public AdditionalScriptTagHelper ( IWebAssetProvider webAssetProvider ) => WebAssetProvider = webAssetProvider;
 
-	public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+	public override async Task ProcessAsync ( TagHelperContext context , TagHelperOutput output )
 	{
 		output.TagName = null;
 
-		if (ViewBag?.AdditionalScript is IList<ScriptInfo> list)
+		if ( ViewBag?.AdditionalScript is IList <ScriptInfo> list )
 		{
-			foreach (ScriptInfo info in list)
+			foreach ( ScriptInfo info in list )
 			{
-				string uri =
-					await WebAssetProvider.GetFileUrl(info.PackageName, info.FileName, info.Version);
+				string uri = await WebAssetProvider.GetFileUrl ( info.PackageName , info.FileName , info.Version );
 
-				TagBuilder link = new TagBuilder(ExternalAssetTagHelper.Script);
+				TagBuilder link = new TagBuilder ( ExternalAssetTagHelper.Script );
 				output.TagMode = TagMode.StartTagAndEndTag;
-				output.Attributes.SetAttribute("src", uri);
-				output.Attributes.SetAttribute("crossorigin", "anonymous");
-				output.Attributes.SetAttribute("referrerpolicy", "no-referrer");
+				output.Attributes.SetAttribute ( "src" ,            uri );
+				output.Attributes.SetAttribute ( "crossorigin" ,    "anonymous" );
+				output.Attributes.SetAttribute ( "referrerpolicy" , "no-referrer" );
 
-				if (info.IsDefer)
+				if ( info.IsDefer )
 				{
-					output.Attributes.SetAttribute(new TagHelperAttribute("defer"));
+					output.Attributes.SetAttribute ( new TagHelperAttribute ( "defer" ) );
 				}
 
-				switch (info.Type)
+				switch ( info.Type )
 				{
-					case ScriptInfo.ScriptType.Module:
-						output.Attributes.SetAttribute("type", "module");
+					case ScriptInfo.ScriptType.Module :
+						output.Attributes.SetAttribute ( "type" , "module" );
 						break;
-					case ScriptInfo.ScriptType.ImportMap:
-						output.Attributes.SetAttribute("type", @"importmap");
+					case ScriptInfo.ScriptType.ImportMap :
+						output.Attributes.SetAttribute ( "type" , @"importmap" );
 						break;
 				}
 
-				output.Content.AppendHtml(link);
+				output.Content.AppendHtml ( link );
 			}
 		}
 	}

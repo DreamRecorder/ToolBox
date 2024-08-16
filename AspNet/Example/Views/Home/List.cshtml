@@ -1,29 +1,35 @@
-﻿@using DreamRecorder.ToolBox.AspNet.CommonComponent.Models;
-@using DreamRecorder.ToolBox.AspNet.Example.Models;
-
-
-@model ListModel
+﻿@using System
+@using System.Collections
+@using System.Collections.Generic
+@using System.Linq
+@using DreamRecorder.ToolBox.AspNet.CommonComponent.Models
+@model DreamRecorder.ToolBox.AspNet.Example.Models.ListModel
 
 @{
 	ViewBag.Title = "Example List";
-	Layout = "_Layout";
-	PageNavigationModel pageNavigatorModel = new PageNavigationModel { Action = "List" , CurrentPage = Model.CurrentPage , LastPage = Model.LastPage , ItemPerPage = Model.AcquiredCount , };
-	PageTitleModel pageTitleModelEmpty = new PageTitleModel { Title = $"Item <small class=\"text-muted\">{Model.StartIndex} to {Model.StartIndex + Model.ActualCount}</small>", };
+	Layout        = "_Layout";
+	PageNavigationModel pageNavigatorModel = new PageNavigationModel
+											{
+												Action      = "List" ,
+												CurrentPage = Model.CurrentPage ,
+												LastPage    = Model.LastPage ,
+												ItemPerPage = Model.AcquiredCount ,
+											};
+	PageTitleModel pageTitleModelEmpty = new PageTitleModel { Title = $"Item <small class=\"text-muted\">{Model.StartIndex} to {Model.StartIndex + Model.ActualCount}</small>" , };
 
-	PageTitleModel pageTitleModelAdd = new PageTitleModel { Title = $"Item <small class=\"text-muted\">{Model.StartIndex} to {Model.StartIndex + Model.ActualCount}</small>", Buttons = PageTitleModel.AddButtons, };
-	PageTitleModel pageTitleModelAddDelete = new PageTitleModel { Title = $"Item <small class=\"text-muted\">{Model.StartIndex} to {Model.StartIndex + Model.ActualCount}</small>", Buttons = PageTitleModel.AddAndDeleteButtons, };
-	PageTitleModel pageTitleModelAddRestore = new PageTitleModel { Title = $"Item <small class=\"text-muted\">{Model.StartIndex} to {Model.StartIndex + Model.ActualCount}</small>", Buttons = PageTitleModel.AddAndRestoreButtons, };
-
+	PageTitleModel pageTitleModelAdd        = new PageTitleModel { Title = $"Item <small class=\"text-muted\">{Model.StartIndex} to {Model.StartIndex + Model.ActualCount}</small>" , Buttons = PageTitleModel.AddButtons , };
+	PageTitleModel pageTitleModelAddDelete  = new PageTitleModel { Title = $"Item <small class=\"text-muted\">{Model.StartIndex} to {Model.StartIndex + Model.ActualCount}</small>" , Buttons = PageTitleModel.AddAndDeleteButtons , };
+	PageTitleModel pageTitleModelAddRestore = new PageTitleModel { Title = $"Item <small class=\"text-muted\">{Model.StartIndex} to {Model.StartIndex + Model.ActualCount}</small>" , Buttons = PageTitleModel.AddAndRestoreButtons , };
 }
 
 <partial name="__TitleWithButton" model="pageTitleModelEmpty"/>
-<partial name="__TitleWithButton" model="pageTitleModelAdd" />
-<partial name="__TitleWithButton" model="pageTitleModelAddDelete" />
-<partial name="__TitleWithButton" model="pageTitleModelAddRestore" />
+<partial name="__TitleWithButton" model="pageTitleModelAdd"/>
+<partial name="__TitleWithButton" model="pageTitleModelAddDelete"/>
+<partial name="__TitleWithButton" model="pageTitleModelAddRestore"/>
 
 <br/>
 
-<partial name="__PageNavigator" model="pageNavigatorModel "/>
+<partial name="__PageNavigator" model="pageNavigatorModel"/>
 
 <br/>
 
@@ -45,4 +51,4 @@
 </table>
 <br/>
 
-<partial name="__PageNavigator" model="pageNavigatorModel "/>
+<partial name="__PageNavigator" model="pageNavigatorModel"/>

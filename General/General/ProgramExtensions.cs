@@ -1,27 +1,24 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
-using System . Reflection ;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
-using JetBrains . Annotations ;
+using JetBrains.Annotations;
 
-namespace DreamRecorder . ToolBox . General
+namespace DreamRecorder.ToolBox.General;
+
+[PublicAPI]
+public static class ProgramExtensions
 {
 
-	[PublicAPI]
-	public static class ProgramExtensions
+	public static string GetProgramName ( )
 	{
-
-		public static string GetProgramName ( )
-		{
-			return Assembly . GetEntryAssembly ( ) ? . GetProgramName ( )
-				   ?? AppDomain . CurrentDomain . GetAssemblies ( ) .
-								  Select ( ass => ass . GetProgramName ( ) ) .
-								  FirstOrDefault ( name => name != null )
-				   ?? Assembly . GetEntryAssembly ( ) ? . GetDisplayName ( ) ;
-		}
-
+		return Assembly.GetEntryAssembly ( )?.GetProgramName ( )
+			   ?? AppDomain.CurrentDomain.GetAssemblies ( ).
+							Select ( ass => ass.GetProgramName ( ) ).
+							FirstOrDefault ( name => name != null )
+			   ?? Assembly.GetEntryAssembly ( )?.GetDisplayName ( );
 	}
 
 }

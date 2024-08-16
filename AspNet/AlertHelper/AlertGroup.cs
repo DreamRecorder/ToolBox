@@ -1,16 +1,13 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace DreamRecorder . ToolBox . AspNet . AlertHelper
+namespace DreamRecorder.ToolBox.AspNet.AlertHelper;
+
+public class AlertGroup
 {
 
-	public class AlertGroup
-	{
-
-		public List <Alert> Alerts { get ; set ; }
-
-	}
+	public List <Alert> Alerts { get; set; }
 
 }

@@ -1,64 +1,59 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . IO ;
-using System . Linq ;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
-using DreamRecorder . ToolBox . General ;
+using DreamRecorder.ToolBox.General;
 
-using Microsoft . VisualStudio . TestTools . UnitTesting ;
+namespace DreamRecorder.ToolBox.UnitTest;
 
-namespace DreamRecorder . ToolBox . UnitTest
+[TestClass]
+public class StreamExtensionsTests
 {
 
-	[TestClass]
-	public class StreamExtensionsTests
+	[TestMethod]
+	public void ReadToFillBufferTest1 ( )
 	{
+		byte [ ] sourceBuffer = new byte [ 128 ];
+		StaticRandom.Current.NextBytes ( sourceBuffer );
 
-		[TestMethod]
-		public void ReadToFillBufferTest1 ( )
+		MemoryStream memoryStream = new MemoryStream ( sourceBuffer );
+
+		memoryStream.Position = 0;
+
+		byte [ ]    destinationBuffer = new byte[ 128 ];
+		Span <byte> buffer            = new Span <byte> ( destinationBuffer );
+
+		Assert.IsTrue ( memoryStream.ReadToFillBuffer ( buffer ) );
+
+		for ( int i = 0 ; i < destinationBuffer.Length ; i++ )
 		{
-			byte [ ] sourceBuffer = new byte [ 128 ] ;
-			StaticRandom . Current . NextBytes ( sourceBuffer ) ;
+			Assert.AreEqual ( sourceBuffer [ i ] , destinationBuffer [ i ] );
+		}
+	}
 
-			MemoryStream memoryStream = new MemoryStream ( sourceBuffer ) ;
+	[TestMethod]
+	public void ReadToFillBufferTest2 ( )
+	{
+		byte [ ] sourceBuffer = new byte[ 128 ];
+		StaticRandom.Current.NextBytes ( sourceBuffer );
 
-			memoryStream . Position = 0 ;
+		MemoryStream memoryStream = new MemoryStream ( sourceBuffer );
 
-			byte [ ]    destinationBuffer = new byte[ 128 ] ;
-			Span <byte> buffer            = new Span <byte> ( destinationBuffer ) ;
+		memoryStream.Position = 0;
 
-			Assert . IsTrue ( memoryStream . ReadToFillBuffer ( buffer ) ) ;
+		byte [ ]    destinationBuffer = new byte[ 64 ];
+		Span <byte> buffer            = new Span <byte> ( destinationBuffer );
 
-			for ( int i = 0 ; i < destinationBuffer . Length ; i++ )
-			{
-				Assert . AreEqual ( sourceBuffer [ i ] , destinationBuffer [ i ] ) ;
-			}
+		Assert.IsTrue ( memoryStream.ReadToFillBuffer ( buffer ) );
+
+		for ( int i = 0 ; i < destinationBuffer.Length ; i++ )
+		{
+			Assert.AreEqual ( sourceBuffer [ i ] , destinationBuffer [ i ] );
 		}
 
-		[TestMethod]
-		public void ReadToFillBufferTest2 ( )
-		{
-			byte [ ] sourceBuffer = new byte[ 128 ] ;
-			StaticRandom . Current . NextBytes ( sourceBuffer ) ;
-
-			MemoryStream memoryStream = new MemoryStream ( sourceBuffer ) ;
-
-			memoryStream . Position = 0 ;
-
-			byte [ ]    destinationBuffer = new byte[ 64 ] ;
-			Span <byte> buffer            = new Span <byte> ( destinationBuffer ) ;
-
-			Assert . IsTrue ( memoryStream . ReadToFillBuffer ( buffer ) ) ;
-
-			for ( int i = 0 ; i < destinationBuffer . Length ; i++ )
-			{
-				Assert . AreEqual ( sourceBuffer [ i ] , destinationBuffer [ i ] ) ;
-			}
-
-			Assert . AreEqual ( memoryStream . Position , 64 ) ;
-		}
-
+		Assert.AreEqual ( memoryStream.Position , 64 );
 	}
 
 }

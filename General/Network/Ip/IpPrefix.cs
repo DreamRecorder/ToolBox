@@ -1,31 +1,28 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
-using JetBrains . Annotations ;
+using JetBrains.Annotations;
 
-namespace DreamRecorder . ToolBox . Network . Ip
+namespace DreamRecorder.ToolBox.Network.Ip;
+
+public abstract class IpPrefix : Prefix
 {
 
-	public abstract class IpPrefix : Prefix
+	public static explicit operator IpPrefix ( [NotNull] string prefix )
 	{
-
-		public static explicit operator IpPrefix ( [NotNull] string prefix )
+		if ( prefix == null )
 		{
-			if ( prefix == null )
-			{
-				throw new ArgumentNullException ( nameof ( prefix ) ) ;
-			}
-
-			if ( prefix . Contains ( ':' ) )
-			{
-				return new Ipv6Prefix ( prefix ) ;
-			}
-
-			return new Ipv4Prefix ( prefix ) ;
+			throw new ArgumentNullException ( nameof ( prefix ) );
 		}
 
+		if ( prefix.Contains ( ':' ) )
+		{
+			return new Ipv6Prefix ( prefix );
+		}
+
+		return new Ipv4Prefix ( prefix );
 	}
 
 }

@@ -1,206 +1,202 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . Linq ;
-using System . Reflection ;
-using System . Runtime . InteropServices ;
-using System . Text ;
-using System . Text . RegularExpressions ;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Text.RegularExpressions;
 
-using JetBrains . Annotations ;
+using JetBrains.Annotations;
 
-namespace DreamRecorder . ToolBox . General
+namespace DreamRecorder.ToolBox.General;
+
+[PublicAPI]
+public static class AssemblyExtensions
 {
 
-	[PublicAPI]
-	public static class AssemblyExtensions
+	public static readonly string CommaWithNewline = $",{Environment.NewLine}";
+
+	public static Regex InformationalVersionRegex = new Regex (
+															   "Code version \"([^\"]+)\" build by \"([^\"]+)\" at \"([^\"]+)\"" ,
+															   RegexOptions.Compiled );
+
+	public static string GetAssemblyFullName ( this Type type )
+		=> type.GetTypeInfo ( ).Assembly.GetName ( ).FullName.Replace ( ", " , CommaWithNewline );
+
+	public static string GetAssemblyInfo ( [NotNull] this Assembly assembly )
 	{
-
-		public static readonly string CommaWithNewline = $",{Environment . NewLine}" ;
-
-		public static Regex InformationalVersionRegex = new Regex (
-																   "Code version \"([^\"]+)\" build by \"([^\"]+)\" at \"([^\"]+)\"" ,
-																   RegexOptions . Compiled ) ;
-
-		public static string GetAssemblyFullName ( this Type type )
-			=> type . GetTypeInfo ( ) . Assembly . GetName ( ) . FullName . Replace ( ", " , CommaWithNewline ) ;
-
-		public static string GetAssemblyInfo ( [NotNull] this Assembly assembly )
+		if ( assembly == null )
 		{
-			if ( assembly == null )
-			{
-				throw new ArgumentNullException ( nameof ( assembly ) ) ;
-			}
-
-			StringBuilder builder = new StringBuilder ( ) ;
-
-			GetAssemblyInfo ( assembly , builder ) ;
-
-			return builder . ToString ( ) ;
+			throw new ArgumentNullException ( nameof ( assembly ) );
 		}
 
-		public static void GetAssemblyInfo ( [NotNull] this Assembly assembly , [NotNull] StringBuilder builder )
+		StringBuilder builder = new StringBuilder ( );
+
+		GetAssemblyInfo ( assembly , builder );
+
+		return builder.ToString ( );
+	}
+
+	public static void GetAssemblyInfo ( [NotNull] this Assembly assembly , [NotNull] StringBuilder builder )
+	{
+		if ( assembly == null )
 		{
-			if ( assembly == null )
-			{
-				throw new ArgumentNullException ( nameof ( assembly ) ) ;
-			}
-
-			if ( builder == null )
-			{
-				throw new ArgumentNullException ( nameof ( builder ) ) ;
-			}
-
-			builder . AppendLine ( assembly . GetName ( ) . Name ) ;
-
-			Version version = assembly . GetName ( ) . Version ;
-			if ( version is not null )
-			{
-				builder . AppendLine ( version . ToString ( ) ) ;
-			}
-
-			(string SourceCodeVersion , string Builder , DateTimeOffset ? BuildTime) ? informationalVersion =
-				assembly . GetInformationalVersion ( ) ;
-
-			if ( informationalVersion != null )
-			{
-				builder . AppendLine ( $"Code version {informationalVersion ? . SourceCodeVersion}" ) ;
-				builder . AppendLine (
-									  $"Built by {informationalVersion ? . Builder} at\u00A0{informationalVersion ? . BuildTime . ToString ( ) . Replace ( ' ' , '\u00A0' )}" ) ;
-			}
-
-			builder . AppendLine ( assembly . GetCustomAttribute <AssemblyCopyrightAttribute> ( ) ? . Copyright ) ;
+			throw new ArgumentNullException ( nameof ( assembly ) );
 		}
 
-		public static void GetAssemblyInfo <T> ( [NotNull] StringBuilder builder )
+		if ( builder == null )
 		{
-			if ( builder == null )
-			{
-				throw new ArgumentNullException ( nameof ( builder ) ) ;
-			}
-
-			GetAssemblyInfo ( typeof ( T ) . Assembly , builder ) ;
+			throw new ArgumentNullException ( nameof ( builder ) );
 		}
 
-		public static string GetBuilder ( [NotNull] this Assembly assembly )
-		{
-			if ( assembly == null )
-			{
-				throw new ArgumentNullException ( nameof ( assembly ) ) ;
-			}
+		builder.AppendLine ( assembly.GetName ( ).Name );
 
-			return assembly . GetInformationalVersion ( ) ? . Builder ;
+		Version version = assembly.GetName ( ).Version;
+		if ( version is not null )
+		{
+			builder.AppendLine ( version.ToString ( ) );
 		}
 
-		public static DateTimeOffset ? GetBuildTime ( [NotNull] this Assembly assembly )
-		{
-			if ( assembly == null )
-			{
-				throw new ArgumentNullException ( nameof ( assembly ) ) ;
-			}
+		(string SourceCodeVersion , string Builder , DateTimeOffset ? BuildTime) ? informationalVersion =
+			assembly.GetInformationalVersion ( );
 
-			return assembly . GetInformationalVersion ( ) ? . BuildTime ;
+		if ( informationalVersion != null )
+		{
+			builder.AppendLine ( $"Code version {informationalVersion?.SourceCodeVersion}" );
+			builder.AppendLine (
+								$"Built by {informationalVersion?.Builder} at\u00A0{informationalVersion?.BuildTime.ToString ( ).Replace ( ' ' , '\u00A0' )}" );
 		}
 
-		public static string GetDisplayName ( [NotNull] this Assembly assembly )
+		builder.AppendLine ( assembly.GetCustomAttribute <AssemblyCopyrightAttribute> ( )?.Copyright );
+	}
+
+	public static void GetAssemblyInfo <T> ( [NotNull] StringBuilder builder )
+	{
+		if ( builder == null )
 		{
-			if ( assembly == null )
-			{
-				throw new ArgumentNullException ( nameof ( assembly ) ) ;
-			}
-
-			AssemblyDisplayNameAttribute attribute = assembly . GetCustomAttribute <AssemblyDisplayNameAttribute> ( ) ;
-
-			return attribute ? . Name ?? assembly . GetName ( ) . Name ;
+			throw new ArgumentNullException ( nameof ( builder ) );
 		}
 
-		public static Guid ? GetGuid ( [NotNull] this Assembly assembly )
+		GetAssemblyInfo ( typeof ( T ).Assembly , builder );
+	}
+
+	public static string GetBuilder ( [NotNull] this Assembly assembly )
+	{
+		if ( assembly == null )
 		{
-			if ( assembly == null )
-			{
-				throw new ArgumentNullException ( nameof ( assembly ) ) ;
-			}
-
-			GuidAttribute attribute = assembly . GetCustomAttributes <GuidAttribute> ( ) . FirstOrDefault ( ) ;
-			string        guid      = attribute ? . Value ;
-
-			if ( guid is null )
-			{
-				return null ;
-			}
-
-			return Guid . Parse ( guid ) ;
+			throw new ArgumentNullException ( nameof ( assembly ) );
 		}
 
-		public static (string SourceCodeVersion , string Builder , DateTimeOffset ? BuildTime) ?
-			GetInformationalVersion ( [NotNull] this Assembly assembly )
+		return assembly.GetInformationalVersion ( )?.Builder;
+	}
+
+	public static DateTimeOffset ? GetBuildTime ( [NotNull] this Assembly assembly )
+	{
+		if ( assembly == null )
 		{
-			if ( assembly == null )
+			throw new ArgumentNullException ( nameof ( assembly ) );
+		}
+
+		return assembly.GetInformationalVersion ( )?.BuildTime;
+	}
+
+	public static string GetDisplayName ( [NotNull] this Assembly assembly )
+	{
+		if ( assembly == null )
+		{
+			throw new ArgumentNullException ( nameof ( assembly ) );
+		}
+
+		AssemblyDisplayNameAttribute attribute = assembly.GetCustomAttribute <AssemblyDisplayNameAttribute> ( );
+
+		return attribute?.Name ?? assembly.GetName ( ).Name;
+	}
+
+	public static Guid ? GetGuid ( [NotNull] this Assembly assembly )
+	{
+		if ( assembly == null )
+		{
+			throw new ArgumentNullException ( nameof ( assembly ) );
+		}
+
+		GuidAttribute attribute = assembly.GetCustomAttributes <GuidAttribute> ( ).FirstOrDefault ( );
+		string        guid      = attribute?.Value;
+
+		if ( guid is null )
+		{
+			return null;
+		}
+
+		return Guid.Parse ( guid );
+	}
+
+	public static (string SourceCodeVersion , string Builder , DateTimeOffset ? BuildTime) ? GetInformationalVersion (
+		[NotNull] this Assembly assembly )
+	{
+		if ( assembly == null )
+		{
+			throw new ArgumentNullException ( nameof ( assembly ) );
+		}
+
+		AssemblyInformationalVersionAttribute attribute =
+			assembly.GetCustomAttribute <AssemblyInformationalVersionAttribute> ( );
+		string value = attribute?.InformationalVersion;
+
+		if ( value != null )
+		{
+			Match match = InformationalVersionRegex.Match ( value );
+
+			if ( match.Success )
 			{
-				throw new ArgumentNullException ( nameof ( assembly ) ) ;
+				return ( match.Groups [ 1 ].Value , match.Groups [ 2 ].Value ,
+						   DateTimeOffset.Parse ( match.Groups [ 3 ].Value ) );
 			}
+		}
 
-			AssemblyInformationalVersionAttribute attribute =
-				assembly . GetCustomAttribute <AssemblyInformationalVersionAttribute> ( ) ;
-			string value = attribute ? . InformationalVersion ;
+		return default;
+	}
 
-			if ( value != null )
+	[CanBeNull]
+	public static string GetProgramName ( [NotNull] this Assembly assembly )
+	{
+		if ( assembly == null )
+		{
+			throw new ArgumentNullException ( nameof ( assembly ) );
+		}
+
+		ApplicationDisplayNameAttribute attribute = assembly.GetCustomAttribute <ApplicationDisplayNameAttribute> ( );
+
+		return attribute?.Name;
+	}
+
+	public static string GetSourceCodeVersion ( [NotNull] this Assembly assembly )
+	{
+		if ( assembly == null )
+		{
+			throw new ArgumentNullException ( nameof ( assembly ) );
+		}
+
+		return assembly.GetInformationalVersion ( )?.SourceCodeVersion;
+	}
+
+	public static void Prepare ( this Assembly assembly )
+	{
+		PrepareAttribute attribute = assembly.GetCustomAttribute <PrepareAttribute> ( );
+
+		if ( attribute != null )
+		{
+			foreach ( TypeInfo type in assembly.DefinedTypes )
 			{
-				Match match = InformationalVersionRegex . Match ( value ) ;
-
-				if ( match . Success )
+				foreach ( MethodInfo method in type.DeclaredMethods )
 				{
-					return ( match . Groups [ 1 ] . Value , match . Groups [ 2 ] . Value ,
-							   DateTimeOffset . Parse ( match . Groups [ 3 ] . Value ) ) ;
-				}
-			}
-
-			return default ;
-		}
-
-		[CanBeNull]
-		public static string GetProgramName ( [NotNull] this Assembly assembly )
-		{
-			if ( assembly == null )
-			{
-				throw new ArgumentNullException ( nameof ( assembly ) ) ;
-			}
-
-			ApplicationDisplayNameAttribute attribute =
-				assembly . GetCustomAttribute <ApplicationDisplayNameAttribute> ( ) ;
-
-			return attribute ? . Name ;
-		}
-
-		public static string GetSourceCodeVersion ( [NotNull] this Assembly assembly )
-		{
-			if ( assembly == null )
-			{
-				throw new ArgumentNullException ( nameof ( assembly ) ) ;
-			}
-
-			return assembly . GetInformationalVersion ( ) ? . SourceCodeVersion ;
-		}
-
-		public static void Prepare ( this Assembly assembly )
-		{
-			PrepareAttribute attribute = assembly . GetCustomAttribute <PrepareAttribute> ( ) ;
-
-			if ( attribute != null )
-			{
-				foreach ( TypeInfo type in assembly . DefinedTypes )
-				{
-					foreach ( MethodInfo method in type . DeclaredMethods )
+					if ( method.GetCustomAttributes ( typeof ( PrepareAttribute ) ).Any ( ) )
 					{
-						if ( method . GetCustomAttributes ( typeof ( PrepareAttribute ) ) . Any ( ) )
-						{
-							method . Invoke ( null , new object [ ] { } ) ;
-						}
+						method.Invoke ( null , new object [ ] { } );
 					}
 				}
 			}
 		}
-
 	}
 
 }

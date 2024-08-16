@@ -1,12 +1,12 @@
-﻿using System ;
-using System . Collections ;
-using System . Collections . Generic ;
-using System . IO ;
-using System . Linq ;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
-using JetBrains . Annotations ;
+using JetBrains.Annotations;
 
-namespace DreamRecorder . ToolBox . General ;
+namespace DreamRecorder.ToolBox.General;
 
 public static class StreamExtensions
 {
@@ -15,46 +15,46 @@ public static class StreamExtensions
 	{
 		if ( stream == null )
 		{
-			throw new ArgumentNullException ( nameof ( stream ) ) ;
+			throw new ArgumentNullException ( nameof ( stream ) );
 		}
 
-		for ( int i = 0 ; i < buffer . Length ; )
+		for ( int i = 0 ; i < buffer.Length ; )
 		{
-			int currentRead = stream . Read ( buffer . Slice ( i , buffer . Length - i ) ) ;
+			int currentRead = stream.Read ( buffer.Slice ( i , buffer.Length - i ) );
 			if ( currentRead > 0 )
 			{
-				i += currentRead ;
+				i += currentRead;
 			}
 			else
 			{
-				return false ;
+				return false;
 			}
 		}
 
-		return true ;
+		return true;
 	}
 
 	public static bool ReadToFillBuffer ( [NotNull] this BinaryReader reader , Span <byte> buffer )
 	{
 		if ( reader == null )
 		{
-			throw new ArgumentNullException ( nameof ( reader ) ) ;
+			throw new ArgumentNullException ( nameof ( reader ) );
 		}
 
-		for ( int i = 0 ; i < buffer . Length ; )
+		for ( int i = 0 ; i < buffer.Length ; )
 		{
-			int currentRead = reader . Read ( buffer . Slice ( i , buffer . Length - i ) ) ;
+			int currentRead = reader.Read ( buffer.Slice ( i , buffer.Length - i ) );
 			if ( currentRead > 0 )
 			{
-				i += currentRead ;
+				i += currentRead;
 			}
 			else
 			{
-				return false ;
+				return false;
 			}
 		}
 
-		return true ;
+		return true;
 	}
 
 }
