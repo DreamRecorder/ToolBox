@@ -77,7 +77,11 @@ public class CdnjsWebAssetProvider : IWebAssetProvider
 		throw new Exception ( );
 	}
 
-	public async Task ClearCache ( ) => PackageVersions.Clear ( );
+	public async Task ClearCache ( )
+	{
+		PackageVersions.Clear ( );
+		await Task.Yield ( );
+	}
 
 	public class CdnjsVersions
 	{

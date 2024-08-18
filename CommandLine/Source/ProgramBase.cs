@@ -11,7 +11,8 @@ using DreamRecorder.ToolBox.General;
 
 using JetBrains.Annotations;
 
-using Microsoft.Extensions.CommandLineUtils;
+using McMaster.Extensions.CommandLineUtils;
+
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -35,6 +36,9 @@ public abstract class ProgramBase <T , TExitCode , TSetting , TSettingCategory> 
 
 	public virtual string AcceptLicenseGuide
 		=> $"To accept this license, you should write \"{AcceptLicenseDeclare}\" at the end of this file.";
+
+	public virtual UnrecognizedArgumentHandling ActionOnUnexpectedArg
+		=> UnrecognizedArgumentHandling.CollectAndContinue;
 
 	public abstract bool AutoSaveSetting { get; }
 
@@ -80,8 +84,6 @@ public abstract class ProgramBase <T , TExitCode , TSetting , TSettingCategory> 
 	public string SettingFilePath => SettingFilePathOverride ?? FileNameConst.SettingFilePath;
 
 	protected virtual string SettingFilePathOverride => null;
-
-	public virtual bool ThrowOnUnexpectedArg => false;
 
 	public virtual bool WaitForExit => true;
 
@@ -344,7 +346,11 @@ public abstract class ProgramBase <T , TExitCode , TSetting , TSettingCategory> 
 
 		Logger = LoggerFactory.Create ( builder => builder.AddConsole ( ) ).CreateLogger <T> ( );
 
-		CommandLineApplication = new CommandLineApplication ( ThrowOnUnexpectedArg );
+		CommandLineApplication = new CommandLineApplication ( );
+
+		CommandLineApplication.UnrecognizedArgumentHandling = ActionOnUnexpectedArg;
+
+		CommandLineApplication.FullName = ProgramExtensions.GetProgramName ( );
 
 		CommandLineApplication.Name = ProgramExtensions.GetProgramName ( );
 
