@@ -21,7 +21,7 @@
 
 				@foreach ( IconButtonModel buttonModel in buttons )
 				{
-					<a class="btn btn-@( buttonModel.BootstrapVariation.ToCssClassPostfix ( ) ) action-btn" asp-controller="@( buttonModel.Controller ?? Model.Controller )" asp-action="@( buttonModel.Action )" asp-route-guid="@( buttonModel.IncludeGuid ? Model.Guid : null )">
+					<a class="btn btn-@( buttonModel.BootstrapVariation.ToCssClassPostfix ( ) ) action-btn" asp-controller="@( buttonModel.Controller ?? Model.Controller ?? ViewContext.RouteData.Values [ "controller" ] )" asp-action="@( buttonModel.Action )" asp-route-guid="@( buttonModel.IncludeGuid ? Model.Guid : null )">
 						<i class="bi bi-@( buttonModel.Icon )"></i>
 					</a>
 				}
