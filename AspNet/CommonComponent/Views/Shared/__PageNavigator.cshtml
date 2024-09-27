@@ -13,10 +13,16 @@
 		Model.PageCount = 9;
 	}
 
+	if (string.IsNullOrEmpty(Model.Controller))
+	{
+		Model.Controller = ViewContext.RouteData.Values["controller"]?.ToString();
+	}
+
 	int currentPage;
 	int left  = Math.Max ( 1 , Model.CurrentPage                   - ( Model.PageCount / 2 ) );
 	int right = Math.Min ( Model.LastPage , left + Model.PageCount - 1 );
 	left = Math.Max ( 1 , right - Model.PageCount + 1 );
+
 }
 
 <nav aria-label="Page Navigation">
