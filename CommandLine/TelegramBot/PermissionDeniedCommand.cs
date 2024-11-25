@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 using DreamRecorder.ToolBox.General;
@@ -12,6 +13,7 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace DreamRecorder.ToolBox.TelegramBot;
 
+[SuppressMessage ( "ReSharper" , "ArgumentsStyleOther" )]
 public class PermissionDeniedCommand <TUser> : TelegramCommand <TUser> where TUser : IUser
 {
 
@@ -37,12 +39,14 @@ public class PermissionDeniedCommand <TUser> : TelegramCommand <TUser> where TUs
 	{
 		if ( tag is ICommand <TUser> command )
 		{
-			session.BotClient.SendTextMessageAsync (
+			session.BotClient.SendMessage (
 													session.PrivateChatId ,
 													$"Command `{command.DisplayName}` do not have permission to read your personal info." ,
-													null ,
 													ParseMode.Markdown ,
-													replyToMessageId : message.MessageId ,
+									
+													replyParameters: new ReplyParameters { ChatId = message?.MessageId ?? default, }
+
+													,
 													replyMarkup : new InlineKeyboardMarkup (
 													 InlineKeyboardButton.WithCallbackData (
 													  "Grant permission" ,
