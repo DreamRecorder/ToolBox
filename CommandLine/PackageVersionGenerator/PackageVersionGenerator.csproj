@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Logging.Console" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" />
+		<PackageReference Include="NuGet.Protocol" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Source\CommandLine.csproj" />
+	</ItemGroup>
+
+	<PropertyGroup Label="Globals">
+		<SccAuxPath>SAK</SccAuxPath>
+		<SccLocalPath>SAK</SccLocalPath>
+		<SccProjectName>SAK</SccProjectName>
+		<SccProvider>SAK</SccProvider>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<AssemblyName>PackageVersionGenerator</AssemblyName>
+		<Description>Tools for other Dreamry project.</Description>
+		<OutputType>Exe</OutputType>
+		<RootNamespace>DreamRecorder.ToolBox.CommandLine.PackageVersionGenerator</RootNamespace>
+		<PublishProfile>FolderProfile</PublishProfile>
+	</PropertyGroup>
+
+</Project>

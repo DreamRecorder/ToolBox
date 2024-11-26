@@ -39,6 +39,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TelegramBotExample", "Comma
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTest", "UnitTest\UnitTest.csproj", "{FD35B2E1-B51C-41AB-9860-7271C9F3062E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PackageVersionGenerator", "CommandLine\PackageVersionGenerator\PackageVersionGenerator.csproj", "{17CB0459-FD5B-46A6-8305-F154622B9E16}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -333,6 +335,26 @@ Global
 		{FD35B2E1-B51C-41AB-9860-7271C9F3062E}.Release|x64.Build.0 = Release|Any CPU
 		{FD35B2E1-B51C-41AB-9860-7271C9F3062E}.Release|x86.ActiveCfg = Release|Any CPU
 		{FD35B2E1-B51C-41AB-9860-7271C9F3062E}.Release|x86.Build.0 = Release|Any CPU
+		{17CB0459-FD5B-46A6-8305-F154622B9E16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17CB0459-FD5B-46A6-8305-F154622B9E16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17CB0459-FD5B-46A6-8305-F154622B9E16}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{17CB0459-FD5B-46A6-8305-F154622B9E16}.Debug|ARM.Build.0 = Debug|Any CPU
+		{17CB0459-FD5B-46A6-8305-F154622B9E16}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{17CB0459-FD5B-46A6-8305-F154622B9E16}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{17CB0459-FD5B-46A6-8305-F154622B9E16}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{17CB0459-FD5B-46A6-8305-F154622B9E16}.Debug|x64.Build.0 = Debug|Any CPU
+		{17CB0459-FD5B-46A6-8305-F154622B9E16}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{17CB0459-FD5B-46A6-8305-F154622B9E16}.Debug|x86.Build.0 = Debug|Any CPU
+		{17CB0459-FD5B-46A6-8305-F154622B9E16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17CB0459-FD5B-46A6-8305-F154622B9E16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17CB0459-FD5B-46A6-8305-F154622B9E16}.Release|ARM.ActiveCfg = Release|Any CPU
+		{17CB0459-FD5B-46A6-8305-F154622B9E16}.Release|ARM.Build.0 = Release|Any CPU
+		{17CB0459-FD5B-46A6-8305-F154622B9E16}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{17CB0459-FD5B-46A6-8305-F154622B9E16}.Release|ARM64.Build.0 = Release|Any CPU
+		{17CB0459-FD5B-46A6-8305-F154622B9E16}.Release|x64.ActiveCfg = Release|Any CPU
+		{17CB0459-FD5B-46A6-8305-F154622B9E16}.Release|x64.Build.0 = Release|Any CPU
+		{17CB0459-FD5B-46A6-8305-F154622B9E16}.Release|x86.ActiveCfg = Release|Any CPU
+		{17CB0459-FD5B-46A6-8305-F154622B9E16}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -351,12 +373,13 @@ Global
 		{CAE62F7C-D98F-4B50-8D39-83B81DE74011} = {6ECFB2DA-3E6D-42A2-AE16-BC0D5B3DF2EE}
 		{D435FC06-C33C-448D-BED2-18160A56DE11} = {6ECFB2DA-3E6D-42A2-AE16-BC0D5B3DF2EE}
 		{0055954F-A10B-4C0D-9C84-764B4E3FB428} = {6749562D-3004-4C05-BF9A-6FC70D2629F8}
+		{17CB0459-FD5B-46A6-8305-F154622B9E16} = {6749562D-3004-4C05-BF9A-6FC70D2629F8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {14DAB56C-F500-45EE-8A65-CFA2C12B509D}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 15
+		SccNumberOfProjects = 16
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://vsts.dreamry.org/defaultcollection
 		SccLocalPath0 = .
@@ -415,5 +438,9 @@ Global
 		SccProjectUniqueName14 = UnitTest\\UnitTest.csproj
 		SccProjectName14 = UnitTest
 		SccLocalPath14 = UnitTest
+		SccProjectUniqueName15 = CommandLine\\PackageVersionGenerator\\PackageVersionGenerator.csproj
+		SccProjectTopLevelParentUniqueName15 = ToolBox.sln
+		SccProjectName15 = CommandLine/PackageVersionGenerator
+		SccLocalPath15 = CommandLine\\PackageVersionGenerator
 	EndGlobalSection
 EndGlobal
