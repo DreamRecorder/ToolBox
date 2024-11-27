@@ -21,8 +21,6 @@ using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
 using NuGet.Versioning;
 
-using Semver;
-
 using ILogger = NuGet.Common.ILogger;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
@@ -55,7 +53,7 @@ public class Program
 
 	public override bool LoadSetting => false;
 
-	public Dictionary <string , NuGetVersion> Versions { get; set; } = new Dictionary <string , NuGetVersion> ( );
+	public Dictionary <string , NuGetVersion> Versions { get; } = new Dictionary <string , NuGetVersion> ( );
 
 	public override bool WaitForExit => true;
 
@@ -73,14 +71,22 @@ public class Program
 
 	public override void RegisterArgument ( CommandLineApplication application )
 	{
-		Arguments = application.Argument ( "configFiles" , "All config files" , true );
+		Arguments = application.Argument ( "configFiles" , "Config files" , true );
 
 		base.RegisterArgument ( application );
 	}
 
-	public override void ShowCopyright ( ) { Console.WriteLine ( "Copyright" ); }
+	public override void ShowCopyright ( )
+	{
+		Console.WriteLine ( $"Copyright (C) 2018 - {DateTime.Now.Year} Wencey Wang" );
 
-	public override void ShowLogo ( ) { Console.WriteLine ( "Logo" ); }
+		Console.WriteLine ( @"This program comes with ABSOLUTELY NO WARRANTY." );
+
+		Console.WriteLine (
+						   @"This is free software, and you are welcome to redistribute it under certain conditions; read License.txt for details." );
+	}
+
+	public override void ShowLogo ( ) { Console.WriteLine ( nameof ( PackageVersionGenerator ) ); }
 
 	public override async void Start ( string [ ] args )
 	{
@@ -93,7 +99,7 @@ public class Program
 				continue;
 			}
 
-			Logger.LogInformation($"Reading File {file}");
+			Logger.LogInformation ( $"Reading File {file}" );
 
 			await using FileStream fileStream = File.OpenRead ( file );
 
@@ -107,9 +113,9 @@ public class Program
 				if ( oldVersion    == null
 					 || newVersion > oldVersion )
 				{
-					Logger.LogInformation($"Adding Package {packageVersion.Include} {newVersion}");
+					Logger.LogInformation ( $"Adding Package {packageVersion.Include} {newVersion}" );
 
-					Versions[ packageVersion.Include ] = newVersion;
+					Versions [ packageVersion.Include ] = newVersion;
 				}
 			}
 		}
@@ -122,9 +128,9 @@ public class Program
 
 		foreach ( PackageSource source in sources )
 		{
-			Logger.LogInformation($"Upgrading using {source.Name}");
+			Logger.LogInformation ( $"Upgrading using {source.Name}" );
 
-			ILogger logger            = NullLogger.Instance;
+			ILogger           logger            = NullLogger.Instance;
 			CancellationToken cancellationToken = CancellationToken.None;
 
 			SourceCacheContext cache      = new SourceCacheContext ( );
@@ -147,8 +153,8 @@ public class Program
 				if ( oldVersion    == null
 					 || newVersion > oldVersion )
 				{
-					Logger.LogInformation($"Upgrading Package {pair.Key} {newVersion}");
-					Versions[ pair.Key ] = newVersion;
+					Logger.LogInformation ( $"Upgrading Package {pair.Key} to {newVersion}" );
+					Versions [ pair.Key ] = newVersion;
 				}
 			}
 		}
@@ -170,34 +176,33 @@ public class Program
 											 } ,
 						 };
 
-		using MemoryStream memoryStream = new MemoryStream();
+		using MemoryStream memoryStream = new MemoryStream ( );
 
-		await using XmlWriter writer = XmlWriter.Create(
-														memoryStream,
-														new XmlWriterSettings
-														{
-															OmitXmlDeclaration  = true,
-															Async               = true,
-															Indent              = true,
-															NewLineOnAttributes = false,
-														});
+		await using XmlWriter writer = XmlWriter.Create (
+														 memoryStream ,
+														 new XmlWriterSettings
+														 {
+															 OmitXmlDeclaration  = true ,
+															 Async               = true ,
+															 Indent              = true ,
+															 NewLineOnAttributes = false ,
+														 } );
 
-		serializer.Serialize(writer, result);
+		serializer.Serialize ( writer , result );
 
-		foreach (string file in Arguments.Values)
+		foreach ( string file in Arguments.Values )
 		{
-			if (string.IsNullOrWhiteSpace(file))
+			if ( string.IsNullOrWhiteSpace ( file ) )
 			{
 				continue;
 			}
 
-			Logger.LogInformation($"Writing to file {file}");
+			Logger.LogInformation ( $"Writing to file {file}" );
 
-			await File.WriteAllBytesAsync(file,memoryStream.ToArray());
+			await File.WriteAllBytesAsync ( file , memoryStream.ToArray ( ) );
 		}
 
-		Exit(ProgramExitCode.Success);
-
+		Exit ( ProgramExitCode.Success );
 	}
 
 
