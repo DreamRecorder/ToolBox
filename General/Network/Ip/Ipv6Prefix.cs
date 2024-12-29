@@ -3,8 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 using JetBrains.Annotations;
+
+using static DreamRecorder.ToolBox.Network.Ip.Ipv6Address;
 
 namespace DreamRecorder.ToolBox.Network.Ip;
 
@@ -82,25 +85,52 @@ public class Ipv6Prefix : IpPrefix
 		return new Ipv6Prefix ( address );
 	}
 
-	public override string ToString ( )
+	public string ToString(AddressStyle style)
 	{
-		StringBuilder builder = new StringBuilder ( );
+		StringBuilder builder = new StringBuilder();
 
-		for ( int i = 0 ; i < AddressBytes.Length ; i += 2 )
+		for (int i = 0; i < AddressBytes.Length; i += 2)
 		{
-			int segment = ( ushort )( AddressBytes.Span [ i ] << 8 ) | AddressBytes.Span [ i + 1 ];
-			builder.AppendFormat ( "{0:X}" , segment );
+			int segment = (ushort)(AddressBytes.Span[i] << 8) | AddressBytes.Span[i + 1];
 
-			if ( i + 2 != AddressBytes.Length )
+			if (style.HasFlag(AddressStyle.LeadingZero))
 			{
-				builder.Append ( ':' );
+				builder.AppendFormat("{0:X4}", segment);
+			}
+			else
+			{
+				builder.AppendFormat("{0:X}", segment);
+			}
+
+			if (i + 2 != AddressBytes.Length)
+			{
+				builder.Append(':');
 			}
 		}
 
-		builder.Append ( '/' );
-		builder.Append ( Length );
+		if (!style.HasFlag(AddressStyle.NoOmitHextets))
+		{
+			MatchCollection matches = ShortenRegex.Matches(builder.ToString());
 
-		return builder.ToString ( );
+			if (matches.MaxBy(match => match.Length) is Match longestMatch)
+			{
+				if (longestMatch.Index + longestMatch.Length == builder.Length)
+				{
+					builder.Replace(longestMatch.Value, "::", longestMatch.Index, longestMatch.Length);
+				}
+				else
+				{
+					builder.Replace(longestMatch.Value, ":", longestMatch.Index, longestMatch.Length);
+				}
+			}
+		}
+
+		builder.Append('/');
+		builder.Append(Length);
+
+		return builder.ToString();
 	}
+
+	public override string ToString ( ) => ToString(AddressStyle.Compressed);
 
 }

@@ -179,10 +179,10 @@ public class Ipv6Address : IpAddress
 
 		if ( ! style.HasFlag ( AddressStyle.NoOmitHextets ) )
 		{
-			MatchCollection matchs = ShortenRegex.Matches ( builder.ToString ( ) );
+			MatchCollection matches = ShortenRegex.Matches ( builder.ToString ( ) );
 
 
-			if ( matchs.MaxBy ( match => match.Length ) is Match longestMatch )
+			if ( matches.MaxBy ( match => match.Length ) is Match longestMatch )
 			{
 				if ( longestMatch.Index + longestMatch.Length == builder.Length )
 				{
