@@ -335,7 +335,7 @@ public class DnsKeyRecord : DnsRecordBase
 				gostPublicKey.Q.AffineXCoord.ToBigInteger ( ).ToByteArrayUnsigned ( ).CopyTo ( publicKey , 32 );
 				gostPublicKey.Q.AffineYCoord.ToBigInteger ( ).ToByteArrayUnsigned ( ).CopyTo ( publicKey , 0 );
 
-				publicKey = publicKey.Reverse ( ).ToArray ( );
+				publicKey = ((IEnumerable<byte>)publicKey).Reverse ( ).ToArray ( );
 				break;
 
 			case DnsSecAlgorithm.EcDsaP256Sha256 :
@@ -655,7 +655,7 @@ public class DnsKeyRecord : DnsRecordBase
 	{
 		ECDomainParameters dParams =
 			ECGost3410NamedCurves.GetByOid ( CryptoProObjectIdentifiers.GostR3410x2001CryptoProA );
-		byte [ ] reversedPublicKey = PublicKey.Reverse ( ).ToArray ( );
+		byte [ ] reversedPublicKey = ((IEnumerable<byte>)PublicKey).Reverse ( ).ToArray ( );
 		ECPoint q = dParams.Curve.CreatePoint (
 											   new BigInteger ( 1 , reversedPublicKey , 32 , 32 ) ,
 											   new BigInteger ( 1 , reversedPublicKey , 0 ,  32 ) );

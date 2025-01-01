@@ -192,7 +192,7 @@ public static class AssemblyExtensions
 				{
 					if ( method.GetCustomAttributes ( typeof ( PrepareAttribute ) ).Any ( ) )
 					{
-						method.Invoke ( null , new object [ ] { } );
+						method.Invoke ( null , [] );
 					}
 				}
 			}
