@@ -12,6 +12,9 @@ namespace DreamRecorder.ToolBox.General;
 public static class ComparisonExtensions
 {
 
+	public static T Clamp <T> ( T value , T min , T max ) where T : IComparable <T>
+		=> Max ( min , Min ( max , value ) );
+
 	public static Comparison <T> IgnoreSmallDifference <T> ( this T proportion ) where T : INumber <T>
 	{
 		return ( ( x , y ) =>
@@ -41,6 +44,10 @@ public static class ComparisonExtensions
 					 }
 				 } );
 	}
+
+	public static T Max <T> ( T x , T y ) where T : IComparable <T> => x.CompareTo ( y ) > 0 ? x : y;
+
+	public static T Min <T> ( T x , T y ) where T : IComparable <T> => x.CompareTo ( y ) < 0 ? x : y;
 
 	public static Comparison <TSource> Select
 		<TSource , TResult> ( Func <TSource , TResult> selector , Comparison <TResult> comparison = null )

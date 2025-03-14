@@ -41,7 +41,7 @@ public class Session <TUser> where TUser : IUser
 		ParseMode                               parseMode             = ParseMode.MarkdownV2 ,
 		bool                                    disableWebPagePreview = false ,
 		bool                                    disableNotification   = false ,
-		IReplyMarkup                            replyMarkup           = null ,
+		ReplyMarkup                            replyMarkup           = null ,
 		CancellationToken                       cancellationToken     = default )
 	{
 		BotClient.SendMessage (
