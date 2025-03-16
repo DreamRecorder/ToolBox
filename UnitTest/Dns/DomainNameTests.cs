@@ -29,6 +29,10 @@ public class DomainNameTests
 		DomainName domainName2   = DomainName.Parse ( "Dreamry.org" );
 		DomainName subDomainName = DomainName.Parse ( "toolbox.dev.dreamry.org" );
 
+		Console.WriteLine(domainName1.ToString());
+		Console.WriteLine(domainName2.ToString());
+		Console.WriteLine(subDomainName.ToString());
+
 		Assert.IsTrue ( domainName1.Equals ( domainName1 ) );
 		Assert.IsTrue ( domainName1.Equals ( domainName2 ) );
 		Assert.IsTrue ( domainName1.Equals ( domainName2 ) );

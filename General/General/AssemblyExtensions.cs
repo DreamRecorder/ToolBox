@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -149,8 +150,15 @@ public static class AssemblyExtensions
 
 			if ( match.Success )
 			{
-				return ( match.Groups [ 1 ].Value , match.Groups [ 2 ].Value ,
-						   DateTimeOffset.Parse ( match.Groups [ 3 ].Value ) );
+				if (DateTimeOffset.TryParse(match.Groups[3].Value, CultureInfo.InvariantCulture, out DateTimeOffset buildTime))
+				{
+					return (match.Groups[1].Value, match.Groups[2].Value, buildTime);
+				}
+				else
+				{
+					return (match.Groups[1].Value, match.Groups[2].Value, null);
+				}
+
 			}
 		}
 
