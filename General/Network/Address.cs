@@ -31,7 +31,7 @@ public abstract class Address : ICloneable , IEquatable <Address> , IAddress
 			return true;
 		}
 
-		return Equals ( AddressBytes , other.AddressBytes ) && Type == other.Type;
+		return AddressBytes.Span.SequenceEqual ( other.AddressBytes.Span ) && Type == other.Type;
 	}
 
 	public override bool Equals ( object obj )

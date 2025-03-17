@@ -23,7 +23,7 @@ public abstract class Prefix : ICloneable , IEquatable <Prefix> , IPrefix <Addre
 
 	public abstract object Clone ( );
 
-	public bool Equals ( Prefix other )
+	public virtual bool Equals ( Prefix other )
 	{
 		if ( other is null )
 		{
@@ -35,7 +35,9 @@ public abstract class Prefix : ICloneable , IEquatable <Prefix> , IPrefix <Addre
 			return true;
 		}
 
-		return Equals ( AddressBytes , other.AddressBytes ) && Length == other.Length && Type == other.Type;
+		return AddressBytes.Span.SequenceEqual ( other.AddressBytes.Span )
+			   && Length == other.Length
+			   && Type   == other.Type;
 	}
 
 	public virtual bool Contains ( [NotNull] Address address )
