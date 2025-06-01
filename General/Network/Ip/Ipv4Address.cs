@@ -25,7 +25,20 @@ public class Ipv4Address : IpAddress
 		AddressBytes       = addressBytes;
 	}
 
-	public Ipv4Address ( string address ) : this ( )
+	public uint Address
+	{
+		get
+		{
+			uint result = 0;
+			result |= ( uint )AddressBytes.Span [ 0 ];
+			result |= ( uint )AddressBytes.Span [ 1 ] << 8;
+			result |= ( uint )AddressBytes.Span [ 2 ] << 16;
+			result |= ( uint )AddressBytes.Span [ 3 ] << 24;
+			return result;
+		}
+    }
+
+    public Ipv4Address ( string address ) : this ( )
 	{
 		if ( address == null )
 		{
