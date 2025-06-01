@@ -69,7 +69,7 @@ public class TelegramBot <TUser> : IStartStop where TUser : IUser
 
 			Logger.LogInformation ( "Connecting..." );
 
-			User me = BotClient.GetMeAsync ( ).Result;
+			User me = BotClient.GetMe ( ).Result;
 			Logger.LogInformation ( "Use Bot {0}" , me.Username );
 			Console.Title = me.Username;
 

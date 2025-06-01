@@ -108,7 +108,7 @@ public class RegisterCommandGroupCommand <TUser> : TelegramCommand <TUser> where
 		{
 			Process ( callbackQuery.Message , args , session , true , tag );
 
-			session.BotClient.EditMessageReplyMarkupAsync (
+			session.BotClient.EditMessageReplyMarkup (
 														   callbackQuery.Message.Chat.Id ,
 														   callbackQuery.Message.MessageId ).
 					Wait ( );

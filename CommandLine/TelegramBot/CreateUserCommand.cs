@@ -88,7 +88,7 @@ public class CreateUserCommand <TUser> : TelegramCommand <TUser> where TUser : I
 	{
 		CreateUser ( callbackQuery.From , null , session );
 
-		session.BotClient.EditMessageReplyMarkupAsync (
+		session.BotClient.EditMessageReplyMarkup (
 													   callbackQuery.Message.Chat.Id ,
 													   callbackQuery.Message.MessageId ).
 				Wait ( );
