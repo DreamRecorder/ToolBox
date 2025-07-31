@@ -99,4 +99,16 @@ public class IpAddressesTests
 		}
 	}
 
+
+	[TestMethod]
+	public void Ipv4ToUnitTest()
+	{
+		string addressString = "98.18.13.0";
+
+		Ipv4Address address = new Ipv4Address ( addressString );
+
+		Assert.AreEqual(856674u, address.Address);
+
+    }
+
 }
