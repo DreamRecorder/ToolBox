@@ -1,3 +1,5 @@
+using DreamRecorder.ToolBox.AspNet.CommonComponent.Models;
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,18 +16,12 @@ public class ErrorViewModel
 
 }
 
-public class ListModel
+public class ListModel : PageNavigationModel
 {
-
-	public int ? AcquiredCount { get; set; }
 
 	public int ActualCount { get; set; }
 
-	public int CurrentPage { get; set; }
-
 	public List <Guid> Items { get; set; }
-
-	public int LastPage { get; set; }
 
 	public int StartIndex { get; set; }
 

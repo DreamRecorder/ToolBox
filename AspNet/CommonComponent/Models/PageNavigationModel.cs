@@ -12,7 +12,9 @@ public class PageNavigationModel
 
 	public string Controller { get; set; }
 
-	public int CurrentPage { get; set; }
+	public IDictionary<string, string> RouteValues { get; set; }
+
+    public int CurrentPage { get; set; }
 
 	public int ? ItemPerPage { get; set; }
 

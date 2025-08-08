@@ -55,12 +55,53 @@ public class HomeController : Controller
 
 		ListModel model = new ListModel
 						  {
-							  StartIndex    = startIndex ,
-							  ActualCount   = actualCount ,
-							  CurrentPage   = actualPageIndex ,
-							  LastPage      = maxPage ,
-							  Items         = ListItems.Take ( actualCount ).ToList ( ) ,
-							  AcquiredCount = acquiredCount ,
+							  StartIndex  = startIndex ,
+							  ActualCount = actualCount ,
+							  CurrentPage = actualPageIndex ,
+							  LastPage    = maxPage ,
+							  Items       = ListItems.Take ( actualCount ).ToList ( ) ,
+							  ItemPerPage = acquiredCount ,
+						  };
+
+
+		return View ( model );
+	}
+
+	[HttpGet ( @"[controller]/[action]/{tag}/{pageIndex?}/{acquiredCount?}" )]
+	[HttpGet ( @"[action]/{tag}/{pageIndex?}/{acquiredCount?}" )]
+	public async Task <IActionResult> ListWithTag ( int ? pageIndex , int ? acquiredCount , string tag )
+	{
+		int count = acquiredCount ?? 100;
+
+		int itemCount = 1145;
+
+		int maxPage = ( ( itemCount - 1 ) / count ) + 1;
+
+		int actualPageIndex = Math.Min ( maxPage , pageIndex ?? 1 );
+
+		int startIndex = count * ( actualPageIndex - 1 );
+
+		int actualCount = Math.Min ( itemCount - startIndex , count );
+
+		if ( ListItems == null )
+		{
+			ListItems = new List <Guid> ( );
+
+			for ( int i = 0 ; i < itemCount ; i++ )
+			{
+				ListItems.Add ( Guid.NewGuid ( ) );
+			}
+		}
+
+		ListModel model = new ListModel
+						  {
+							  StartIndex  = startIndex ,
+							  ActualCount = actualCount ,
+							  CurrentPage = actualPageIndex ,
+							  LastPage    = maxPage ,
+							  Items       = ListItems.Take ( actualCount ).ToList ( ) ,
+							  ItemPerPage = acquiredCount ,
+							  RouteValues = new Dictionary <string , string> { { "tag" , tag } , } ,
 						  };
 
 
